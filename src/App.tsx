@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import styled, { keyframes } from 'styled-components';
+import { keyframes } from '@emotion/react';
+import styled from '@emotion/styled';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -24,9 +25,6 @@ function App() {
         </a>
         <a href="https://reactjs.org/" target="_blank">
           <p>React</p>
-        </a>
-        <a href="https://styled-components.com/" target="_blank">
-          <p>Styled-Components</p>
         </a>
         <a href="https://github.com/aleclarson/vite-tsconfig-paths" target="_blank">
           <p>Absolute-Path</p>

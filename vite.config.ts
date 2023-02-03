@@ -56,7 +56,12 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
-    plugins: [tsconfigPaths(), react()],
+    plugins: [tsconfigPaths(), react({
+      jsxImportSource: '@emotion/react',
+      babel: {
+        plugins: ['@emotion/babel-plugin']
+      }
+    })],
 
     base: "/",
     publicDir: "./public",
