@@ -53,6 +53,14 @@
     "indent": ["error", 2],
     "semi": ["error", "always"],
     "quotes": ["error", "double"],
+    "object-property-newline": [
+      "error",
+      {
+        "allowAllPropertiesOnSameLine": false
+      }
+    ],
+    "array-bracket-newline": ["error", "consistent"],
+    "array-bracket-spacing": ["error", "always"],
 
     /* React Options */
     "react/jsx-uses-react": "off",
