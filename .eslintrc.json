@@ -33,6 +33,26 @@
     "no-unreachable": "warn",
     "strict": ["error", "global"],
     "curly": "warn",
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "only-multiline",
+        "objects": "only-multiline",
+        "imports": "only-multiline",
+        "exports": "only-multiline",
+        "functions": "never"
+      }
+    ],
+    "brace-style": [
+      "error",
+      "stroustrup",
+      {
+        "allowSingleLine": false
+      }
+    ],
+    "indent": ["error", 2],
+    "semi": ["error", "always"],
+    "quotes": ["error", "double"],
 
     /* React Options */
     "react/jsx-uses-react": "off",
