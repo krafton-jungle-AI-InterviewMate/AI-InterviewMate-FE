@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
-import tsconfigPaths from 'vite-tsconfig-paths'
+import tsconfigPaths from "vite-tsconfig-paths";
+import mkcert from "vite-plugin-mkcert";
 
 export default defineConfig(({ mode }) => {
   /**
@@ -28,7 +29,10 @@ export default defineConfig(({ mode }) => {
    * Production Mode
    */
   if (mode === "production") {
-    process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
+    process.env = {
+      ...process.env,
+      ...loadEnv(mode, process.cwd()) 
+    };
 
     Object.assign(serverOptions, {
       host: "0.0.0.0",
@@ -56,12 +60,16 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
-    plugins: [tsconfigPaths(), react({
-      jsxImportSource: '@emotion/react',
-      babel: {
-        plugins: ['@emotion/babel-plugin']
-      }
-    })],
+    plugins: [
+      tsconfigPaths(),
+      react({
+        jsxImportSource: "@emotion/react",
+        babel: {
+          plugins: [ "@emotion/babel-plugin" ]
+        }
+      }),
+      mkcert()
+    ],
 
     base: "/",
     publicDir: "./public",
