@@ -2,7 +2,6 @@ import { Global, css } from "@emotion/react";
 
 const globalStyles = css`
   @import url("https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap");
-  @import url(//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css);
 
   :root {
     /** 색상 변수 */
@@ -21,7 +20,7 @@ const globalStyles = css`
     --push-alert: #c20013;
     --light-alert: #ff3c4e;
     /** 스타일 변수 */
-    --box-shadow: 0px 6px 24px 0px rgba(var(--main-black), 0.03);
+    --box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.03);
     --button-border-radius: 15px 30px;
 
     font-family: "Archivo", "Spoqa Han Sans Neo", sans-serif;
