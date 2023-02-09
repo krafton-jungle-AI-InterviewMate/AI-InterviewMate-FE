@@ -35,6 +35,7 @@ const Nav = () => {
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
         onClose={handleClose}
+        onClick={handleClose}
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "left",
