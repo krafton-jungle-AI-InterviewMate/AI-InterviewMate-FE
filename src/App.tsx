@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Nav from "components/layout/Nav";
 import Home from "pages/Home";
+import Mypage from "pages/Mypage";
 import styled from "@emotion/styled";
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/mypage" element={<Mypage />} />
       </Routes>
     </StyledWrapper>
   );
