@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Nav from "components/layout/Nav";
 import Home from "pages/Home";
 import styled from "@emotion/styled";
+import Lobby from "pages/Lobby";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/Lobby" element={<Lobby />} />
       </Routes>
     </StyledWrapper>
   );
