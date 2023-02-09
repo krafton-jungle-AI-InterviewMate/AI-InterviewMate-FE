@@ -1,24 +1,24 @@
 import { Routes, Route } from "react-router-dom";
+import Nav from "components/layout/Nav";
 import Home from "pages/Home";
 import styled from "@emotion/styled";
 
 function App() {
   return (
-    <Wrapper>
-      <h1>
-        <p>InterviewMate</p>
-        <p>인터뷰메이트</p>
-      </h1>
+    <StyledWrapper>
+      <Nav />
 
       <Routes>
         <Route path="/" element={<Home />} />
       </Routes>
-    </Wrapper>
+    </StyledWrapper>
   );
 }
 
-// TODO: common layout
-const Wrapper = styled.div`
+const StyledWrapper = styled.section`
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
   max-width: 1440px;
   min-width: 1000px;
   margin: 0 auto;

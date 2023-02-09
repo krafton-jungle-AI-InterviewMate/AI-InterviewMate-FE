@@ -47,11 +47,11 @@ const globalStyles = css`
 
   a {
     font-weight: 500;
-    color: var(--main-blue);
+    color: var(--main-black);
     text-decoration: inherit;
   }
   a:hover {
-    color: var(--light-blue);
+    color: var(--light-black);
   }
 
   html,
@@ -96,7 +96,7 @@ const globalStyles = css`
       background-color: var(--main-white);
     }
     a:hover {
-      color: var(--light-blue);
+      color: var(--main-black);
     }
     button {
       background-color: var(--push-gray);
