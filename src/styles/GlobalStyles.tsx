@@ -1,8 +1,11 @@
-import { Global, css } from '@emotion/react';
+import { Global, css } from "@emotion/react";
 
 const globalStyles = css`
+  @import url("https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap");
+  @import url(//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css);
+
   :root {
-    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+    font-family: "Archivo", "Spoqa Han Sans Neo", sans-serif;
     font-size: 16px;
     line-height: 24px;
     font-weight: 400;

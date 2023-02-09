@@ -3,7 +3,10 @@ import styled from "@emotion/styled";
 function App() {
   return (
     <Wrapper>
-      <h1>InterviewMate</h1>
+      <h1>
+        <p>InterviewMate</p>
+        <p>인터뷰메이트</p>
+      </h1>
     </Wrapper>
   );
 }
