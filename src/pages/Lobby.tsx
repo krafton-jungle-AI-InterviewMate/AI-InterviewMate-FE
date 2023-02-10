@@ -36,31 +36,31 @@ function Lobby() {
       </StyledLobbyInterface>
       <StyledRoomContents>
         <Room
-          roomName="모의 면접 같이 하실 분"
-          aiInter={true}
+          roomName="무신사 짱짱"
+          isAiInterview={true}
           roomState="진행 중"
-          lock={false}
+          isLock={false}
           question={5}
           currPeople={1}
           totalPeople={1}
         />
         <Room
-          roomName="비밀번호 1234 입니다"
-          aiInter={false}
+          roomName="당근 마켓 가즈아"
+          isAiInterview={true}
           roomState="대기 중"
-          lock={true}
-          interviewTime={15}
+          isLock={false}
+          question={6}
           currPeople={1}
-          totalPeople={2}
+          totalPeople={1}
         />
         <Room
           roomName="크래프톤 면접 준비"
-          aiInter={false}
+          isAiInterview={true}
           roomState="진행 중"
-          interviewTime={60}
-          lock={false}
-          currPeople={2}
-          totalPeople={2}
+          question={3}
+          isLock={false}
+          currPeople={1}
+          totalPeople={1}
         />
       </StyledRoomContents>
     </>
