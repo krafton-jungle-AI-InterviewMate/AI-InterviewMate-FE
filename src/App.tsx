@@ -49,6 +49,7 @@ const StyledWrapper = styled.section`
   max-width: 1440px;
   min-width: 1000px;
   margin: 0 auto;
+  padding-bottom: 68px;
   text-align: center;
 `;
 

@@ -1,9 +1,10 @@
+import notFound from "static/images/404.svg";
 import styled from "@emotion/styled";
 
 const NotFound = () => {
   return (
     <StyledWrap>
-      <StyledImg src="images/404.svg" alt="404" />
+      <StyledImg src={notFound} alt="404" />
       찾으시는 페이지가 없습니다.
     </StyledWrap>
   );

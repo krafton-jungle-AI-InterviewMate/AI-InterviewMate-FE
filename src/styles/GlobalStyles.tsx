@@ -21,7 +21,7 @@ const globalStyles = css`
     --light-alert: #ff3c4e;
     /** 스타일 변수 */
     --box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.03);
-    --button-border-radius: 15px 30px;
+    --button-border-radius: 5px 15px;
 
     font-family: "Archivo", "Spoqa Han Sans Neo", sans-serif;
     font-size: 16px;
@@ -79,13 +79,10 @@ const globalStyles = css`
     background-color: var(--main-black);
     cursor: pointer;
     transition: border-color 0.25s;
+    outline: none;
   }
   button:hover {
-    border-color: var(--push-blue);
-  }
-  button:focus,
-  button:focus-visible {
-    outline: 4px auto -webkit-focus-ring-color;
+    outline: none;
   }
 `;
 

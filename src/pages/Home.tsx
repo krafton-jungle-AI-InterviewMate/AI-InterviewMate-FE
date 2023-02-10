@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import mainIllust from "static/images/undraw_Interview_re_e5jn.png";
 import styled from "@emotion/styled";
 
 const StyledHomeContents = styled.div`
@@ -60,7 +61,7 @@ const Home = () => {
         <span>충분한 연습을 통해 당당히 취업하세요.</span>
         <Link to="/lobby">바로 시작하기</Link>
       </StyledStart>
-      <img src="images/undraw_Interview_re_e5jn.png" alt="interview image" />
+      <img src={mainIllust} alt="interview image" />
     </StyledHomeContents>
   );
 };
