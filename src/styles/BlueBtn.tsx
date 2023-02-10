@@ -14,7 +14,7 @@ export const StyledBlueBtn = styled.div<BtnSize>`
   color: var(--main-black);
   background-color: var(--main-white);
   border-radius: ${props => (props.width === "250px" ? "15px 30px" : "5px 15px")};
-  border: 1px solid var(--main-black);
+  filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.5));
   font-size: ${props =>
     props.width === "250px" ? "24px" : props.width === "200px" ? "20px" : "16px"};
   font-weight: 400;
@@ -24,7 +24,6 @@ export const StyledBlueBtn = styled.div<BtnSize>`
     background-color: var(--main-blue);
     color: var(--main-white);
     cursor: pointer;
-    border: 0;
   }
   &:active {
     background-color: var(--push-blue);
