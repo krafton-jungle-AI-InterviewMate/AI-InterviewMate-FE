@@ -22,10 +22,9 @@ export const StyledRedBtn = styled.div<BtnSize>`
   transition: 0.2s;
   &:hover {
     background-color: var(--main-alert);
-    a {
-      color: var(--main-white);
-    }
+    color: var(--main-white);
     cursor: pointer;
+    border: 0;
   }
   &:active {
     background-color: var(--push-alert);
