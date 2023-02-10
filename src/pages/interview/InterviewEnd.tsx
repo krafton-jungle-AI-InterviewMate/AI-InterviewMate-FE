@@ -4,7 +4,7 @@ import { StyledRedBtn } from "styles/RedBtn";
 
 const StyledInterviewEnd = styled.div`
   color: var(--main-black);
-  h3 {
+  h2 {
     margin: 50px 0;
     font-size: 36px;
   }
@@ -32,10 +32,10 @@ const StyledInterviewEnd = styled.div`
 function InterviewEnd() {
   return (
     <StyledInterviewEnd>
-      <h3>인터뷰 종료!</h3>
+      <h2>면접 종료!</h2>
       <div className="endContents">
         <p>수고하셨습니다.</p>
-        <span>인터뷰 결과는 마이페이지에서 확인하실 수 있습니다.</span>
+        <span>면접 결과는 마이페이지에서 확인하실 수 있습니다.</span>
         <Link to="/lobby">
           <StyledRedBtn width="100px" height="32px">
             나가기
