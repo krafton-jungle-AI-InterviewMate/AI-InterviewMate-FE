@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import {
   interviewModeAtom,
@@ -6,7 +6,7 @@ import {
   interviewQuestionTotalAtom,
 } from "store/interview/atom";
 
-import { InterviewModeComment } from "constants/interview";
+import { InterviewModeComment, ANSWER_LIMIT_SECONDS } from "constants/interview";
 import InterviewComment from "../InterviewComment";
 import InterviewAiTimer from "../InterviewAiTimer";
 
@@ -16,6 +16,7 @@ const AnswerModeController = () => {
   const setInterviewMode = useSetRecoilState(interviewModeAtom);
   const interviewQuestionNumber = useRecoilValue(interviewQuestionNumberAtom);
   const interviewQuestionTotal = useRecoilValue(interviewQuestionTotalAtom);
+  const [ countDown, setCountDown ] = useState(ANSWER_LIMIT_SECONDS);
 
   useEffect(() => {
     const timerId = window.setTimeout(() => {
@@ -24,10 +25,15 @@ const AnswerModeController = () => {
           ? "finished"
           : "break",
       );
-    }, 1000 * 300); // ? STT 기능 추가하면 버퍼 시간 필요할 듯
+    }, 1000 * ANSWER_LIMIT_SECONDS); // ? STT 기능 추가하면 버퍼 시간 필요할 듯
+
+    const intervalId = window.setInterval(() => {
+      return setCountDown((prev) => prev - 1);
+    }, 1000);
 
     return () => {
       window.clearTimeout(timerId);
+      window.clearInterval(intervalId);
     };
   }, []);
 
@@ -38,7 +44,10 @@ const AnswerModeController = () => {
           <StyledComment>
             {InterviewModeComment.answer}
           </StyledComment>
-          <InterviewAiTimer sec={30} />
+          <StyledTimer>
+            <span>남은 시간: {countDown}초</span>
+            <InterviewAiTimer sec={ANSWER_LIMIT_SECONDS} />
+          </StyledTimer>
         </StyledFlex>
       </InterviewComment>
     </StyledWrap>
@@ -76,4 +85,18 @@ const StyledComment = styled.strong`
   align-items: center;
   font-size: 20px;
   font-weight: 400;
+`;
+
+const StyledTimer = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+
+  & span {
+    margin-right: 10px;
+    color: var(--font-gray);
+    font-weight: 400;
+    font-size: 14px;
+  }
 `;

@@ -7,3 +7,5 @@ export const InterviewModeComment: { [mode in CommentMode]: string } = {
   answer: "답변을 듣고 있습니다.",
   finished: "면접이 종료되었습니다. 잠시만 기다려주세요.",
 };
+
+export const ANSWER_LIMIT_SECONDS = 30;

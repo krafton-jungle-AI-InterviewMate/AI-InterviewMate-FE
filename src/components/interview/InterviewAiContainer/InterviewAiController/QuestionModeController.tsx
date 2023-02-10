@@ -36,6 +36,7 @@ const QuestionModeController = (props: QuestionModeControllerProps) => {
     <StyledWrap>
       <InterviewComment>
         <StyledComment>
+          <span>Q.</span>
           {questionList[interviewQuestionNumber]}
         </StyledComment>
       </InterviewComment>
@@ -65,4 +66,10 @@ const StyledComment = styled.strong`
   height: 100%;
   font-size: 20px;
   font-weight: 400;
+  color: var(--main-black);
+
+  & span {
+    font-weight: 700;
+    margin-right: 20px;
+  }
 `;

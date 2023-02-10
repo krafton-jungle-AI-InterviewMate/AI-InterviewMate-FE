@@ -28,9 +28,7 @@ const InterviewAiContainer = () => {
 
   return (
     <StyledWrap>
-      <p>
-        TODO: 사용자 영상 영역
-      </p>
+      {/* TODO: react-webcam */}
       {interviewMode === "break" && (
         <BreakModeController />
       )}
@@ -52,5 +50,6 @@ export default InterviewAiContainer;
 const StyledWrap = styled.section`
   width: 100%;
   min-height: calc(100vh - 170px);
+  margin-top: 30px;
   position: relative;
 `;
