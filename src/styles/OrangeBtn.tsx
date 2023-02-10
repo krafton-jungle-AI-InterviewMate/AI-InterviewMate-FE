@@ -20,6 +20,7 @@ export const StyledOrangeBtn = styled.div<BtnSize>`
   transition: 0.2s;
   &:hover {
     background-color: var(--light-orange);
+    cursor: pointer;
   }
   &:active {
     background-color: var(--push-orange);
