@@ -40,6 +40,7 @@ const StyledRoom = styled.div<IRoom>`
       font-size: 12px;
       background-color: ${props => (props.aiInter ? "var(--push-gray)" : "var(--main-black)")};
       border-radius: 5px;
+      color: var(--main-white);
     }
   }
   .roomState {
