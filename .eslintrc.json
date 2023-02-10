@@ -33,16 +33,7 @@
     "no-unreachable": "warn",
     "strict": ["error", "global"],
     "curly": "warn",
-    "comma-dangle": [
-      "error",
-      {
-        "arrays": "only-multiline",
-        "objects": "only-multiline",
-        "imports": "only-multiline",
-        "exports": "only-multiline",
-        "functions": "only-multiline"
-      }
-    ],
+    "comma-dangle": ["error", "always-multiline"],
     "brace-style": [
       "error",
       "stroustrup",
