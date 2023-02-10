@@ -11,7 +11,6 @@ export const StyledOrangeBtn = styled.div<BtnSize>`
   align-items: center;
   width: ${props => props.width};
   height: ${props => props.height};
-  margin-top: 60px;
   color: white;
   background-color: var(--main-orange);
   border-radius: ${props => (props.width === "250px" ? "15px 30px" : "5px 15px")};

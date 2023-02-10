@@ -26,6 +26,10 @@ const StyledStart = styled.div`
     font-size: 20px;
     color: var(--font-gray);
   }
+  a {
+    display: block;
+    margin-top: 60px;
+  }
 `;
 
 const Home = () => {

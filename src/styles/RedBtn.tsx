@@ -11,7 +11,6 @@ export const StyledRedBtn = styled.div<BtnSize>`
   align-items: center;
   width: ${props => props.width};
   height: ${props => props.height};
-  margin-top: 60px;
   color: var(--main-black);
   background-color: var(--main-white);
   border-radius: ${props => (props.width === "250px" ? "15px 30px" : "5px 15px")};
