@@ -1,5 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Nav from "components/layout/Nav";
+import Home from "pages/Home";
+import Mypage from "pages/Mypage";
 import styled from "@emotion/styled";
 import Home from "pages/Home";
 import Lobby from "pages/Lobby";
@@ -12,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/Lobby" element={<Lobby />} />
+        <Route path="/mypage" element={<Mypage />} />
       </Routes>
     </StyledWrapper>
   );

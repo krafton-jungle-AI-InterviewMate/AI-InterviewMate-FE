@@ -61,6 +61,7 @@
     ],
     "array-bracket-newline": ["error", "consistent"],
     "array-bracket-spacing": ["error", "always"],
+    "eol-last": ["error", "always"],
 
     /* React Options */
     "react/jsx-uses-react": "off",
@@ -69,6 +70,7 @@
     "react/jsx-filename-extension": 0,
     "react/jsx-one-expression-per-line": 0,
     "react/prop-types": 0,
+    "react/jsx-indent": ["error", 2],
 
     /* React Hooks Options */
     "react-hooks/rules-of-hooks": "error",
