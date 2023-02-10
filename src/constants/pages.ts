@@ -2,6 +2,7 @@ export const PagesPath = {
   INDEX: "/",
   MYPAGE: "/mypage",
   INTERVIEW_READY: "/interview/ready",
+  INTERVIEW_END: "/interview/end",
   LOBBY: "/lobby",
 } as const;
 
@@ -14,4 +15,5 @@ export const PagesName = {
 
   /** 면접방 */
   "/interview/ready": "면접 대기방",
+  "/interview/end": "면접 종료",
 } as const;

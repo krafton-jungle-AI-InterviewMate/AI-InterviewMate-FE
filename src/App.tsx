@@ -6,6 +6,7 @@ import Home from "pages/Home";
 import Mypage from "pages/Mypage";
 import Lobby from "pages/Lobby";
 import { InterviewReady } from "pages/interview";
+import { InterviewEnd } from "pages/interview";
 import NotFound from "pages/NotFound";
 
 import styled from "@emotion/styled";
@@ -23,6 +24,7 @@ function App() {
         {/* NavWithBreadcrumbs */}
         <Route element={<BreadcrumbsLayout />}>
           <Route path={PagesPath.MYPAGE} element={<Mypage />} />
+          <Route path={PagesPath.INTERVIEW_END} element={<InterviewEnd />} />
           {/* TODO: 면접 진행 페이지 외에 새로 추가하시는 페이지는 모두 이 부분에 추가해주세요. */}
         </Route>
 
