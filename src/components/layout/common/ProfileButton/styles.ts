@@ -23,13 +23,13 @@ export const popoverStyleOverride: SxProps = {
 
     "&:hover": {
       color: "var(--light-blue)",
-    }
+    },
   },
   "& .mypageLink": {
     fontWeight: 400,
 
     "&:hover": {
       color: "var(--light-blue)",
-    }
-  }
+    },
+  },
 };
