@@ -1,17 +1,20 @@
 import { Routes, Route } from "react-router-dom";
-import Nav from "components/layout/Nav";
+import { PagesPath } from "constants/pages";
+import { NavInterview } from "components/layout/nav";
 import Home from "pages/Home";
 import Mypage from "pages/Mypage";
+import InterviewReady from "pages/interview/InterviewReady";
 import styled from "@emotion/styled";
 
 function App() {
   return (
     <StyledWrapper>
-      <Nav />
+      <NavInterview />
 
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/mypage" element={<Mypage />} />
+        <Route path={PagesPath.INDEX} element={<Home />} />
+        <Route path={PagesPath.MYPAGE} element={<Mypage />} />
+        <Route path={PagesPath.INTERVIEW_READY} element={<InterviewReady />} />
       </Routes>
     </StyledWrapper>
   );
