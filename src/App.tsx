@@ -1,8 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Nav from "components/layout/Nav";
-import Home from "pages/Home";
-import Mypage from "pages/Mypage";
 import styled from "@emotion/styled";
+import Mypage from "pages/Mypage";
 import Home from "pages/Home";
 import Lobby from "pages/Lobby";
 
