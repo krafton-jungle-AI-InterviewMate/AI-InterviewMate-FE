@@ -45,9 +45,9 @@ const globalStyles = css`
   }
 
   a {
-    font-weight: 500;
     color: var(--main-black);
     text-decoration: inherit;
+    transition: color 200ms;
   }
   a:hover {
     color: var(--light-black);
@@ -75,7 +75,6 @@ const globalStyles = css`
     border: 1px solid transparent;
     padding: 0.6em 1.2em;
     font-size: 1em;
-    font-weight: 500;
     font-family: inherit;
     background-color: var(--main-black);
     cursor: pointer;
