@@ -52,6 +52,5 @@ const StyledSecond = styled.div<{ sec: number }>`
   border-radius: 3px;
   background-color: var(--main-white);
   box-shadow: 0px 4px 14px 3px var(--main-white);
-  opacity: 0.8;
 `;
 

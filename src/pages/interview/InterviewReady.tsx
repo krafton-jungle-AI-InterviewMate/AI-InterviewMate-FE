@@ -1,4 +1,7 @@
 import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { interviewModeAtom } from "store/interview/atom";
+
 import InterviewReadyContainer from "components/interview/InterviewReadyContainer";
 
 import { AiOutlineInfoCircle } from "react-icons/ai";
@@ -7,6 +10,7 @@ import { commonButtonStyle } from "styles/common";
 
 const InterviewReady = () => {
   const navigate = useNavigate();
+  const setInterviewMode = useSetRecoilState(interviewModeAtom);
 
   const handleCancelButton = () => {
     // TODO: 컨펌 팝업
@@ -15,6 +19,7 @@ const InterviewReady = () => {
 
   const handleGoButton = () => {
     // TODO: landmarks 상태 저장
+    setInterviewMode("break");
     navigate("/interview/ai");
   };
 

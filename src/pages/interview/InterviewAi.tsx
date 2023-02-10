@@ -1,7 +1,4 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { interviewModeAtom } from "store/interview/atom";
 
 import ai from "static/images/robot.jpg";
 import InterviewAiContainer from "components/interview/InterviewAiContainer";
@@ -10,14 +7,7 @@ import styled from "@emotion/styled";
 import { commonButtonStyle } from "styles/common";
 
 const InterviewAi = () => {
-  const interviewMode = useRecoilValue(interviewModeAtom);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (interviewMode === "finished") {
-      navigate("/interview/end");
-    }
-  }, [ interviewMode ]);
 
   const handleExitButton = () => {
     // TODO: 컨펌 팝업
@@ -35,10 +25,6 @@ const InterviewAi = () => {
         </StyledExitButton>
       </StyledInterviewerSection>
       <InterviewAiContainer />
-      {/* TODO: AnswerModeController로 이관 */}
-      {/* {interviewMode === "answer" && (
-        <InterviewAiTimer sec={30} />
-      )} */}
     </StyledWrap>
   );
 };
