@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Nav from "components/layout/Nav";
-import Home from "pages/Home";
 import styled from "@emotion/styled";
+import Home from "pages/Home";
 import Lobby from "pages/Lobby";
 
 function App() {

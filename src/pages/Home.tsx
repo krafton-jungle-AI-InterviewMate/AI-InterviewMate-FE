@@ -12,7 +12,7 @@ const StyledHomeContents = styled.div`
   }
 `;
 
-const StyeldStartButton = styled.div`
+const StyledStart = styled.div`
   text-align: left;
   p {
     font-size: 48px;
@@ -51,16 +51,16 @@ const StyeldStartButton = styled.div`
 const Home = () => {
   return (
     <StyledHomeContents>
-      <StyeldStartButton>
+      <StyledStart>
         <p>
           면접 합격은
           <br />
           AI 인터뷰 메이트.
         </p>
         <span>충분한 연습을 통해 당당히 취업하세요.</span>
-        <Link to={"/Lobby"}>바로 시작하기</Link>
-      </StyeldStartButton>
-      <img src="../../public/undraw_Interview_re_e5jn.png" alt="interview image" />
+        <Link to="/lobby">바로 시작하기</Link>
+      </StyledStart>
+      <img src="public/undraw_Interview_re_e5jn.png" alt="interview image" />
     </StyledHomeContents>
   );
 };
