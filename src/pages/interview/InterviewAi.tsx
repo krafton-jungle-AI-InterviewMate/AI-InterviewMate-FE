@@ -72,10 +72,12 @@ const StyledExitButton = styled.button`
   background-color: var(--main-white);
   color: var(--main-black);
   margin-left: 28px;
+  border: 1px solid var(--main-black);
 
   &:hover {
-    background-color: var(--main-alert);
+    background-color: var(--light-alert);
     color: var(--main-white);
+    border-color: transparent;
   }
   &:active {
     background-color: var(--push-alert);
