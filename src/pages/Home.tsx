@@ -60,7 +60,7 @@ const Home = () => {
         <span>충분한 연습을 통해 당당히 취업하세요.</span>
         <Link to="/lobby">바로 시작하기</Link>
       </StyledStart>
-      <img src="public/undraw_Interview_re_e5jn.png" alt="interview image" />
+      <img src="images/public/undraw_Interview_re_e5jn.png" alt="interview image" />
     </StyledHomeContents>
   );
 };
