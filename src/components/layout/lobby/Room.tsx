@@ -18,6 +18,7 @@ const StyledRoom = styled.div<IRoom>`
   background-color: var(--main-white);
   padding: 28px 42px;
   margin-bottom: 40px;
+  filter: drop-shadow(0px 6px 24px rgba(0, 0, 0, 0.03));
   .roomHeader {
     display: flex;
     justify-content: space-between;
@@ -49,6 +50,9 @@ const StyledRoom = styled.div<IRoom>`
     justify-content: space-between;
     align-items: center;
     color: var(--font-gray);
+    p {
+      margin: 0;
+    }
     .warningComent {
       display: flex;
       justify-content: center;
@@ -70,10 +74,10 @@ const StyledRoom = styled.div<IRoom>`
   }
 `;
 
-interface IRoomInfo {
+interface RoomProps {
   roomName: string; // 방 제목
-  aiInter: boolean; // AI 면접, 유저 면접
-  lock: boolean; // 잠금 여부
+  isAiInterview: boolean; // AI 면접, 유저 면접
+  isLock: boolean; // 잠금 여부
   roomState: string; // 방 상태
   question?: number; // 질문 개수
   interviewTime?: number; // 인터뷰 시간
@@ -83,31 +87,31 @@ interface IRoomInfo {
 
 function Room({
   roomName,
-  aiInter,
-  lock,
+  isAiInterview,
+  isLock,
   roomState,
   question,
   interviewTime,
   currPeople,
   totalPeople,
-}: IRoomInfo) {
+}: RoomProps) {
   return (
-    <StyledRoom aiInter={aiInter}>
+    <StyledRoom aiInter={isAiInterview}>
       <div className="roomHeader">
         <div className="roomName">
           <p>{roomName}</p>
-          {aiInter ? (
+          {isAiInterview ? (
             <span>질문 개수: {question}개</span>
           ) : (
             <span>진행 시간: {interviewTime}분</span>
           )}
         </div>
-        <div className="interviewer">{aiInter ? "AI 면접관" : "유저 면접관"}</div>
+        <div className="interviewer">{isAiInterview ? "AI 면접관" : "유저 면접관"}</div>
       </div>
 
       <div className="roomState">
         <p>{roomState}</p>
-        {aiInter ? (
+        {isAiInterview ? (
           <div className="warningComent">
             <AiOutlineInfoCircle size={"25px"} color={"#d9d9d9"} />
             <p>
@@ -115,7 +119,7 @@ function Room({
               <br />방 만들기 기능을 이용해주세요.
             </p>
           </div>
-        ) : lock ? (
+        ) : isLock ? (
           <div className="roomInfo">
             <span>
               {currPeople} / {totalPeople}
