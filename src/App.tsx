@@ -1,20 +1,22 @@
 import { Routes, Route } from "react-router-dom";
 import { PagesPath } from "constants/pages";
-import { NavInterview } from "components/layout/nav";
+import { NavSimple } from "components/layout/nav";
 import Home from "pages/Home";
 import Mypage from "pages/Mypage";
+import Lobby from "pages/Lobby";
 import InterviewReady from "pages/interview/InterviewReady";
 import styled from "@emotion/styled";
 
 function App() {
   return (
     <StyledWrapper>
-      <NavInterview />
+      <NavSimple />
 
       <Routes>
         <Route path={PagesPath.INDEX} element={<Home />} />
         <Route path={PagesPath.MYPAGE} element={<Mypage />} />
         <Route path={PagesPath.INTERVIEW_READY} element={<InterviewReady />} />
+        <Route path={PagesPath.LOBBY} element={<Lobby />} />
       </Routes>
     </StyledWrapper>
   );
