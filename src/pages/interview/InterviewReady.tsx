@@ -3,7 +3,7 @@ import InterviewReadyContainer from "components/interview/InterviewReadyContaine
 
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import styled from "@emotion/styled";
-import { css } from "@emotion/react";
+import { commonButtonStyle } from "styles/common";
 
 const InterviewReady = () => {
   const navigate = useNavigate();
@@ -63,14 +63,6 @@ const StyledButtonBox = styled.div`
   width: 430px;
 `;
 
-const commonButtonStyle = css`
-  width: 200px;
-  height: 48px;
-  border-radius: var(--button-border-radius);
-  transition: all 200ms;
-`;
-
-// TODO: common button으로 교체
 const StyledCancelButton = styled.button`
   ${commonButtonStyle}
   background-color: var(--main-white);

@@ -5,7 +5,7 @@ import { SimpleLayout, BreadcrumbsLayout, InterviewLayout } from "components/lay
 import Home from "pages/Home";
 import Mypage from "pages/Mypage";
 import Lobby from "pages/Lobby";
-import { InterviewReady } from "pages/interview";
+import { InterviewAi, InterviewReady } from "pages/interview";
 import NotFound from "pages/NotFound";
 
 import styled from "@emotion/styled";
@@ -32,7 +32,7 @@ function App() {
         </Route>
 
         {/* Pages Without Nav */}
-        {/* TODO: 면접 진행 페이지 */}
+        <Route path={PagesPath.INTERVIEW_AI} element={<InterviewAi />} />
 
         <Route element={<SimpleLayout />}>
           <Route path="*" element={<NotFound />} />
