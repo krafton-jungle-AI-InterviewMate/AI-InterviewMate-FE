@@ -15,13 +15,16 @@ export const StyledBlueBtn = styled.div<BtnSize>`
   background-color: var(--main-white);
   border-radius: ${props => (props.width === "250px" ? "15px 30px" : "5px 15px")};
   border: 1px solid var(--main-black);
-  font-size: ${props => (props.width === "250px" ? "24px" : "20px")};
+  font-size: ${props =>
+    props.width === "250px" ? "24px" : props.width === "200px" ? "20px" : "16px"};
   font-weight: 400;
   text-align: center;
   transition: 0.2s;
   &:hover {
     background-color: var(--main-blue);
-    color: var(--main-white);
+    a {
+      color: var(--main-white);
+    }
     cursor: pointer;
   }
   &:active {
