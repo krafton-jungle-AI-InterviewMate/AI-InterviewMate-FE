@@ -113,7 +113,7 @@ function Room({
         <p>{roomState}</p>
         {isAiInterview ? (
           <div className="warningComent">
-            <AiOutlineInfoCircle size={"25px"} color={"#d9d9d9"} />
+            <AiOutlineInfoCircle size={"25px"} color={"var(--push-gray)"} />
             <p>
               AI 면접관 방에는 입장하실 수 없습니다.
               <br />방 만들기 기능을 이용해주세요.
@@ -124,14 +124,14 @@ function Room({
             <span>
               {currPeople} / {totalPeople}
             </span>
-            <RiGitRepositoryPrivateFill size={"32px"} color={"#d9d9d9"} />
+            <RiGitRepositoryPrivateFill size={"32px"} color={"var(--push-gray)"} />
           </div>
         ) : (
           <div className="roomInfo">
             <span>
               {currPeople} / {totalPeople}
             </span>
-            <MdPublic size={"32px"} color={"#d9d9d9"} />
+            <MdPublic size={"32px"} color={"var(--push-gray)"} />
           </div>
         )}
       </div>

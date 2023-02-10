@@ -16,6 +16,7 @@ const StyledHomeContents = styled.div`
 const StyledStart = styled.div`
   text-align: left;
   p {
+    color: var(--main-black);
     font-size: 48px;
     font-weight: 400;
     line-height: 60px;
