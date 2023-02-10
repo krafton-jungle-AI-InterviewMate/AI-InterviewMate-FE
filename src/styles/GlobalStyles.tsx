@@ -28,9 +28,9 @@ const globalStyles = css`
     line-height: 24px;
     font-weight: 400;
 
-    color-scheme: light dark;
-    color: rgba(255, 255, 255, 0.87);
-    background-color: var(--main-black);
+    /* color-scheme: light dark; */
+    color: var(--main-black);
+      background-color: var(--main-white);
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -50,7 +50,7 @@ const globalStyles = css`
     text-decoration: inherit;
   }
   a:hover {
-    color: var(--light-black);
+    color: var(--light-blue);
   }
 
   html,
@@ -87,19 +87,6 @@ const globalStyles = css`
   button:focus,
   button:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
-  }
-
-  @media (prefers-color-scheme: light) {
-    :root {
-      color: var(--main-black);
-      background-color: var(--main-white);
-    }
-    a:hover {
-      color: var(--main-black);
-    }
-    button {
-      background-color: var(--push-gray);
-    }
   }
 `;
 
