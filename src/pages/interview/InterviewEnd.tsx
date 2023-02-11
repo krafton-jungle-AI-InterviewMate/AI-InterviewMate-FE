@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
-import { StyledRedBtn } from "styles/RedBtn";
 import { useState, useEffect } from "react";
 import InterviewRadio from "components/layout/interviewEnd/InterviewRadio";
+import { StyledBtn } from "styles/StyledBtn";
 
 const StyledInterviewEnd = styled.div`
   color: var(--main-black);
@@ -76,9 +76,9 @@ function InterviewEnd({ isAiInterview, isInterviewer }: InterviewEndProps) {
           <p>수고하셨습니다.</p>
           <span>면접 결과는 마이페이지에서 확인하실 수 있습니다.</span>
           <Link to="/lobby">
-            <StyledRedBtn width="100px" height="32px">
+            <StyledBtn width="100px" height="32px" color="red">
               나가기
-            </StyledRedBtn>
+            </StyledBtn>
           </Link>
         </div>
       ) : isInterviewer ? (
@@ -87,9 +87,9 @@ function InterviewEnd({ isAiInterview, isInterviewer }: InterviewEndProps) {
           <InterviewRadio handleChange={handleChange} labelName="면접 자세" />
           <InterviewRadio handleChange={handleChange} labelName="면접 답변" />
           <Link to="/lobby">
-            <StyledRedBtn width="100px" height="32px">
+            <StyledBtn width="100px" height="32px" color="red">
               나가기
-            </StyledRedBtn>
+            </StyledBtn>
           </Link>
         </div>
       ) : (
@@ -97,9 +97,9 @@ function InterviewEnd({ isAiInterview, isInterviewer }: InterviewEndProps) {
           <InterviewRadio handleChange={handleChange} labelName="면접관 1" />
           <InterviewRadio handleChange={handleChange} labelName="면접관 2" />
           <Link to="/lobby">
-            <StyledRedBtn width="100px" height="32px">
+            <StyledBtn width="100px" height="32px" color="red">
               나가기
-            </StyledRedBtn>
+            </StyledBtn>
           </Link>
         </div>
       )}
