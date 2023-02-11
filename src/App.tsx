@@ -2,11 +2,12 @@ import { Routes, Route } from "react-router-dom";
 import { PagesPath } from "constants/pages";
 
 import { SimpleLayout, BreadcrumbsLayout, InterviewLayout } from "components/layout";
+import { InterviewAi, InterviewReady, InterviewEnd } from "pages/interview";
 import Home from "pages/Home";
 import Mypage from "pages/mypage/Mypage";
 import Result from "pages/mypage/Result";
+import ResultDetails from "pages/mypage/ResultDetails";
 import Lobby from "pages/Lobby";
-import { InterviewAi, InterviewReady, InterviewEnd } from "pages/interview";
 import NotFound from "pages/NotFound";
 
 import styled from "@emotion/styled";
@@ -25,6 +26,7 @@ function App() {
         <Route element={<BreadcrumbsLayout />}>
           <Route path={PagesPath.MYPAGE} element={<Mypage />} />
           <Route path={PagesPath.RESULT} element={<Result />} />
+          <Route path={PagesPath.RESULT_DETAILS} element={<ResultDetails />} />
           <Route
             path={PagesPath.INTERVIEW_END}
             element={<InterviewEnd isAiInterview={true} isInterviewer={true} />}
