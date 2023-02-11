@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import Webcam from "react-webcam";
 import ai from "static/images/robot.jpg";
 import NameTag from "./NameTag";
-
+import Skeleton from "@mui/material/Skeleton";
 import { BsThreeDots } from "react-icons/bs";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
@@ -26,6 +26,9 @@ const InterviewReadyContainer = () => {
     <StyledContainer>
       <StyledProfile>
         <StyledVideoWrap>
+          {!isWebcamReady && (
+            <Skeleton variant="rectangular" width={272} height={204} />
+          )}
           <Webcam ref={webcamRef} mirrored={false} onCanPlay={() => setIsWebcamReady(true)} />
           <StyledCanvas ref={canvasRef} />
         </StyledVideoWrap>

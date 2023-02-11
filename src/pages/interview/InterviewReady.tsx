@@ -1,12 +1,16 @@
 import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { interviewModeAtom } from "store/interview/atom";
+
 import InterviewReadyContainer from "components/interview/InterviewReadyContainer";
 
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import styled from "@emotion/styled";
-import { css } from "@emotion/react";
+import { commonButtonStyle } from "styles/common";
 
 const InterviewReady = () => {
   const navigate = useNavigate();
+  const setInterviewMode = useSetRecoilState(interviewModeAtom);
 
   const handleCancelButton = () => {
     // TODO: 컨펌 팝업
@@ -15,6 +19,7 @@ const InterviewReady = () => {
 
   const handleGoButton = () => {
     // TODO: landmarks 상태 저장
+    setInterviewMode("break");
     navigate("/interview/ai");
   };
 
@@ -63,14 +68,6 @@ const StyledButtonBox = styled.div`
   width: 430px;
 `;
 
-const commonButtonStyle = css`
-  width: 200px;
-  height: 48px;
-  border-radius: var(--button-border-radius);
-  transition: all 200ms;
-`;
-
-// TODO: common button으로 교체
 const StyledCancelButton = styled.button`
   ${commonButtonStyle}
   background-color: var(--main-white);

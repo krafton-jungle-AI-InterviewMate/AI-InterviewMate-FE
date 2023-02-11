@@ -1,6 +1,7 @@
 export const PagesPath = {
   INDEX: "/",
   MYPAGE: "/mypage",
+  INTERVIEW_AI: "/interview/ai",
   INTERVIEW_READY: "/interview/ready",
   INTERVIEW_END: "/interview/end",
   LOBBY: "/lobby",
