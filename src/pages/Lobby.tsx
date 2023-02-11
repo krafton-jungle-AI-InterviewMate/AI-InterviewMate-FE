@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
-import { StyledOrangeBtn } from "styles/OrangeBtn";
+import { StyledBtn } from "styles/StyledBtn";
 import { Link } from "react-router-dom";
-import { StyledBlueBtn } from "styles/BlueBtn";
 import Room from "components/layout/lobby/Room";
 
 const StyledLobbyInterface = styled.div`
@@ -26,13 +25,13 @@ function Lobby() {
     <>
       <StyledLobbyInterface>
         <Link to="/interview/ready">
-          <StyledOrangeBtn width="200px" height="48px">
+          <StyledBtn width="200px" height="48px" color="orange">
             시작하기
-          </StyledOrangeBtn>
+          </StyledBtn>
         </Link>
-        <StyledBlueBtn width="200px" height="48px">
+        <StyledBtn width="200px" height="48px" color="blue">
           목록 새로고침
-        </StyledBlueBtn>
+        </StyledBtn>
       </StyledLobbyInterface>
       <StyledRoomContents>
         <Room

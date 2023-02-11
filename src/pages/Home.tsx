@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import mainIllust from "static/images/undraw_Interview_re_e5jn.png";
 import styled from "@emotion/styled";
-import { StyledOrangeBtn } from "styles/OrangeBtn";
+import { StyledBtn } from "styles/StyledBtn";
 
 const StyledHomeContents = styled.div`
   min-width: 1000px;
@@ -45,9 +45,9 @@ const Home = () => {
         </p>
         <span>충분한 연습을 통해 당당히 취업하세요.</span>
         <Link to="/lobby">
-          <StyledOrangeBtn width="250px" height="70px">
+          <StyledBtn width="250px" height="70px" color="orange">
             바로 시작하기
-          </StyledOrangeBtn>
+          </StyledBtn>
         </Link>
       </StyledStart>
       <img src={mainIllust} alt="interview image" />
