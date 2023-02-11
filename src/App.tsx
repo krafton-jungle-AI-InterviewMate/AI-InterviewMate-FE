@@ -3,7 +3,8 @@ import { PagesPath } from "constants/pages";
 
 import { SimpleLayout, BreadcrumbsLayout, InterviewLayout } from "components/layout";
 import Home from "pages/Home";
-import Mypage from "pages/Mypage";
+import Mypage from "pages/mypage/Mypage";
+import Result from "pages/mypage/Result";
 import Lobby from "pages/Lobby";
 import { InterviewAi, InterviewReady, InterviewEnd } from "pages/interview";
 import NotFound from "pages/NotFound";
@@ -23,6 +24,7 @@ function App() {
         {/* NavWithBreadcrumbs */}
         <Route element={<BreadcrumbsLayout />}>
           <Route path={PagesPath.MYPAGE} element={<Mypage />} />
+          <Route path={PagesPath.RESULT} element={<Result />} />
           <Route
             path={PagesPath.INTERVIEW_END}
             element={<InterviewEnd isAiInterview={true} isInterviewer={true} />}
