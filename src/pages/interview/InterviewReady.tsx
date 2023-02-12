@@ -45,7 +45,7 @@ const InterviewReady = () => {
   } = useFaceLandmarksDetection({
     video,
     canvasRef,
-    isDebugging: true,
+    isDebugging: false,
   });
 
   useEffect(() => {
@@ -232,6 +232,18 @@ const StyledGoButton = styled.button`
   &:active {
     background-color: var(--push-orange);
   }
+
+  ${({ disabled }) => disabled && css`
+    background-color: var(--push-gray);
+    cursor: not-allowed;
+
+    &:hover {
+    background-color: var(--push-gray);
+    }
+    &:active {
+      background-color: var(--push-gray);
+    }
+  `};
 `;
 
 const StyledInformation = styled.div`
