@@ -6,10 +6,13 @@ import {
   interviewQuestionTotalAtom,
 } from "store/interview/atom";
 import useFaceLandmarksDetection from "hooks/useFaceLandmarkDetection";
+import useCheckIrisPosition from "hooks/useCheckIrisPosition";
+import useIrisAssessment from "hooks/useIrisAssessment";
 
 import { InterviewModeComment, ANSWER_LIMIT_SECONDS } from "constants/interview";
 import InterviewComment from "../InterviewComment";
 import InterviewAiTimer from "../InterviewAiTimer";
+import InterviewFeedback from "components/interview/InterviewFeedback";
 
 import styled from "@emotion/styled";
 
@@ -49,11 +52,24 @@ const AnswerModeController = (props: AnswerModeControllerProps) => {
   }, []);
 
   const {
-    face, // ! TODO: if face
+    face,
   } = useFaceLandmarksDetection({
     video,
     canvasRef,
-    isDebugging: true,
+    isDebugging: false,
+  });
+
+  const {
+    horizontalRatio,
+  } = useCheckIrisPosition({
+    face,
+  });
+
+  const {
+    showFeedback: showIrisFeedback,
+  } = useIrisAssessment({
+    isRealtimeMode: true,
+    horizontalRatio,
   });
 
   return (
@@ -64,11 +80,16 @@ const AnswerModeController = (props: AnswerModeControllerProps) => {
             {InterviewModeComment.answer}
           </StyledComment>
           <StyledTimer>
-            <span>남은 시간: {countDown}초</span>
+            <span>남은 시간: {countDown >= 0 ? countDown : 0}초</span>
             <InterviewAiTimer sec={ANSWER_LIMIT_SECONDS} />
           </StyledTimer>
         </StyledFlex>
       </InterviewComment>
+
+      {showIrisFeedback && (
+        <InterviewFeedback feedbackType="iris" />
+      )}
+      <InterviewFeedback feedbackType="motion" />
     </StyledWrap>
   );
 };
