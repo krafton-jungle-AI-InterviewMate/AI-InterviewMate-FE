@@ -36,7 +36,7 @@ const useIrisAssessment = (params: UseIrisAssessmentParams) => {
 
     const timerId = window.setTimeout(() => {
       setIncrements((curr) => curr + 1);
-    }, 1000 * 1.5);
+    }, 1000 * 1);
 
     return (() => {
       window.clearTimeout(timerId);

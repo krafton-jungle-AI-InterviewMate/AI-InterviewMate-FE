@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import throttle from "lodash.throttle";
 import * as FaceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
 import { checkHorizontalRatio } from "lib/faceLandmarkDetection";
 
@@ -13,17 +12,22 @@ const useCheckIrisPosition = (params: UseCheckIrisPositionParams) => {
   } = params;
 
   const [ horizontalRatio, setHorizontalRatio ] = useState(0.5);
-
-  const throttledCheckHorizontalRatio = throttle((kp: FaceLandmarksDetection.Keypoint[]) => {
-    const ratio = checkHorizontalRatio(kp);
-    setHorizontalRatio(ratio);
-  }, 1000 * 1.5);
+  const [ increments, setIncrements ] = useState(0);
 
   useEffect(() => {
     if (face) {
-      throttledCheckHorizontalRatio(face.keypoints);
+      const ratio = checkHorizontalRatio(face.keypoints);
+      setHorizontalRatio(ratio);
     }
-  }, [ face ]);
+
+    const timerId = window.setTimeout(() => {
+      setIncrements((curr) => curr + 1);
+    }, 1000 * 0.5);
+
+    return (() => {
+      window.clearTimeout(timerId);
+    });
+  }, [ increments ]);
 
   return {
     horizontalRatio,
