@@ -22,7 +22,6 @@ export const tableContainerStyleOverride: SxProps = {
   },
   "& tr td:last-child": {
     borderRight: "none",
-    ...commonFontStyle,
   },
   "& button": {
     ...commonFontStyle,
