@@ -1,4 +1,4 @@
-import { defineConfig, loadEnv } from "vite";
+import { defineConfig, loadEnv, ServerOptions, BuildOptions } from "vite";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import mkcert from "vite-plugin-mkcert";
@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => {
   /**
    * Common Server Options
    */
-  const serverOptions = {
+  const serverOptions: ServerOptions = {
     proxy: {
       "/api": {
         target: process.env.VITE_PUBLIC_API_SERVER,
@@ -20,9 +20,12 @@ export default defineConfig(({ mode }) => {
   /**
    * Common Build Options
    */
-  const buildOptions = {
+  const buildOptions: BuildOptions = {
     outDir: "dist",
     assetsDir: "assets",
+    commonjsOptions: {
+      include: [],
+    },
   };
 
   /**
@@ -31,7 +34,7 @@ export default defineConfig(({ mode }) => {
   if (mode === "production") {
     process.env = {
       ...process.env,
-      ...loadEnv(mode, process.cwd()) 
+      ...loadEnv(mode, process.cwd()), 
     };
 
     Object.assign(serverOptions, {
@@ -65,11 +68,14 @@ export default defineConfig(({ mode }) => {
       react({
         jsxImportSource: "@emotion/react",
         babel: {
-          plugins: [ "@emotion/babel-plugin" ]
-        }
+          plugins: [ "@emotion/babel-plugin" ],
+        },
       }),
-      mkcert()
+      mkcert(),
     ],
+    optimizeDeps: {
+      disabled: false,
+    },
 
     base: "/",
     publicDir: "./public",
