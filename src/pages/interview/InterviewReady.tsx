@@ -8,7 +8,7 @@ import useFaceLandmarksDetection from "hooks/useFaceLandmarksDetection";
 
 import Webcam from "react-webcam";
 import ai from "static/images/robot.jpg";
-import NameTag from "components/interview/InterviewNameTag"; // TODO: 파일 위치 및 이름 변경
+import NameTag from "components/interview/InterviewNameTag";
 import Skeleton from "@mui/material/Skeleton";
 
 import { BsThreeDots } from "react-icons/bs";
