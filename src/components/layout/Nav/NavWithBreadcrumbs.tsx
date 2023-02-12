@@ -24,8 +24,4 @@ const StyledLeftSection = styled.div`
   flex-flow: row nowrap;
   justify-content: center;
   align-items: center;
-
-  & a:hover {
-    color: var(--push-blue);
-  }
 `;

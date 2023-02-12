@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
-import { interviewModeAtom } from "store/interview/atom";
+import useInitializeInterviewState from "hooks/useInitializeInterviewState";
 
 import InterviewReadyContainer from "components/interview/InterviewReadyContainer";
 
@@ -10,7 +9,9 @@ import { commonButtonStyle } from "styles/common";
 
 const InterviewReady = () => {
   const navigate = useNavigate();
-  const setInterviewMode = useSetRecoilState(interviewModeAtom);
+  const {
+    initializeInterviewState,
+  } = useInitializeInterviewState();
 
   const handleCancelButton = () => {
     // TODO: 컨펌 팝업
@@ -19,18 +20,20 @@ const InterviewReady = () => {
 
   const handleGoButton = () => {
     // TODO: landmarks 상태 저장
-    setInterviewMode("break");
+    initializeInterviewState();
     navigate("/interview/ai");
   };
 
   return (
     <StyledWrapper>
       <InterviewReadyContainer />
+      {/* TODO: InterviewReadyContainer 여기에 풀기 */}
       <StyledFlexContainer>
         <StyledButtonBox>
           <StyledCancelButton type="button" onClick={handleCancelButton}>
             면접 취소하기
           </StyledCancelButton>
+          {/* TODO: disabled until isWebcamReady */}
           <StyledGoButton type="button" onClick={handleGoButton}>
             GO
             <StyledInformation>
