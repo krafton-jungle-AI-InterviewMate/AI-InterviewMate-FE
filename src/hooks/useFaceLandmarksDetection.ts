@@ -3,20 +3,20 @@ import * as FaceLandmarksDetection from "@tensorflow-models/face-landmarks-detec
 import { drawFaceMesh } from "lib/faceLandmarkDetection";
 
 type UseVideoFaceMeshParams = {
-  video: HTMLVideoElement;
+  video: HTMLVideoElement | null;
   canvasRef: React.MutableRefObject<HTMLCanvasElement | null>;
   isDebugging: boolean;
   debuggingOption?: { isShowIndex?: boolean };
+  /** 랜드마크를 단 한번만 detect할지 여부. 기본값은 false로, 랜드마크를 0.1초 간격으로 detect함. */
+  isOneOff?: boolean;
 };
 
 const useFaceLandmarksDetection = (params: UseVideoFaceMeshParams) => {
   const {
     video,
-    video: {
-      readyState,
-    },
     canvasRef,
     debuggingOption,
+    isOneOff,
   } = params;
   let {
     isDebugging,
@@ -36,6 +36,10 @@ const useFaceLandmarksDetection = (params: UseVideoFaceMeshParams) => {
 
   const setNewDetector = async () => {
     try {
+      if (!isVideoReady) {
+        throw new Error("video is not ready");
+      }
+
       setIsDetectorLoading(true);
 
       const model = FaceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
@@ -58,6 +62,10 @@ const useFaceLandmarksDetection = (params: UseVideoFaceMeshParams) => {
 
   const updateFace = async (detector: FaceLandmarksDetection.FaceLandmarksDetector) => {
     try {
+      if (!video) {
+        return;
+      }
+
       const { videoWidth, videoHeight } = video;
 
       video.width = videoWidth;
@@ -98,34 +106,43 @@ const useFaceLandmarksDetection = (params: UseVideoFaceMeshParams) => {
   };
 
   useEffect(() => {
+    if (!video) {
+      return;
+    }
+
+    const {
+      readyState,
+    } = video;
+
     if (readyState === 4) {
       setIsVideoReady(true);
     }
-  }, [ readyState ]);
-
-  useEffect(() => {
-    if (isVideoReady) {
-      (async () => {
-        await setNewDetector();
-      })();
-    }
-  }, [ isVideoReady ]);
+  }, [ video ]);
 
   useEffect(() => {
     if (detector) {
-      const intervalId = window.setInterval(async () => {
-        await updateFace(detector);
-      }, 100);
-
-      return () => {
-        window.clearInterval(intervalId);
-      };
+      if (isOneOff) {
+        (async () => {
+          await updateFace(detector);
+        })();
+      }
+      else {
+        const intervalId = window.setInterval(async () => {
+          await updateFace(detector);
+        }, 100);
+  
+        return () => {
+          window.clearInterval(intervalId);
+        };
+      }
     }
   }, [ detector ]);
 
   return {
+    isVideoReady,
     isDetectorLoading,
     faceMeshErrorMsg,
+    setNewDetector,
     face,
   };
 };

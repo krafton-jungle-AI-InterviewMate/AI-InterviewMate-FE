@@ -5,7 +5,7 @@ import {
   interviewQuestionNumberAtom,
   interviewQuestionTotalAtom,
 } from "store/interview/atom";
-import useFaceLandmarksDetection from "hooks/useFaceLandmarkDetection";
+import useFaceLandmarksDetection from "hooks/useFaceLandmarksDetection";
 import useCheckIrisPosition from "hooks/useCheckIrisPosition";
 import useIrisAssessment from "hooks/useIrisAssessment";
 
@@ -53,11 +53,21 @@ const AnswerModeController = (props: AnswerModeControllerProps) => {
 
   const {
     face,
+    setNewDetector,
+    isVideoReady,
   } = useFaceLandmarksDetection({
     video,
     canvasRef,
     isDebugging: false,
   });
+
+  useEffect(() => {
+    if (isVideoReady) {
+      (async () => {
+        await setNewDetector();
+      })();
+    }
+  }, [ isVideoReady ]);
 
   const {
     horizontalRatio,
