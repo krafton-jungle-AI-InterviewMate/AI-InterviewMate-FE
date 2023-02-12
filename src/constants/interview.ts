@@ -10,6 +10,7 @@ export const InterviewModeComment: { [mode in CommentMode]: string } = {
 export const ANSWER_LIMIT_SECONDS = 30;
 
 export const IRIS_PERFECT_SCORE = 100;
+export const MOTION_PERFECT_SCORE = 100;
 
 export const InterviewFeedbackComment: { [type in InterviewFeedbackTypes]: string } = {
   iris: "화면에 집중하세요.",
