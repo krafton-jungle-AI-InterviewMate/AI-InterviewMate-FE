@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { useCats } from "hooks/queries/example";
+
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -9,6 +12,17 @@ import Paper from "@mui/material/Paper";
 import { tableContainerStyleOverride } from "./styles";
 
 const ResultTable = () => {
+  const {
+    data,
+    isSuccess,
+  } = useCats({});
+
+  useEffect(() => {
+    if (isSuccess) {
+      console.log(data);
+    }
+  }, [ isSuccess ]);
+
   return (
     <TableContainer sx={tableContainerStyleOverride} component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="spanning table">

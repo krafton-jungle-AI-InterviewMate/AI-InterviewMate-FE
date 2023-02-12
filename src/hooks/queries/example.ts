@@ -1,13 +1,27 @@
 /** EXAMPLE CODE */
 
 import { useQuery } from "@tanstack/react-query";
-import { getAPI } from "api/axios";
+import exampleAPI from "api/example";
+import { ImageQueryParams } from "api/example/types";
 
-const fetchCats = () =>
-  getAPI({
-    endPoint: "/images/search",
+type UseCatsParams = {
+  imageQueryParams?: ImageQueryParams;
+};
+
+export const useCats = (params: UseCatsParams) => {
+  const {
+    imageQueryParams,
+  } = params;
+
+  const {
+    data,
+    isSuccess,
+  } = useQuery([ "fetchCats" ], () => {
+    return exampleAPI.getCats(imageQueryParams);
   });
 
-export const useFetchCats = () => {
-  return useQuery([ "fetchCats" ], () => fetchCats());
+  return {
+    data,
+    isSuccess,
+  };
 };

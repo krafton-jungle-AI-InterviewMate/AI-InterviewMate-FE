@@ -36,20 +36,6 @@ const requestErrorHandler = err => {
 };
 
 /**
- * Response Success Handler
- */
-const responseSuccessHandler = res => {
-  const response: DefaultResponse = res.data;
-
-  if (200 <= res.status && res.status < 300) {
-    return response.data;
-  }
-  else {
-    return responseErrorHandler(res);
-  }
-};
-
-/**
  * Response Fail handler
  */
 const responseErrorHandler = err => {
@@ -69,7 +55,7 @@ axiosInstance.interceptors.request.use(
  * Axios Response Middleware
  */
 axiosInstance.interceptors.response.use(
-  res => responseSuccessHandler(res),
+  (response) => response,
   err => responseErrorHandler(err),
 );
 

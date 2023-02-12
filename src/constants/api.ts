@@ -1,10 +1,10 @@
 /** EXAMPLE CODE */
 
-import { ImageQueryParams } from "types/apis";
+import { ImageQueryParams } from "api/example/types";
 
 export const BASE_URL = "https://api.thecatapi.com/v1"; // TODO: env
 
 export const API_PATH = {
-  GET_IMAGE: (queryParams: ImageQueryParams) =>
+  GET_IMAGE: (queryParams?: ImageQueryParams) =>
     `/images/search?${queryParams || ""}`,
 };
