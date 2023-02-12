@@ -88,3 +88,16 @@ export const drawFaceMesh = (params: DrawFaceMeshParams) => {
     }
   });
 };
+
+export const checkHorizontalRatio = (kp: Keypoint[]) => {
+  const eyeRightWidth = kp[POINTS.EYE_RIGHT_END].x - kp[POINTS.EYE_RIGHT_START].x;
+  const eyeLeftWidth = kp[POINTS.EYE_LEFT_END].x - kp[POINTS.EYE_LEFT_START].x;
+
+  const pupilRightPos = kp[POINTS.PUPIL_RIGHT].x - kp[POINTS.EYE_RIGHT_START].x;
+  const pupilLeftPos = kp[POINTS.PUPIL_LEFT].x - kp[POINTS.EYE_LEFT_START].x;
+
+  const pupilRight = pupilRightPos / eyeRightWidth;
+  const pupilLeft = pupilLeftPos / eyeLeftWidth;
+
+  return Number(((pupilRight + pupilLeft) / 2).toFixed(2));
+};

@@ -1,12 +1,12 @@
 export const IRIS_START = 468;
 export const IRIS_END = 477;
 
-export const PUPIL_LEFT = 468;
-export const PUPIL_RIGHT = 473;
-export const EYE_LEFT_START = 33;
-export const EYE_LEFT_END = 155;
-export const EYE_RIGHT_START = 398;
-export const EYE_RIGHT_END = 263;
+export const PUPIL_RIGHT = 468;
+export const PUPIL_LEFT = 473;
+export const EYE_RIGHT_START = 33;
+export const EYE_RIGHT_END = 155;
+export const EYE_LEFT_START = 398;
+export const EYE_LEFT_END = 263;
 
 // * Triangulation metrics
 // (원소 3개씩 묶여서 하나의 삼각형을 이루게 된다.)
