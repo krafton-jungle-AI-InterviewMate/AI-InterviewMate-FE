@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import * as FaceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
+import { drawFaceMesh } from "lib/faceLandmarkDetection";
 
 type UseVideoFaceMeshParams = {
   video: HTMLVideoElement;
+  canvasRef: React.MutableRefObject<HTMLCanvasElement | null>;
+  isDebugging: boolean;
+  debuggingOption?: { isShowIndex?: boolean };
 };
 
 const useFaceLandmarksDetection = (params: UseVideoFaceMeshParams) => {
@@ -11,7 +15,16 @@ const useFaceLandmarksDetection = (params: UseVideoFaceMeshParams) => {
     video: {
       readyState,
     },
+    canvasRef,
+    debuggingOption,
   } = params;
+  let {
+    isDebugging,
+  } = params;
+
+  if (import.meta.env.PROD) {
+    isDebugging = false;
+  }
 
   const [ isVideoReady, setIsVideoReady ] = useState(false);
   const [ isDetectorLoading, setIsDetectorLoading ] = useState(false);
@@ -52,6 +65,30 @@ const useFaceLandmarksDetection = (params: UseVideoFaceMeshParams) => {
 
       const [ newFace ] = await detector.estimateFaces(video);
       setFace(newFace);
+
+      // * 이하 디버깅을 위한 캔버스 관련 처리
+      if (isDebugging) {
+        if (!canvasRef.current) {
+          throw new Error("no canvasRef.current");
+        }
+
+        canvasRef.current.width = videoWidth;
+        canvasRef.current.height = videoHeight;
+
+        const ctx = canvasRef.current.getContext("2d");
+
+        if (!ctx) {
+          throw new Error("ctx not ready");
+        }
+
+        const isShowIndex = Boolean(debuggingOption && debuggingOption.isShowIndex);
+
+        drawFaceMesh({
+          keypoints: newFace.keypoints,
+          ctx,
+          isShowIndex,
+        });
+      }
     }
     catch (e) {
       if (e instanceof Error) {

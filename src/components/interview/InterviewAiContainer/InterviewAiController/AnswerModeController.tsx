@@ -5,6 +5,7 @@ import {
   interviewQuestionNumberAtom,
   interviewQuestionTotalAtom,
 } from "store/interview/atom";
+import useFaceLandmarksDetection from "hooks/useFaceLandmarkDetection";
 
 import { InterviewModeComment, ANSWER_LIMIT_SECONDS } from "constants/interview";
 import InterviewComment from "../InterviewComment";
@@ -12,7 +13,17 @@ import InterviewAiTimer from "../InterviewAiTimer";
 
 import styled from "@emotion/styled";
 
-const AnswerModeController = () => {
+type AnswerModeControllerProps = {
+  video: HTMLVideoElement;
+  canvasRef: React.MutableRefObject<HTMLCanvasElement | null>;
+};
+
+const AnswerModeController = (props: AnswerModeControllerProps) => {
+  const {
+    video,
+    canvasRef,
+  } = props;
+
   const setInterviewMode = useSetRecoilState(interviewModeAtom);
   const interviewQuestionNumber = useRecoilValue(interviewQuestionNumberAtom);
   const interviewQuestionTotal = useRecoilValue(interviewQuestionTotalAtom);
@@ -36,6 +47,14 @@ const AnswerModeController = () => {
       window.clearInterval(intervalId);
     };
   }, []);
+
+  const {
+    face, // ! TODO: if face
+  } = useFaceLandmarksDetection({
+    video,
+    canvasRef,
+    isDebugging: true,
+  });
 
   return (
     <StyledWrap>
