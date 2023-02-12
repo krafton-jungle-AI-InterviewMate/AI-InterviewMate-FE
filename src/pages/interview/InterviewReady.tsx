@@ -27,11 +27,13 @@ const InterviewReady = () => {
   return (
     <StyledWrapper>
       <InterviewReadyContainer />
+      {/* TODO: InterviewReadyContainer 여기에 풀기 */}
       <StyledFlexContainer>
         <StyledButtonBox>
           <StyledCancelButton type="button" onClick={handleCancelButton}>
             면접 취소하기
           </StyledCancelButton>
+          {/* TODO: disabled until isWebcamReady */}
           <StyledGoButton type="button" onClick={handleGoButton}>
             GO
             <StyledInformation>

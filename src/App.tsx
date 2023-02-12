@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { PagesPath } from "constants/pages";
 
+import { ToastContainer } from "react-toastify";
 import { SimpleLayout, BreadcrumbsLayout, InterviewLayout } from "components/layout";
 import { InterviewAi, InterviewReady, InterviewEnd } from "pages/interview";
 import Home from "pages/Home";
@@ -15,6 +16,8 @@ import styled from "@emotion/styled";
 function App() {
   return (
     <StyledWrapper>
+      <ToastContainer />
+
       <Routes>
         {/* NavSimple */}
         <Route element={<SimpleLayout />}>
