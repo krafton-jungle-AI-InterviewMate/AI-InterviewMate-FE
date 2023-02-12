@@ -38,7 +38,7 @@ const StyledResult = styled.div<StyledResultProps>`
       font-size: 12px;
       color: var(--main-white);
       background-color: ${props =>
-        props.isAiInterview ? "var(--push-gray)" : "var(--main-black)"};
+    props.isAiInterview ? "var(--push-gray)" : "var(--main-black)"};
       border-radius: 5px;
     }
     span {

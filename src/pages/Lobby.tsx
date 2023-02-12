@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { StyledBtn } from "styles/StyledBtn";
 import { Link } from "react-router-dom";
-import Room from "components/layout/lobby/Room";
+import Room from "components/lobby/Room";
 
 const StyledLobbyInterface = styled.div`
   min-width: 1000px;

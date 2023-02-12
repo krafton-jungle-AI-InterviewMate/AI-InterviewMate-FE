@@ -1,4 +1,4 @@
-import InterviewResult from "components/layout/Result/InterviewResult";
+import InterviewResult from "components/interview/InterviewResult";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 

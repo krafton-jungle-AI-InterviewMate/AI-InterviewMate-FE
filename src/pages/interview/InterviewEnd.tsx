@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import InterviewRadio from "components/layout/interviewEnd/InterviewRadio";
+import InterviewRadio from "components/interview/InterviewRadio";
 import { StyledBtn } from "styles/StyledBtn";
 
 const StyledInterviewEnd = styled.div`
@@ -47,17 +47,19 @@ interface InterviewEndProps {
 }
 
 function InterviewEnd({ isAiInterview, isInterviewer }: InterviewEndProps) {
-  const [eyeScore, setEyeScore] = useState(3);
-  const [poseScore, setPoseScore] = useState(3);
-  const [answerScore, setAnswerScore] = useState(3);
+  const [ eyeScore, setEyeScore ] = useState(3);
+  const [ poseScore, setPoseScore ] = useState(3);
+  const [ answerScore, setAnswerScore ] = useState(3);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
     if (name === "면접 시선") {
       setEyeScore(Number(value));
-    } else if (name === "면접 자세") {
+    }
+    else if (name === "면접 자세") {
       setPoseScore(Number(value));
-    } else if (name === "면접 답변") {
+    }
+    else if (name === "면접 답변") {
       setAnswerScore(Number(value));
     }
   };
@@ -66,7 +68,7 @@ function InterviewEnd({ isAiInterview, isInterviewer }: InterviewEndProps) {
     console.log(eyeScore);
     console.log(poseScore);
     console.log(answerScore);
-  }, [eyeScore, poseScore, answerScore]);
+  }, [ eyeScore, poseScore, answerScore ]);
 
   return (
     <StyledInterviewEnd>
