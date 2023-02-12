@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useRecoilState } from "recoil";
 import { irisScoreAtom } from "store/interview/atom";
+import { THRESHOLD_LEFT, THRESHOLD_RIGHT } from "constants/faceLandmarkDetection";
 
 type UseIrisAssessmentParams = {
   isRealtimeMode: boolean;
@@ -18,7 +19,7 @@ const useIrisAssessment = (params: UseIrisAssessmentParams) => {
   const [ increments, setIncrements ] = useState(0);
 
   const isIrisOutOfCenter = useMemo(() => {
-    return (horizontalRatio < 0.4 || horizontalRatio > 0.6);
+    return (horizontalRatio < THRESHOLD_RIGHT || horizontalRatio > THRESHOLD_LEFT);
   }, [ horizontalRatio ]);
 
   const assess = () => {

@@ -8,6 +8,9 @@ export const EYE_RIGHT_END = 155;
 export const EYE_LEFT_START = 398;
 export const EYE_LEFT_END = 263;
 
+export const THRESHOLD_RIGHT = 0.4;
+export const THRESHOLD_LEFT = 0.6;
+
 // * Triangulation metrics
 // (원소 3개씩 묶여서 하나의 삼각형을 이루게 된다.)
 export const TRIANGULATION = [
