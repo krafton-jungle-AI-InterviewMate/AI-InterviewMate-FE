@@ -21,7 +21,8 @@ const StyledMypage = styled.div`
       width: 250px;
       height: 2px;
       background-color: var(--main-black);
-      margin: 5px 0 15px;
+      margin: 2px 0 15px;
+      border: none;
     }
     a {
       display: block;
@@ -31,6 +32,9 @@ const StyledMypage = styled.div`
       &:hover {
         color: var(--main-blue);
       }
+    }
+    a:first-of-type {
+      margin-bottom: 10px;
     }
   }
 `;
