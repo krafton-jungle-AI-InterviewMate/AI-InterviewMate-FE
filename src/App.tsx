@@ -9,10 +9,15 @@ import Result from "pages/mypage/Result";
 import ResultDetails from "pages/mypage/ResultDetails";
 import Lobby from "pages/Lobby";
 import NotFound from "pages/NotFound";
+import NotAvailable from "pages/NotAvailable";
+
+import useCheckSTTAvailable from "hooks/useCheckSTTAvailable";
 
 import styled from "@emotion/styled";
 
 function App() {
+  useCheckSTTAvailable();
+
   return (
     <StyledWrapper>
       <Routes>
@@ -44,6 +49,7 @@ function App() {
 
         <Route element={<SimpleLayout />}>
           <Route path="*" element={<NotFound />} />
+          <Route path="/not-available" element={<NotAvailable />} />
         </Route>
       </Routes>
     </StyledWrapper>
