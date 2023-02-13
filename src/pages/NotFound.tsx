@@ -1,10 +1,13 @@
 import notFound from "static/images/404.svg";
+import ExternalLink from "components/common/ExternalLink";
 import styled from "@emotion/styled";
 
 const NotFound = () => {
   return (
     <StyledWrap>
-      <StyledImg src={notFound} alt="404" />
+      <ExternalLink href="https://storyset.com/people">
+        <StyledImg src={notFound} alt="People illustrations by Storyset" />
+      </ExternalLink>
       찾으시는 페이지가 없습니다.
     </StyledWrap>
   );
