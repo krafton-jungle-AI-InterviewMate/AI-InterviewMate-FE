@@ -20,6 +20,11 @@ export const interviewQuestionTotalAtom = atom<number>({
 });
 
 /** 인터뷰 진행 중 채점 관련 */
+export const answerScriptAtom = atom<string[]>({
+  key: "AnswerScript",
+  default: [],
+});
+
 export const irisScoreAtom = atom<number>({
   key: "IrisScore",
   default: IRIS_PERFECT_SCORE,

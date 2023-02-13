@@ -4,6 +4,9 @@ import { useState, useEffect } from "react";
 import InterviewRadio from "components/interview/InterviewRadio";
 import { StyledBtn } from "styles/StyledBtn";
 
+import { useRecoilValue } from "recoil";
+import { answerScriptAtom } from "store/interview/atom";
+
 const StyledInterviewEnd = styled.div`
   color: var(--main-black);
   h2 {
@@ -50,6 +53,9 @@ function InterviewEnd({ isAiInterview, isInterviewer }: InterviewEndProps) {
   const [ eyeScore, setEyeScore ] = useState(3);
   const [ poseScore, setPoseScore ] = useState(3);
   const [ answerScore, setAnswerScore ] = useState(3);
+
+  const answerScript = useRecoilValue(answerScriptAtom); // TODO: API 연동
+  console.log(answerScript);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
