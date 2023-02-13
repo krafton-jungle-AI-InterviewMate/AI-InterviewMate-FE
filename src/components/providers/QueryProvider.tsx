@@ -1,4 +1,4 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 /**
  * React-Query Options
@@ -11,6 +11,10 @@ export const queryClient = new QueryClient({
       refetchOnMount: false,
       refetchOnReconnect: true,
       refetchOnWindowFocus: false,
+      retry: 1,
+    },
+    mutations: {
+      retry: 1,
     },
   },
 });
