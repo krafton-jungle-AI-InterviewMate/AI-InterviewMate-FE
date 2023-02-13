@@ -8,7 +8,7 @@ const getCats: GetCats = params =>
   });
 
 const getRatingHistory: GetRatingHistory = () =>
-  getAPI({ endPoint: API_PATH.GET_RESULT_LIST() });
+  getAPI({ endPoint: API_PATH.GET_RESULT_LIST });
 
 export default {
   getCats,
