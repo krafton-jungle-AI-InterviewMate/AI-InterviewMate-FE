@@ -12,7 +12,7 @@ const StyledLoading = styled.div<StyledLoadingProps>`
 function Loading({ margin }) {
   return (
     <StyledLoading margin={margin}>
-      <ClipLoader color="#146eb4" size={50} />
+      <ClipLoader color="var(--main-blue)" size={50} />
     </StyledLoading>
   );
 }
