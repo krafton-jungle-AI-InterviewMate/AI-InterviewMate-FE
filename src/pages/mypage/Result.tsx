@@ -1,12 +1,21 @@
 import InterviewResult from "components/interview/InterviewResult";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
+import { useGetRatingHistory } from "hooks/queries/mypage";
+import { useEffect } from "react";
 
 const StyledResult = styled.div`
   margin-top: 120px;
 `;
 
 function Result() {
+  const { data, isSuccess, isLoading, isError } = useGetRatingHistory();
+
+  useEffect(() => {
+    if (!isLoading && data) {
+      console.log(data);
+    }
+  }, [isLoading]);
   return (
     <StyledResult>
       <Link to="/mypage/result/details">
