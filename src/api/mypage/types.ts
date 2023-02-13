@@ -29,6 +29,7 @@ export type Cat = {
 
 export type RatingHistory = {
   roomName: string; // 방제목
+  roomIdx: number;
   createdAt: string; // 생성 일자
   roomType: "USER" | "AI";
   roomTime: number; // 면접 시간

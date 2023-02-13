@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
 interface StyledResultProps {
-  isAiInterview: boolean;
+  roomType: "USER" | "AI";
 }
 
 const StyledResult = styled.div<StyledResultProps>`
@@ -38,7 +38,7 @@ const StyledResult = styled.div<StyledResultProps>`
       font-size: 12px;
       color: var(--main-white);
       background-color: ${props =>
-    props.isAiInterview ? "var(--push-gray)" : "var(--main-black)"};
+        props.roomType === "AI" ? "var(--push-gray)" : "var(--main-black)"};
       border-radius: 5px;
     }
     span {
@@ -50,31 +50,34 @@ const StyledResult = styled.div<StyledResultProps>`
 
 interface InterviewResultProps {
   roomName: string;
-  isAiInterview: boolean;
-  interviewDate: string;
-  question?: number;
-  interviewTime?: number;
+  roomType: "USER" | "AI";
+  createdAt: string;
+  roomTime: number;
+  roomQuestionNum: number;
 }
 
 function InterviewResult({
   roomName,
-  isAiInterview,
-  interviewDate,
-  question,
-  interviewTime,
+  createdAt,
+  roomType,
+  roomTime,
+  roomQuestionNum,
 }: InterviewResultProps) {
+  const [createdDate, createdTime] = createdAt.split("T");
   return (
-    <StyledResult isAiInterview={true}>
+    <StyledResult roomType={roomType}>
       <div className="nameDate">
         <h2>{roomName}</h2>
-        <p>{interviewDate}</p>
+        <p>
+          {createdDate} {createdTime}
+        </p>
       </div>
       <div className="infoTime">
-        <div className="interviewer">{isAiInterview ? "AI 면접관" : "유저 면접관"}</div>
-        {isAiInterview ? (
-          <span className="interviewTime">질문 개수: {question}개</span>
+        <div className="interviewer">{roomType === "AI" ? "AI 면접관" : "유저 면접관"}</div>
+        {roomType === "AI" ? (
+          <span className="interviewTime">질문 개수: {roomQuestionNum}개</span>
         ) : (
-          <span className="interviewTime">진행 시간: {interviewTime}분</span>
+          <span className="interviewTime">진행 시간: {roomTime}분</span>
         )}
       </div>
     </StyledResult>
