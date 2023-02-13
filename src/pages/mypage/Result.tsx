@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import { useGetRatingHistory } from "hooks/queries/mypage";
 import { useEffect } from "react";
 
+import { useEffect } from "react";
+import { useGetRatingHistory } from "hooks/queries/mypage";
+
 const StyledResult = styled.div`
   margin-top: 120px;
 `;

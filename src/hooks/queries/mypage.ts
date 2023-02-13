@@ -3,7 +3,7 @@ import mypageAPI from "api/mypage";
 
 export const useGetRatingHistory = () => {
   const { data, isSuccess, isLoading, isError } = useQuery(["fetchRatingHistory"], () => {
-    return mypageAPI.getRatingHistory;
+    return mypageAPI.getRatingHistory();
   });
 
   return {

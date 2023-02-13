@@ -7,8 +7,7 @@ const getCats: GetCats = params =>
     endPoint: API_PATH.GET_IMAGE(params),
   });
 
-const getRatingHistory: GetRatingHistory = () =>
-  getAPI({ endPoint: API_PATH.GET_RATING_HISTORY() });
+const getRatingHistory: GetRatingHistory = () => getAPI({ endPoint: API_PATH.GET_RATING_HISTORY });
 
 export default {
   getCats,
