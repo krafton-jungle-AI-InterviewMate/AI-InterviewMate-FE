@@ -24,7 +24,7 @@ function Result() {
     <StyledResult>
       {isLoading ? (
         <Loading margin="120px 0 0" />
-      ) : !isError ? (
+      ) : isError ? (
         <ServerError />
       ) : (
         historys.map(history => (
