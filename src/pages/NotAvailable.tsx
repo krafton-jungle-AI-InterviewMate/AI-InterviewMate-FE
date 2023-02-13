@@ -10,15 +10,10 @@ const NotAvailable = () => {
         <StyledImg src={sorry} alt="People illustrations by Storyset" />
       </ExternalLink>
       <StyledTextBox>
-        아쉽지만 현재 인터뷰메이트는
+        아쉽지만 현재 접속 중이신 브라우저에서는 인터뷰메이트의 서비스 이용이 불가능합니다.
         <br />
-        <em>크롬(Chrome)</em> 브라우저만 지원하고 있습니다.
+        <em>크롬(Chrome)</em> 브라우저로 접속하시길 권장합니다.
         <br />
-
-        <div className="space" />
-        계속해서 이용하시려면 크롬을 설치하신 후
-        <br />
-        이용해주시길 바랍니다.
 
         <div className="space" />
         <ExternalLink href="https://www.google.co.kr/intl/ko/chrome/">
@@ -53,7 +48,7 @@ const StyledImg = styled.img`
 `;
 
 const StyledTextBox = styled.div`
-  width: 400px;
+  width: 800px;
   word-break: keep-all;
 
   & .space {
