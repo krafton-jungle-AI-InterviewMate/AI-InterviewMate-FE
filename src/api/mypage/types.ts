@@ -27,22 +27,22 @@ export type Cat = {
   favourite: any;
 };
 
-export type ResultList = {
-  data: [
-    {
-      roomName: string; // 방제목
-      createdAt: Date; // 생성 일자
-      roomType: string; // USER || AI
-      roomTime: number; // 면접 시간
-      roomQuestionNum: number; // 질문 개수
-    },
-  ];
+export type RatingHistory = {
+  roomName: string; // 방제목
+  createdAt: string; // 생성 일자
+  roomType: "USER" | "AI";
+  roomTime: number; // 면접 시간
+  roomQuestionNum: number; // 질문 개수
 };
 
 export type GetCatsResponse = Array<Cat>;
 
 export type GetCats = (params?: ImageQueryParams) => Promise<AxiosResponse<GetCatsResponse>>;
 
-export type GetResultListResponse = Array<ResultList>;
+export type GetRatingHistoryResponse = {
+  statusCode: number;
+  statusMsg: string;
+  data: Array<RatingHistory>;
+};
 
-export type GETResultList = (params?) => Promise<AxiosResponse<GetResultListResponse>>;
+export type GetRatingHistory = () => Promise<AxiosResponse<GetRatingHistoryResponse>>;

@@ -1,16 +1,16 @@
 import { getAPI } from "api/axios";
 import { API_PATH } from "constants/api";
-import { GetCats, GETResultList } from "./types";
+import { GetCats, GetRatingHistory } from "./types";
 
 const getCats: GetCats = params =>
   getAPI({
     endPoint: API_PATH.GET_IMAGE(params),
   });
 
-const getResultList: GETResultList = params =>
-  getAPI({ endPoint: API_PATH.GET_RESULT_LIST(params) });
+const getRatingHistory: GetRatingHistory = params =>
+  getAPI({ endPoint: API_PATH.GET_RESULT_LIST() });
 
 export default {
   getCats,
-  getResultList,
+  getRatingHistory,
 };
