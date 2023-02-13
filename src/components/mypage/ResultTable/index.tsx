@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useCats } from "hooks/queries/example";
+import { useCats } from "hooks/queries/example/useCats";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
