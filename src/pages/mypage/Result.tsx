@@ -23,6 +23,8 @@ function Result() {
     <StyledResult>
       {isLoading ? (
         <Loading margin="120px 0 0" />
+      ) : isError ? (
+        <h2>{data?.data.statusMsg}</h2>
       ) : (
         historys.map(history => (
           <Link key={history.roomIdx} to={`/mypage/result/${history.roomIdx}`}>
