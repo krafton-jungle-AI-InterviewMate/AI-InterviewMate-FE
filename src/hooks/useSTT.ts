@@ -38,38 +38,44 @@ const useSTT = () => {
 
   // * answer mode일 때만 음성 인식 시작
   useEffect(() => {
-    if (interviewMode === "answer") {
-      if (isListening) {
-        return;
+    try {
+      if (interviewMode === "answer") {
+        if (isListening) {
+          return;
+        }
+  
+        recognition.start();
+        handleRecognitionStart();
       }
-
-      recognition.start();
-      handleRecognitionStart();
+      else {
+        if (!isListening) {
+          return;
+        }
+  
+        recognition.stop();
+        handleRecognitionEnd();
+      }
     }
-    else {
-      if (!isListening) {
-        return;
-      }
-
+    catch (e) {
+      console.log(e);
       recognition.stop();
       handleRecognitionEnd();
     }
-
-    return (() => {
-      recognition.stop();
-    });
   }, [ interviewMode ]);
 
   // * 음성 인식이 자동으로 종료됐는데 아직 answer mode라면 음성 인식 재시작
   useEffect(() => {
-    if (isRecognitionEnd && interviewMode === "answer") {
-      recognition.start();
-      handleRecognitionStart();
+    try {
+      if (isRecognitionEnd && interviewMode === "answer") {
+        recognition.start();
+        handleRecognitionStart();
+      }
     }
-
-    return (() => {
+    catch (e) {
+      console.log(e);
       recognition.stop();
-    });
+      handleRecognitionEnd();
+    }
   }, [ isRecognitionEnd ]);
 
   // * speech recognition 객체 언어 설정 및 이벤트 핸들러 등록

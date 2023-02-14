@@ -47,3 +47,36 @@ export type GetRatingHistoryResponse = {
 };
 
 export type GetRatingHistory = () => Promise<AxiosResponse<GetRatingHistoryResponse>>;
+
+export type CommentsRequestDtos = {
+  viewerIdx: number;
+  questionTitle: string;
+  comment: string;
+};
+
+export type ScriptRequestsDtos = {
+  questionIdx: number;
+  script: string;
+};
+
+export type PostRatingVieweePayloadData = {
+  viewerIdx: number; // 79797979로 지정할 경우 AI로 인식된다고 함.
+  eyesRating: number;
+  attitudeRating: number;
+  answerRating?: number;
+  commentsRequestDtos?: Array<CommentsRequestDtos>;
+  scriptRequestsDtos: Array<ScriptRequestsDtos>;
+};
+
+export type PostRatingVieweePayload = {
+  data: PostRatingVieweePayloadData;
+  roomIdx: number;
+}
+
+export type PostRatingVieweeResponse = {
+  data: null;
+  statusCode: number;
+  statusMsg: string;
+}
+
+export type PostRatingViewee = (payload: PostRatingVieweePayload) => Promise<AxiosResponse<PostRatingVieweeResponse>>;
