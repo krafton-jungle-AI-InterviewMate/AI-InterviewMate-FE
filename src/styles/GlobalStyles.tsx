@@ -48,7 +48,7 @@ const globalStyles = css`
       border-radius: 10px;
       line-height: 1.5;
       color: #585858;
-      font-size: 14px;
+      font-size: 12px;
     }
     .progress-bar {
       background: linear-gradient(-90deg, var(--main-alert) 0%, var(--main-alert) 35%, #fafafa 100%);

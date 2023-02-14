@@ -40,9 +40,9 @@ const InterviewReady = () => {
   const {
     isVideoReady,
     setNewDetector,
-    face,
-    isDetectionOn,
     setIsDetectionOn,
+    updateFace,
+    detector,
   } = useFaceLandmarksDetection({
     video,
     canvasRef,
@@ -56,37 +56,46 @@ const InterviewReady = () => {
     }
   }, [ isWebcamReady, isVideoReady ]);
 
+  useEffect(() => {
+    if (isVideoReady) {
+      (async() => {
+        await setNewDetector();
+      })();
+    }
+  }, [ isVideoReady ]);
+
   const handleCancelButton = () => {
     // TODO: 컨펌 팝업
     navigate("/lobby");
   };
 
   const handleGoButton = async () => {
-    setDisableGoButton(true);
-    initializeInterviewState();
-    await setNewDetector();
-    setIsDetectionOn(true);
-  };
+    try {
+      if (!detector) {
+        throw new Error("detector is not ready");
+      }
 
-  useEffect(() => {
-    if (face) {
-      toast.clearWaitingQueue();
-      setMotionSnapshot(face);
-      navigate("/interview/ai");
-    }
-    else {
-      if (disableGoButton && isDetectionOn) {
-        console.log(face);
-        toast("문제가 발생했습니다. 잠시 후 다시 시도해주세요.", Styled.toastOptions);
-        // ! FIXME: 간헐적으로 발생해서 아직 원인 파악 못함.
-        // ! 우선은 토스트로 임시 예외 처리
-        // ! QA 진행하며 원인 파악되면 수정할 예정
+      setDisableGoButton(true);
+      initializeInterviewState();
+      setIsDetectionOn(true);
+
+      const newFace = await updateFace(detector);
+
+      if (newFace) {
+        setIsDetectionOn(false);
+        toast.clearWaitingQueue();
+        setMotionSnapshot(newFace);
+        navigate("/interview/ai");
+      }
+      else {
+        toast("화면에서 얼굴이 인식되지 않습니다.", Styled.toastOptions);
         setDisableGoButton(false);
       }
     }
-
-    setIsDetectionOn(false);
-  }, [ face ]);
+    catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <Styled.Wrapper>
