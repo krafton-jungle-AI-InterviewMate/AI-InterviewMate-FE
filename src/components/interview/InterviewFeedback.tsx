@@ -32,11 +32,11 @@ const StyledWrap = styled.div<InterviewFeedbackProps>`
   justify-content: space-evenly;
   align-items: center;
   position: absolute;
-  bottom: 60px;
+  top: 100px;
   transform: translate(-50%, 0);
   width: 254px;
   height: 38px;
-  background-color: rgba(24, 24, 24, 0.8);
+  background-color: #ff9900d6;
   border-radius: var(--button-border-radius);
   color: var(--main-white);
 

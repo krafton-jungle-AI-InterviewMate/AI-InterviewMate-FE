@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { faceLandmarksDetectorAtom } from "store/interview/atom";
 import * as FaceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
 import { drawFaceMesh } from "lib/faceLandmarkDetection";
 
@@ -26,18 +28,21 @@ const useFaceLandmarksDetection = (params: UseVideoFaceMeshParams) => {
     isDebugging = false;
   }
 
+  const [ detector, setDetector ] = useRecoilState(faceLandmarksDetectorAtom);
+
   const [ isVideoReady, setIsVideoReady ] = useState(false);
   const [ isDetectorLoading, setIsDetectorLoading ] = useState(false);
   const [ faceMeshErrorMsg, setFaceMeshErrorMsg ] = useState<null | string>(null);
-  const [ detector, setDetector ] = useState<null | FaceLandmarksDetection.FaceLandmarksDetector>(
-    null,
-  );
   const [ face, setFace ] = useState<null | FaceLandmarksDetection.Face>(null);
+  const [ isDetectionOn, setIsDetectionOn ] = useState(false);
 
   const setNewDetector = async () => {
     try {
       if (!isVideoReady) {
         throw new Error("video is not ready");
+      }
+      if (detector) {
+        return;
       }
 
       setIsDetectorLoading(true);
@@ -54,6 +59,7 @@ const useFaceLandmarksDetection = (params: UseVideoFaceMeshParams) => {
       setIsDetectorLoading(false);
     }
     catch (e) {
+      console.log(e);
       if (e instanceof Error) {
         setFaceMeshErrorMsg(e.message);
       }
@@ -63,7 +69,7 @@ const useFaceLandmarksDetection = (params: UseVideoFaceMeshParams) => {
   const updateFace = async (detector: FaceLandmarksDetection.FaceLandmarksDetector) => {
     try {
       if (!video) {
-        return;
+        throw new Error("video is not ready");
       }
 
       const { videoWidth, videoHeight } = video;
@@ -97,8 +103,11 @@ const useFaceLandmarksDetection = (params: UseVideoFaceMeshParams) => {
           isShowIndex,
         });
       }
+
+      return newFace;
     }
     catch (e) {
+      console.log(e);
       if (e instanceof Error) {
         setFaceMeshErrorMsg(e.message);
       }
@@ -120,23 +129,25 @@ const useFaceLandmarksDetection = (params: UseVideoFaceMeshParams) => {
   }, [ video ]);
 
   useEffect(() => {
-    if (detector) {
-      if (isOneOff) {
-        (async () => {
-          await updateFace(detector);
-        })();
-      }
-      else {
-        const intervalId = window.setInterval(async () => {
-          await updateFace(detector);
-        }, 100);
-  
-        return () => {
-          window.clearInterval(intervalId);
-        };
-      }
+    if (!(isDetectionOn && detector)) {
+      return;
     }
-  }, [ detector ]);
+
+    if (isOneOff) {
+      // updateFace를 사용처에서 직접 가져가서 처리헤야 함.
+      // 깔끔하게 처리할 수 있는 더 좋은 방법이 있을텐데 ㅠ
+      return;
+    }
+    else {
+      const intervalId = window.setInterval(async () => {
+        await updateFace(detector);
+      }, 100);
+  
+      return () => {
+        window.clearInterval(intervalId);
+      };
+    }
+  }, [ isDetectionOn, detector ]);
 
   return {
     isVideoReady,
@@ -144,6 +155,10 @@ const useFaceLandmarksDetection = (params: UseVideoFaceMeshParams) => {
     faceMeshErrorMsg,
     setNewDetector,
     face,
+    isDetectionOn,
+    setIsDetectionOn,
+    updateFace,
+    detector,
   };
 };
 

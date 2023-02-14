@@ -46,7 +46,7 @@ interface InterviewEndProps {
   isInterviewer: boolean; // 면접자 true, 면접관 false
 }
 
-function InterviewEnd({ isAiInterview, isInterviewer }: InterviewEndProps) {
+const InterviewEnd = ({ isAiInterview, isInterviewer }: InterviewEndProps) => {
   const [ eyeScore, setEyeScore ] = useState(3);
   const [ poseScore, setPoseScore ] = useState(3);
   const [ answerScore, setAnswerScore ] = useState(3);
@@ -72,41 +72,43 @@ function InterviewEnd({ isAiInterview, isInterviewer }: InterviewEndProps) {
 
   return (
     <StyledInterviewEnd>
-      <h2>면접 종료!</h2>
-      {isAiInterview ? (
-        <div className="aiEndContents">
-          <p>수고하셨습니다.</p>
-          <span>면접 결과는 마이페이지에서 확인하실 수 있습니다.</span>
-          <Link to="/lobby">
-            <StyledBtn width="100px" height="32px" color="red">
-              나가기
-            </StyledBtn>
-          </Link>
-        </div>
-      ) : isInterviewer ? (
-        <div className="userEndContents">
-          <InterviewRadio handleChange={handleChange} labelName="면접 시선" />
-          <InterviewRadio handleChange={handleChange} labelName="면접 자세" />
-          <InterviewRadio handleChange={handleChange} labelName="면접 답변" />
-          <Link to="/lobby">
-            <StyledBtn width="100px" height="32px" color="red">
-              나가기
-            </StyledBtn>
-          </Link>
-        </div>
-      ) : (
-        <div className="userEndContents">
-          <InterviewRadio handleChange={handleChange} labelName="면접관 1" />
-          <InterviewRadio handleChange={handleChange} labelName="면접관 2" />
-          <Link to="/lobby">
-            <StyledBtn width="100px" height="32px" color="red">
-              나가기
-            </StyledBtn>
-          </Link>
-        </div>
-      )}
+      <>
+        <h2>면접 종료!</h2>
+        {isAiInterview ? (
+          <div className="aiEndContents">
+            <p>수고하셨습니다.</p>
+            <span>면접 결과는 마이페이지에서 확인하실 수 있습니다.</span>
+            <Link to="/lobby">
+              <StyledBtn width="100px" height="32px" color="red">
+                나가기
+              </StyledBtn>
+            </Link>
+          </div>
+        ) : isInterviewer ? (
+          <div className="userEndContents">
+            <InterviewRadio handleChange={handleChange} labelName="면접 시선" />
+            <InterviewRadio handleChange={handleChange} labelName="면접 자세" />
+            <InterviewRadio handleChange={handleChange} labelName="면접 답변" />
+            <Link to="/lobby">
+              <StyledBtn width="100px" height="32px" color="red">
+                나가기
+              </StyledBtn>
+            </Link>
+          </div>
+        ) : (
+          <div className="userEndContents">
+            <InterviewRadio handleChange={handleChange} labelName="면접관 1" />
+            <InterviewRadio handleChange={handleChange} labelName="면접관 2" />
+            <Link to="/lobby">
+              <StyledBtn width="100px" height="32px" color="red">
+                나가기
+              </StyledBtn>
+            </Link>
+          </div>
+        )}
+      </>
     </StyledInterviewEnd>
   );
-}
+};
 
 export default InterviewEnd;

@@ -24,11 +24,13 @@
     "react-icons": "^4.7.1",
     "react-router-dom": "^6.8.1",
     "react-spinners": "^0.13.8",
+    "react-toastify": "^9.1.1",
     "react-webcam": "^7.0.1",
     "recoil": "0.7.5"
   },
   "devDependencies": {
     "@emotion/babel-plugin": "^11.10.5",
+    "@types/dom-speech-recognition": "^0.0.1",
     "@types/node": "18.7.1",
     "@types/qs": "^6.9.7",
     "@types/react": "18.0.21",

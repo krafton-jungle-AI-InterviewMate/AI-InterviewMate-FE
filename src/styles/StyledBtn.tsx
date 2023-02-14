@@ -6,7 +6,7 @@ interface StyledBtnProps {
   color: string;
 }
 
-export const StyledBtn = styled.div<StyledBtnProps>`
+export const StyledBtn = styled.button<StyledBtnProps>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -25,9 +25,9 @@ export const StyledBtn = styled.div<StyledBtnProps>`
   transition: 0.2s;
   &:hover {
     background-color: ${props =>
-      props.color === "orange"
-        ? "var(--light-orange)"
-        : props.color === "blue"
+    props.color === "orange"
+      ? "var(--light-orange)"
+      : props.color === "blue"
         ? "var(--main-blue)"
         : "var(--main-alert)"};
     color: var(--main-white);
@@ -35,9 +35,9 @@ export const StyledBtn = styled.div<StyledBtnProps>`
   }
   &:active {
     background-color: ${props =>
-      props.color === "orange"
-        ? "var(--push-orange)"
-        : props.color === "blue"
+    props.color === "orange"
+      ? "var(--push-orange)"
+      : props.color === "blue"
         ? "var(--push-blue)"
         : "var(--push-alert)"};
   }

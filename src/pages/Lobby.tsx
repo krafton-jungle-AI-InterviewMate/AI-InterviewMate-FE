@@ -1,13 +1,13 @@
 import styled from "@emotion/styled";
 import { StyledBtn } from "styles/StyledBtn";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Room from "components/lobby/Room";
 
 const StyledLobbyInterface = styled.div`
   min-width: 1000px;
   display: flex;
   margin: 75px 0 50px;
-  a {
+  button {
     margin-right: 30px;
   }
 `;
@@ -21,14 +21,21 @@ const StyledRoomContents = styled.div`
 `;
 
 function Lobby() {
+  const navigate = useNavigate();
+
   return (
     <>
       <StyledLobbyInterface>
-        <Link to="/interview/ready">
-          <StyledBtn width="200px" height="48px" color="orange">
-            시작하기
-          </StyledBtn>
-        </Link>
+        <StyledBtn
+          width="200px"
+          height="48px"
+          color="orange"
+          onClick={() => {
+            navigate("/interview/ready");
+          }}
+        >
+          시작하기
+        </StyledBtn>
         <StyledBtn width="200px" height="48px" color="blue">
           목록 새로고침
         </StyledBtn>

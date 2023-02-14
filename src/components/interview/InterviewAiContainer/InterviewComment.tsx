@@ -26,5 +26,4 @@ const StyledInterviewComment = styled.div`
   border: 1px solid var(--main-orange);
   border-radius: var(--button-border-radius);
   color: var(--font-gray);
-  box-shadow: var(--box-shadow);
 `;

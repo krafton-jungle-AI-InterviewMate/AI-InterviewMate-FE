@@ -32,42 +32,14 @@ const AnswerModeController = (props: AnswerModeControllerProps) => {
   const interviewQuestionTotal = useRecoilValue(interviewQuestionTotalAtom);
   const [ countDown, setCountDown ] = useState(ANSWER_LIMIT_SECONDS);
 
-  useEffect(() => {
-    const timerId = window.setTimeout(() => {
-      setInterviewMode(
-        interviewQuestionNumber >= interviewQuestionTotal
-          ? "finished"
-          : "break",
-      );
-    }, 1000 * ANSWER_LIMIT_SECONDS); // ? STT 기능 추가하면 버퍼 시간 필요할 듯
-
-    const intervalId = window.setInterval(() => {
-      return setCountDown((prev) => prev - 1);
-    }, 1000);
-
-    return () => {
-      window.clearTimeout(timerId);
-      window.clearInterval(intervalId);
-    };
-  }, []);
-
   const {
     face,
-    setNewDetector,
-    isVideoReady,
+    setIsDetectionOn,
   } = useFaceLandmarksDetection({
     video,
     canvasRef,
     isDebugging: false,
   });
-
-  useEffect(() => {
-    if (isVideoReady) {
-      (async () => {
-        await setNewDetector();
-      })();
-    }
-  }, [ isVideoReady ]);
 
   const {
     horizontalRatio,
@@ -81,6 +53,32 @@ const AnswerModeController = (props: AnswerModeControllerProps) => {
     isRealtimeMode: true,
     horizontalRatio,
   });
+
+  const goToNextQuestion = () => {
+    setIsDetectionOn(false);
+    setInterviewMode(
+      interviewQuestionNumber >= interviewQuestionTotal
+        ? "finished"
+        : "break",
+    );
+  };
+
+  useEffect(() => {
+    setIsDetectionOn(true);
+
+    const timerId = window.setTimeout(() => {
+      goToNextQuestion();
+    }, 1000 * ANSWER_LIMIT_SECONDS); // ? STT 기능 추가하면 버퍼 시간 필요할 듯
+
+    const intervalId = window.setInterval(() => {
+      return setCountDown((prev) => prev - 1);
+    }, 1000);
+
+    return () => {
+      window.clearTimeout(timerId);
+      window.clearInterval(intervalId);
+    };
+  }, []);
 
   return (
     <StyledWrap>
@@ -100,6 +98,13 @@ const AnswerModeController = (props: AnswerModeControllerProps) => {
         <InterviewFeedback feedbackType="iris" />
       )}
       <InterviewFeedback feedbackType="motion" />
+
+      <StyledNextButton type="button" onClick={goToNextQuestion}>
+        다음으로 넘어가기
+        <StyledSmall>
+          답변을 완료하셨다면,
+        </StyledSmall>
+      </StyledNextButton>
     </StyledWrap>
   );
 };
@@ -148,4 +153,36 @@ const StyledTimer = styled.div`
     font-weight: 400;
     font-size: 14px;
   }
+`;
+
+const StyledNextButton = styled.button`
+  position: absolute;
+  top: 50%;
+  right: 60px;
+  width: 100px;
+  height: 100px;
+  font-size: 14px;
+  text-align: center;
+  background-color: var(--main-orange);
+  color: var(--main-white);
+  border-radius: 999px;
+  transition: 0.2s;
+
+  &:hover {
+    background-color: var(--light-orange);
+  }
+  &:hover {
+    background-color: var(--push-orange);
+  }
+`;
+
+const StyledSmall = styled.small`
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 120px;
+  color: var(--font-gray);
+  opacity: 0.5;
+  font-size: 12px;
 `;

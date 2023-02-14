@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import mypageAPI from "api/mypage";
 import { RoomTypes } from "api/mypage/types";
 
@@ -28,4 +28,15 @@ export const useGetRatingDetail = (roomIdx: number, type: RoomTypes) => {
     fetchStatus,
     isFetching,
   };
+};
+
+export const usePostRatingViewee = () => {
+  return useMutation(mypageAPI.postRatingViewee, {
+    onSuccess: (data) => {
+      console.log(data);
+    },
+    onError: (e) => {
+      console.log(e);
+    },
+  });
 };

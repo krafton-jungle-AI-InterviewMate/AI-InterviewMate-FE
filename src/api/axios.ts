@@ -1,4 +1,4 @@
-import axios, { DefaultResponse } from "axios";
+import axios from "axios";
 import qs from "qs";
 
 import { Dict, CommonAPI } from "types/apis";
