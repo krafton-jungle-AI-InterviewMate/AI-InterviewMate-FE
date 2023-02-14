@@ -33,33 +33,24 @@ const QuestionModeController = (props: QuestionModeControllerProps) => {
 
   console.log(interviewQuestionNumber);
 
-  const msg = useMemo(() => new SpeechSynthesisUtterance(), []);
+  const synth = window.speechSynthesis;
 
   useEffect(() => {
-    if (msg) {
-      msg.text = questions[interviewQuestionNumber]; // 읽을 텍스트
-      msg.lang = "ko-KR"; // 언어
-      msg.rate = 1; // 말하는 속도
-      msg.pitch = 1; // 말하는 톤
+    const msg = new SpeechSynthesisUtterance(questions[interviewQuestionNumber]);
+    msg.rate = 2;
+    msg.pitch = 1.5;
 
-      // const voice = speechSynthesis.getVoices()[0]; // 기본 목소리
-      const voice = speechSynthesis.getVoices()[12]; // 트위치 TTS 목소리
-      msg.voice = voice; // 말하는 목소리
+    msg.onend = () => {
+      setInterviewMode("answer");
+      setInterviewQuestionNumber(curr => curr + 1);
+    };
 
-      msg.onend = () => {
-        // 말하기가 끝난 후 실행
-        setInterviewMode("answer");
-        setInterviewQuestionNumber(curr => curr + 1);
-      };
+    synth.speak(msg);
 
-      const synth = window.speechSynthesis;
-      synth.speak(msg); // 말하기
-
-      return () => {
-        synth.cancel(); // 삭제
-      };
-    }
-  }, [msg]);
+    return () => {
+      synth.cancel();
+    };
+  }, []);
 
   return (
     <StyledWrap>
