@@ -13,6 +13,7 @@ const useSTT = () => {
   const interviewMode = useRecoilValue(interviewModeAtom);
   const interviewQuestionNumber = useRecoilValue(interviewQuestionNumberAtom);
 
+  const [ isListening, setIsListening ] = useState(false);
   const [ isRecognitionEnd, setIsRecognitionEnd ] = useState(true);
   const [ recognitionResult, setRecognitionResult ] = useState<null | SpeechRecognitionResultList>(null);
 
@@ -21,7 +22,13 @@ const useSTT = () => {
     return new Recognition();
   }, []);
 
+  const handleRecognitionStart = () => {
+    setIsListening(true);
+    setIsRecognitionEnd(false);
+  };
+
   const handleRecognitionEnd = () => {
+    setIsListening(false);
     setIsRecognitionEnd(true);
   };
 
@@ -32,12 +39,20 @@ const useSTT = () => {
   // * answer mode일 때만 음성 인식 시작
   useEffect(() => {
     if (interviewMode === "answer") {
+      if (isListening) {
+        return;
+      }
+
       recognition.start();
-      setIsRecognitionEnd(false);
+      handleRecognitionStart();
     }
     else {
+      if (!isListening) {
+        return;
+      }
+
       recognition.stop();
-      setIsRecognitionEnd(true);
+      handleRecognitionEnd();
     }
 
     return (() => {
@@ -49,7 +64,7 @@ const useSTT = () => {
   useEffect(() => {
     if (isRecognitionEnd && interviewMode === "answer") {
       recognition.start();
-      setIsRecognitionEnd(false);
+      handleRecognitionStart();
     }
 
     return (() => {
@@ -61,11 +76,13 @@ const useSTT = () => {
   useEffect(() => {
     recognition.lang = "ko-KR";
 
+    recognition.addEventListener("start", handleRecognitionStart);
     recognition.addEventListener("end", handleRecognitionEnd);
     recognition.addEventListener("result", handleRecognitionResult);
 
     return (() => {
       recognition.stop();
+      recognition.removeEventListener("start", handleRecognitionStart);
       recognition.removeEventListener("end", handleRecognitionEnd);
       recognition.removeEventListener("result", handleRecognitionResult);
     });
