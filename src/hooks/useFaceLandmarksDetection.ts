@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { faceLandmarksDetectorAtom } from "store/interview/atom";
 import * as FaceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
 import { drawFaceMesh } from "lib/faceLandmarkDetection";
 
@@ -26,18 +28,21 @@ const useFaceLandmarksDetection = (params: UseVideoFaceMeshParams) => {
     isDebugging = false;
   }
 
+  const [ detector, setDetector ] = useRecoilState(faceLandmarksDetectorAtom);
+
   const [ isVideoReady, setIsVideoReady ] = useState(false);
   const [ isDetectorLoading, setIsDetectorLoading ] = useState(false);
   const [ faceMeshErrorMsg, setFaceMeshErrorMsg ] = useState<null | string>(null);
-  const [ detector, setDetector ] = useState<null | FaceLandmarksDetection.FaceLandmarksDetector>(
-    null,
-  );
   const [ face, setFace ] = useState<null | FaceLandmarksDetection.Face>(null);
+  const [ isDetectionOn, setIsDetectionOn ] = useState(false);
 
   const setNewDetector = async () => {
     try {
       if (!isVideoReady) {
         throw new Error("video is not ready");
+      }
+      if (detector) {
+        throw new Error("detector already exists");
       }
 
       setIsDetectorLoading(true);
@@ -99,6 +104,7 @@ const useFaceLandmarksDetection = (params: UseVideoFaceMeshParams) => {
       }
     }
     catch (e) {
+      console.log(e);
       if (e instanceof Error) {
         setFaceMeshErrorMsg(e.message);
       }
@@ -120,6 +126,10 @@ const useFaceLandmarksDetection = (params: UseVideoFaceMeshParams) => {
   }, [ video ]);
 
   useEffect(() => {
+    if (!isDetectionOn) {
+      return;
+    }
+
     if (detector) {
       if (isOneOff) {
         (async () => {
@@ -136,7 +146,7 @@ const useFaceLandmarksDetection = (params: UseVideoFaceMeshParams) => {
         };
       }
     }
-  }, [ detector ]);
+  }, [ isDetectionOn, detector ]);
 
   return {
     isVideoReady,
@@ -144,6 +154,7 @@ const useFaceLandmarksDetection = (params: UseVideoFaceMeshParams) => {
     faceMeshErrorMsg,
     setNewDetector,
     face,
+    setIsDetectionOn,
   };
 };
 

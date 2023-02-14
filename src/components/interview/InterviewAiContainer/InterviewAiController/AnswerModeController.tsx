@@ -32,42 +32,14 @@ const AnswerModeController = (props: AnswerModeControllerProps) => {
   const interviewQuestionTotal = useRecoilValue(interviewQuestionTotalAtom);
   const [ countDown, setCountDown ] = useState(ANSWER_LIMIT_SECONDS);
 
-  useEffect(() => {
-    const timerId = window.setTimeout(() => {
-      setInterviewMode(
-        interviewQuestionNumber >= interviewQuestionTotal
-          ? "finished"
-          : "break",
-      );
-    }, 1000 * ANSWER_LIMIT_SECONDS); // ? STT 기능 추가하면 버퍼 시간 필요할 듯
-
-    const intervalId = window.setInterval(() => {
-      return setCountDown((prev) => prev - 1);
-    }, 1000);
-
-    return () => {
-      window.clearTimeout(timerId);
-      window.clearInterval(intervalId);
-    };
-  }, []);
-
   const {
     face,
-    setNewDetector,
-    isVideoReady,
+    setIsDetectionOn,
   } = useFaceLandmarksDetection({
     video,
     canvasRef,
     isDebugging: false,
   });
-
-  useEffect(() => {
-    if (isVideoReady) {
-      (async () => {
-        await setNewDetector();
-      })();
-    }
-  }, [ isVideoReady ]);
 
   const {
     horizontalRatio,
@@ -81,6 +53,32 @@ const AnswerModeController = (props: AnswerModeControllerProps) => {
     isRealtimeMode: true,
     horizontalRatio,
   });
+
+  const goToNextQuestion = () => {
+    setIsDetectionOn(false);
+    setInterviewMode(
+      interviewQuestionNumber >= interviewQuestionTotal
+        ? "finished"
+        : "break",
+    );
+  };
+
+  useEffect(() => {
+    setIsDetectionOn(true);
+
+    const timerId = window.setTimeout(() => {
+      goToNextQuestion();
+    }, 1000 * ANSWER_LIMIT_SECONDS); // ? STT 기능 추가하면 버퍼 시간 필요할 듯
+
+    const intervalId = window.setInterval(() => {
+      return setCountDown((prev) => prev - 1);
+    }, 1000);
+
+    return () => {
+      window.clearTimeout(timerId);
+      window.clearInterval(intervalId);
+    };
+  }, []);
 
   return (
     <StyledWrap>
@@ -147,5 +145,21 @@ const StyledTimer = styled.div`
     color: var(--font-gray);
     font-weight: 400;
     font-size: 14px;
+  }
+`;
+
+const StyledNextButton = styled.button`
+  width: 200px;
+  height: 124px;
+  font-size: 14px;
+  text-align: center;
+  background-color: var(--main-orange);
+  color: var(--main-white);
+
+  &:hover {
+    background-color: var(--light-orange);
+  }
+  &:hover {
+    background-color: var(--push-orange);
   }
 `;

@@ -40,10 +40,12 @@ const InterviewReady = () => {
     isVideoReady,
     setNewDetector,
     face,
+    setIsDetectionOn,
   } = useFaceLandmarksDetection({
     video,
     canvasRef,
     isDebugging: false,
+    isOneOff: true,
   });
 
   useEffect(() => {
@@ -61,11 +63,13 @@ const InterviewReady = () => {
     setDisableGoButton(true);
     initializeInterviewState();
     await setNewDetector();
+    setIsDetectionOn(true);
   };
 
   useEffect(() => {
     if (face) {
       setMotionSnapshot(face);
+      setIsDetectionOn(false);
       navigate("/interview/ai");
     }
   }, [ face ]);
