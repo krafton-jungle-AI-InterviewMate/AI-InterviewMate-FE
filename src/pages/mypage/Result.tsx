@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useGetRatingHistory } from "hooks/queries/mypage";
 import { useEffect, useState } from "react";
 import { RatingHistory } from "api/mypage/types";
-import Loading from "pages/Loading";
+import Loading from "components/common/Loading";
 import ServerError from "pages/ServerError";
 
 const StyledResult = styled.div`
@@ -12,14 +12,14 @@ const StyledResult = styled.div`
 `;
 
 function Result() {
-  const [historys, setHistorys] = useState<RatingHistory[]>([]);
+  const [ historys, setHistorys ] = useState<RatingHistory[]>([]);
   const { data, isSuccess, isLoading, isError } = useGetRatingHistory();
 
   useEffect(() => {
     if (!isLoading && data) {
       setHistorys(data.data.data);
     }
-  }, [isLoading]);
+  }, [ isLoading ]);
   return (
     <StyledResult>
       {isLoading ? (
@@ -28,7 +28,10 @@ function Result() {
         <ServerError />
       ) : (
         historys.map(history => (
-          <Link key={history.roomIdx} to={`/mypage/result/${history.roomIdx}`}>
+          <Link
+            key={history.roomIdx}
+            to={`/mypage/result/details?room=${history.roomIdx}&type=${history.roomType}`}
+          >
             <InterviewResult
               roomName={history.roomName}
               createdAt={history.createdAt}

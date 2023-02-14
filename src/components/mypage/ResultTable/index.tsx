@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useCats } from "hooks/queries/example/useCats";
+import { useState } from "react";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -8,23 +7,42 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import ScriptDialog from "./ScriptDialog";
 
 import { tableContainerStyleOverride } from "./styles";
+import { GetRatingDetailResponse } from "api/mypage/types";
 
-const ResultTable = () => {
+type ResultTableProps = {
+  data: GetRatingDetailResponse;
+};
+
+const ResultTable = (props: ResultTableProps) => {
   const {
-    data,
-    isSuccess,
-  } = useCats({});
+    data: {
+      data: {
+        eyesRating,
+        attitudeRating,
+        scriptList,
+      },
+    },
+  } = props;
 
-  useEffect(() => {
-    if (isSuccess) {
-      console.log(data);
-    }
-  }, [ isSuccess ]);
+  const [ dialogOpen, setDialogOpen ] = useState<null | number>(null);
+
+  const handleClose = () => {
+    setDialogOpen(null);
+  };
 
   return (
     <TableContainer sx={tableContainerStyleOverride} component={Paper}>
+      {typeof dialogOpen === "number" && (
+        <ScriptDialog
+          questionTitle={scriptList[Number(dialogOpen)].questionTitle}
+          script={scriptList[Number(dialogOpen)].script}
+          isOpen={typeof dialogOpen === "number"}
+          handleClose={handleClose}
+        />
+      )}
       <Table sx={{ minWidth: 700 }} aria-label="spanning table">
         <TableHead>
           <TableRow>
@@ -38,37 +56,23 @@ const ResultTable = () => {
         <TableBody>
           <TableRow>
             <TableCell>시선 점수</TableCell>
-            <TableCell align="center" colSpan={2}>87/100</TableCell>
+            <TableCell align="center" colSpan={2}>{eyesRating}/100</TableCell>
           </TableRow>
           <TableRow>
             <TableCell>자세 점수</TableCell>
-            <TableCell align="center" colSpan={2}>90/100</TableCell>
+            <TableCell align="center" colSpan={2}>{attitudeRating}/100</TableCell>
           </TableRow>
-          <TableRow>
-            <TableCell rowSpan={3}>답변 점수</TableCell>
-            <TableCell align="center">Q1. HTTP 프로토콜에 대해 설명해주세요.</TableCell>
-            <TableCell align="center">
-              <button type="button" onClick={() => console.log("TODO: 스크립트 모달")}>
-                54/100
-              </button>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell align="center">Q2. HTTP와 HTTPS의 차이점은 무엇인가요?</TableCell>
-            <TableCell align="center">
-              <button type="button" onClick={() => console.log("TODO: 스크립트 모달")}>
-                62/100
-              </button>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell align="center">Q3. TCP와 UDP의 차이를 설명해주세요.</TableCell>
-            <TableCell align="center">
-              <button type="button" onClick={() => console.log("TODO: 스크립트 모달")}>
-                78/100
-              </button>
-            </TableCell>
-          </TableRow>
+          {scriptList.map((script, idx, self) =>
+            <TableRow key={idx}>
+              {!idx && <TableCell rowSpan={self.length}>답변 점수</TableCell>}
+              <TableCell align="center">{`Q${idx + 1}. ${script.questionTitle}`}</TableCell>
+              <TableCell align="center">
+                <button type="button" onClick={() => setDialogOpen(idx)}>
+                  {script.rating}/100
+                </button>
+              </TableCell>
+            </TableRow>,
+          )}
         </TableBody>
       </Table>
     </TableContainer>

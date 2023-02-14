@@ -1,7 +1,9 @@
+import { formatDate } from "lib/format";
+import { RoomTypes } from "api/mypage/types";
 import styled from "@emotion/styled";
 
 interface StyledResultProps {
-  roomType: "USER" | "AI";
+  roomType: RoomTypes;
 }
 
 const StyledResult = styled.div<StyledResultProps>`
@@ -38,7 +40,7 @@ const StyledResult = styled.div<StyledResultProps>`
       font-size: 12px;
       color: var(--main-white);
       background-color: ${props =>
-        props.roomType === "AI" ? "var(--push-gray)" : "var(--main-black)"};
+    props.roomType === "AI" ? "var(--push-gray)" : "var(--main-black)"};
       border-radius: 5px;
     }
     span {
@@ -50,7 +52,7 @@ const StyledResult = styled.div<StyledResultProps>`
 
 interface InterviewResultProps {
   roomName: string;
-  roomType: "USER" | "AI";
+  roomType: RoomTypes;
   createdAt: string;
   roomTime: number;
   roomQuestionNum: number;
@@ -63,13 +65,12 @@ function InterviewResult({
   roomTime,
   roomQuestionNum,
 }: InterviewResultProps) {
-  const [createdDate, createdTime] = createdAt.split("T");
   return (
     <StyledResult roomType={roomType}>
       <div className="nameDate">
         <h2>{roomName}</h2>
         <p>
-          {createdDate} {createdTime}
+          {formatDate(createdAt)} 면접
         </p>
       </div>
       <div className="infoTime">

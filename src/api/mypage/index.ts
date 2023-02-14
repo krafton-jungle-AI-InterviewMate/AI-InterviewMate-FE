@@ -1,13 +1,12 @@
 import { getAPI, postAPI } from "api/axios";
 import { API_PATH } from "constants/api";
-import { GetCats, GetRatingHistory, PostRatingViewee } from "./types";
-
-const getCats: GetCats = params =>
-  getAPI({
-    endPoint: API_PATH.GET_IMAGE(params),
-  });
+import { GetRatingHistory,GetRatingDetail, PostRatingViewee } from "./types";
 
 const getRatingHistory: GetRatingHistory = () => getAPI({ endPoint: API_PATH.GET_RATING_HISTORY });
+
+const getRatingDetail: GetRatingDetail = (roomIdx, type) => getAPI({
+  endPoint: API_PATH.GET_RATING_DETAIL(roomIdx, type),
+});
 
 const postRatingViewee: PostRatingViewee = ({
   data,
@@ -18,7 +17,7 @@ const postRatingViewee: PostRatingViewee = ({
 });
 
 export default {
-  getCats,
   getRatingHistory,
+  getRatingDetail,
   postRatingViewee,
 };
