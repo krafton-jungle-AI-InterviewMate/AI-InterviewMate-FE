@@ -57,12 +57,10 @@ const useSTT = () => {
       }
     }
     catch (e) {
+      console.log(e);
       recognition.stop();
+      handleRecognitionEnd();
     }
-
-    return (() => {
-      recognition.stop();
-    });
   }, [ interviewMode ]);
 
   // * 음성 인식이 자동으로 종료됐는데 아직 answer mode라면 음성 인식 재시작
@@ -74,12 +72,10 @@ const useSTT = () => {
       }
     }
     catch (e) {
+      console.log(e);
       recognition.stop();
+      handleRecognitionEnd();
     }
-
-    return (() => {
-      recognition.stop();
-    });
   }, [ isRecognitionEnd ]);
 
   // * speech recognition 객체 언어 설정 및 이벤트 핸들러 등록

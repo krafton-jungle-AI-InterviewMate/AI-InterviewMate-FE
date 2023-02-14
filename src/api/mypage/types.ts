@@ -60,7 +60,7 @@ export type ScriptRequestsDtos = {
 };
 
 export type PostRatingVieweePayloadData = {
-  viewerIdx?: number;
+  viewerIdx: number; // 79797979로 지정할 경우 AI로 인식된다고 함.
   eyesRating: number;
   attitudeRating: number;
   answerRating?: number;
@@ -70,10 +70,11 @@ export type PostRatingVieweePayloadData = {
 
 export type PostRatingVieweePayload = {
   data: PostRatingVieweePayloadData;
-  roomIdx?: number;
+  roomIdx: number;
 }
 
 export type PostRatingVieweeResponse = {
+  data: null;
   statusCode: number;
   statusMsg: string;
 }

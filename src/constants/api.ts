@@ -8,5 +8,7 @@ export const BASE_URL = "https://jungle-weat.shop";
 export const API_PATH = {
   GET_IMAGE: (queryParams?: ImageQueryParams) => `/images/search?${queryParams || ""}`,
   GET_RATING_HISTORY: "/rating/history",
-  POST_RATING_VIEWEE: (roomIdx?: number) => `/rating/{roomIdx}/viewee${roomIdx ? `/${roomIdx}` : ""}`,
+  POST_RATING_VIEWEE: (roomIdx: number) => `/rating/${roomIdx}/viewee`,
 };
+
+export const AI_VIEWER_IDX = 79797979;

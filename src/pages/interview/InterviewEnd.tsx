@@ -4,11 +4,6 @@ import { useState, useEffect } from "react";
 import InterviewRadio from "components/interview/InterviewRadio";
 import { StyledBtn } from "styles/StyledBtn";
 
-import { useRecoilValue } from "recoil";
-import { answerScriptAtom, motionScoreAtom, irisScoreAtom } from "store/interview/atom";
-import { usePostRatingViewee } from "hooks/queries/mypage";
-import Loading from "pages/Loading";
-
 const StyledInterviewEnd = styled.div`
   color: var(--main-black);
   h2 {
@@ -56,17 +51,6 @@ const InterviewEnd = ({ isAiInterview, isInterviewer }: InterviewEndProps) => {
   const [ poseScore, setPoseScore ] = useState(3);
   const [ answerScore, setAnswerScore ] = useState(3);
 
-  const motionScore = useRecoilValue(motionScoreAtom);
-  const irisScore = useRecoilValue(irisScoreAtom);
-  const answerScript = useRecoilValue(answerScriptAtom);
-
-  const {
-    mutate,
-    isLoading,
-    isSuccess,
-    isError,
-  } = usePostRatingViewee();
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
     if (name === "면접 시선") {
@@ -86,37 +70,9 @@ const InterviewEnd = ({ isAiInterview, isInterviewer }: InterviewEndProps) => {
     console.log(answerScore);
   }, [ eyeScore, poseScore, answerScore ]);
 
-  useEffect(() => {
-    console.log("irisScore:", irisScore);
-    console.log("motionScore:", motionScore);
-    console.log("answerScript:", answerScript);
-
-    const data = {
-      eyesRating: irisScore,
-      attitudeRating: motionScore,
-      scriptRequestsDtos: answerScript.map((script, idx) => ({
-        questionIdx: idx,
-        script,
-      })),
-    };
-
-    mutate({
-      // TODO: roomIdx
-      data,
-    });
-  }, []);
-
-  if (isLoading) {
-    return (
-      <StyledInterviewEnd>
-        <Loading margin={0} />
-      </StyledInterviewEnd>
-    );
-  }
-
   return (
     <StyledInterviewEnd>
-      {isSuccess && (
+      {(
         <>
           <h2>면접 종료!</h2>
           {isAiInterview ? (
@@ -152,9 +108,6 @@ const InterviewEnd = ({ isAiInterview, isInterviewer }: InterviewEndProps) => {
             </div>
           )}
         </>
-      )}
-      {isError && (
-        <p>면접이 정상적으로 종료되지 않았습니다.</p>
       )}
     </StyledInterviewEnd>
   );
