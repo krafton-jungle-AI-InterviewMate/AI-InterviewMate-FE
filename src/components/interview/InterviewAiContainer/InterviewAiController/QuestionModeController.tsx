@@ -37,7 +37,7 @@ const QuestionModeController = (props: QuestionModeControllerProps) => {
 
   useEffect(() => {
     const msg = new SpeechSynthesisUtterance(questions[interviewQuestionNumber]);
-    msg.rate = 2;
+    msg.rate = 1;
     msg.pitch = 1.5;
 
     msg.onend = () => {
