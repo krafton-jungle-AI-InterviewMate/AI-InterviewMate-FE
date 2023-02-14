@@ -38,21 +38,26 @@ const useSTT = () => {
 
   // * answer mode일 때만 음성 인식 시작
   useEffect(() => {
-    if (interviewMode === "answer") {
-      if (isListening) {
-        return;
+    try {
+      if (interviewMode === "answer") {
+        if (isListening) {
+          return;
+        }
+  
+        recognition.start();
+        handleRecognitionStart();
       }
-
-      recognition.start();
-      handleRecognitionStart();
+      else {
+        if (!isListening) {
+          return;
+        }
+  
+        recognition.stop();
+        handleRecognitionEnd();
+      }
     }
-    else {
-      if (!isListening) {
-        return;
-      }
-
+    catch (e) {
       recognition.stop();
-      handleRecognitionEnd();
     }
 
     return (() => {
@@ -62,9 +67,14 @@ const useSTT = () => {
 
   // * 음성 인식이 자동으로 종료됐는데 아직 answer mode라면 음성 인식 재시작
   useEffect(() => {
-    if (isRecognitionEnd && interviewMode === "answer") {
-      recognition.start();
-      handleRecognitionStart();
+    try {
+      if (isRecognitionEnd && interviewMode === "answer") {
+        recognition.start();
+        handleRecognitionStart();
+      }
+    }
+    catch (e) {
+      recognition.stop();
     }
 
     return (() => {
