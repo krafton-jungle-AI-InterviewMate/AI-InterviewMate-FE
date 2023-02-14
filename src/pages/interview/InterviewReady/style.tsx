@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 import { commonButtonStyle } from "styles/common";
+import { ToastOptions } from "react-toastify";
 
 export const Wrapper = styled.section`
   width: 1000px;
@@ -147,3 +148,16 @@ export const Information = styled.div`
     margin-left: 4px;
   }
 `;
+
+export const toastOptions: ToastOptions = {
+  position: "top-right",
+  autoClose: 2000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  theme: "light",
+  progressClassName: "progress-bar",
+  type: "warning",
+};

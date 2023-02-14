@@ -10,6 +10,7 @@ import Webcam from "react-webcam";
 import ai from "static/images/robot.jpg";
 import NameTag from "components/interview/InterviewNameTag";
 import Skeleton from "@mui/material/Skeleton";
+import { toast } from "react-toastify";
 
 import { BsThreeDots } from "react-icons/bs";
 import { AiOutlineInfoCircle } from "react-icons/ai";
@@ -40,6 +41,7 @@ const InterviewReady = () => {
     isVideoReady,
     setNewDetector,
     face,
+    isDetectionOn,
     setIsDetectionOn,
   } = useFaceLandmarksDetection({
     video,
@@ -68,10 +70,22 @@ const InterviewReady = () => {
 
   useEffect(() => {
     if (face) {
+      toast.clearWaitingQueue();
       setMotionSnapshot(face);
-      setIsDetectionOn(false);
       navigate("/interview/ai");
     }
+    else {
+      if (disableGoButton && isDetectionOn) {
+        console.log(face);
+        toast("문제가 발생했습니다. 잠시 후 다시 시도해주세요.", Styled.toastOptions);
+        // ! FIXME: 간헐적으로 발생해서 아직 원인 파악 못함.
+        // ! 우선은 토스트로 임시 예외 처리
+        // ! QA 진행하며 원인 파악되면 수정할 예정
+        setDisableGoButton(false);
+      }
+    }
+
+    setIsDetectionOn(false);
   }, [ face ]);
 
   return (
