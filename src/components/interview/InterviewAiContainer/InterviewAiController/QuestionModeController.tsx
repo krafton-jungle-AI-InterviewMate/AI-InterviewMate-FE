@@ -1,36 +1,56 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import { interviewModeAtom, interviewQuestionNumberAtom } from "store/interview/atom";
 
 import InterviewComment from "../InterviewComment";
 
 import styled from "@emotion/styled";
+import questions from "components/interview/_mock/questions";
 
 type QuestionModeControllerProps = {
   questionList: string[];
 };
 
 const QuestionModeController = (props: QuestionModeControllerProps) => {
-  const {
-    questionList,
-  } = props;
+  const { questionList } = props;
 
   const setInterviewMode = useSetRecoilState(interviewModeAtom);
-  const [ interviewQuestionNumber, setInterviewQuestionNumber ] = useRecoilState(interviewQuestionNumberAtom);
+  const [interviewQuestionNumber, setInterviewQuestionNumber] = useRecoilState(
+    interviewQuestionNumberAtom,
+  );
 
   // ! FIXME: 실제로는 음성 플레이 종료 시점을 기준으로 인터뷰 모드 변경
-  useEffect(() => {
-    const timerId = window.setTimeout(() => {
-      setInterviewMode("answer");
-      setInterviewQuestionNumber((curr) => curr + 1);
-    }, 1000 * 5);
+  // useEffect(() => {
+  //   const timerId = window.setTimeout(() => {
+  //     setInterviewMode("answer");
+  //     setInterviewQuestionNumber(curr => curr + 1);
+  //   }, 1000 * 5);
 
-    return () => {
-      window.clearTimeout(timerId);
-    };
-  }, []);
+  //   return () => {
+  //     window.clearTimeout(timerId);
+  //   };
+  // }, []);
 
   console.log(interviewQuestionNumber);
+
+  const synth = window.speechSynthesis;
+
+  useEffect(() => {
+    const msg = new SpeechSynthesisUtterance(questions[interviewQuestionNumber]);
+    msg.rate = 1;
+    msg.pitch = 1.5;
+
+    msg.onend = () => {
+      setInterviewMode("answer");
+      setInterviewQuestionNumber(curr => curr + 1);
+    };
+
+    synth.speak(msg);
+
+    return () => {
+      synth.cancel();
+    };
+  }, []);
 
   return (
     <StyledWrap>
