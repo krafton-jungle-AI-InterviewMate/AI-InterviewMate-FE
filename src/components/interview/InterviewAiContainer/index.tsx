@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { interviewModeAtom, interviewQuestionTotalAtom } from "store/interview/atom";
+import {
+  interviewModeAtom,
+  interviewQuestionTotalAtom,
+  answerScriptAtom,
+} from "store/interview/atom";
 
 import {
   BreakModeController,
@@ -11,6 +15,8 @@ import {
 import Webcam from "react-webcam";
 import Skeleton from "@mui/material/Skeleton";
 
+import useSTT from "hooks/useSTT";
+
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 
@@ -20,11 +26,14 @@ import questions from "../_mock/questions";
 const InterviewAiContainer = () => {
   const interviewMode = useRecoilValue(interviewModeAtom);
   const setInterviewQuestionTotal = useSetRecoilState(interviewQuestionTotalAtom);
+  const setAnswerScript = useSetRecoilState(answerScriptAtom);
 
   const canvasRef = useRef<null | HTMLCanvasElement>(null);
   const webcamRef = useRef<null | Webcam>(null);
   const [ isWebcamReady, setIsWebcamReady ] = useState(false);
   const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
+
+  useSTT();
 
   useEffect(() => {
     if (isWebcamReady && webcamRef.current) {
@@ -35,6 +44,7 @@ const InterviewAiContainer = () => {
   useEffect(() => {
     // ! FIXME: 질문 fetching API 연동 이후 실제 질문 개수로 세팅
     setInterviewQuestionTotal(questions.length);
+    setAnswerScript(new Array(questions.length).fill(""));
   }, []);
 
   return (

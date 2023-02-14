@@ -11,11 +11,9 @@ const InterviewAiTimer = (props: InterviewAiTimerProps) => {
   } = props;
 
   return (
-    <div>
-      <StyledClock>
-        <StyledSecond sec={sec} />
-      </StyledClock>
-    </div>
+    <StyledClock>
+      <StyledSecond sec={sec} />
+    </StyledClock>
   );
 };
 
@@ -32,10 +30,11 @@ const rotation = keyframes`
 
 const StyledClock = styled.div`
   position: relative;
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: 999px;
-  background-color: var(--main-orange);
+  background-color: var(--main-white);
+  border: 1px solid var(--main-orange);
 `;
 
 const StyledSecond = styled.div<{ sec: number }>`
@@ -47,10 +46,9 @@ const StyledSecond = styled.div<{ sec: number }>`
   position: absolute;
   top: 4px;
   left: calc(50% - 1px);
-  width: 3px;
-  height: calc(50% - 4px);
+  width: 2px;
+  height: calc(50% - 3px);
   border-radius: 3px;
-  background-color: var(--main-white);
-  box-shadow: 0px 4px 14px 3px var(--main-white);
+  background-color: var(--main-orange);
 `;
 

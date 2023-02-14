@@ -1,6 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import { PagesPath } from "constants/pages";
 
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 import { SimpleLayout, BreadcrumbsLayout, InterviewLayout } from "components/layout";
 import { InterviewAi, InterviewReady, InterviewEnd } from "pages/interview";
 import Home from "pages/Home";
@@ -9,12 +12,19 @@ import Result from "pages/mypage/Result";
 import ResultDetails from "pages/mypage/ResultDetails";
 import Lobby from "pages/Lobby";
 import NotFound from "pages/NotFound";
+import NotAvailable from "pages/NotAvailable";
+
+import useCheckSTTAvailable from "hooks/useCheckSTTAvailable";
 
 import styled from "@emotion/styled";
 
 function App() {
+  useCheckSTTAvailable();
+
   return (
     <StyledWrapper>
+      <ToastContainer limit={1} />
+
       <Routes>
         {/* NavSimple */}
         <Route element={<SimpleLayout />}>
@@ -44,6 +54,7 @@ function App() {
 
         <Route element={<SimpleLayout />}>
           <Route path="*" element={<NotFound />} />
+          <Route path="/not-available" element={<NotAvailable />} />
         </Route>
       </Routes>
     </StyledWrapper>

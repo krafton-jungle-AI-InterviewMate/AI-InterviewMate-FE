@@ -42,6 +42,17 @@ const globalStyles = css`
       color: var(--main-white);
       background: var(--main-blue);
     }
+
+    /* react-toastify style override */
+    .Toastify__toast {
+      border-radius: 10px;
+      line-height: 1.5;
+      color: #585858;
+      font-size: 12px;
+    }
+    .progress-bar {
+      background: linear-gradient(-90deg, var(--main-alert) 0%, var(--main-alert) 35%, #fafafa 100%);
+    }
   }
 
   a {

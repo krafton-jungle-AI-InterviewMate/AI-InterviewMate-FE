@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import mainIllust from "static/images/undraw_Interview_re_e5jn.png";
 import styled from "@emotion/styled";
 import { StyledBtn } from "styles/StyledBtn";
@@ -28,13 +28,15 @@ const StyledStart = styled.div`
     font-size: 20px;
     color: var(--font-gray);
   }
-  a {
+  button {
     display: block;
     margin-top: 60px;
   }
 `;
 
 const Home = () => {
+  const navigate = useNavigate();
+
   return (
     <StyledHomeContents>
       <StyledStart>
@@ -44,11 +46,16 @@ const Home = () => {
           AI 인터뷰 메이트.
         </p>
         <span>충분한 연습을 통해 당당히 취업하세요.</span>
-        <Link to="/lobby">
-          <StyledBtn width="250px" height="70px" color="orange">
-            바로 시작하기
-          </StyledBtn>
-        </Link>
+        <StyledBtn
+          width="250px"
+          height="70px"
+          color="orange"
+          onClick={() => {
+            navigate("/lobby");
+          }}
+        >
+          바로 시작하기
+        </StyledBtn>
       </StyledStart>
       <img src={mainIllust} alt="interview image" />
     </StyledHomeContents>
