@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import { interviewModeAtom, interviewQuestionNumberAtom } from "store/interview/atom";
 
@@ -20,16 +20,16 @@ const QuestionModeController = (props: QuestionModeControllerProps) => {
   );
 
   // ! FIXME: 실제로는 음성 플레이 종료 시점을 기준으로 인터뷰 모드 변경
-  useEffect(() => {
-    const timerId = window.setTimeout(() => {
-      setInterviewMode("answer");
-      setInterviewQuestionNumber(curr => curr + 1);
-    }, 1000 * 5);
+  // useEffect(() => {
+  //   const timerId = window.setTimeout(() => {
+  //     setInterviewMode("answer");
+  //     setInterviewQuestionNumber(curr => curr + 1);
+  //   }, 1000 * 5);
 
-    return () => {
-      window.clearTimeout(timerId);
-    };
-  }, []);
+  //   return () => {
+  //     window.clearTimeout(timerId);
+  //   };
+  // }, []);
 
   console.log(interviewQuestionNumber);
 
@@ -37,19 +37,26 @@ const QuestionModeController = (props: QuestionModeControllerProps) => {
 
   useEffect(() => {
     if (msg) {
-      msg.text = questions[interviewQuestionNumber];
-      msg.lang = "ko-KR";
-      msg.rate = 1;
-      msg.pitch = 1;
+      msg.text = questions[interviewQuestionNumber]; // 읽을 텍스트
+      msg.lang = "ko-KR"; // 언어
+      msg.rate = 1; // 말하는 속도
+      msg.pitch = 1; // 말하는 톤
 
-      const voice = speechSynthesis.getVoices()[12];
-      msg.voice = voice;
+      // const voice = speechSynthesis.getVoices()[0]; // 기본 목소리
+      const voice = speechSynthesis.getVoices()[12]; // 트위치 TTS 목소리
+      msg.voice = voice; // 말하는 목소리
+
+      msg.onend = () => {
+        // 말하기가 끝난 후 실행
+        setInterviewMode("answer");
+        setInterviewQuestionNumber(curr => curr + 1);
+      };
 
       const synth = window.speechSynthesis;
-      synth.speak(msg);
+      synth.speak(msg); // 말하기
 
       return () => {
-        synth.cancel();
+        synth.cancel(); // 삭제
       };
     }
   }, [msg]);
