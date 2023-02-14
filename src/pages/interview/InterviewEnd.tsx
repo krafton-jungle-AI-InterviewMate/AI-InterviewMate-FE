@@ -5,7 +5,9 @@ import InterviewRadio from "components/interview/InterviewRadio";
 import { StyledBtn } from "styles/StyledBtn";
 
 import { useRecoilValue } from "recoil";
-import { answerScriptAtom } from "store/interview/atom";
+import { answerScriptAtom, motionScoreAtom, irisScoreAtom } from "store/interview/atom";
+import { usePostRatingViewee } from "hooks/queries/mypage";
+import Loading from "pages/Loading";
 
 const StyledInterviewEnd = styled.div`
   color: var(--main-black);
@@ -49,13 +51,21 @@ interface InterviewEndProps {
   isInterviewer: boolean; // 면접자 true, 면접관 false
 }
 
-function InterviewEnd({ isAiInterview, isInterviewer }: InterviewEndProps) {
+const InterviewEnd = ({ isAiInterview, isInterviewer }: InterviewEndProps) => {
   const [ eyeScore, setEyeScore ] = useState(3);
   const [ poseScore, setPoseScore ] = useState(3);
   const [ answerScore, setAnswerScore ] = useState(3);
 
-  const answerScript = useRecoilValue(answerScriptAtom); // TODO: API 연동
-  console.log(answerScript);
+  const motionScore = useRecoilValue(motionScoreAtom);
+  const irisScore = useRecoilValue(irisScoreAtom);
+  const answerScript = useRecoilValue(answerScriptAtom);
+
+  const {
+    mutate,
+    isLoading,
+    isSuccess,
+    isError,
+  } = usePostRatingViewee();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
@@ -76,43 +86,78 @@ function InterviewEnd({ isAiInterview, isInterviewer }: InterviewEndProps) {
     console.log(answerScore);
   }, [ eyeScore, poseScore, answerScore ]);
 
+  useEffect(() => {
+    console.log("irisScore:", irisScore);
+    console.log("motionScore:", motionScore);
+    console.log("answerScript:", answerScript);
+
+    const data = {
+      eyesRating: irisScore,
+      attitudeRating: motionScore,
+      scriptRequestsDtos: answerScript.map((script, idx) => ({
+        questionIdx: idx,
+        script,
+      })),
+    };
+
+    mutate({
+      // TODO: roomIdx
+      data,
+    });
+  }, []);
+
+  if (isLoading) {
+    return (
+      <StyledInterviewEnd>
+        <Loading margin={0} />
+      </StyledInterviewEnd>
+    );
+  }
+
   return (
     <StyledInterviewEnd>
-      <h2>면접 종료!</h2>
-      {isAiInterview ? (
-        <div className="aiEndContents">
-          <p>수고하셨습니다.</p>
-          <span>면접 결과는 마이페이지에서 확인하실 수 있습니다.</span>
-          <Link to="/lobby">
-            <StyledBtn width="100px" height="32px" color="red">
-              나가기
-            </StyledBtn>
-          </Link>
-        </div>
-      ) : isInterviewer ? (
-        <div className="userEndContents">
-          <InterviewRadio handleChange={handleChange} labelName="면접 시선" />
-          <InterviewRadio handleChange={handleChange} labelName="면접 자세" />
-          <InterviewRadio handleChange={handleChange} labelName="면접 답변" />
-          <Link to="/lobby">
-            <StyledBtn width="100px" height="32px" color="red">
-              나가기
-            </StyledBtn>
-          </Link>
-        </div>
-      ) : (
-        <div className="userEndContents">
-          <InterviewRadio handleChange={handleChange} labelName="면접관 1" />
-          <InterviewRadio handleChange={handleChange} labelName="면접관 2" />
-          <Link to="/lobby">
-            <StyledBtn width="100px" height="32px" color="red">
-              나가기
-            </StyledBtn>
-          </Link>
-        </div>
+      {isSuccess && (
+        <>
+          <h2>면접 종료!</h2>
+          {isAiInterview ? (
+            <div className="aiEndContents">
+              <p>수고하셨습니다.</p>
+              <span>면접 결과는 마이페이지에서 확인하실 수 있습니다.</span>
+              <Link to="/lobby">
+                <StyledBtn width="100px" height="32px" color="red">
+                  나가기
+                </StyledBtn>
+              </Link>
+            </div>
+          ) : isInterviewer ? (
+            <div className="userEndContents">
+              <InterviewRadio handleChange={handleChange} labelName="면접 시선" />
+              <InterviewRadio handleChange={handleChange} labelName="면접 자세" />
+              <InterviewRadio handleChange={handleChange} labelName="면접 답변" />
+              <Link to="/lobby">
+                <StyledBtn width="100px" height="32px" color="red">
+                  나가기
+                </StyledBtn>
+              </Link>
+            </div>
+          ) : (
+            <div className="userEndContents">
+              <InterviewRadio handleChange={handleChange} labelName="면접관 1" />
+              <InterviewRadio handleChange={handleChange} labelName="면접관 2" />
+              <Link to="/lobby">
+                <StyledBtn width="100px" height="32px" color="red">
+                  나가기
+                </StyledBtn>
+              </Link>
+            </div>
+          )}
+        </>
+      )}
+      {isError && (
+        <p>면접이 정상적으로 종료되지 않았습니다.</p>
       )}
     </StyledInterviewEnd>
   );
-}
+};
 
 export default InterviewEnd;
