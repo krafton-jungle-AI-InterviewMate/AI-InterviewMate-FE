@@ -126,25 +126,23 @@ const useFaceLandmarksDetection = (params: UseVideoFaceMeshParams) => {
   }, [ video ]);
 
   useEffect(() => {
-    if (!isDetectionOn) {
+    if (!(isDetectionOn && detector)) {
       return;
     }
 
-    if (detector) {
-      if (isOneOff) {
-        (async () => {
-          await updateFace(detector);
-        })();
-      }
-      else {
-        const intervalId = window.setInterval(async () => {
-          await updateFace(detector);
-        }, 100);
+    if (isOneOff) {
+      (async () => {
+        await updateFace(detector);
+      })();
+    }
+    else {
+      const intervalId = window.setInterval(async () => {
+        await updateFace(detector);
+      }, 100);
   
-        return () => {
-          window.clearInterval(intervalId);
-        };
-      }
+      return () => {
+        window.clearInterval(intervalId);
+      };
     }
   }, [ isDetectionOn, detector ]);
 
