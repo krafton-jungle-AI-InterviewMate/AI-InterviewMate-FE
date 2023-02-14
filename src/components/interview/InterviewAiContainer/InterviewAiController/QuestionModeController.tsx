@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import { interviewModeAtom, interviewQuestionNumberAtom } from "store/interview/atom";
 
