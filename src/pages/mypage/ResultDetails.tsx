@@ -13,7 +13,7 @@ const ResultDetails = () => {
   const {
     data,
     isFetching,
-    isError,
+    isSuccess,
   } = useGetRatingDetail(
     Number(searchParams.get("room")),
     searchParams.get("type") as RoomTypes,
@@ -29,11 +29,7 @@ const ResultDetails = () => {
 
   return (
     <StyledWrapper>
-      {isError ? (
-        <div>
-          <p>데이터를 불러오는 중 에러가 발생했습니다.</p>
-        </div>
-      ) : (
+      {isSuccess && data ? (
         <>
           <StyledHeader>
             <div className="left-section">
@@ -49,8 +45,12 @@ const ResultDetails = () => {
               <p className="right-section__option">질문 개수: 3개</p>
             </div>
           </StyledHeader>
-          <ResultTable />
+          <ResultTable data={data.data} />
         </>
+      ) : (
+        <div>
+          <p>데이터를 불러오는 중 에러가 발생했습니다.</p>
+        </div>
       )}
     </StyledWrapper>
   );
