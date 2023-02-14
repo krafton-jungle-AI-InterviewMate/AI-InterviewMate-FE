@@ -1,6 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { useGetRatingDetail } from "hooks/queries/mypage";
 import { RoomTypes } from "api/mypage/types";
+import { formatDate } from "lib/format";
 
 import ResultTable from "components/mypage/ResultTable";
 import Loading from "components/common/Loading";
@@ -34,15 +35,21 @@ const ResultDetails = () => {
           <StyledHeader>
             <div className="left-section">
               <div className="left-section__role-tag">
-                <span>AI 면접관</span>
+                <span>
+                  {searchParams.get("type") as RoomTypes === "USER" ? "유저" : "AI"} 면접관
+                </span>
               </div>
               <h2>
-                JS 면접 준비
+                {data.data.data.roomName}
               </h2>
             </div>
             <div className="right-section">
-              <p className="right-section__time">2월 6일 일요일 17:32 면접</p>
-              <p className="right-section__option">질문 개수: 3개</p>
+              <p className="right-section__time">
+                {formatDate(data.data.data.createdAt)} 면접
+              </p>
+              <p className="right-section__option">
+                질문 개수: {data.data.data.roomQuestionNum}개
+              </p>
             </div>
           </StyledHeader>
           <ResultTable data={data.data} />

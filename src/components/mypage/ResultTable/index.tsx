@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -5,6 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import ScriptDialog from "./ScriptDialog";
 
 import { tableContainerStyleOverride } from "./styles";
 import { GetRatingDetailResponse } from "api/mypage/types";
@@ -24,8 +27,22 @@ const ResultTable = (props: ResultTableProps) => {
     },
   } = props;
 
+  const [ dialogOpen, setDialogOpen ] = useState<null | number>(null);
+
+  const handleClose = () => {
+    setDialogOpen(null);
+  };
+
   return (
     <TableContainer sx={tableContainerStyleOverride} component={Paper}>
+      {typeof dialogOpen === "number" && (
+        <ScriptDialog
+          questionTitle={scriptList[Number(dialogOpen)].questionTitle}
+          script={scriptList[Number(dialogOpen)].script}
+          isOpen={typeof dialogOpen === "number"}
+          handleClose={handleClose}
+        />
+      )}
       <Table sx={{ minWidth: 700 }} aria-label="spanning table">
         <TableHead>
           <TableRow>
@@ -50,7 +67,7 @@ const ResultTable = (props: ResultTableProps) => {
               {!idx && <TableCell rowSpan={self.length}>답변 점수</TableCell>}
               <TableCell align="center">{`Q${idx + 1}. ${script.questionTitle}`}</TableCell>
               <TableCell align="center">
-                <button type="button" onClick={() => console.log("TODO: 스크립트 모달", script.script)}>
+                <button type="button" onClick={() => setDialogOpen(idx)}>
                   {script.rating}/100
                 </button>
               </TableCell>
