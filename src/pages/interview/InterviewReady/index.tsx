@@ -126,8 +126,10 @@ const InterviewReady = () => {
           <Styled.CancelButton type="button" onClick={handleCancelButton}>
             면접 취소하기
           </Styled.CancelButton>
-          <Styled.GoButton type="button" onClick={handleGoButton} disabled={disableGoButton}>
-            GO
+          <Styled.GoButtonWrap>
+            <Styled.GoButton type="button" onClick={handleGoButton} disabled={disableGoButton}>
+              GO
+            </Styled.GoButton>
             <Styled.Information>
               <AiOutlineInfoCircle size={24} />
               <small>
@@ -136,7 +138,7 @@ const InterviewReady = () => {
                 면접을 시작할 수 있습니다.
               </small>
             </Styled.Information>
-          </Styled.GoButton>
+          </Styled.GoButtonWrap>
         </Styled.ButtonBox>
       </Styled.FlexContainer>
     </Styled.Wrapper>
