@@ -15,6 +15,8 @@ import InterviewAiTimer from "../InterviewAiTimer";
 import InterviewFeedback from "components/interview/InterviewFeedback";
 
 import styled from "@emotion/styled";
+import useCheckHeadMotion from "hooks/useCheckHeadMotion";
+import useMotionAssessment from "hooks/useMotionAssessment";
 
 type AnswerModeControllerProps = {
   video: HTMLVideoElement;
@@ -46,12 +48,23 @@ const AnswerModeController = (props: AnswerModeControllerProps) => {
   } = useCheckIrisPosition({
     face,
   });
+  const {
+    isBadMotion,
+  } = useCheckHeadMotion({
+    face,
+  });
 
   const {
     showFeedback: showIrisFeedback,
   } = useIrisAssessment({
     isRealtimeMode: true,
     horizontalRatio,
+  });
+  const {
+    showFeedback: showMotionFeedback,
+  } = useMotionAssessment({
+    isRealtimeMode: true,
+    isBadMotion,
   });
 
   const goToNextQuestion = () => {
@@ -68,7 +81,7 @@ const AnswerModeController = (props: AnswerModeControllerProps) => {
 
     const timerId = window.setTimeout(() => {
       goToNextQuestion();
-    }, 1000 * ANSWER_LIMIT_SECONDS); // ? STT 기능 추가하면 버퍼 시간 필요할 듯
+    }, 1000 * ANSWER_LIMIT_SECONDS);
 
     const intervalId = window.setInterval(() => {
       return setCountDown((prev) => prev - 1);
@@ -97,7 +110,9 @@ const AnswerModeController = (props: AnswerModeControllerProps) => {
       {showIrisFeedback && (
         <InterviewFeedback feedbackType="iris" />
       )}
-      <InterviewFeedback feedbackType="motion" />
+      {showMotionFeedback && (
+        <InterviewFeedback feedbackType="motion" />
+      )}
 
       <StyledNextButton type="button" onClick={goToNextQuestion}>
         다음으로 넘어가기
