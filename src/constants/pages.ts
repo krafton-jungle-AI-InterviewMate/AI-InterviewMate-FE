@@ -11,6 +11,7 @@ export const PagesPath = {
 
 // ! Breadcrumbs를 나타내는 경우에만 추가해주세요.
 export const PagesName = {
+  "/lobby": "로비",
   /** 마이페이지 */
   "/mypage": "마이페이지",
   "/mypage/result": "면접 결과 확인",

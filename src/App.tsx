@@ -27,11 +27,11 @@ function App() {
         {/* NavSimple */}
         <Route element={<SimpleLayout />}>
           <Route path={PagesPath.INDEX} element={<Home />} />
-          <Route path={PagesPath.LOBBY} element={<Lobby />} />
         </Route>
 
         {/* NavWithBreadcrumbs */}
         <Route element={<BreadcrumbsLayout />}>
+          <Route path={PagesPath.LOBBY} element={<Lobby />} />
           <Route path={PagesPath.MYPAGE} element={<Mypage />} />
           <Route path={PagesPath.RESULT} element={<Result />} />
           <Route path={PagesPath.RESULT_DETAILS} element={<ResultDetails />} />
