@@ -13,3 +13,4 @@ export const formatDate = (dateStr: string) => {
   const time = date.toLocaleTimeString("ko-KR", timeOptions);
   return `${date.toLocaleDateString("ko-KR", dateOptions)} ${time}`;
 };
+
