@@ -3,7 +3,7 @@ import { useLocation, Link } from "react-router-dom";
 import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
 import { PagesName } from "constants/pages";
 import { getBreadcrumbs } from "lib/pages";
-import { breadcrumbsStyleOverride } from "./styles";
+import { breadcrumbsStyleOverride, StyledPlainCrumb } from "./styles";
 
 const Breadcrumbs = () => {
   const {
@@ -18,10 +18,16 @@ const Breadcrumbs = () => {
     <MuiBreadcrumbs
       aria-label="breadcrumb"
       sx={breadcrumbsStyleOverride}>
-      {breadcrumbs.map((crumb, idx) =>
-        <Link to={crumb} key={idx}>
-          {PagesName[crumb]}
-        </Link>,
+      {breadcrumbs.map((crumb, idx) => 
+        crumb.includes(pathname) ? (
+          <StyledPlainCrumb key={idx}>
+            {PagesName[crumb]}
+          </StyledPlainCrumb>
+        ) : (
+          <Link to={crumb} key={idx}>
+            {PagesName[crumb]}
+          </Link>
+        ),
       )}
     </MuiBreadcrumbs>
   );
