@@ -6,27 +6,36 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { GrClose as CloseIcon } from "react-icons/gr";
 
+import { replaceKeywordTags } from "./util";
+
+import emotionStyled from "@emotion/styled";
+
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiPaper-root": {
     width: "600px",
     height: "400px",
   },
   "& .MuiDialogContent-root": {
+    display: "flex",
+    flexFlow: "colum nowrap",
+    justifyContents: "center",
+    alignItems: "center",
     padding: theme.spacing(2),
     textAlign: "center",
+    color: "var(--font-gray)",
 
-    "& .placeholder": {
+    "& span": {
       color: "var(--push-gray)",
     },
   },
   "& *": {
-    color: "var(--font-gray)",
     fontFamily: "\"Archivo\", \"Spoqa Han Sans Neo\", sans-serif;",
   },
   "& path": {
     stroke: "var(--font-gray)",
   },
   "& h2": {
+    color: "var(--font-gray)",
     width: "80%",
   },
 }));
@@ -91,12 +100,30 @@ const ScriptDialog = (props: ScriptDialogProps) => {
         {questionTitle}
       </BootstrapDialogTitle>
       <DialogContent dividers>
-        <Typography gutterBottom>
-          {script || <span className="placeholder">작성된 내용이 없습니다.</span>}
-        </Typography>
+        <StyledScriptWrap>
+          <Typography
+            gutterBottom
+            dangerouslySetInnerHTML={{
+              __html: replaceKeywordTags({
+                script,
+                tag: "strong",
+              })
+            || "<span className=\"placeholder\">작성된 내용이 없습니다.</span>",
+            }}
+          />
+        </StyledScriptWrap>
       </DialogContent>
     </BootstrapDialog>
   );
 };
 
 export default ScriptDialog;
+
+const StyledScriptWrap = emotionStyled.div`
+  margin: 0 auto;
+
+  & .MuiTypography-root strong {
+    display: inline;
+    box-shadow: inset 0 -10px 0 #a0ec2e90;
+  }
+`;

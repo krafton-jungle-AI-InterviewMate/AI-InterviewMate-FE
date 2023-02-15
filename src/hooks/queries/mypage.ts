@@ -16,9 +16,11 @@ export const useGetRatingHistory = () => {
 };
 
 export const useGetRatingDetail = (roomIdx: number, type: RoomTypes) => {
-  const { data, isSuccess, isLoading, isError, fetchStatus, isFetching } = useQuery([ "fetchRatingDetail" ], () => {
-    return mypageAPI.getRatingDetail(roomIdx, type);
-  });
+  const { data, isSuccess, isLoading, isError, fetchStatus, isFetching } = useQuery(
+    [ "fetchRatingDetail", `room${roomIdx}` ],
+    () => {
+      return mypageAPI.getRatingDetail(roomIdx, type);
+    });
 
   return {
     data,

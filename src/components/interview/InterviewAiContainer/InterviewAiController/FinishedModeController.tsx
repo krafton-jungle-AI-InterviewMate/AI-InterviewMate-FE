@@ -101,8 +101,6 @@ const StyledLayer = styled.div`
   align-items: center;
   width: 400px;
   height: 300px;
-  /* background-color: #18181830; */
-  backdrop-filter: blur(4px);
   border-radius: 5px;
   `;
 
