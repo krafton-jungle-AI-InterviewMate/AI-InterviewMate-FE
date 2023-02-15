@@ -1,5 +1,6 @@
 import { Keypoint } from "@tensorflow-models/face-landmarks-detection";
-import * as POINTS from "constants/faceLandmarkDetection";
+import { POINTS, TRIANGULATION } from "constants/faceLandmarkDetection";
+import { BoundingBox } from "types/faceLandmarkDetection";
 
 // * Triangle drawing method
 const drawPath = (ctx: CanvasRenderingContext2D, points: Keypoint[], closePath: boolean) => {
@@ -54,12 +55,12 @@ export const drawFaceMesh = (params: DrawFaceMeshParams) => {
   } = params;
 
   // * Draw triangles
-  for (let i = 0; i < POINTS.TRIANGULATION.length / 3; i++) {
+  for (let i = 0; i < TRIANGULATION.length / 3; i++) {
     // 삼각형의 세 꼭짓점 묶기
     const indexes = [
-      POINTS.TRIANGULATION[i * 3],
-      POINTS.TRIANGULATION[i * 3 + 1],
-      POINTS.TRIANGULATION[i * 3 + 2],
+      TRIANGULATION[i * 3],
+      TRIANGULATION[i * 3 + 1],
+      TRIANGULATION[i * 3 + 2],
     ];
 
     const points = indexes.map(point => keypoints[point]);
@@ -100,4 +101,69 @@ export const checkHorizontalRatio = (kp: Keypoint[]) => {
   const pupilLeft = pupilLeftPos / eyeLeftWidth;
 
   return Number(((pupilRight + pupilLeft) / 2).toFixed(2));
+};
+
+export const isInsideHitBox = (hitBox: BoundingBox, coords: BoundingBox) => {
+  const {
+    xMin: hitBoxXMin,
+    xMax: hitBoxXMax,
+    yMin: hitBoxYMin,
+    yMax: hitBoxYMax,
+  } = hitBox;
+
+  const { xMin, xMax, yMin, yMax } = coords;
+
+  return (
+    xMin > hitBoxXMin
+    && xMax < hitBoxXMax
+    && yMin > hitBoxYMin
+    && yMax < hitBoxYMax
+  );
+};
+
+/** https://mathbang.net/138 */
+const getDistanceBetweenTwoKeypoints = (kp1: Keypoint, kp2: Keypoint) => {
+
+  const dis_x = kp1.x - kp2.x;
+  const dis_y = kp1.y - kp2.y;
+
+  return Math.sqrt(Math.abs(dis_x * dis_x) + Math.abs(dis_y * dis_y));
+};
+
+type FaceDistance = {
+  right: number;
+  left: number;
+};
+/**
+ * right distance: from 127 to 33
+ * left distance: from 263 to 356
+ */
+export const getFaceDistance: (kp: Keypoint[]) => FaceDistance = (kp) => {
+  const rightDistance =
+    getDistanceBetweenTwoKeypoints(kp[POINTS.RIGHT_EAR], kp[POINTS.EYE_RIGHT_START]);
+  const leftDistance =
+    getDistanceBetweenTwoKeypoints(kp[POINTS.LEFT_EAR], kp[POINTS.EYE_LEFT_END]);
+
+  return {
+    right: rightDistance,
+    left: leftDistance,
+  };
+};
+
+type FaceDistanceWithThreshold = FaceDistance & {
+  rightThreshold: number;
+  leftThreshold: number;
+}
+export const isFaceDistanceStable = (
+  initDistance: FaceDistanceWithThreshold,
+  currDistance: FaceDistance,
+) => {
+  const isHeadTurnRightSafely =
+    (initDistance.rightThreshold < currDistance.right)
+    && (initDistance.right > currDistance.right);
+  const isHeadTurnLeftSafely =
+    (initDistance.leftThreshold < currDistance.left)
+    && (initDistance.left > currDistance.left);
+
+  return isHeadTurnRightSafely || isHeadTurnLeftSafely;
 };
