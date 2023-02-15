@@ -103,10 +103,14 @@ export const CancelButton = styled.button`
   }
 `;
 
-export const GoButton = styled.button`
+export const GoButtonWrap = styled.div`
   position: relative;
+`;
+
+export const GoButton = styled.button`
   ${commonButtonStyle}
   background-color: var(--main-orange);
+  color: var(--main-white);
   margin-left: 28px;
 
   &:hover {
@@ -131,7 +135,7 @@ export const GoButton = styled.button`
 
 export const Information = styled.div`
   position: absolute;
-  left: 0;
+  left: 24px;
   bottom: -40px;
   display: flex;
   flex-flow: row nowrap;
@@ -146,6 +150,7 @@ export const Information = styled.div`
     font-size: 12px;
     text-align: left;
     margin-left: 4px;
+    line-height: 1.2;
   }
 `;
 
