@@ -22,15 +22,15 @@ const StyledCreateRoom = styled.div`
       justify-content: space-between;
       align-items: center;
       margin-bottom: 45px;
+      h2 {
+        color: var(--main-black);
+        font-size: 24px;
+      }
       .tabBtn {
         button {
           margin-left: 20px;
         }
       }
-    }
-    form {
-      display: flex;
-      justify-content: space-between;
     }
   }
 `;
