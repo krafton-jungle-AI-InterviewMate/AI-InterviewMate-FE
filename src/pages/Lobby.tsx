@@ -2,6 +2,8 @@ import styled from "@emotion/styled";
 import { StyledBtn } from "styles/StyledBtn";
 import { useNavigate } from "react-router-dom";
 import Room from "components/lobby/Room";
+import CreateRoom from "components/modal/room/CreateRoom";
+import { useState } from "react";
 
 const StyledLobbyInterface = styled.div`
   min-width: 1000px;
@@ -22,16 +24,17 @@ const StyledRoomContents = styled.div`
 
 function Lobby() {
   const navigate = useNavigate();
-
+  const [modalCreateRoom, setModalCreateRoom] = useState(true);
   return (
     <>
+      {modalCreateRoom ? <CreateRoom setModalCreateRoom={setModalCreateRoom} /> : null}
       <StyledLobbyInterface>
         <StyledBtn
           width="200px"
           height="48px"
           color="orange"
           onClick={() => {
-            navigate("/interview/ready");
+            setModalCreateRoom(true);
           }}
         >
           방 만들기
