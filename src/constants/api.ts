@@ -11,6 +11,7 @@ export const API_PATH = {
   POST_RATING_VIEWEE: (roomIdx: number) => `/rating/${roomIdx}/viewee`,
   POST_INTERVIEW_ROOMS: (queryParams?: PostInterviewRooms) =>
     `/interview/rooms?${queryParams || ""}`,
+  GET_INTERVIEW_ROOMS: "/interview/rooms",
 };
 
 export const AI_VIEWER_IDX = 79797979;
