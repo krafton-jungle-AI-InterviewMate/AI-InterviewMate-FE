@@ -34,7 +34,7 @@ function Lobby() {
             navigate("/interview/ready");
           }}
         >
-          시작하기
+          방 만들기
         </StyledBtn>
         <StyledBtn width="200px" height="48px" color="blue">
           목록 새로고침
