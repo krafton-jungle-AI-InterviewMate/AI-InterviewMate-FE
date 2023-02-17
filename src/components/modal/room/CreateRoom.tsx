@@ -53,13 +53,13 @@ const StyledTabBtn = styled.button`
 `;
 
 function CreateRoom({ setModalCreateRoom }) {
-  const [isUser, setIsUser] = useState("user");
+  const [roomType, setRoomType] = useState("USER");
 
   const onTabBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
     const {
       currentTarget: { name },
     } = event;
-    setIsUser(name);
+    setRoomType(name);
   };
 
   const onClickModalClose = () => {
@@ -72,21 +72,25 @@ function CreateRoom({ setModalCreateRoom }) {
           <h2>방 만들기</h2>
           <div className="tabBtn">
             <StyledTabBtn
-              className={isUser === "user" ? "active" : ""}
+              className={roomType === "USER" ? "active" : ""}
               onClick={onTabBtn}
-              name="user"
+              name="USER"
             >
               유저 면접관
             </StyledTabBtn>
-            <StyledTabBtn className={isUser === "ai" ? "active" : ""} onClick={onTabBtn} name="ai">
+            <StyledTabBtn
+              className={roomType === "AI" ? "active" : ""}
+              onClick={onTabBtn}
+              name="AI"
+            >
               AI 면접관
             </StyledTabBtn>
           </div>
         </div>
-        {isUser === "user" ? (
-          <UserRoomForm onClickModalClose={onClickModalClose} />
+        {roomType === "USER" ? (
+          <UserRoomForm roomType={roomType} onClickModalClose={onClickModalClose} />
         ) : (
-          <AiRoomForm onClickModalClose={onClickModalClose} />
+          <AiRoomForm roomType={roomType} onClickModalClose={onClickModalClose} />
         )}
       </div>
     </StyledCreateRoom>
