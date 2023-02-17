@@ -51,7 +51,7 @@ const Home = () => {
           height="70px"
           color="orange"
           onClick={() => {
-            navigate("/lobby");
+            navigate("/login");
           }}
         >
           바로 시작하기

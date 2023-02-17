@@ -1,12 +1,13 @@
 import { Routes, Route } from "react-router-dom";
 import { PagesPath } from "constants/pages";
 
-
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { SimpleLayout, BreadcrumbsLayout, InterviewLayout } from "components/layout";
+
 import { InterviewAi, InterviewReady, InterviewEnd } from "pages/interview";
 import Home from "pages/Home";
+import Login from "pages/Login";
 import { Mypage, Result, ResultDetails } from "pages/mypage";
 import Lobby from "pages/Lobby";
 import NotFound from "pages/NotFound";
@@ -31,6 +32,7 @@ function App() {
 
         {/* NavWithBreadcrumbs */}
         <Route element={<BreadcrumbsLayout />}>
+          <Route path={PagesPath.LOGIN} element={<Login />} />
           <Route path={PagesPath.LOBBY} element={<Lobby />} />
           <Route path={PagesPath.MYPAGE} element={<Mypage />} />
           <Route path={PagesPath.RESULT} element={<Result />} />
