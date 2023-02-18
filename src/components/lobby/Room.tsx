@@ -2,9 +2,13 @@ import styled from "@emotion/styled";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { RiGitRepositoryPrivateFill } from "react-icons/ri";
 import { MdPublic } from "react-icons/md";
+import { RoomStatus } from "api/lobby/type";
+import { RoomTypes } from "api/mypage/types";
+import { Link } from "react-router-dom";
 
 interface IRoom {
-  aiInter: boolean;
+  roomType: RoomTypes;
+  roomStatus: RoomStatus;
 }
 
 const StyledRoom = styled.div<IRoom>`
@@ -17,7 +21,6 @@ const StyledRoom = styled.div<IRoom>`
   border: 1px solid var(--main-gray);
   background-color: var(--main-white);
   padding: 28px 42px;
-  margin-bottom: 40px;
   filter: drop-shadow(0px 6px 24px rgba(0, 0, 0, 0.03));
   .roomHeader {
     display: flex;
@@ -37,9 +40,9 @@ const StyledRoom = styled.div<IRoom>`
     .interviewer {
       width: 100px;
       height: 24px;
-      background-color: ${props => props.aiInter};
+      background-color: ${props => props.roomType};
       font-size: 12px;
-      background-color: ${props => (props.aiInter ? "var(--push-gray)" : "var(--main-black)")};
+      background-color: ${props => (props.roomType ? "var(--push-gray)" : "var(--main-black)")};
       border-radius: 5px;
       color: var(--main-white);
     }
@@ -52,6 +55,10 @@ const StyledRoom = styled.div<IRoom>`
     color: var(--font-gray);
     p {
       margin: 0;
+    }
+    .roomStatus {
+      color: ${props =>
+        props.roomStatus === "CREATE" ? "var(--main-orange)" : "var(--main-black)"};
     }
     .warningComent {
       display: flex;
@@ -76,66 +83,75 @@ const StyledRoom = styled.div<IRoom>`
 
 interface RoomProps {
   roomName: string; // 방 제목
-  isAiInterview: boolean; // AI 면접, 유저 면접
-  isLock: boolean; // 잠금 여부
-  roomState: string; // 방 상태
+  roomType: RoomTypes; // AI 면접, 유저 면접
+  roomIsPrivate: boolean; // 잠금 여부
+  roomStatus: RoomStatus; // 방 상태
   question?: number; // 질문 개수
   interviewTime?: number; // 인터뷰 시간
-  currPeople: number; // 현재 인원 수
-  totalPeople: number; // 총 인원 수
+  roomPeopleNow: number; // 현재 인원 수
+  roomPeopleNum: number; // 총 인원 수
 }
 
 function Room({
   roomName,
-  isAiInterview,
-  isLock,
-  roomState,
+  roomType,
+  roomIsPrivate,
+  roomStatus,
   question,
   interviewTime,
-  currPeople,
-  totalPeople,
+  roomPeopleNow,
+  roomPeopleNum,
 }: RoomProps) {
   return (
-    <StyledRoom aiInter={isAiInterview}>
-      <div className="roomHeader">
-        <div className="roomName">
-          <p>{roomName}</p>
-          {isAiInterview ? (
-            <span>질문 개수: {question}개</span>
-          ) : (
-            <span>진행 시간: {interviewTime}분</span>
-          )}
-        </div>
-        <div className="interviewer">{isAiInterview ? "AI 면접관" : "유저 면접관"}</div>
-      </div>
-
-      <div className="roomState">
-        <p>{roomState}</p>
-        {isAiInterview ? (
-          <div className="warningComent">
-            <AiOutlineInfoCircle size={"25px"} color={"var(--push-gray)"} />
-            <p>
-              AI 면접관 방에는 입장하실 수 없습니다.
-              <br />방 만들기 기능을 이용해주세요.
-            </p>
+    <div style={{ marginBottom: 40 }}>
+      <Link
+        to={
+          roomStatus === "CREATE" && roomType === "USER" && roomPeopleNow < roomPeopleNum
+            ? "/interview/ready"
+            : ""
+        }
+      >
+        <StyledRoom roomType={roomType} roomStatus={roomStatus}>
+          <div className="roomHeader">
+            <div className="roomName">
+              <p>{roomName}</p>
+              {roomType ? (
+                <span>질문 개수: {question}개</span>
+              ) : (
+                <span>진행 시간: {interviewTime}분</span>
+              )}
+            </div>
+            <div className="interviewer">{roomType === "AI" ? "AI 면접관" : "유저 면접관"}</div>
           </div>
-        ) : isLock ? (
-          <div className="roomInfo">
-            <span>
-              {currPeople} / {totalPeople}
-            </span>
-            <RiGitRepositoryPrivateFill size={"32px"} color={"var(--push-gray)"} />
+          <div className="roomState">
+            <p className="roomStatus">{roomStatus === "CREATE" ? "대기 중" : "진행 중"}</p>
+            {roomType === "AI" ? (
+              <div className="warningComent">
+                <AiOutlineInfoCircle size={"25px"} color={"var(--push-gray)"} />
+                <p>
+                  AI 면접관 방에는 입장하실 수 없습니다.
+                  <br />방 만들기 기능을 이용해주세요.
+                </p>
+              </div>
+            ) : roomIsPrivate ? (
+              <div className="roomInfo">
+                <span>
+                  {roomPeopleNow} / {roomPeopleNum}
+                </span>
+                <RiGitRepositoryPrivateFill size={"32px"} color={"var(--push-gray)"} />
+              </div>
+            ) : (
+              <div className="roomInfo">
+                <span>
+                  {roomPeopleNow} / {roomPeopleNum}
+                </span>
+                <MdPublic size={"32px"} color={"var(--push-gray)"} />
+              </div>
+            )}
           </div>
-        ) : (
-          <div className="roomInfo">
-            <span>
-              {currPeople} / {totalPeople}
-            </span>
-            <MdPublic size={"32px"} color={"var(--push-gray)"} />
-          </div>
-        )}
-      </div>
-    </StyledRoom>
+        </StyledRoom>
+      </Link>
+    </div>
   );
 }
 

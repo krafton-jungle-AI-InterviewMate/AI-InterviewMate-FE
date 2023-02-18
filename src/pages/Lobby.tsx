@@ -1,9 +1,13 @@
 import styled from "@emotion/styled";
 import { StyledBtn } from "styles/StyledBtn";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Room from "components/lobby/Room";
 import CreateRoom from "components/modal/room/CreateRoom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useGetInterviewRooms } from "./../hooks/queries/lobby/lobby";
+import { InterviewRooms } from "api/lobby/type";
+import Loading from "components/common/Loading";
+import ServerError from "./ServerError";
 
 const StyledLobbyInterface = styled.div`
   min-width: 1000px;
@@ -23,8 +27,17 @@ const StyledRoomContents = styled.div`
 `;
 
 function Lobby() {
-  const navigate = useNavigate();
   const [modalCreateRoom, setModalCreateRoom] = useState(true);
+  const [interviewRooms, setInterviewRooms] = useState<InterviewRooms[]>([]);
+  const { data, isSuccess, isLoading, isError } = useGetInterviewRooms();
+  useEffect(() => {
+    if (!isLoading && data) {
+      setInterviewRooms(data.data.data);
+    }
+  }, [isLoading]);
+  const onClickReload = () => {
+    window.location.reload();
+  };
   return (
     <>
       {modalCreateRoom ? <CreateRoom setModalCreateRoom={setModalCreateRoom} /> : null}
@@ -39,38 +52,29 @@ function Lobby() {
         >
           방 만들기
         </StyledBtn>
-        <StyledBtn width="200px" height="48px" color="blue">
+        <StyledBtn onClick={onClickReload} width="200px" height="48px" color="blue">
           목록 새로고침
         </StyledBtn>
       </StyledLobbyInterface>
       <StyledRoomContents>
-        <Room
-          roomName="무신사 짱짱"
-          isAiInterview={true}
-          roomState="진행 중"
-          isLock={false}
-          question={5}
-          currPeople={1}
-          totalPeople={1}
-        />
-        <Room
-          roomName="당근 마켓 가즈아"
-          isAiInterview={true}
-          roomState="대기 중"
-          isLock={false}
-          question={6}
-          currPeople={1}
-          totalPeople={1}
-        />
-        <Room
-          roomName="크래프톤 면접 준비"
-          isAiInterview={true}
-          roomState="진행 중"
-          question={3}
-          isLock={false}
-          currPeople={1}
-          totalPeople={1}
-        />
+        {isLoading ? (
+          <Loading margin="120px 0 0" />
+        ) : isError ? (
+          <ServerError />
+        ) : (
+          interviewRooms.map(room => (
+            <Room
+              key={room.createdAt}
+              roomName={room.roomName}
+              roomType={room.roomType}
+              roomStatus={room.roomStatus}
+              roomIsPrivate={room.roomIsPrivate}
+              question={5}
+              roomPeopleNow={room.roomPeopleNow}
+              roomPeopleNum={room.roomPeopleNum}
+            />
+          ))
+        )}
       </StyledRoomContents>
     </>
   );
