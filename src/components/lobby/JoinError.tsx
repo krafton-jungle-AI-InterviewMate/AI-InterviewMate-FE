@@ -19,6 +19,7 @@ const StyledJoinError = styled.div`
     background-color: var(--main-white);
     h2 {
       font-size: 24px;
+      font-weight: 400;
       color: var(--main-black);
       margin-bottom: 78px;
     }

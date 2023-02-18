@@ -12,9 +12,9 @@ export type RoomStatus = "CREATE" | "PROCEED" | "EXIT";
 export type PostInterviewRoomsPayloadData = {
   email?: string;
   roomName: string;
-  roomPeopleNum: number;
+  roomPeopleNum?: number;
   roomPassword?: string;
-  isPrivate: boolean;
+  isPrivate?: boolean;
   roomType: RoomTypes;
   roomQuestionboxIdx: number;
   roomQuestionNum?: number;
@@ -30,7 +30,7 @@ export type PostInterviewRoomsResponse = {
   roomIdx: number;
   roomName: string;
   roomPeopleNum: number;
-  roomPassword?: number;
+  roomPassword: number;
   roomType: RoomTypes;
   nickName: string;
   roomTime: number;

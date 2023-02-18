@@ -17,13 +17,12 @@ import { RoomTypes } from "api/mypage/types";
 interface InputRoomFormProps {
   email?: string;
   roomName: string;
-  roomPeopleNum: number;
+  roomPeopleNum?: number;
   roomPassword?: string;
-  isPrivate: boolean;
+  isPrivate?: boolean;
   roomType: RoomTypes;
   roomQuestionboxIdx: number;
-  roomQuestionNum?: number;
-  roomTime: number;
+  roomTime?: number;
 }
 
 function CreateRoomForm({ onClickModalClose, roomType }) {
@@ -53,6 +52,7 @@ function CreateRoomForm({ onClickModalClose, roomType }) {
   const { mutate, isLoading } = usePostInterviewRooms();
 
   const onValid = (data: any) => {
+    data["roomType"] = roomType;
     console.log(data);
     if (isLoading) {
       return;
@@ -79,7 +79,6 @@ function CreateRoomForm({ onClickModalClose, roomType }) {
       passwordError={errors?.roomPassword?.message}
     >
       <form onSubmit={handleSubmit(onValid)}>
-        <input {...register("roomType")} readOnly hidden value={roomType} />
         <input {...register("email")} readOnly hidden value="user4@test.com" />
         <div className="inputContent">
           <label htmlFor="roomName">방 제목</label>
@@ -108,59 +107,49 @@ function CreateRoomForm({ onClickModalClose, roomType }) {
         <span className="guide">
           최소 2자 ~ 최대 10자까지 입력 가능합니다. 특수문자는 사용 불가능합니다. (띄어쓰기 제외)
         </span>
-        {roomType === "USER" ? (
-          <>
-            <div className="inputContent">
-              <FormControl className="radioForm">
-                <FormLabel>면접관 수</FormLabel>
-                <RadioGroup row>
-                  <FormControlLabel
-                    value={1}
-                    control={<Radio {...register("roomPeopleNum", { required: true })} />}
-                    label="1명"
-                  />
-                  <FormControlLabel
-                    value={2}
-                    control={<Radio {...register("roomPeopleNum", { required: true })} />}
-                    label="2명"
-                  />
-                  <FormControlLabel
-                    value={3}
-                    control={<Radio {...register("roomPeopleNum", { required: true })} />}
-                    label="3명"
-                  />
-                </RadioGroup>
-              </FormControl>
-            </div>
-            <div className="inputContent">
-              <FormControl className="radioForm">
-                <FormLabel>공개 여부</FormLabel>
-                <RadioGroup row>
-                  <FormControlLabel
-                    value={false}
-                    control={
-                      <Radio
-                        {...register("isPrivate", { required: true })}
-                        onChange={onChangePublic}
-                      />
-                    }
-                    label="공개"
-                  />
-                  <FormControlLabel
-                    value={true}
-                    control={
-                      <Radio
-                        {...register("isPrivate", { required: true })}
-                        onChange={onChangePublic}
-                      />
-                    }
-                    label="비공개"
-                  />
-                </RadioGroup>
-              </FormControl>
-            </div>
-          </>
-        ) : null}
+        <div className="inputContent">
+          <FormControl className="radioForm">
+            <FormLabel>면접관 수</FormLabel>
+            <RadioGroup row>
+              <FormControlLabel
+                value={2}
+                control={<Radio {...register("roomPeopleNum", { required: true })} />}
+                label="1명"
+              />
+              <FormControlLabel
+                value={3}
+                control={<Radio {...register("roomPeopleNum", { required: true })} />}
+                label="2명"
+              />
+              <FormControlLabel
+                value={4}
+                control={<Radio {...register("roomPeopleNum", { required: true })} />}
+                label="3명"
+              />
+            </RadioGroup>
+          </FormControl>
+        </div>
+        <div className="inputContent">
+          <FormControl className="radioForm">
+            <FormLabel>공개 여부</FormLabel>
+            <RadioGroup row>
+              <FormControlLabel
+                value={false}
+                control={
+                  <Radio {...register("isPrivate", { required: true })} onChange={onChangePublic} />
+                }
+                label="공개"
+              />
+              <FormControlLabel
+                value={true}
+                control={
+                  <Radio {...register("isPrivate", { required: true })} onChange={onChangePublic} />
+                }
+                label="비공개"
+              />
+            </RadioGroup>
+          </FormControl>
+        </div>
         {isPrivate ? (
           <>
             <div className="inputContent">
