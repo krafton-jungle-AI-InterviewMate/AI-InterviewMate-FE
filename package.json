@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "@emotion/babel-plugin": "^11.10.5",
+    "@tanstack/react-query-devtools": "^4.24.6",
     "@types/dom-speech-recognition": "^0.0.1",
     "@types/node": "18.7.1",
     "@types/qs": "^6.9.7",

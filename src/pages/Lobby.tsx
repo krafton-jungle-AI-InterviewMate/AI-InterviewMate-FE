@@ -7,6 +7,7 @@ import { useGetInterviewRooms } from "./../hooks/queries/lobby/lobby";
 import { InterviewRooms } from "api/lobby/type";
 import Loading from "components/common/Loading";
 import ServerError from "./ServerError";
+import JoinError from "components/lobby/JoinError";
 
 const StyledLobbyInterface = styled.div`
   min-width: 1000px;
@@ -26,20 +27,23 @@ const StyledRoomContents = styled.div`
 `;
 
 function Lobby() {
-  const [modalCreateRoom, setModalCreateRoom] = useState(true);
+  const [modalCreateRoom, setModalCreateRoom] = useState(false);
   const [interviewRooms, setInterviewRooms] = useState<InterviewRooms[]>([]);
   const { data, isSuccess, isLoading, isError } = useGetInterviewRooms();
   useEffect(() => {
     if (!isLoading && data) {
       setInterviewRooms(data.data.data);
     }
-  }, [isLoading]);
+  }, [data]);
+
   const onClickReload = () => {
     window.location.reload();
   };
+  const [isJoinError, setIsJoinError] = useState(false);
   return (
     <>
       {modalCreateRoom ? <CreateRoom setModalCreateRoom={setModalCreateRoom} /> : null}
+      {isJoinError ? <JoinError setIsJoinError={setIsJoinError} /> : null}
       <StyledLobbyInterface>
         <StyledBtn
           width="200px"
@@ -68,9 +72,10 @@ function Lobby() {
               roomType={room.roomType}
               roomStatus={room.roomStatus}
               roomIsPrivate={room.roomIsPrivate}
-              question={5}
+              roomTime={room.roomTime}
               roomPeopleNow={room.roomPeopleNow}
               roomPeopleNum={room.roomPeopleNum}
+              setIsJoinError={setIsJoinError}
             />
           ))
         )}
