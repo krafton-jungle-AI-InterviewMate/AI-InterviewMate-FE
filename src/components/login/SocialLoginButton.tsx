@@ -18,9 +18,8 @@ const SocialLoginButton = (props: SocialLoginButtonProps) => {
 
   return (
     <StyledButton provider={provider} type="button" onClick={() => {}}>
-      {provider === "kakao" ? (
-        <img src={kakaoLogin} alt="카카오 로그인" />
-      ) : (
+      {provider === "kakao" && <img src={kakaoLogin} alt="카카오 로그인" />}
+      {provider !== "kakao" && (
         <>
           <img className={provider} src={provider === "github" ? githubIcon : googleIcon} alt="" />
           <StyledText>{ProviderName[provider]} 로그인</StyledText>
