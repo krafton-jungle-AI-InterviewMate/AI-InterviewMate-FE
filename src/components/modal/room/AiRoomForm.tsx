@@ -52,7 +52,6 @@ function AiRoomForm({ onClickModalClose, roomType }) {
   const onValid = (data: any) => {
     data["roomType"] = roomType;
     data["isPrivate"] = true;
-    console.log(data);
     if (isLoading) {
       return;
     }

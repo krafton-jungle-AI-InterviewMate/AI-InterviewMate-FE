@@ -53,7 +53,6 @@ function CreateRoomForm({ onClickModalClose, roomType }) {
 
   const onValid = (data: any) => {
     data["roomType"] = roomType;
-    console.log(data);
     if (isLoading) {
       return;
     }
