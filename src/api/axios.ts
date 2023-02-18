@@ -1,5 +1,6 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import qs from "qs";
+import { accessTokenCookies, refreshTokenCookies } from "lib/cookies";
 
 import { Dict, CommonAPI } from "types/apis";
 import { BASE_URL } from "constants/api";
@@ -17,15 +18,31 @@ export const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
-    // TODO: 인증 기능 구현 후 디폴트 헤더 추가
-    // (remove when logout)
   },
 });
 
 /**
- * Request Success Handler
+ * Request Success Handler - API 호출될 때마다 실행됨.
  */
-const requestSuccessHandler = config => {
+const requestSuccessHandler = (config:  AxiosRequestConfig) => {
+  const refreshToken = refreshTokenCookies.get();
+  const accessToken = accessTokenCookies.get();
+
+  console.log("refreshToken", refreshToken);
+
+  if (accessToken) {
+    config.headers!["Authorization"] = `Bearer ${accessToken}`;
+  }
+  else if (refreshToken) {
+    const body = {
+      refreshToken,
+    };
+
+    // 1. access token 갱신 요청
+    // 2. 1에서 응답받은 access token을 다음과 같이 설정:
+    // config.headers["Authorization"] = `Bearer ${token}`;
+  }
+
   return config;
 };
 
@@ -33,6 +50,9 @@ const requestSuccessHandler = config => {
  * Request Fail Handler
  */
 const requestErrorHandler = err => {
+  refreshTokenCookies.remove();
+  accessTokenCookies.remove();
+
   return Promise.reject(err);
 };
 
