@@ -1,13 +1,12 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
-import AiRoomForm from "./AiRoomForm";
-import UserRoomForm from "./UserRoomForm";
+import CreateRoomForm from "./CreateRoomForm";
 
 const StyledCreateRoom = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
+  position: fixed;
   width: 100vw;
   height: 100vh;
   z-index: 999;
@@ -87,11 +86,7 @@ function CreateRoom({ setModalCreateRoom }) {
             </StyledTabBtn>
           </div>
         </div>
-        {roomType === "USER" ? (
-          <UserRoomForm roomType={roomType} onClickModalClose={onClickModalClose} />
-        ) : (
-          <AiRoomForm roomType={roomType} onClickModalClose={onClickModalClose} />
-        )}
+        <CreateRoomForm roomType={roomType} onClickModalClose={onClickModalClose} />
       </div>
     </StyledCreateRoom>
   );
