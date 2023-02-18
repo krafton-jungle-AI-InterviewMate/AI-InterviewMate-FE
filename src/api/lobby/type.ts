@@ -49,6 +49,7 @@ export type InterviewRooms = {
   roomType: RoomTypes;
   roomStatus: RoomStatus;
   createdAt: string;
+  idx: number;
 };
 
 export type GetInterviewRoomsResponse = ResponseStatus & {

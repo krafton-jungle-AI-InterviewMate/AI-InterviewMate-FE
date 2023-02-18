@@ -89,6 +89,7 @@ interface RoomProps {
   roomTime?: number; // 인터뷰 시간
   roomPeopleNow: number; // 현재 인원 수
   roomPeopleNum: number; // 총 인원 수
+  idx: number;
   setIsJoinError: (text: boolean) => void;
 }
 
@@ -100,6 +101,7 @@ function Room({
   roomTime,
   roomPeopleNow,
   roomPeopleNum,
+  idx,
   setIsJoinError,
 }: RoomProps) {
   const onClickJoin = () => {
