@@ -6,7 +6,6 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import styled from "@emotion/styled";
-import { useState } from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { useSetRecoilState } from "recoil";
 import { feedbackAtom } from "store/interview/atom";
@@ -25,14 +24,7 @@ interface InputRoomFormProps {
 
 function AiRoomForm({ onClickModalClose, roomType }) {
   const navigate = useNavigate();
-  const [isPrivate, setIsPrivate] = useState(false);
   const feedback = useSetRecoilState(feedbackAtom);
-  const onChangePublic = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const {
-      currentTarget: { value },
-    } = event;
-    setIsPrivate(value === "true" ? true : false);
-  };
 
   const onChangeFeedback = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -72,10 +64,7 @@ function AiRoomForm({ onClickModalClose, roomType }) {
   };
 
   return (
-    <StyledUserRoomForm
-      roomNameError={errors?.roomName?.message}
-      passwordError={errors?.roomPassword?.message}
-    >
+    <StyledUserRoomForm roomNameError={errors?.roomName?.message}>
       <form onSubmit={handleSubmit(onValid)}>
         <input {...register("email")} readOnly hidden value="user4@test.com" />
         <div className="inputContent">
@@ -171,7 +160,6 @@ function AiRoomForm({ onClickModalClose, roomType }) {
 
 interface StyledUserRoomFormProps {
   roomNameError: string | undefined;
-  passwordError: string | undefined;
 }
 
 const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`
@@ -204,9 +192,6 @@ const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`
       }
       #roomName {
         border-color: ${props => (props.roomNameError ? "var(--main-alert)" : "var(--main-black)")};
-      }
-      #password {
-        border-color: ${props => (props.passwordError ? "var(--main-alert)" : "var(--main-black)")};
       }
       select {
         width: 370px;
