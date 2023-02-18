@@ -8,6 +8,7 @@ import { SimpleLayout, BreadcrumbsLayout, InterviewLayout } from "components/lay
 import { InterviewAi, InterviewReady, InterviewEnd } from "pages/interview";
 import Home from "pages/Home";
 import Login from "pages/Login";
+import { Redirect } from "pages/oauth";
 import { Mypage, Result, ResultDetails } from "pages/mypage";
 import Lobby from "pages/Lobby";
 import NotFound from "pages/NotFound";
@@ -51,6 +52,7 @@ function App() {
 
         {/* Pages Without Nav */}
         <Route path={PagesPath.INTERVIEW_AI} element={<InterviewAi />} />
+        <Route path={PagesPath.REDIRECT_URI} element={<Redirect />} />
 
         <Route element={<SimpleLayout />}>
           <Route path="*" element={<NotFound />} />

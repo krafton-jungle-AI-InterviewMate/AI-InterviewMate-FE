@@ -8,6 +8,7 @@ export const PagesPath = {
   INTERVIEW_END: "/interview/end",
   LOBBY: "/lobby",
   LOGIN: "/login",
+  REDIRECT_URI: "/oauth/redirect",
 } as const;
 
 // ! Breadcrumbs를 나타내는 경우에만 추가해주세요.
