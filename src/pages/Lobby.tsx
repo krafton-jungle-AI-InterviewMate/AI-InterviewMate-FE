@@ -33,7 +33,8 @@ function Lobby() {
     if (!isLoading && data) {
       setInterviewRooms(data.data.data);
     }
-  }, [isLoading]);
+  }, [data]);
+
   const onClickReload = () => {
     window.location.reload();
   };
