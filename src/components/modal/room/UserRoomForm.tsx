@@ -10,6 +10,7 @@ import { useState } from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { useSetRecoilState } from "recoil";
 import { feedbackAtom } from "store/interview/atom";
+import { RoomTypes } from "api/mypage/types";
 
 interface StyledUserRoomFormProps {
   roomNameError: string | undefined;
@@ -94,7 +95,7 @@ interface UserRoomFormProps {
   roomPeopleNum: number;
   roomPassword?: string;
   isPrivate: boolean;
-  roomType: "AI" | "USER";
+  roomType: RoomTypes;
   roomQuestionboxIdx: number;
   roomQuestionNum?: number;
   roomTime: number;

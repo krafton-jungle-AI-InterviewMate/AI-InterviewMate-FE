@@ -40,9 +40,9 @@ const StyledRoom = styled.div<IRoom>`
     .interviewer {
       width: 100px;
       height: 24px;
-      background-color: ${props => props.roomType};
       font-size: 12px;
-      background-color: ${props => (props.roomType ? "var(--push-gray)" : "var(--main-black)")};
+      background-color: ${props =>
+        props.roomType === "AI" ? "var(--push-gray)" : "var(--main-black)"};
       border-radius: 5px;
       color: var(--main-white);
     }
@@ -86,10 +86,10 @@ interface RoomProps {
   roomType: RoomTypes; // AI 면접, 유저 면접
   roomIsPrivate: boolean; // 잠금 여부
   roomStatus: RoomStatus; // 방 상태
-  question?: number; // 질문 개수
-  interviewTime?: number; // 인터뷰 시간
+  roomTime?: number; // 인터뷰 시간
   roomPeopleNow: number; // 현재 인원 수
   roomPeopleNum: number; // 총 인원 수
+  setIsJoinError: (text: boolean) => void;
 }
 
 function Room({
@@ -97,11 +97,16 @@ function Room({
   roomType,
   roomIsPrivate,
   roomStatus,
-  question,
-  interviewTime,
+  roomTime,
   roomPeopleNow,
   roomPeopleNum,
+  setIsJoinError,
 }: RoomProps) {
+  const onClickJoin = () => {
+    if (roomType === "AI" || roomPeopleNow === roomPeopleNum || roomStatus === "PROCEED") {
+      setIsJoinError(true);
+    }
+  };
   return (
     <div style={{ marginBottom: 40 }}>
       <Link
@@ -110,16 +115,13 @@ function Room({
             ? "/interview/ready"
             : ""
         }
+        onClick={onClickJoin}
       >
         <StyledRoom roomType={roomType} roomStatus={roomStatus}>
           <div className="roomHeader">
             <div className="roomName">
               <p>{roomName}</p>
-              {roomType ? (
-                <span>질문 개수: {question}개</span>
-              ) : (
-                <span>진행 시간: {interviewTime}분</span>
-              )}
+              {roomType === "AI" ? null : <span>진행 시간: {roomTime}분</span>}
             </div>
             <div className="interviewer">{roomType === "AI" ? "AI 면접관" : "유저 면접관"}</div>
           </div>
