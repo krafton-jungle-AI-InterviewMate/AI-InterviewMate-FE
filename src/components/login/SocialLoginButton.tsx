@@ -41,10 +41,12 @@ const StyledButton = styled.button<{ provider: SocialLoginProviderType }>`
   height: 45px;
   padding: 0;
   border-radius: 5px;
+  font-family: "Roboto", "Spoqa Han Sans Neo", sans-serif;
   font-weight: 500;
   font-size: 14px;
   background-color: transparent;
   overflow: hidden;
+  transition: filter 300ms;
 
   & img.github {
     width: 24px;
@@ -60,13 +62,16 @@ const StyledButton = styled.button<{ provider: SocialLoginProviderType }>`
     background-color: var(--main-white);
     color: var(--main-black);
     box-shadow: 0px 1px 4px 0px var(--push-gray);
-    font-family: "Roboto", "Spoqa Han Sans Neo", sans-serif;
   `}
 
   ${({ provider }) => provider === "github" && css`
     background-color: var(--github-black);
     color: var(--main-white);
   `}
+
+  &:hover {
+    filter: brightness(.92);
+  }
 `;
 
 const StyledText = styled.span`
