@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { StyledBtn } from "styles/StyledBtn";
-import { Link, useNavigate } from "react-router-dom";
 import Room from "components/lobby/Room";
 import CreateRoom from "components/modal/room/CreateRoom";
 import { useEffect, useState } from "react";
