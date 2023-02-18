@@ -18,6 +18,7 @@ export const axiosInstance = axios.create({
     "Content-Type": "application/json",
     Accept: "application/json",
     // TODO: 인증 기능 구현 후 디폴트 헤더 추가
+    // (remove when logout)
   },
 });
 
