@@ -9,16 +9,21 @@ export type RoomTypes = "USER" | "AI";
 
 export type RoomStatus = "CREATE" | "PROCEED" | "EXIT";
 
-export type PostInterviewRoomsPayload = {
+export type PostInterviewRoomsPayloadData = {
   email?: string;
   roomName: string;
   roomPeopleNum: number;
   roomPassword?: string;
   isPrivate: boolean;
-  roomType: "USER" | "AI";
+  roomType: RoomTypes;
   roomQuestionboxIdx: number;
   roomQuestionNum?: number;
-  roomTime: number;
+  roomTime?: number;
+};
+
+export type PostInterviewRoomsPayload = {
+  data: PostInterviewRoomsPayloadData;
+  roomIdx: number;
 };
 
 export type PostInterviewRoomsResponse = {
@@ -26,7 +31,7 @@ export type PostInterviewRoomsResponse = {
   roomName: string;
   roomPeopleNum: number;
   roomPassword?: number;
-  roomType: "USER" | "AI";
+  roomType: RoomTypes;
   nickName: string;
   roomTime: number;
   roomQuestionNum: number;

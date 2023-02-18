@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import lobbyAPI from "api/lobby";
 
 export const useGetInterviewRooms = () => {
@@ -12,4 +12,15 @@ export const useGetInterviewRooms = () => {
     isLoading,
     isError,
   };
+};
+
+export const usePostInterviewRooms = () => {
+  return useMutation(lobbyAPI.postInterviewRooms, {
+    onSuccess: data => {
+      console.log(data);
+    },
+    onError: e => {
+      console.log(e);
+    },
+  });
 };
