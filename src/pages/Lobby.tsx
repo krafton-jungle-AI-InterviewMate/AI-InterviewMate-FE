@@ -67,7 +67,7 @@ function Lobby() {
         ) : (
           interviewRooms.map(room => (
             <Room
-              key={room.createdAt}
+              key={room.idx}
               roomName={room.roomName}
               roomType={room.roomType}
               roomStatus={room.roomStatus}
@@ -75,6 +75,7 @@ function Lobby() {
               roomTime={room.roomTime}
               roomPeopleNow={room.roomPeopleNow}
               roomPeopleNum={room.roomPeopleNum}
+              idx={room.idx}
               setIsJoinError={setIsJoinError}
             />
           ))
