@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import NavSimple from "./nav/NavSimple";
+import { NavSimple } from "./temp";
 
 
 const SimpleLayout = () => {
