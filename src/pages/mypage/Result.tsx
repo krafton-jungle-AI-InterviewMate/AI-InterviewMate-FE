@@ -5,21 +5,21 @@ import { useGetRatingHistory } from "hooks/queries/mypage";
 import { useEffect, useState } from "react";
 import { RatingHistory } from "api/mypage/types";
 import Loading from "components/common/Loading";
-import ServerError from "pages/ServerError";
+import ServerError from "components/common/ServerError";
 
 const StyledResult = styled.div`
   margin-top: 120px;
 `;
 
 function Result() {
-  const [ historys, setHistorys ] = useState<RatingHistory[]>([]);
+  const [historys, setHistorys] = useState<RatingHistory[]>([]);
   const { data, isSuccess, isLoading, isError } = useGetRatingHistory();
 
   useEffect(() => {
     if (!isLoading && data) {
       setHistorys(data.data.data);
     }
-  }, [ isLoading ]);
+  }, [isLoading]);
   return (
     <StyledResult>
       {isLoading ? (

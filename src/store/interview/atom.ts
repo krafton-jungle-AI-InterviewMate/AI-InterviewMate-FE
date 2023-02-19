@@ -46,12 +46,17 @@ export const motionSnapshotAtom = atom<FaceLandmarksDetection.Face>({
   default: {
     box: {
       height: 0,
-      width: 0, 
-      xMax: 0, 
-      xMin: 0, 
-      yMax: 0, 
-      yMin: 0, 
+      width: 0,
+      xMax: 0,
+      xMin: 0,
+      yMax: 0,
+      yMin: 0,
     },
     keypoints: [],
   },
+});
+
+export const feedbackAtom = atom<string>({
+  key: "feedback",
+  default: "ON",
 });

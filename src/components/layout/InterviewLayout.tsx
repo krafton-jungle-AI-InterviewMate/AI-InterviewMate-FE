@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { NavInterview } from "components/layout/nav";
-
+import { NavInterview } from "./nav";
 
 const InterviewLayout = () => {
   return (

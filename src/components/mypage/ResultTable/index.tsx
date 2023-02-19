@@ -27,19 +27,25 @@ const ResultTable = (props: ResultTableProps) => {
     },
   } = props;
 
-  const [ dialogOpen, setDialogOpen ] = useState<null | number>(null);
+  const [ isDialogOpen, setIsDialogOpen ] = useState<boolean>(false);
+  const [ questionIdx, setQuestionIdx ] = useState<number>(0);
+
+  const handleOpen = (idx: number) => {
+    setIsDialogOpen(true);
+    setQuestionIdx(idx);
+  };
 
   const handleClose = () => {
-    setDialogOpen(null);
+    setIsDialogOpen(false);
   };
 
   return (
     <TableContainer sx={tableContainerStyleOverride} component={Paper}>
-      {typeof dialogOpen === "number" && (
+      {isDialogOpen && (
         <ScriptDialog
-          questionTitle={scriptList[Number(dialogOpen)].questionTitle}
-          script={scriptList[Number(dialogOpen)].script}
-          isOpen={typeof dialogOpen === "number"}
+          questionTitle={scriptList[questionIdx]?.questionTitle || ""}
+          script={scriptList[questionIdx]?.script || ""}
+          isOpen={isDialogOpen}
           handleClose={handleClose}
         />
       )}
@@ -67,7 +73,7 @@ const ResultTable = (props: ResultTableProps) => {
               {!idx && <TableCell rowSpan={self.length}>답변 점수</TableCell>}
               <TableCell align="center">{`Q${idx + 1}. ${script.questionTitle}`}</TableCell>
               <TableCell align="center">
-                <button type="button" onClick={() => setDialogOpen(idx)}>
+                <button type="button" onClick={() => handleOpen(idx)}>
                   {script.rating}/100
                 </button>
               </TableCell>

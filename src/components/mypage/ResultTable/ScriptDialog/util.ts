@@ -12,5 +12,5 @@ export const replaceKeywordTags = ({ script, tag }: ReplaceKeywordTagsParams) =>
     .replace(openingTagRegex, openingTag)
     .replace(closingTagRegex, closingTag);
 
-  return newScript;
+  return `<p>${newScript}</p>`;
 };
