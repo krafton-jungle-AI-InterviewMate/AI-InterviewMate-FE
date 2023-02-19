@@ -6,76 +6,79 @@ import { RoomStatus } from "api/lobby/type";
 import { RoomTypes } from "api/mypage/types";
 import { Link } from "react-router-dom";
 
-interface IRoom {
+interface IRoomProps {
   roomType: RoomTypes;
   roomStatus: RoomStatus;
 }
 
-const StyledRoom = styled.div<IRoom>`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 388px;
-  height: 105px;
-  border-radius: 5px;
-  border: 1px solid var(--main-gray);
-  background-color: var(--main-white);
-  padding: 28px 42px;
-  filter: drop-shadow(0px 6px 24px rgba(0, 0, 0, 0.03));
-  .roomHeader {
+const StyledRoom = styled.div<IRoomProps>`
+  margin-bottom: 40px;
+  .room {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    .roomName {
-      color: var(--main-black);
+    width: 388px;
+    height: 105px;
+    border-radius: 5px;
+    border: 1px solid var(--main-gray);
+    background-color: var(--main-white);
+    padding: 28px 42px;
+    filter: drop-shadow(0px 6px 24px rgba(0, 0, 0, 0.03));
+    .roomHeader {
+      display: flex;
+      justify-content: space-between;
+      .roomName {
+        color: var(--main-black);
+        text-align: left;
+        p {
+          margin: 0;
+          font-size: 16px;
+          font-weight: 500;
+        }
+        span {
+          font-size: 12px;
+        }
+      }
+      .interviewer {
+        width: 100px;
+        height: 24px;
+        font-size: 12px;
+        background-color: ${props =>
+          props.roomType === "AI" ? "var(--push-gray)" : "var(--main-black)"};
+        border-radius: 5px;
+        color: var(--main-white);
+      }
+    }
+    .roomState {
       text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--font-gray);
       p {
         margin: 0;
-        font-size: 16px;
-        font-weight: 500;
       }
-      span {
+      .roomStatus {
+        color: ${props =>
+          props.roomStatus === "CREATE" ? "var(--main-orange)" : "var(--main-black)"};
+      }
+      .warningComment {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         font-size: 12px;
+        line-height: 15px;
+        p {
+          margin-left: 6px;
+        }
       }
-    }
-    .interviewer {
-      width: 100px;
-      height: 24px;
-      font-size: 12px;
-      background-color: ${props =>
-        props.roomType === "AI" ? "var(--push-gray)" : "var(--main-black)"};
-      border-radius: 5px;
-      color: var(--main-white);
-    }
-  }
-  .roomState {
-    text-align: left;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: var(--font-gray);
-    p {
-      margin: 0;
-    }
-    .roomStatus {
-      color: ${props =>
-        props.roomStatus === "CREATE" ? "var(--main-orange)" : "var(--main-black)"};
-    }
-    .warningComent {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 12px;
-      line-height: 15px;
-      p {
-        margin-left: 6px;
-      }
-    }
-    .roomInfo {
-      display: flex;
-      align-items: flex-end;
-      span {
-        font-size: 16px;
-        margin-right: 12px;
+      .roomInfo {
+        display: flex;
+        align-items: flex-end;
+        span {
+          font-size: 16px;
+          margin-right: 12px;
+        }
       }
     }
   }
@@ -92,8 +95,7 @@ interface RoomProps {
   idx: number;
   setIsJoinError: (text: boolean) => void;
 }
-
-function Room({
+const Room = ({
   roomName,
   roomType,
   roomIsPrivate,
@@ -103,14 +105,14 @@ function Room({
   roomPeopleNum,
   idx,
   setIsJoinError,
-}: RoomProps) {
+}: RoomProps) => {
   const onClickJoin = () => {
     if (roomType === "AI" || roomPeopleNow === roomPeopleNum || roomStatus === "PROCEED") {
       setIsJoinError(true);
     }
   };
   return (
-    <div style={{ marginBottom: 40 }}>
+    <StyledRoom roomType={roomType} roomStatus={roomStatus}>
       <Link
         to={
           roomStatus === "CREATE" && roomType === "USER" && roomPeopleNow < roomPeopleNum
@@ -119,7 +121,7 @@ function Room({
         }
         onClick={onClickJoin}
       >
-        <StyledRoom roomType={roomType} roomStatus={roomStatus}>
+        <div className="room">
           <div className="roomHeader">
             <div className="roomName">
               <p>{roomName}</p>
@@ -130,8 +132,8 @@ function Room({
           <div className="roomState">
             <p className="roomStatus">{roomStatus === "CREATE" ? "대기 중" : "진행 중"}</p>
             {roomType === "AI" ? (
-              <div className="warningComent">
-                <AiOutlineInfoCircle size={"25px"} color={"var(--push-gray)"} />
+              <div className="warningComment">
+                <AiOutlineInfoCircle size={25} color="var(--push-gray)" />
                 <p>
                   AI 면접관 방에는 입장하실 수 없습니다.
                   <br />방 만들기 기능을 이용해주세요.
@@ -142,21 +144,21 @@ function Room({
                 <span>
                   {roomPeopleNow} / {roomPeopleNum}
                 </span>
-                <RiGitRepositoryPrivateFill size={"32px"} color={"var(--push-gray)"} />
+                <RiGitRepositoryPrivateFill size={32} color="var(--push-gray)" />
               </div>
             ) : (
               <div className="roomInfo">
                 <span>
                   {roomPeopleNow} / {roomPeopleNum}
                 </span>
-                <MdPublic size={"32px"} color={"var(--push-gray)"} />
+                <MdPublic size={32} color="var(--push-gray)" />
               </div>
             )}
           </div>
-        </StyledRoom>
+        </div>
       </Link>
-    </div>
+    </StyledRoom>
   );
-}
+};
 
 export default Room;

@@ -71,7 +71,10 @@ function CreateRoomForm({ onClickModalClose, roomType }) {
       },
     );
   };
-
+  const roomPeopleNumArr = [1, 2, 3];
+  const isPrivateArr = [false, true];
+  const FeedbackArr = ["ON", "OFF"];
+  const roomTimeArr = [15, 30, 45, 60];
   return (
     <StyledUserRoomForm
       roomNameError={errors?.roomName?.message}
@@ -110,21 +113,14 @@ function CreateRoomForm({ onClickModalClose, roomType }) {
           <FormControl className="radioForm">
             <FormLabel>면접관 수</FormLabel>
             <RadioGroup row>
-              <FormControlLabel
-                value={2}
-                control={<Radio {...register("roomPeopleNum", { required: true })} />}
-                label="1명"
-              />
-              <FormControlLabel
-                value={3}
-                control={<Radio {...register("roomPeopleNum", { required: true })} />}
-                label="2명"
-              />
-              <FormControlLabel
-                value={4}
-                control={<Radio {...register("roomPeopleNum", { required: true })} />}
-                label="3명"
-              />
+              {roomPeopleNumArr.map((data, idx) => (
+                <FormControlLabel
+                  key={`roomPeopleNum${idx}`}
+                  value={data + 1}
+                  control={<Radio {...register("roomPeopleNum", { required: true })} />}
+                  label={`${data}명`}
+                />
+              ))}
             </RadioGroup>
           </FormControl>
         </div>
@@ -132,20 +128,19 @@ function CreateRoomForm({ onClickModalClose, roomType }) {
           <FormControl className="radioForm">
             <FormLabel>공개 여부</FormLabel>
             <RadioGroup row>
-              <FormControlLabel
-                value={false}
-                control={
-                  <Radio {...register("isPrivate", { required: true })} onChange={onChangePublic} />
-                }
-                label="공개"
-              />
-              <FormControlLabel
-                value={true}
-                control={
-                  <Radio {...register("isPrivate", { required: true })} onChange={onChangePublic} />
-                }
-                label="비공개"
-              />
+              {isPrivateArr.map((data, idx) => (
+                <FormControlLabel
+                  key={`isPrivate${idx}`}
+                  value={data}
+                  control={
+                    <Radio
+                      {...register("isPrivate", { required: true })}
+                      onChange={onChangePublic}
+                    />
+                  }
+                  label={data ? "비공개" : "공개"}
+                />
+              ))}
             </RadioGroup>
           </FormControl>
         </div>
@@ -179,16 +174,14 @@ function CreateRoomForm({ onClickModalClose, roomType }) {
           <FormControl className="radioForm">
             <FormLabel>실시간 피드백</FormLabel>
             <RadioGroup row>
-              <FormControlLabel
-                value="ON"
-                control={<Radio onChange={onChangeFeedback} />}
-                label="ON"
-              />
-              <FormControlLabel
-                value="OFF"
-                control={<Radio onChange={onChangeFeedback} />}
-                label="OFF"
-              />
+              {FeedbackArr.map((data, idx) => (
+                <FormControlLabel
+                  key={`Feedback${idx}`}
+                  value={data}
+                  control={<Radio onChange={onChangeFeedback} />}
+                  label={data}
+                />
+              ))}
             </RadioGroup>
           </FormControl>
         </div>
@@ -203,26 +196,14 @@ function CreateRoomForm({ onClickModalClose, roomType }) {
           <FormControl className="radioForm">
             <FormLabel>시간 제한</FormLabel>
             <RadioGroup row>
-              <FormControlLabel
-                value={15}
-                control={<Radio {...register("roomTime", { required: true })} />}
-                label="15분"
-              />
-              <FormControlLabel
-                value={30}
-                control={<Radio {...register("roomTime", { required: true })} />}
-                label="30분"
-              />
-              <FormControlLabel
-                value={45}
-                control={<Radio {...register("roomTime", { required: true })} />}
-                label="45분"
-              />
-              <FormControlLabel
-                value={60}
-                control={<Radio {...register("roomTime", { required: true })} />}
-                label="60분"
-              />
+              {roomTimeArr.map((data, idx) => (
+                <FormControlLabel
+                  key={`roomTime${idx}`}
+                  value={data}
+                  control={<Radio {...register("roomTime", { required: true })} />}
+                  label={`${data}분`}
+                />
+              ))}
             </RadioGroup>
           </FormControl>
         </div>
@@ -240,8 +221,8 @@ function CreateRoomForm({ onClickModalClose, roomType }) {
 }
 
 interface StyledUserRoomFormProps {
-  roomNameError: string | undefined;
-  passwordError: string | undefined;
+  roomNameError?: string;
+  passwordError?: string;
 }
 
 const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`

@@ -22,15 +22,15 @@ interface InputRoomFormProps {
   roomQuestionNum?: number;
 }
 
-function AiRoomForm({ onClickModalClose, roomType }) {
+const AiRoomForm = ({ onClickModalClose, roomType }) => {
   const navigate = useNavigate();
-  const feedback = useSetRecoilState(feedbackAtom);
+  const setFeedback = useSetRecoilState(feedbackAtom);
 
   const onChangeFeedback = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { value },
     } = event;
-    feedback(value);
+    setFeedback(value);
   };
 
   const {
@@ -62,7 +62,7 @@ function AiRoomForm({ onClickModalClose, roomType }) {
       },
     );
   };
-
+  const FeedbackArr = ["ON", "OFF"];
   return (
     <StyledUserRoomForm roomNameError={errors?.roomName?.message}>
       <form onSubmit={handleSubmit(onValid)}>
@@ -98,16 +98,14 @@ function AiRoomForm({ onClickModalClose, roomType }) {
           <FormControl className="radioForm">
             <FormLabel>실시간 피드백</FormLabel>
             <RadioGroup row>
-              <FormControlLabel
-                value="ON"
-                control={<Radio onChange={onChangeFeedback} />}
-                label="ON"
-              />
-              <FormControlLabel
-                value="OFF"
-                control={<Radio onChange={onChangeFeedback} />}
-                label="OFF"
-              />
+              {FeedbackArr.map((data, idx) => (
+                <FormControlLabel
+                  key={`Feedback${idx}`}
+                  value={data}
+                  control={<Radio onChange={onChangeFeedback} />}
+                  label={data}
+                />
+              ))}
             </RadioGroup>
           </FormControl>
         </div>
@@ -156,7 +154,7 @@ function AiRoomForm({ onClickModalClose, roomType }) {
       </form>
     </StyledUserRoomForm>
   );
-}
+};
 
 interface StyledUserRoomFormProps {
   roomNameError: string | undefined;

@@ -3,11 +3,11 @@ import { StyledBtn } from "styles/StyledBtn";
 import Room from "components/lobby/Room";
 import CreateRoom from "components/modal/room/CreateRoom";
 import { useEffect, useState } from "react";
-import { useGetInterviewRooms } from "./../hooks/queries/lobby/lobby";
+import { useGetInterviewRooms } from "hooks/queries/lobby/lobby";
 import { InterviewRooms } from "api/lobby/type";
 import Loading from "components/common/Loading";
-import ServerError from "./ServerError";
-import JoinError from "components/lobby/JoinError";
+import ServerError from "components/common/ServerError";
+import JoinError from "components/modal/lobby/JoinError";
 
 const StyledLobbyInterface = styled.div`
   min-width: 1000px;
@@ -26,10 +26,10 @@ const StyledRoomContents = styled.div`
   justify-content: space-between;
 `;
 
-function Lobby() {
+const Lobby = () => {
   const [modalCreateRoom, setModalCreateRoom] = useState(false);
   const [interviewRooms, setInterviewRooms] = useState<InterviewRooms[]>([]);
-  const { data, isSuccess, isLoading, isError } = useGetInterviewRooms();
+  const { data, isSuccess, isLoading, isError, refetch } = useGetInterviewRooms();
   useEffect(() => {
     if (!isLoading && data) {
       setInterviewRooms(data.data.data);
@@ -37,7 +37,7 @@ function Lobby() {
   }, [data]);
 
   const onClickReload = () => {
-    window.location.reload();
+    refetch();
   };
   const [isJoinError, setIsJoinError] = useState(false);
   return (
@@ -83,6 +83,6 @@ function Lobby() {
       </StyledRoomContents>
     </>
   );
-}
+};
 
 export default Lobby;

@@ -33,7 +33,7 @@ function JoinError({ setIsJoinError }) {
   return (
     <StyledJoinError>
       <div className="contents">
-        <h2>해당 방에는 입장하실 수 없습니다.</h2>
+        <h2>이 방에는 입장하실 수 없습니다.</h2>
         <StyledBtn onClick={onClickCancel} width="200px" height="42px" color="orange">
           네!
         </StyledBtn>

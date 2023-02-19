@@ -2,13 +2,13 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import lobbyAPI from "api/lobby";
 
 export const useGetInterviewRooms = () => {
-  const { data, isSuccess, isLoading, isError } = useQuery(
+  const { data, isSuccess, isLoading, isError, refetch } = useQuery(
     ["fetchInterviewRooms"],
     () => {
       return lobbyAPI.getInterviewRooms();
     },
     {
-      refetchInterval: 3000,
+      refetchInterval: 10000,
     },
   );
 
@@ -17,6 +17,7 @@ export const useGetInterviewRooms = () => {
     isSuccess,
     isLoading,
     isError,
+    refetch,
   };
 };
 

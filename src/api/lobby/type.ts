@@ -26,16 +26,9 @@ export type PostInterviewRoomsPayload = {
   roomIdx: number;
 };
 
-export type PostInterviewRoomsResponse = {
+export type PostInterviewRoomsResponse = PostInterviewRoomsPayloadData & {
   roomIdx: number;
-  roomName: string;
-  roomPeopleNum: number;
-  roomPassword: number;
-  roomType: RoomTypes;
   nickName: string;
-  roomTime: number;
-  roomQuestionNum: number;
-  roomQuestionboxIdx: number;
   createdAt: string;
   roomStatus: string;
 };
