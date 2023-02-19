@@ -1,3 +1,4 @@
+import React from "react";
 import { styled } from "@mui/material/styles";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
@@ -61,16 +62,16 @@ const ScriptDialog = (props: ScriptDialogProps) => {
       open={isOpen}
     >
       <StyledScriptWrap>
-        <Typography
+        {/* <Typography
           gutterBottom
           dangerouslySetInnerHTML={{
             __html: replaceKeywordTags({
               script,
               tag: "strong",
             })
-            || "<span className=\"placeholder\">작성된 내용이 없습니다.</span>",
+            || "<span>작성된 내용이 없습니다.</span>",
           }}
-        />
+        /> */}
       </StyledScriptWrap>
     </Modal>
   );

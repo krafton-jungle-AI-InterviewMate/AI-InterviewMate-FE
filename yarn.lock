@@ -984,10 +984,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/match-sorter-utils@npm:^8.7.0":
+  version: 8.7.6
+  resolution: "@tanstack/match-sorter-utils@npm:8.7.6"
+  dependencies:
+    remove-accents: 0.4.2
+  checksum: 3f3dda277e6e55ca1224a28b38a2deb3ac912c2f2f5263a32fa0d9126c6b6d05feb475539729fd248f1eb88b612109db90b847ec8fdfc05d0f4073c900a2d3f6
+  languageName: node
+  linkType: hard
+
 "@tanstack/query-core@npm:4.6.0":
   version: 4.6.0
   resolution: "@tanstack/query-core@npm:4.6.0"
   checksum: 945a3b1ddc89ddf484f828cee0be5db0939f51865b2518f8c4ef351c6a3fc992f8c9fbbd32a5bf16b97d0250e95f43c1e571d5a1dfefd99ab835ffe0f934b159
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query-devtools@npm:^4.24.6":
+  version: 4.24.9
+  resolution: "@tanstack/react-query-devtools@npm:4.24.9"
+  dependencies:
+    "@tanstack/match-sorter-utils": ^8.7.0
+    superjson: ^1.10.0
+    use-sync-external-store: ^1.2.0
+  peerDependencies:
+    "@tanstack/react-query": 4.24.9
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: ec528c7b0f8e5bb24ed52d442111bb5c0f7a5090320ba580ac61fee42e6e6d87c8c25acaeb2f6305d7ca76bdb030c2b5961b72aa4ea06e0bed7356de0885f2bd
   languageName: node
   linkType: hard
 
@@ -1935,6 +1959,15 @@ __metadata:
   version: 1.9.0
   resolution: "convert-source-map@npm:1.9.0"
   checksum: dc55a1f28ddd0e9485ef13565f8f756b342f9a46c4ae18b843fe3c30c675d058d6a4823eff86d472f187b176f0adf51ea7b69ea38be34be4a63cbbf91b0593c8
+  languageName: node
+  linkType: hard
+
+"copy-anything@npm:^3.0.2":
+  version: 3.0.3
+  resolution: "copy-anything@npm:3.0.3"
+  dependencies:
+    is-what: ^4.1.8
+  checksum: d456dc5ec98dee7c7cf87d809eac30dc2ac942acd4cf970fab394e280ceb6dd7a8a7a5a44fcbcc50e0206658de3cc20b92863562f5797930bb2619f164f4c182
   languageName: node
   linkType: hard
 
@@ -3383,6 +3416,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"is-what@npm:^4.1.8":
+  version: 4.1.8
+  resolution: "is-what@npm:4.1.8"
+  checksum: b9bec3acff102d14ad467f4c74c9886af310fa160e07a63292c8c181e6768c7c4c1054644e13d67185b963644e4a513bce8c6b8ce3d3ca6f9488a69fccad5f97
+  languageName: node
+  linkType: hard
+
 "isexe@npm:^2.0.0":
   version: 2.0.0
   resolution: "isexe@npm:2.0.0"
@@ -4129,6 +4169,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-hook-form@npm:^7.43.1":
+  version: 7.43.1
+  resolution: "react-hook-form@npm:7.43.1"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18
+  checksum: a15b672885cf9bb43c6691bf544b3ead59860bb8c6298c7607b8b82952707ec8dd9fd9d1346310abb8696e99319b1f78f6023941d129154815811ee64d750461
+  languageName: node
+  linkType: hard
+
 "react-icons@npm:^4.7.1":
   version: 4.7.1
   resolution: "react-icons@npm:4.7.1"
@@ -4308,6 +4357,13 @@ __metadata:
   version: 3.2.0
   resolution: "regexpp@npm:3.2.0"
   checksum: a78dc5c7158ad9ddcfe01aa9144f46e192ddbfa7b263895a70a5c6c73edd9ce85faf7c0430e59ac38839e1734e275b9c3de5c57ee3ab6edc0e0b1bdebefccef8
+  languageName: node
+  linkType: hard
+
+"remove-accents@npm:0.4.2":
+  version: 0.4.2
+  resolution: "remove-accents@npm:0.4.2"
+  checksum: 84a6988555dea24115e2d1954db99509588d43fe55a1590f0b5894802776f7b488b3151c37ceb9e4f4b646f26b80b7325dcea2fae58bc3865df146e1fa606711
   languageName: node
   linkType: hard
 
@@ -4704,6 +4760,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"superjson@npm:^1.10.0":
+  version: 1.12.2
+  resolution: "superjson@npm:1.12.2"
+  dependencies:
+    copy-anything: ^3.0.2
+  checksum: cf7735e172811ed87476a7c2f1bb0e83725a0e3c2d7a50a71303a973060b3c710288767fb767a7a7eee8e5625d3ccaee1176a93e27f43841627512c15c4cdf84
+  languageName: node
+  linkType: hard
+
 "supports-color@npm:^5.3.0":
   version: 5.5.0
   resolution: "supports-color@npm:5.5.0"
@@ -4960,6 +5025,7 @@ __metadata:
     "@mediapipe/face_mesh": ^0.4.1633559619
     "@mui/material": ^5.11.8
     "@tanstack/react-query": 4.6.0
+    "@tanstack/react-query-devtools": ^4.24.6
     "@tensorflow-models/face-landmarks-detection": ^1.0.2
     "@tensorflow/tfjs": ^4.2.0
     "@types/dom-speech-recognition": ^0.0.1
@@ -4979,6 +5045,7 @@ __metadata:
     qs: ^6.11.0
     react: 18.2.0
     react-dom: 18.2.0
+    react-hook-form: ^7.43.1
     react-icons: ^4.7.1
     react-is: ^18.2.0
     react-responsive-modal: ^6.4.1
