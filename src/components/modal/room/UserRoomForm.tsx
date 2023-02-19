@@ -10,7 +10,7 @@ import { useState } from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { useSetRecoilState } from "recoil";
 import { feedbackAtom } from "store/interview/atom";
-import { usePostInterviewRooms } from "hooks/queries/lobby/lobby";
+import { usePostInterviewRooms } from "hooks/queries/interview";
 import { useNavigate } from "react-router";
 import { RoomTypes } from "api/mypage/types";
 

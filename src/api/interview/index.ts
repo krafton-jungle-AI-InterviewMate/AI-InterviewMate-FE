@@ -1,6 +1,6 @@
 import { getAPI, postAPI } from "api/axios";
 import { API_PATH } from "constants/api";
-import { PostInterviewRooms, GetInterviewRooms } from "api/lobby/type";
+import { PostInterviewRooms, GetInterviewRooms } from "api/interview/type";
 
 const getInterviewRooms: GetInterviewRooms = () =>
   getAPI({ endPoint: API_PATH.GET_INTERVIEW_ROOMS });

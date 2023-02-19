@@ -1,11 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import lobbyAPI from "api/lobby";
+import interviewAPI from "api/interview";
 
 export const useGetInterviewRooms = () => {
   const { data, isSuccess, isLoading, isError, refetch } = useQuery(
     ["fetchInterviewRooms"],
     () => {
-      return lobbyAPI.getInterviewRooms();
+      return interviewAPI.getInterviewRooms();
     },
     {
       refetchInterval: 10000,
@@ -22,7 +22,7 @@ export const useGetInterviewRooms = () => {
 };
 
 export const usePostInterviewRooms = () => {
-  return useMutation(lobbyAPI.postInterviewRooms, {
+  return useMutation(interviewAPI.postInterviewRooms, {
     onSuccess: data => {
       console.log(data);
     },

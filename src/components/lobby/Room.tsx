@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { RiGitRepositoryPrivateFill } from "react-icons/ri";
 import { MdPublic } from "react-icons/md";
-import { RoomStatus } from "api/lobby/type";
+import { RoomStatus } from "api/interview/type";
 import { RoomTypes } from "api/mypage/types";
 import { Link } from "react-router-dom";
 

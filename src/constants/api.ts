@@ -10,6 +10,7 @@ export const API_PATH = {
   POST_RATING_VIEWEE: (roomIdx: number) => `/rating/${roomIdx}/viewee`,
   POST_INTERVIEW_ROOMS: (roomIdx: number) => `/interview/rooms?${roomIdx}`,
   GET_INTERVIEW_ROOMS: "/interview/rooms",
+  GET_QUESTIONBOXES: "/questionBoxes",
 };
 
 export const AI_VIEWER_IDX = 79797979;
