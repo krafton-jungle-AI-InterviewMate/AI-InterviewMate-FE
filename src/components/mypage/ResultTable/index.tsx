@@ -35,11 +35,11 @@ const ResultTable = (props: ResultTableProps) => {
 
   return (
     <TableContainer sx={tableContainerStyleOverride} component={Paper}>
-      {typeof dialogOpen === "number" && (
+      {dialogOpen !== null && (
         <ScriptDialog
           questionTitle={scriptList[Number(dialogOpen)].questionTitle}
           script={scriptList[Number(dialogOpen)].script}
-          isOpen={typeof dialogOpen === "number"}
+          isOpen={dialogOpen !== null}
           handleClose={handleClose}
         />
       )}
