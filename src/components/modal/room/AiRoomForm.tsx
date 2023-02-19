@@ -27,7 +27,7 @@ interface InputRoomFormProps {
 const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
   const navigate = useNavigate();
   const setFeedback = useSetRecoilState(feedbackAtom);
-  const [questionNum, setQuestionNum] = useState(0);
+  const [ questionNum, setQuestionNum ] = useState(0);
 
   const onChangeFeedback = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -64,7 +64,7 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
       },
     );
   };
-  const FeedbackArr = ["ON", "OFF"];
+  const FeedbackArr = [ "ON", "OFF" ];
   return (
     <StyledUserRoomForm roomNameError={errors?.roomName?.message}>
       <form onSubmit={handleSubmit(onValid)}>
@@ -156,7 +156,7 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
         </div>
         <div className="inputContent">
           <label htmlFor="question">질문 꾸러미</label>
-          <select id="question" {...register("roomQuestionboxIdx", { required: true })}>
+          <select id="question" {...register("roomQuestionBoxIdx", { required: true })}>
             {questionNum ? (
               questionBoxes.map((data: questionBoxes, idx: number) =>
                 data.questionNum === questionNum ? (

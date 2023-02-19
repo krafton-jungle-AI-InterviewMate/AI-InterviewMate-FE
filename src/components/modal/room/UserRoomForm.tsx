@@ -28,7 +28,7 @@ interface InputRoomFormProps {
 
 function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
   const navigate = useNavigate();
-  const [isPrivate, setIsPrivate] = useState(false);
+  const [ isPrivate, setIsPrivate ] = useState(false);
   const feedback = useSetRecoilState(feedbackAtom);
   const onChangePublic = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -69,10 +69,10 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
       },
     );
   };
-  const roomPeopleNumArr = [1, 2, 3];
-  const isPrivateArr = [false, true];
-  const FeedbackArr = ["ON", "OFF"];
-  const roomTimeArr = [15, 30, 45, 60];
+  const roomPeopleNumArr = [ 1, 2, 3 ];
+  const isPrivateArr = [ false, true ];
+  const FeedbackArr = [ "ON", "OFF" ];
+  const roomTimeArr = [ 15, 30, 45, 60 ];
   return (
     <StyledUserRoomForm
       roomNameError={errors.roomName?.message}
@@ -201,7 +201,7 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
         <span className="guide">실시간 피드백 설정은 방 생성 이후에는 수정하실 수 없습니다.</span>
         <div className="inputContent">
           <label htmlFor="question">질문 꾸러미</label>
-          <select id="question" {...register("roomQuestionboxIdx", { required: true })}>
+          <select id="question" {...register("roomQuestionBoxIdx", { required: true })}>
             {questionBoxes.map((data: questionBoxes, idx: number) => (
               <option key={idx} value={data.idx}>
                 {data.boxName}
