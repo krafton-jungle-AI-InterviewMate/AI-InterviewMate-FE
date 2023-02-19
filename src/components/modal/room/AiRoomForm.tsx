@@ -12,6 +12,8 @@ import { feedbackAtom } from "store/interview/atom";
 import { usePostInterviewRooms } from "hooks/queries/interview";
 import { useNavigate } from "react-router";
 import { RoomTypes } from "api/mypage/types";
+import { useState } from "react";
+import { questionBoxes } from "api/questionBoxes/type";
 
 interface InputRoomFormProps {
   email?: string;
@@ -22,9 +24,10 @@ interface InputRoomFormProps {
   roomQuestionNum?: number;
 }
 
-const AiRoomForm = ({ onClickModalClose, roomType }) => {
+const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
   const navigate = useNavigate();
   const setFeedback = useSetRecoilState(feedbackAtom);
+  const [questionNum, setQuestionNum] = useState(0);
 
   const onChangeFeedback = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -72,8 +75,14 @@ const AiRoomForm = ({ onClickModalClose, roomType }) => {
           <input
             {...register("roomName", {
               required: "방 제목을 입력해주세요.",
-              minLength: { value: 2, message: "최소 2자 ~ 최대 10자까지 입력 가능합니다." },
-              maxLength: { value: 10, message: "최소 2자 ~ 최대 10자까지 입력 가능합니다." },
+              minLength: {
+                value: 2,
+                message: "최소 2자 ~ 최대 10자까지 입력 가능합니다.",
+              },
+              maxLength: {
+                value: 10,
+                message: "최소 2자 ~ 최대 10자까지 입력 가능합니다.",
+              },
               pattern: {
                 value: /[A-Z|a-z|0-9|ㄱ-ㅎ|가-힣|]+$/gi,
                 message: "특수문자는 사용 불가능합니다.",
@@ -84,10 +93,10 @@ const AiRoomForm = ({ onClickModalClose, roomType }) => {
             id="roomName"
             autoComplete="off"
           />
-          {errors?.roomName?.message ? (
+          {errors.roomName?.message ? (
             <span className="error">
               <AiOutlineInfoCircle className="errorIcon" size={24} />
-              {errors?.roomName?.message}
+              {errors.roomName.message}
             </span>
           ) : null}
         </div>
@@ -102,47 +111,67 @@ const AiRoomForm = ({ onClickModalClose, roomType }) => {
                 <FormControlLabel
                   key={`Feedback${idx}`}
                   value={data}
-                  control={<Radio onChange={onChangeFeedback} />}
+                  control={<Radio onChange={onChangeFeedback} required />}
                   label={data}
                 />
               ))}
             </RadioGroup>
           </FormControl>
         </div>
+        <span className="guide">실시간 피드백 설정은 방 생성 이후에는 수정하실 수 없습니다.</span>
+        <div className="inputContent">
+          <label htmlFor="questionNum">질문 개수</label>
+          <input
+            {...register("roomQuestionNum", {
+              required: "질문 개수를 입력해주세요.",
+              pattern: {
+                value: /^[0-9|]+$/gi,
+                message: "숫자만 입력해주세요.",
+              },
+              min: {
+                value: 1,
+                message: "1개 이상 입력해주세요.",
+              },
+              max: {
+                value: 10,
+                message: "10개를 넘을 수 없습니다.",
+              },
+            })}
+            id="questionNum"
+            type="text"
+            required
+            autoComplete="off"
+            onChange={event => {
+              const {
+                target: { value },
+              } = event;
+              setQuestionNum(parseInt(value));
+            }}
+          />
+          {errors.roomQuestionNum?.message ? (
+            <span className="error">
+              <AiOutlineInfoCircle className="errorIcon" size={24} />
+              {errors.roomQuestionNum.message}
+            </span>
+          ) : null}
+        </div>
         <div className="inputContent">
           <label htmlFor="question">질문 꾸러미</label>
           <select id="question" {...register("roomQuestionboxIdx", { required: true })}>
-            <option value="1">질문 꾸러미 1</option>
+            {questionNum ? (
+              questionBoxes.map((data: questionBoxes, idx) =>
+                data.questionNum === questionNum ? (
+                  <option key={idx} value={data.idx}>
+                    {data.boxName}
+                  </option>
+                ) : null,
+              )
+            ) : (
+              <option value="">질문 꾸러미를 선택해주세요.</option>
+            )}
           </select>
         </div>
         <span className="guide">면접관에게 보여질 질문 꾸러미를 선택해주세요.</span>
-        <div className="inputContent">
-          <FormControl className="radioForm">
-            <FormLabel>질문 개수</FormLabel>
-            <RadioGroup row>
-              <FormControlLabel
-                value={3}
-                control={<Radio {...register("roomQuestionNum", { required: true })} />}
-                label="3개"
-              />
-              <FormControlLabel
-                value={5}
-                control={<Radio {...register("roomQuestionNum", { required: true })} />}
-                label="5개"
-              />
-              <FormControlLabel
-                value={8}
-                control={<Radio {...register("roomQuestionNum", { required: true })} />}
-                label="8개"
-              />
-              <FormControlLabel
-                value={10}
-                control={<Radio {...register("roomQuestionNum", { required: true })} />}
-                label="10개"
-              />
-            </RadioGroup>
-          </FormControl>
-        </div>
         <div className="submitAndCancel">
           <StyledBtn width="380px" height="58px" color="orange">
             확인
@@ -157,7 +186,7 @@ const AiRoomForm = ({ onClickModalClose, roomType }) => {
 };
 
 interface StyledUserRoomFormProps {
-  roomNameError: string | undefined;
+  roomNameError?: string;
 }
 
 const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`

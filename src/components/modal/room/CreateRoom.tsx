@@ -1,7 +1,9 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AiRoomForm from "./AiRoomForm";
 import CreateRoomForm from "./UserRoomForm";
+import { useGetQuestionBoxes } from "hooks/queries/questionBoxes";
+import { questionBoxes } from "api/questionBoxes/type";
 
 const StyledCreateRoom = styled.div`
   display: flex;
@@ -54,6 +56,14 @@ const StyledTabBtn = styled.button`
 
 function CreateRoom({ setModalCreateRoom }) {
   const [roomType, setRoomType] = useState("USER");
+  const [questionBoxes, SetQuestionBoxes] = useState<questionBoxes[]>([]);
+  const { data, isLoading, isError, isSuccess } = useGetQuestionBoxes("4"); // 임시 파라미터값
+
+  useEffect(() => {
+    if (!isLoading && data) {
+      SetQuestionBoxes(data.data.data);
+    }
+  }, [isLoading]);
 
   const onTabBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
     const {
@@ -90,7 +100,11 @@ function CreateRoom({ setModalCreateRoom }) {
         {roomType === "USER" ? (
           <CreateRoomForm roomType={roomType} onClickModalClose={onClickModalClose} />
         ) : (
-          <AiRoomForm roomType={roomType} onClickModalClose={onClickModalClose} />
+          <AiRoomForm
+            roomType={roomType}
+            onClickModalClose={onClickModalClose}
+            questionBoxes={questionBoxes}
+          />
         )}
       </div>
     </StyledCreateRoom>

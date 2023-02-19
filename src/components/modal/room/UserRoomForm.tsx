@@ -77,8 +77,8 @@ function CreateRoomForm({ onClickModalClose, roomType }) {
   const roomTimeArr = [15, 30, 45, 60];
   return (
     <StyledUserRoomForm
-      roomNameError={errors?.roomName?.message}
-      passwordError={errors?.roomPassword?.message}
+      roomNameError={errors.roomName?.message}
+      passwordError={errors.roomPassword?.message}
     >
       <form onSubmit={handleSubmit(onValid)}>
         <input {...register("email")} readOnly hidden value="user4@test.com" />
@@ -87,8 +87,14 @@ function CreateRoomForm({ onClickModalClose, roomType }) {
           <input
             {...register("roomName", {
               required: "방 제목을 입력해주세요.",
-              minLength: { value: 2, message: "최소 2자 ~ 최대 10자까지 입력 가능합니다." },
-              maxLength: { value: 10, message: "최소 2자 ~ 최대 10자까지 입력 가능합니다." },
+              minLength: {
+                value: 2,
+                message: "최소 2자 ~ 최대 10자까지 입력 가능합니다.",
+              },
+              maxLength: {
+                value: 10,
+                message: "최소 2자 ~ 최대 10자까지 입력 가능합니다.",
+              },
               pattern: {
                 value: /[A-Z|a-z|0-9|ㄱ-ㅎ|가-힣|]+$/gi,
                 message: "특수문자는 사용 불가능합니다.",
@@ -99,10 +105,10 @@ function CreateRoomForm({ onClickModalClose, roomType }) {
             id="roomName"
             autoComplete="off"
           />
-          {errors?.roomName?.message ? (
+          {errors.roomName?.message ? (
             <span className="error">
               <AiOutlineInfoCircle className="errorIcon" size={24} />
-              {errors?.roomName?.message}
+              {errors.roomName.message}
             </span>
           ) : null}
         </div>
@@ -151,19 +157,28 @@ function CreateRoomForm({ onClickModalClose, roomType }) {
               <input
                 {...register("roomPassword", {
                   required: "비밀번호를 입력해주세요.",
-                  minLength: { value: 3, message: "3 ~ 10자리의 숫자를 입력해주세요." },
-                  maxLength: { value: 10, message: "3 ~ 10자리의 숫자를 입력해주세요." },
-                  pattern: { value: /^[0-9|]+$/gi, message: "숫자만 입력해주세요." },
+                  minLength: {
+                    value: 3,
+                    message: "3 ~ 10자리의 숫자를 입력해주세요.",
+                  },
+                  maxLength: {
+                    value: 10,
+                    message: "3 ~ 10자리의 숫자를 입력해주세요.",
+                  },
+                  pattern: {
+                    value: /^[0-9|]+$/gi,
+                    message: "숫자만 입력해주세요.",
+                  },
                 })}
                 id="password"
                 type="password"
                 required
                 autoComplete="off"
               />
-              {errors?.roomPassword?.message ? (
+              {errors.roomPassword?.message ? (
                 <span className="error">
                   <AiOutlineInfoCircle className="errorIcon" size={24} />
-                  {errors?.roomPassword?.message}
+                  {errors.roomPassword.message}
                 </span>
               ) : null}
             </div>
@@ -178,13 +193,14 @@ function CreateRoomForm({ onClickModalClose, roomType }) {
                 <FormControlLabel
                   key={`Feedback${idx}`}
                   value={data}
-                  control={<Radio onChange={onChangeFeedback} />}
+                  control={<Radio onChange={onChangeFeedback} required />}
                   label={data}
                 />
               ))}
             </RadioGroup>
           </FormControl>
         </div>
+        <span className="guide">실시간 피드백 설정은 방 생성 이후에는 수정하실 수 없습니다.</span>
         <div className="inputContent">
           <label htmlFor="question">질문 꾸러미</label>
           <select id="question" {...register("roomQuestionboxIdx", { required: true })}>
