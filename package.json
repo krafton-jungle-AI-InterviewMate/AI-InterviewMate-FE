@@ -21,6 +21,7 @@
     "qs": "^6.11.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.43.1",
     "react-icons": "^4.7.1",
     "react-is": "^18.2.0",
     "react-responsive-modal": "^6.4.1",
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "@emotion/babel-plugin": "^11.10.5",
+    "@tanstack/react-query-devtools": "^4.24.6",
     "@types/dom-speech-recognition": "^0.0.1",
     "@types/node": "18.7.1",
     "@types/qs": "^6.9.7",
