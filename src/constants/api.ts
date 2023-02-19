@@ -8,7 +8,7 @@ export const API_PATH = {
   GET_RATING_HISTORY: "/rating/history",
   GET_RATING_DETAIL: (roomIdx: number, type: RoomTypes) => `/rating/${roomIdx}?type=${type}`,
   POST_RATING_VIEWEE: (roomIdx: number) => `/rating/${roomIdx}/viewee`,
-  POST_INTERVIEW_ROOMS: (roomIdx: number) => `/interview/rooms?${roomIdx}`,
+  POST_INTERVIEW_ROOMS: "/interview/rooms",
   GET_INTERVIEW_ROOMS: "/interview/rooms",
   GET_QUESTIONBOXES: (memberIdx: string) => `/questionBoxes/temp/${memberIdx}`,
 };

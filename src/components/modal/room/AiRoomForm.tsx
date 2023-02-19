@@ -52,7 +52,6 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
     }
     mutate(
       {
-        roomIdx: 1,
         data,
       },
       {
@@ -159,7 +158,7 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
           <label htmlFor="question">질문 꾸러미</label>
           <select id="question" {...register("roomQuestionboxIdx", { required: true })}>
             {questionNum ? (
-              questionBoxes.map((data: questionBoxes, idx) =>
+              questionBoxes.map((data: questionBoxes, idx: number) =>
                 data.questionNum === questionNum ? (
                   <option key={idx} value={data.idx}>
                     {data.boxName}

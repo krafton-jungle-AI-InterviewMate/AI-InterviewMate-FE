@@ -13,6 +13,7 @@ import { feedbackAtom } from "store/interview/atom";
 import { usePostInterviewRooms } from "hooks/queries/interview";
 import { useNavigate } from "react-router";
 import { RoomTypes } from "api/mypage/types";
+import { questionBoxes } from "api/questionBoxes/type";
 
 interface InputRoomFormProps {
   email?: string;
@@ -25,7 +26,7 @@ interface InputRoomFormProps {
   roomTime?: number;
 }
 
-function CreateRoomForm({ onClickModalClose, roomType }) {
+function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
   const navigate = useNavigate();
   const [isPrivate, setIsPrivate] = useState(false);
   const feedback = useSetRecoilState(feedbackAtom);
@@ -57,10 +58,7 @@ function CreateRoomForm({ onClickModalClose, roomType }) {
       return;
     }
     mutate(
-      {
-        roomIdx: 1,
-        data,
-      },
+      { data },
       {
         onSuccess: () => {
           navigate("/interview/ready");
@@ -204,7 +202,11 @@ function CreateRoomForm({ onClickModalClose, roomType }) {
         <div className="inputContent">
           <label htmlFor="question">질문 꾸러미</label>
           <select id="question" {...register("roomQuestionboxIdx", { required: true })}>
-            <option value="1">질문 꾸러미 1</option>
+            {questionBoxes.map((data: questionBoxes, idx: number) => (
+              <option key={idx} value={data.idx}>
+                {data.boxName}
+              </option>
+            ))}
           </select>
         </div>
         <span className="guide">면접관에게 보여질 질문 꾸러미를 선택해주세요.</span>
@@ -313,4 +315,4 @@ const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`
   }
 `;
 
-export default CreateRoomForm;
+export default UserRoomForm;

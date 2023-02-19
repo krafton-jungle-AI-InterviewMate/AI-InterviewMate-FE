@@ -23,7 +23,6 @@ export type PostInterviewRoomsPayloadData = {
 
 export type PostInterviewRoomsPayload = {
   data: PostInterviewRoomsPayloadData;
-  roomIdx: number;
 };
 
 export type PostInterviewRoomsResponse = PostInterviewRoomsPayloadData & {

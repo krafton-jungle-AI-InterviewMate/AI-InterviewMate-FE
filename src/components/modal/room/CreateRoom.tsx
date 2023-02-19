@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import AiRoomForm from "./AiRoomForm";
-import CreateRoomForm from "./UserRoomForm";
+import UserRoomForm from "./UserRoomForm";
 import { useGetQuestionBoxes } from "hooks/queries/questionBoxes";
 import { questionBoxes } from "api/questionBoxes/type";
 import { RoomTypes } from "api/mypage/types";
@@ -99,7 +99,11 @@ const CreateRoom = ({ setModalCreateRoom }) => {
           </div>
         </div>
         {roomType === "USER" ? (
-          <CreateRoomForm roomType={roomType} onClickModalClose={onClickModalClose} />
+          <UserRoomForm
+            roomType={roomType}
+            onClickModalClose={onClickModalClose}
+            questionBoxes={questionBoxes}
+          />
         ) : (
           <AiRoomForm
             roomType={roomType}
