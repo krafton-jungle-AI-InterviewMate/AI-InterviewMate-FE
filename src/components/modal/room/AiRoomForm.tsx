@@ -27,7 +27,7 @@ interface InputRoomFormProps {
 const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
   const navigate = useNavigate();
   const setFeedback = useSetRecoilState(feedbackAtom);
-  const [ questionNum, setQuestionNum ] = useState(0);
+  const [questionNum, setQuestionNum] = useState(0);
 
   const onChangeFeedback = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -56,7 +56,7 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
       },
       {
         onSuccess: () => {
-          navigate("/interview/ready");
+          navigate("/interview/ready/user");
         },
         onError(error) {
           alert(error);
@@ -64,7 +64,7 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
       },
     );
   };
-  const FeedbackArr = [ "ON", "OFF" ];
+  const FeedbackArr = ["ON", "OFF"];
   return (
     <StyledUserRoomForm roomNameError={errors?.roomName?.message}>
       <form onSubmit={handleSubmit(onValid)}>
