@@ -325,6 +325,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@bedrock-layout/use-forwarded-ref@npm:^1.3.1":
+  version: 1.6.1
+  resolution: "@bedrock-layout/use-forwarded-ref@npm:1.6.1"
+  dependencies:
+    "@bedrock-layout/use-stateful-ref": ^1.4.1
+  peerDependencies:
+    react: ^16.8 || ^17 || ^18
+  checksum: 5740618af79e54ff5eef71965807c28a87769dae5e032c93d401f87d4a140814605af0198c97d72a1487b3fdd17a762e0a0c8f9da6eec89c68dd8852043fb6ec
+  languageName: node
+  linkType: hard
+
+"@bedrock-layout/use-stateful-ref@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "@bedrock-layout/use-stateful-ref@npm:1.4.1"
+  peerDependencies:
+    react: ^16.8 || ^17 || ^18
+  checksum: 6523e54908d7cb264f235d7b787fc08478fd516052dbe63482ee89943da79f7e136c2cb2ee3283310a8549cf61b4963bac8e3e127e2c8faabf434543762c4278
+  languageName: node
+  linkType: hard
+
 "@cush/relative@npm:^1.0.0":
   version: 1.0.0
   resolution: "@cush/relative@npm:1.0.0"
@@ -1681,6 +1701,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"body-scroll-lock@npm:^3.1.5":
+  version: 3.1.5
+  resolution: "body-scroll-lock@npm:3.1.5"
+  checksum: 52c25b81d6e7a87cfbdd7870363c3e20a439dbc76535b735916e2df907abbce95c0da0d2c7a2cfe88f49775d53bbc4bd09445ffda2d61b999efa3f0b1dedfc5e
+  languageName: node
+  linkType: hard
+
 "brace-expansion@npm:^1.1.7":
   version: 1.1.11
   resolution: "brace-expansion@npm:1.1.11"
@@ -1798,6 +1825,13 @@ __metadata:
   version: 2.0.0
   resolution: "chownr@npm:2.0.0"
   checksum: c57cf9dd0791e2f18a5ee9c1a299ae6e801ff58fee96dc8bfd0dcb4738a6ce58dd252a3605b1c93c6418fe4f9d5093b28ffbf4d66648cb2a9c67eaef9679be2f
+  languageName: node
+  linkType: hard
+
+"classnames@npm:^2.3.1":
+  version: 2.3.2
+  resolution: "classnames@npm:2.3.2"
+  checksum: 2c62199789618d95545c872787137262e741f9db13328e216b093eea91c85ef2bfb152c1f9e63027204e2559a006a92eb74147d46c800a9f96297ae1d9f96f4e
   languageName: node
   linkType: hard
 
@@ -4118,6 +4152,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-responsive-modal@npm:^6.4.1":
+  version: 6.4.1
+  resolution: "react-responsive-modal@npm:6.4.1"
+  dependencies:
+    "@bedrock-layout/use-forwarded-ref": ^1.3.1
+    body-scroll-lock: ^3.1.5
+    classnames: ^2.3.1
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18
+    react-dom: ^16.8.0 || ^17 || ^18
+  checksum: b4b4a076f60de949983097eedefe6a95248c3ed5e026e113f889623266bbc04fa8b39155aba77f825f68d3bec9366fb9f0e5c19e00a97b0e534c028bdc266969
+  languageName: node
+  linkType: hard
+
 "react-router-dom@npm:^6.8.1":
   version: 6.8.1
   resolution: "react-router-dom@npm:6.8.1"
@@ -4933,6 +4981,7 @@ __metadata:
     react-dom: 18.2.0
     react-icons: ^4.7.1
     react-is: ^18.2.0
+    react-responsive-modal: ^6.4.1
     react-router-dom: ^6.8.1
     react-spinners: ^0.13.8
     react-toastify: ^9.1.1
