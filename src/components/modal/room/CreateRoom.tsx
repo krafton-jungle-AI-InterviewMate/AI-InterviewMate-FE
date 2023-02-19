@@ -4,6 +4,7 @@ import AiRoomForm from "./AiRoomForm";
 import CreateRoomForm from "./UserRoomForm";
 import { useGetQuestionBoxes } from "hooks/queries/questionBoxes";
 import { questionBoxes } from "api/questionBoxes/type";
+import { RoomTypes } from "api/mypage/types";
 
 const StyledCreateRoom = styled.div`
   display: flex;
@@ -54,8 +55,8 @@ const StyledTabBtn = styled.button`
   }
 `;
 
-function CreateRoom({ setModalCreateRoom }) {
-  const [roomType, setRoomType] = useState("USER");
+const CreateRoom = ({ setModalCreateRoom }) => {
+  const [roomType, setRoomType] = useState<RoomTypes>("USER");
   const [questionBoxes, SetQuestionBoxes] = useState<questionBoxes[]>([]);
   const { data, isLoading, isError, isSuccess } = useGetQuestionBoxes("4"); // 임시 파라미터값
 
@@ -65,11 +66,11 @@ function CreateRoom({ setModalCreateRoom }) {
     }
   }, [isLoading]);
 
-  const onTabBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const onClickTabBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
     const {
       currentTarget: { name },
     } = event;
-    setRoomType(name);
+    setRoomType(name as RoomTypes);
   };
 
   const onClickModalClose = () => {
@@ -83,14 +84,14 @@ function CreateRoom({ setModalCreateRoom }) {
           <div className="tabBtn">
             <StyledTabBtn
               className={roomType === "USER" ? "active" : ""}
-              onClick={onTabBtn}
+              onClick={onClickTabBtn}
               name="USER"
             >
               유저 면접관
             </StyledTabBtn>
             <StyledTabBtn
               className={roomType === "AI" ? "active" : ""}
-              onClick={onTabBtn}
+              onClick={onClickTabBtn}
               name="AI"
             >
               AI 면접관
@@ -109,6 +110,6 @@ function CreateRoom({ setModalCreateRoom }) {
       </div>
     </StyledCreateRoom>
   );
-}
+};
 
 export default CreateRoom;
