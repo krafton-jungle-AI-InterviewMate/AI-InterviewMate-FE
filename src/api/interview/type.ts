@@ -16,7 +16,7 @@ export type PostInterviewRoomsPayloadData = {
   roomPassword?: string;
   isPrivate?: boolean;
   roomType: RoomTypes;
-  roomQuestionboxIdx: number;
+  roomQuestionBoxIdx: number;
   roomQuestionNum?: number;
   roomTime?: number;
 };

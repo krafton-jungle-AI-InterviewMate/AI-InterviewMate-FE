@@ -22,7 +22,7 @@ interface InputRoomFormProps {
   roomPassword?: string;
   isPrivate?: boolean;
   roomType: RoomTypes;
-  roomQuestionboxIdx: number;
+  roomQuestionBoxIdx: number;
   roomTime?: number;
 }
 
