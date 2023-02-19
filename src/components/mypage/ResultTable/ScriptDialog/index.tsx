@@ -1,44 +1,22 @@
 import React from "react";
-import { styled } from "@mui/material/styles";
 import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import { GrClose as CloseIcon } from "react-icons/gr";
+import { Modal, ModalProps } from "react-responsive-modal";
 
 import { replaceKeywordTags } from "./util";
 
-import emotionStyled from "@emotion/styled";
+import styled from "@emotion/styled";
 
-// const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-//   "& .MuiPaper-root": {
-//     width: "600px",
-//     height: "400px",
-//   },
-//   "& .MuiDialogContent-root": {
-//     display: "flex",
-//     flexFlow: "colum nowrap",
-//     justifyContents: "center",
-//     alignItems: "center",
-//     padding: theme.spacing(2),
-//     textAlign: "center",
-//     color: "var(--font-gray)",
-
-//     "& span": {
-//       color: "var(--push-gray)",
-//     },
-//   },
-//   "& *": {
-//     fontFamily: "\"Archivo\", \"Spoqa Han Sans Neo\", sans-serif;",
-//   },
-//   "& path": {
-//     stroke: "var(--font-gray)",
-//   },
-//   "& h2": {
-//     color: "var(--font-gray)",
-//     width: "80%",
-//   },
-// }));
+const modalStyles: ModalProps["styles"] = {
+  root: {
+    top: "80px",
+  },
+  modal: {
+    width: "600px",
+    height: "400px",
+    boxShadow: "var(--box-shadow)",
+    borderRadius: "15px",
+  },
+};
 
 type ScriptDialogProps = {
   questionTitle: string;
@@ -60,30 +38,41 @@ const ScriptDialog = (props: ScriptDialogProps) => {
       onClose={handleClose}
       aria-labelledby="customized-dialog-title"
       open={isOpen}
+      styles={modalStyles}
     >
-      <StyledScriptWrap>
-        {/* <Typography
-          gutterBottom
-          dangerouslySetInnerHTML={{
-            __html: replaceKeywordTags({
-              script,
-              tag: "strong",
-            })
-            || "<span>작성된 내용이 없습니다.</span>",
-          }}
-        /> */}
-      </StyledScriptWrap>
+      <StyledQuestion>{questionTitle}</StyledQuestion>
+      <StyledScriptWrap
+        dangerouslySetInnerHTML={{
+          __html: replaceKeywordTags({
+            script,
+            tag: "strong",
+          })
+          || "<span>작성된 내용이 없습니다.</span>",
+        }}
+      />
     </Modal>
   );
 };
 
 export default ScriptDialog;
 
-const StyledScriptWrap = emotionStyled.div`
+const StyledScriptWrap = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  height: calc(100% - 60px);
   margin: 0 auto;
 
-  & .MuiTypography-root strong {
+  & strong {
     display: inline;
     box-shadow: inset 0 -10px 0 #a0ec2e90;
   }
+`;
+
+const StyledQuestion = styled.p`
+  font-weight: 500;
+  font-size: 20px;
+  padding-top: 20px;
+  margin: 0;
 `;
