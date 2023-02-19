@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import NavWithBreadcrumbs from "components/layout/nav/NavWithBreadcrumbs";
+import NavWithBreadcrumbs from "./nav/NavWithBreadcrumbs";
 
 
 const BreadcrumbsLayout = () => {
