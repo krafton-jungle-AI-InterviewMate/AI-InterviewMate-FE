@@ -15,4 +15,6 @@ export type GetQuestionBoxesResponse = ResponseStatus & {
   data: Array<questionBoxes>;
 };
 
-export type GetQuestionBoxes = () => Promise<AxiosResponse<GetQuestionBoxesResponse>>;
+export type GetQuestionBoxes = (
+  memberIdx: string,
+) => Promise<AxiosResponse<GetQuestionBoxesResponse>>;
