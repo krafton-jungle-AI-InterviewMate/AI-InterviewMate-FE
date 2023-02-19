@@ -116,7 +116,7 @@ const Room = ({
       <Link
         to={
           roomStatus === "CREATE" && roomType === "USER" && roomPeopleNow < roomPeopleNum
-            ? "/interview/ready/user"
+            ? "/interview/readyuser"
             : ""
         }
         onClick={onClickJoin}
