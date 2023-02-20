@@ -23,7 +23,7 @@ const QuestionList = () => {
     <StyledQuestionList>
       {isLoading ? (
         <Loading margin="120" />
-      ) : !isError ? (
+      ) : isError ? (
         <ServerError />
       ) : (
         questionBoxes.map(data => (
