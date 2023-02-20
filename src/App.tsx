@@ -7,7 +7,7 @@ import { SimpleLayout, BreadcrumbsLayout, InterviewLayout } from "components/lay
 import { InterviewAi, InterviewReady, InterviewEnd } from "pages/interview";
 import Home from "pages/Home";
 import { Mypage, Result, ResultDetails } from "pages/mypage";
-import Questions from "pages/mypage/Questions";
+import QuestionList from "pages/mypage/QuestionList";
 import Lobby from "pages/Lobby";
 import NotFound from "pages/NotFound";
 import NotAvailable from "pages/NotAvailable";
@@ -35,7 +35,7 @@ function App() {
           <Route path={PagesPath.MYPAGE} element={<Mypage />} />
           <Route path={PagesPath.RESULT} element={<Result />} />
           <Route path={PagesPath.RESULT_DETAILS} element={<ResultDetails />} />
-          <Route path={PagesPath.QUESTIONS} element={<Questions />} />
+          <Route path={PagesPath.QUESTIONS} element={<QuestionList />} />
           <Route
             path={PagesPath.INTERVIEW_END}
             element={<InterviewEnd isAiInterview={true} isInterviewer={true} />}
