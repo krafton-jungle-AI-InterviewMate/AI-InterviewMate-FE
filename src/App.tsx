@@ -1,13 +1,13 @@
 import { Routes, Route } from "react-router-dom";
 import { PagesPath } from "constants/pages";
 
-
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { SimpleLayout, BreadcrumbsLayout, InterviewLayout } from "components/layout";
 import { InterviewAi, InterviewReady, InterviewEnd } from "pages/interview";
 import Home from "pages/Home";
 import { Mypage, Result, ResultDetails } from "pages/mypage";
+import Questions from "pages/mypage/Questions";
 import Lobby from "pages/Lobby";
 import NotFound from "pages/NotFound";
 import NotAvailable from "pages/NotAvailable";
@@ -35,6 +35,7 @@ function App() {
           <Route path={PagesPath.MYPAGE} element={<Mypage />} />
           <Route path={PagesPath.RESULT} element={<Result />} />
           <Route path={PagesPath.RESULT_DETAILS} element={<ResultDetails />} />
+          <Route path={PagesPath.QUESTIONS} element={<Questions />} />
           <Route
             path={PagesPath.INTERVIEW_END}
             element={<InterviewEnd isAiInterview={true} isInterviewer={true} />}
