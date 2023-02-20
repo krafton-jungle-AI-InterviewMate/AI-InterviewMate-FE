@@ -7,17 +7,18 @@ import kakaoLogin from "static/images/kakao_login_medium_wide.png";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 
-type SocialLoginButtonProps = {
+type SocialLoginButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   provider: SocialLoginProviderType;
 }
 
 const SocialLoginButton = (props: SocialLoginButtonProps) => {
   const {
     provider,
+    onClick,
   } = props;
 
   return (
-    <StyledButton provider={provider} type="button" onClick={() => {}}>
+    <StyledButton provider={provider} type="button" onClick={onClick}>
       {provider === "kakao" && <img src={kakaoLogin} alt="카카오 로그인" />}
       {provider !== "kakao" && (
         <>
