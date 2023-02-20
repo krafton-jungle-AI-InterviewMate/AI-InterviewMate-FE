@@ -1281,6 +1281,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/recordrtc@npm:^5.6.10":
+  version: 5.6.10
+  resolution: "@types/recordrtc@npm:5.6.10"
+  checksum: 4e2838f75d6fb35fd6fa0cc54148e91ed33cdfea6790487288e356e27a69756f6a821c529d2eb8acce11768eeed0729e5af321f16063c4855d68263e4ea65d8d
+  languageName: node
+  linkType: hard
+
 "@types/scheduler@npm:*":
   version: 0.16.2
   resolution: "@types/scheduler@npm:0.16.2"
@@ -4322,6 +4329,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"recordrtc@npm:^5.6.2":
+  version: 5.6.2
+  resolution: "recordrtc@npm:5.6.2"
+  checksum: 4be66e42fd427a86e5726afcf061963a5a16d7900d535debd2754d63ee9768d6fda8b5a7592e9835ac4b98b37d4dd73490b793f82c038d45e95dcdcc27f57d2c
+  languageName: node
+  linkType: hard
+
 "recrawl-sync@npm:^2.0.3":
   version: 2.2.3
   resolution: "recrawl-sync@npm:2.2.3"
@@ -5033,6 +5047,7 @@ __metadata:
     "@types/qs": ^6.9.7
     "@types/react": 18.0.21
     "@types/react-dom": 18.0.6
+    "@types/recordrtc": ^5.6.10
     "@typescript-eslint/eslint-plugin": 5.38.0
     "@typescript-eslint/parser": ^5.50.0
     "@vitejs/plugin-react": 2.1.0
@@ -5054,6 +5069,7 @@ __metadata:
     react-toastify: ^9.1.1
     react-webcam: ^7.0.1
     recoil: 0.7.5
+    recordrtc: ^5.6.2
     typescript: 4.8.3
     vite: 3.1.3
     vite-plugin-mkcert: ^1.13.0

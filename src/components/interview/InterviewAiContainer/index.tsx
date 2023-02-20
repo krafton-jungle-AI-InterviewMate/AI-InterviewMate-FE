@@ -3,6 +3,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   interviewModeAtom,
   interviewQuestionTotalAtom,
+  interviewQuestionNumberAtom,
   answerScriptAtom,
 } from "store/interview/atom";
 
@@ -16,6 +17,8 @@ import Webcam from "react-webcam";
 import Skeleton from "@mui/material/Skeleton";
 
 import useSTT from "hooks/useSTT";
+import { useRecorderPermission } from "hooks/useRecorderPermission";
+import RecordRTC from "recordrtc";
 
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
@@ -25,6 +28,7 @@ import questions from "../_mock/questions";
 
 const InterviewAiContainer = () => {
   const interviewMode = useRecoilValue(interviewModeAtom);
+  const interviewQuestionNumber = useRecoilValue(interviewQuestionNumberAtom);
   const setInterviewQuestionTotal = useSetRecoilState(interviewQuestionTotalAtom);
   const setAnswerScript = useSetRecoilState(answerScriptAtom);
 
@@ -32,8 +36,54 @@ const InterviewAiContainer = () => {
   const webcamRef = useRef<null | Webcam>(null);
   const [ isWebcamReady, setIsWebcamReady ] = useState(false);
   const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
+  const [ recorder, setRecorder ] = useState<null | RecordRTC.RecordRTCPromisesHandler>();
 
   useSTT();
+
+  const {
+    getPermissionInitializeRecorder,
+  } = useRecorderPermission("video");
+
+  const startRecording = async () => {
+    if (recorder) {
+      await recorder.startRecording();
+    }
+  };
+
+  const stopRecording = async () => {
+    if (recorder) {
+      await recorder.stopRecording();
+      let blob = await recorder.getBlob();
+      RecordRTC.invokeSaveAsDialog(blob, `interview${interviewQuestionNumber}.webm`);
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      const rec = await getPermissionInitializeRecorder();
+
+      setRecorder(rec);
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (interviewMode === "answer") {
+      (async () => {
+        await startRecording();
+      })();
+    }
+    else {
+      (async () => {
+        await stopRecording();
+      })();
+    }
+
+    return (() => {
+      (async () => {
+        await stopRecording();
+      })();
+    });
+  }, [ interviewMode ]);
 
   useEffect(() => {
     if (isWebcamReady && webcamRef.current) {
