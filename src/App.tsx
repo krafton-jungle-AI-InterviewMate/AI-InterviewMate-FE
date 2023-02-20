@@ -35,7 +35,6 @@ function App() {
           <Route path={PagesPath.MYPAGE} element={<Mypage />} />
           <Route path={PagesPath.RESULT} element={<Result />} />
           <Route path={PagesPath.RESULT_DETAILS} element={<ResultDetails />} />
-          <Route path={PagesPath.QUESTION_BOXES} element={<QuestionBoxes />} />
           <Route
             path={PagesPath.INTERVIEW_END}
             element={<InterviewEnd isAiInterview={true} isInterviewer={true} />}
