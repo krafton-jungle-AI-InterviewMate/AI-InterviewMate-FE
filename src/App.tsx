@@ -1,13 +1,13 @@
 import { Routes, Route } from "react-router-dom";
 import { PagesPath } from "constants/pages";
 
-
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { SimpleLayout, BreadcrumbsLayout, InterviewLayout } from "components/layout";
 import { InterviewAi, InterviewReady, InterviewEnd } from "pages/interview";
 import Home from "pages/Home";
 import { Mypage, Result, ResultDetails } from "pages/mypage";
+import QuestionBoxes from "pages/mypage/QuestionBoxes";
 import Lobby from "pages/Lobby";
 import NotFound from "pages/NotFound";
 import NotAvailable from "pages/NotAvailable";
