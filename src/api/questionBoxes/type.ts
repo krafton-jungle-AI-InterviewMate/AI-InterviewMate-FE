@@ -34,12 +34,12 @@ export type QuestionBox = { // ! TODO: QuestionBoxes 또는 이 타입 둘 중 �
 export type QuestionDetail = {
   idx: number;
   questionBox: QuestionBox;
-  keyword1: string;
-  keyword2: string;
-  keyword3: string;
-  keyword4: string;
-  keyword5: string;
   questionTitle: string;
+  keyword1: string;
+  keyword2?: string;
+  keyword3?: string;
+  keyword4?: string;
+  keyword5?: string;
 };
 
 export type GetQuestionDetailsResponse = ResponseStatus & {
