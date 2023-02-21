@@ -2,7 +2,6 @@ import { atom } from "recoil";
 import { Member } from "types/auth";
 
 export const memberInitialState: Member = {
-  isLoggedIn: false,
   accessToken: "",
   username: "",
 };

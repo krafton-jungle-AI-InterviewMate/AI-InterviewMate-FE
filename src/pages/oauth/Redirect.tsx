@@ -22,7 +22,6 @@ const Redirect = () => {
         // TODO: 멤버 정보 요청
 
         setMember({
-          isLoggedIn: true,
           accessToken,
           username: "", // TODO:
         });
