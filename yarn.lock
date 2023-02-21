@@ -4341,6 +4341,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"recoil-nexus@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "recoil-nexus@npm:0.4.0"
+  peerDependencies:
+    "@types/react": ">=16.8.0"
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+    recoil: ">=0.2.0"
+    typescript: ">=4.1.0"
+  checksum: 9671dbe93b42019f6a3efb0c7b6409e0c12d23339077e3a940edee9ae928f38b5546f6a71555dbba7513c6db0d8a7d8bf47c9f41fd8b341045ff93c248b54151
+  languageName: node
+  linkType: hard
+
 "recoil@npm:0.7.5":
   version: 0.7.5
   resolution: "recoil@npm:0.7.5"
@@ -5100,6 +5113,7 @@ __metadata:
     react-toastify: ^9.1.1
     react-webcam: ^7.0.1
     recoil: 0.7.5
+    recoil-nexus: ^0.4.0
     typescript: 4.8.3
     vite: 3.1.3
     vite-plugin-mkcert: ^1.13.0
