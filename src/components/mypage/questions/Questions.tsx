@@ -57,7 +57,13 @@ const StyledBtnStlyed = styled(StyledBtn)`
   margin-right: 25px;
 `;
 
-const Questions = ({ boxName, idx, questionNum }) => {
+interface QuestionsProps {
+  boxName: string;
+  idx: number;
+  questionNum: number;
+}
+
+const Questions = ({ boxName, idx, questionNum }: QuestionsProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const handleClickDelete = () => {
     setIsOpen(true);
