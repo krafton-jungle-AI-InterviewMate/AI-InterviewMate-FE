@@ -8,7 +8,7 @@ export const refreshTokenCookies = {
   set: (refreshToken: string) => {
     // * refresh token 만료일 = 자동 로그인 유지 기간
     const todayInMilliseconds = new Date().getTime();
-    const expireDate = new Date(todayInMilliseconds + (ONE_DAY * 7));
+    const expireDate = new Date(todayInMilliseconds + ONE_DAY);
 
     cookies.set(REFRESH_TOKEN_COOKIE_NAME, refreshToken, {
       sameSite: "strict",
