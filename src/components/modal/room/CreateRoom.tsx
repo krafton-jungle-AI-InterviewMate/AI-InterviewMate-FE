@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import AiRoomForm from "./AiRoomForm";
 import UserRoomForm from "./UserRoomForm";
 import { useGetQuestionBoxes } from "hooks/queries/questionBoxes";
-import { questionBoxes } from "api/questionBoxes/type";
+import { QuestionBoxes } from "api/questionBoxes/type";
 import { RoomTypes } from "api/mypage/types";
 
 const StyledCreateRoom = styled.div`
@@ -56,15 +56,15 @@ const StyledTabBtn = styled.button`
 `;
 
 const CreateRoom = ({ setModalCreateRoom }) => {
-  const [roomType, setRoomType] = useState<RoomTypes>("USER");
-  const [questionBoxes, SetQuestionBoxes] = useState<questionBoxes[]>([]);
+  const [ roomType, setRoomType ] = useState<RoomTypes>("USER");
+  const [ questionBoxes, SetQuestionBoxes ] = useState<QuestionBoxes[]>([]);
   const { data, isLoading, isError, isSuccess } = useGetQuestionBoxes("4"); // 임시 파라미터값
 
   useEffect(() => {
     if (!isLoading && data) {
       SetQuestionBoxes(data.data.data);
     }
-  }, [isLoading]);
+  }, [ isLoading ]);
 
   const onClickTabBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
     const {

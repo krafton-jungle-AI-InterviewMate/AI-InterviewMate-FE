@@ -5,14 +5,14 @@ type ResponseStatus = {
   statusMsg: string;
 };
 
-export type questionBoxes = {
+export type QuestionBoxes = {
   idx: number;
   boxName: string;
   questionNum: number;
 };
 
 export type GetQuestionBoxesResponse = ResponseStatus & {
-  data: Array<questionBoxes>;
+  data: Array<QuestionBoxes>;
 };
 
 export type GetQuestionBoxes = (
