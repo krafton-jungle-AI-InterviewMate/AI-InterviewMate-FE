@@ -5,7 +5,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { SimpleLayout, BreadcrumbsLayout, InterviewLayout } from "components/layout";
 import { InterviewAi, InterviewReady, InterviewEnd } from "pages/interview";
-import InterviewReadyUser from "pages/interview/InterviewReadyUser";
+import UserInterview from "pages/interview/userInterview/UserInterview";
 import Home from "pages/Home";
 import { Mypage, Result, ResultDetails } from "pages/mypage";
 import Lobby from "pages/Lobby";
@@ -45,7 +45,7 @@ function App() {
         {/* NavInterview */}
         <Route element={<InterviewLayout />}>
           <Route path={PagesPath.INTERVIEW_READY} element={<InterviewReady />} />
-          <Route path={PagesPath.INTERVIEW_READY_USER} element={<InterviewReadyUser />} />
+          <Route path={PagesPath.INTERVIEW_READY_USER} element={<UserInterview />} />
         </Route>
 
         {/* Pages Without Nav */}
