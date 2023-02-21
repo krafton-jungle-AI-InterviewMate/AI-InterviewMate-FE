@@ -57,6 +57,19 @@ const StyledBtnStlyed = styled(StyledBtn)`
   margin-right: 25px;
 `;
 
+interface StyledClearBtnProps {
+  questionNum: number;
+}
+
+const StyledClearBtn = styled(StyledBtn)<StyledClearBtnProps>`
+  opacity: ${props => (props.questionNum === 0 ? 0.3 : 1)};
+  &:hover {
+    background-color: ${props => (props.questionNum ? "" : "var(--main-white)")};
+    color: ${props => (props.questionNum ? "" : "var(--main-black)")};
+    cursor: ${props => (props.questionNum ? "" : "default")};
+  }
+`;
+
 interface QuestionsProps {
   boxName: string;
   idx: number;
@@ -78,9 +91,16 @@ const Questions = ({ boxName, idx, questionNum }: QuestionsProps) => {
           <h2>{boxName}</h2>
           <span>{questionNum} / 30</span>
         </StyledLink>
-        <StyledBtn onClick={handleClickDelete} width="100px" height="32px" color="red">
+        <StyledClearBtn
+          questionNum={questionNum}
+          onClick={handleClickDelete}
+          width="100px"
+          height="32px"
+          color="red"
+          disabled={!questionNum}
+        >
           비우기
-        </StyledBtn>
+        </StyledClearBtn>
         <Dialog
           open={isOpen}
           onClose={handleClickClose}
