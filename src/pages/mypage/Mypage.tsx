@@ -1,5 +1,7 @@
-import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
+import useLogout from "hooks/useLogout";
+
+import styled from "@emotion/styled";
 
 const StyledMypage = styled.div`
   width: 1000px;
@@ -24,7 +26,8 @@ const StyledMypage = styled.div`
       margin: 2px 0 15px;
       border: none;
     }
-    a {
+    a,
+    button.logout {
       display: block;
       font-size: 16px;
       font-weight: 500;
@@ -36,17 +39,29 @@ const StyledMypage = styled.div`
     a:first-of-type {
       margin-bottom: 10px;
     }
+    button.logout {
+      background: none;
+      padding: 0;
+      outline: none;
+      border: none;
+    }
   }
 `;
 
 const Mypage = () => {
+  const {
+    handleLogout,
+  } = useLogout();
+
   return (
     <StyledMypage>
       <div>
         <h2>회원 정보</h2>
         <hr />
         <Link to="/*">프로필 수정</Link>
-        <Link to="/*">로그아웃</Link>
+        <button type="button" className="logout" onClick={handleLogout}>
+          로그아웃
+        </button>
       </div>
       <div>
         <h2>인터뷰 관리</h2>
