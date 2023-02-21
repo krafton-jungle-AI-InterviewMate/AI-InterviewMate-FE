@@ -17,6 +17,7 @@ export const ReadyContainer = styled.div`
 `;
 
 export const Profile = styled.div`
+  position: relative;
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
@@ -70,7 +71,7 @@ export const ImageWrap = styled.div`
   ${wrapStyle}
 
   & img {
-    width: 100%;
+    height: 100%;
   }
 `;
 
@@ -166,3 +167,25 @@ export const toastOptions: ToastOptions = {
   progressClassName: "progress-bar",
   type: "warning",
 };
+
+export const SelectButton = styled.button`
+  position: absolute;
+  top: -42px;
+  width: 200px;
+  height: 24px;
+  border-radius: 5px;
+  background-color: var(--main-black);
+  color: var(--main-white);
+  font-size: 14px;
+  padding: 0;
+`;
+
+export const MiniProfile = styled.span`
+  position: absolute;
+  bottom: -40px;
+  width: 272px;
+  word-break: keep-all;
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--font-gray);
+`;

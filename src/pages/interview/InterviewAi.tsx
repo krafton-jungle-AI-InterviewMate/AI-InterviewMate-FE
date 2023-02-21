@@ -1,13 +1,18 @@
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { interviewModeAtom, aiInterviewerAtom } from "store/interview/atom";
 
-import ai from "static/images/robot.jpg";
 import InterviewAiContainer from "components/interview/InterviewAiContainer";
+import { getAiInterviewerVideo, getAiInterviewerListening } from "lib/interview";
 
 import styled from "@emotion/styled";
 import { commonButtonStyle } from "styles/common";
 
 const InterviewAi = () => {
   const navigate = useNavigate();
+
+  const interviewMode = useRecoilValue(interviewModeAtom);
+  const aiInterviewer = useRecoilValue(aiInterviewerAtom);
 
   const handleExitButton = () => {
     // TODO: 컨펌 팝업
@@ -18,7 +23,15 @@ const InterviewAi = () => {
     <StyledWrap>
       <StyledInterviewerSection>
         <StyledImageWrap>
-          <img src={ai} alt="AI 면접관" />
+          {interviewMode === "question" ? (
+            <video width={200} autoPlay loop muted key={getAiInterviewerVideo(aiInterviewer)}>
+              <source src={getAiInterviewerVideo(aiInterviewer)} type="video/mp4" />
+            </video>
+          ) : (
+            <video width={200} autoPlay loop muted key={getAiInterviewerListening(aiInterviewer)}>
+              <source src={getAiInterviewerListening(aiInterviewer)} type="video/mp4" />
+            </video>
+          )}
         </StyledImageWrap>
         <StyledExitButton type="button" onClick={handleExitButton}>
           면접 나가기
@@ -54,13 +67,9 @@ const StyledImageWrap = styled.div`
   width: 200px;
   height: 125px;
   overflow: hidden;
-  border-radius: 5px;
 
   & img {
-    position: absolute;
-    top: -20px;
-    left: 0;
-    width: 100%;
+    width: 200px;
   }
 `;
 
