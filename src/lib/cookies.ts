@@ -2,30 +2,61 @@ import { Cookies } from "react-cookie";
 import { ONE_DAY } from "constants/common";
 
 const cookies = new Cookies();
-const REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
 
-export const refreshTokenCookies = {
-  set: (refreshToken: string) => {
-    // * refresh token 만료일 = 자동 로그인 유지 기간
-    const todayInMilliseconds = new Date().getTime();
-    const expireDate = new Date(todayInMilliseconds + ONE_DAY);
+const getCookieExpireDate = (duration: number) => {
+  const todayInMilliseconds = new Date().getTime();
+  return new Date(todayInMilliseconds + (ONE_DAY * duration));
+};
 
-    cookies.set(REFRESH_TOKEN_COOKIE_NAME, refreshToken, {
+export const CookieName = {
+  IS_LOGGED_IN: "isLoggedIn",
+  USERNAME: "username",
+};
+
+export const isLoggedInCookie = {
+  set: (isLoggedIn: boolean) => {
+    const expireDate = getCookieExpireDate(1);
+
+    cookies.set(CookieName.IS_LOGGED_IN, isLoggedIn, {
       sameSite: "strict",
-      // use / as the path if you want your cookie to be accessible on all pages
       path: "/",
       expires: expireDate,
-      httpOnly: true,
+      secure: true,
     });
   },
 
-  get: () => cookies.get(REFRESH_TOKEN_COOKIE_NAME),
+  get: () => cookies.get(CookieName.IS_LOGGED_IN),
 
   // uses when logout
   remove: () => {
-    cookies.remove(REFRESH_TOKEN_COOKIE_NAME, {
+    cookies.remove(CookieName.IS_LOGGED_IN, {
       sameSite: "strict",
       path: "/",
+      secure: true,
+    });
+  },
+};
+
+export const usernameCookie = {
+  set: (username: string) => {
+    const expireDate = getCookieExpireDate(1);
+
+    cookies.set(CookieName.USERNAME, username, {
+      sameSite: "strict",
+      path: "/",
+      expires: expireDate,
+      secure: true,
+    });
+  },
+
+  get: () => cookies.get(CookieName.USERNAME),
+
+  // uses when logout
+  remove: () => {
+    cookies.remove(CookieName.USERNAME, {
+      sameSite: "strict",
+      path: "/",
+      secure: true,
     });
   },
 };
