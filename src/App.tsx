@@ -15,11 +15,13 @@ import NotFound from "pages/NotFound";
 import NotAvailable from "pages/NotAvailable";
 
 import useCheckSTTAvailable from "hooks/useCheckSTTAvailable";
+import useCheckAuth from "hooks/useCheckAuth";
 
 import styled from "@emotion/styled";
 
 function App() {
   useCheckSTTAvailable();
+  useCheckAuth();
 
   return (
     <StyledWrapper>

@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
 import SocialLoginLink from "components/login/SocialLoginLink";
 import { Providers } from "constants/login";
-import { useGetAuthorization } from "hooks/queries/auth";
-import { SocialTypes } from "api/auth/type";
 import { BASE_URL, API_PATH } from "constants/api";
+import { PagesPath } from "constants/pages";
 
 import styled from "@emotion/styled";
 
@@ -19,7 +17,7 @@ const Login = () => {
               href={`${BASE_URL}${API_PATH.GET_AUTHORIZATION(
                 {
                   social: provider,
-                  redirect_uri: "/oauth/redirect",
+                  redirect_uri: PagesPath.REDIRECT_URI,
                 },
               )}`}
               target="_self"

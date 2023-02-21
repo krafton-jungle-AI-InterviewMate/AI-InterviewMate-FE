@@ -18,7 +18,7 @@ export const useGetAuthorization = (params: GetAuthorizationParams, enabled: boo
 };
 
 export const useGetRefresh = (enabled: boolean) => {
-  const { data, isSuccess, isLoading, isError } = useQuery([ "getRefresh" ], () => {
+  const { data, isSuccess, isLoading, isFetching, isError } = useQuery([ "getRefresh" ], () => {
     return authAPI.getRefresh();
   }, {
     enabled,
@@ -28,6 +28,7 @@ export const useGetRefresh = (enabled: boolean) => {
     data,
     isSuccess,
     isLoading,
+    isFetching,
     isError,
   };
 };
