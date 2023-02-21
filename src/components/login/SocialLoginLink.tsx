@@ -1,24 +1,24 @@
 import { SocialLoginProviderType } from "types/login";
 import { ProviderName } from "constants/login";
 
+import ExternalLink from "components/common/ExternalLink";
 import googleIcon from "static/images/login-google.svg";
 import githubIcon from "static/images/login-github.svg";
 import kakaoLogin from "static/images/kakao_login_medium_wide.png";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 
-type SocialLoginButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+type SocialLoginButtonProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   provider: SocialLoginProviderType;
 }
 
-const SocialLoginButton = (props: SocialLoginButtonProps) => {
+const SocialLoginLink = (props: SocialLoginButtonProps) => {
   const {
     provider,
-    onClick,
   } = props;
 
   return (
-    <StyledButton provider={provider} type="button" onClick={onClick}>
+    <StyledLink type="button" {...props}>
       {provider === "kakao" && <img src={kakaoLogin} alt="카카오 로그인" />}
       {provider !== "kakao" && (
         <>
@@ -26,13 +26,13 @@ const SocialLoginButton = (props: SocialLoginButtonProps) => {
           <StyledText>{ProviderName[provider]} 로그인</StyledText>
         </>
       )}
-    </StyledButton>
+    </StyledLink>
   );
 };
 
-export default SocialLoginButton;
+export default SocialLoginLink;
 
-const StyledButton = styled.button<{ provider: SocialLoginProviderType }>`
+const StyledLink = styled(ExternalLink)<{ provider: SocialLoginProviderType }>`
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;

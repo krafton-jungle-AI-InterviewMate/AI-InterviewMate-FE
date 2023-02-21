@@ -13,9 +13,7 @@ export const API_PATH = {
   GET_INTERVIEW_ROOMS: "/interview/rooms",
   GET_QUESTIONBOXES: (memberIdx: string) => `/questionBoxes/temp/${memberIdx}`,
   GET_AUTHORIZATION: ({ social, redirect_uri }: GetAuthorizationParams) =>
-    `/login/oauth2/authorization/${social}?redirect_uri=${redirect_uri}`,
+    `/login/oauth2/authorization/${social}?redirect_uri=${window.location.origin}${redirect_uri}`,
 };
 
 export const AI_VIEWER_IDX = 79797979;
-
-export const AUTH_REDIRECT_URI = "/oauth/redirect";
