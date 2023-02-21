@@ -8,6 +8,8 @@ import { PagesPath } from "constants/pages";
 
 const StyledQuestions = styled.div`
   width: 900px;
+  height: 48px;
+  box-sizing: border-box;
   margin-bottom: 32px;
   border-radius: 5px 15px;
   border: 1px solid var(--main-gray);
@@ -19,6 +21,7 @@ const StyledQuestions = styled.div`
     border-color: var(--main-orange);
   }
   .contents {
+    height: 100%;
     padding: 0 30px;
     display: flex;
     align-items: center;
@@ -42,7 +45,6 @@ const StyledLink = styled(Link)`
   align-items: center;
   justify-content: space-between;
   width: 700px;
-  height: 32px;
   padding: 10px 0;
   h2 {
     font-size: 20px;
