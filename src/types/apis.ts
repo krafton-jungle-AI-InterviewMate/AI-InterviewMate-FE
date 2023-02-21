@@ -9,3 +9,11 @@ export type AxiosParams = {
 };
 
 export type CommonAPI = (axiosParams: AxiosParams) => Promise<AxiosResponse>;
+
+export type Member = {
+  idx: number;
+  nickname: string;
+  email: string;
+  authProvider: "GOOGLE"; // ! TODO: 1-auth merge 이후 수정
+  refreshToken: string;
+};
