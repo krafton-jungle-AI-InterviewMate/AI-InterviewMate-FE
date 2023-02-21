@@ -1,27 +1,36 @@
 import { useSearchParams } from "react-router-dom";
+import { useQuestionDetails } from "hooks/queries/questionBoxes";
+
 import Loading from "components/common/Loading";
 
 import styled from "@emotion/styled";
+import { useEffect } from "react";
 
 const QuestionDetails = () => {
   const [ searchParams ] = useSearchParams();
 
-  // const {
-  //   data,
-  //   isFetching,
-  //   isSuccess,
-  // } = useGetRatingDetail(
-  //   Number(searchParams.get("room")),
-  //   searchParams.get("type") as RoomTypes,
-  // );
+  const {
+    data,
+    isSuccess,
+    isFetching,
+  } = useQuestionDetails(
+    Number(searchParams.get("box")),
+  );
 
-  // if (isFetching) {
-  //   return (
-  //     <StyledWrapper>
-  //       <Loading margin="0" />
-  //     </StyledWrapper>
-  //   );
-  // }
+
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+    }
+  }, [ data ]);
+
+  if (isFetching) {
+    return (
+      <StyledWrapper>
+        <Loading margin="0" />
+      </StyledWrapper>
+    );
+  }
 
   // return (
   //   <StyledWrapper>

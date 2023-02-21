@@ -2,9 +2,9 @@ import styled from "@emotion/styled";
 import { Dialog, DialogActions, DialogTitle } from "@mui/material";
 import { Link } from "react-router-dom";
 import { StyledBtn } from "styles/StyledBtn";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDeleteQuestionBoxes } from "hooks/queries/questionBoxes";
-import { resetSystemFetch } from "@tensorflow/tfjs-core/dist/platforms/platform_node";
+import { PagesPath } from "constants/pages";
 
 const StyledQuestions = styled.div`
   width: 900px;
@@ -79,7 +79,7 @@ interface QuestionsProps {
 }
 
 const Questions = ({ boxName, idx, questionNum }: QuestionsProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [ isOpen, setIsOpen ] = useState(false);
   const { mutate, isLoading } = useDeleteQuestionBoxes();
   const handleClickDelete = () => {
     setIsOpen(true);
@@ -103,7 +103,7 @@ const Questions = ({ boxName, idx, questionNum }: QuestionsProps) => {
   return (
     <StyledQuestions>
       <div className="contents">
-        <StyledLink to="/*">
+        <StyledLink to={`${PagesPath.QUESTIONS_DETAILS}?box=${idx}`}>
           <h2>{boxName}</h2>
           <span>{questionNum} / 30</span>
         </StyledLink>

@@ -26,14 +26,17 @@ export const useDeleteQuestionBoxes = () => {
 };
 
 export const useQuestionDetails = (questionBoxIdx: number) => {
-  const { data, isSuccess, isLoading, isError } = useQuery([ "fetchQuestionDetails" ], () => {
-    return questionBoxesAPI.getQuestionDetails(questionBoxIdx);
-  });
+  const { data, isSuccess, isLoading, isFetching, isError } = useQuery(
+    [ "fetchQuestionDetails", `box${questionBoxIdx}` ],
+    () => {
+      return questionBoxesAPI.getQuestionDetails(questionBoxIdx);
+    });
 
   return {
     data,
     isSuccess,
     isLoading,
+    isFetching,
     isError,
   };
 };
