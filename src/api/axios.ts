@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
 import qs from "qs";
-import { accessTokenCookies, refreshTokenCookies } from "lib/cookies";
 
 import { Dict, CommonAPI } from "types/apis";
 import { BASE_URL } from "constants/api";
@@ -24,25 +23,7 @@ export const axiosInstance = axios.create({
 /**
  * Request Success Handler - API 호출될 때마다 실행됨.
  */
-const requestSuccessHandler = (config:  AxiosRequestConfig) => {
-  const refreshToken = refreshTokenCookies.get();
-  const accessToken = accessTokenCookies.get();
-
-  console.log("refreshToken", refreshToken);
-
-  if (accessToken) {
-    config.headers!["Authorization"] = `Bearer ${accessToken}`;
-  }
-  else if (refreshToken) {
-    const body = {
-      refreshToken,
-    };
-
-    // 1. access token 갱신 요청
-    // 2. 1에서 응답받은 access token을 다음과 같이 설정:
-    // config.headers["Authorization"] = `Bearer ${token}`;
-  }
-
+const requestSuccessHandler = config => {
   return config;
 };
 
@@ -50,9 +31,6 @@ const requestSuccessHandler = (config:  AxiosRequestConfig) => {
  * Request Fail Handler
  */
 const requestErrorHandler = err => {
-  refreshTokenCookies.remove();
-  accessTokenCookies.remove();
-
   return Promise.reject(err);
 };
 
