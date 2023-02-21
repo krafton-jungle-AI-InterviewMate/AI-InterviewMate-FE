@@ -72,6 +72,11 @@ const QuestionDetails = () => {
                 </StyledBtn>
               </StyledQuestion>,
             )}
+            <StyledFixedBottom>
+              <StyledAddQuestionButton type="button" onClick={() => {}}>
+                + 질문 추가하기
+              </StyledAddQuestionButton>
+            </StyledFixedBottom>
           </StyledList>
         </>
       ) : (
@@ -128,6 +133,7 @@ const StyledList = styled.ul`
   width: 100%;
   list-style: none;
   padding: 0;
+  padding-bottom: 160px;
   margin: 0;
 `;
 
@@ -184,4 +190,34 @@ const StyledQuestionButton = styled.button`
   padding-left: 0;
   width: 100%;
   text-align: left;
+`;
+
+const StyledFixedBottom = styled.div`
+  position: fixed;
+  bottom: 0;
+  right: 50%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 100vw;
+  background-color: #ffffff90;
+  backdrop-filter: blur(5px);
+`;
+
+const StyledAddQuestionButton = styled.button`
+  width: 900px;
+  height: 80px;
+  margin: 0px auto 80px;
+  border-radius: var(--button-border-radius);
+  background-color: var(--main-orange);
+  color: var(--main-white);
+  font-size: 20px;
+  font-weight: 500;
+  transition: background-color 200ms;
+
+  &:hover {
+    background-color: var(--light-orange);
+  }
+  &:active {
+    background-color: var(--push-orange);
+  }
 `;
