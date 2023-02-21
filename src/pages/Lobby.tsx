@@ -18,12 +18,17 @@ const StyledLobbyInterface = styled.div`
   }
 `;
 
-const StyledRoomContents = styled.div`
+interface StyledRoomContentsProps {
+  isLoading: boolean;
+  isError: boolean;
+}
+
+const StyledRoomContents = styled.div<StyledRoomContentsProps>`
   min-width: 1000px;
   width: 1000px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: ${props => (props.isError || props.isLoading ? "center" : "space-between")};
 `;
 
 const Lobby = () => {
@@ -59,7 +64,7 @@ const Lobby = () => {
           목록 새로고침
         </StyledBtn>
       </StyledLobbyInterface>
-      <StyledRoomContents>
+      <StyledRoomContents isLoading={isLoading} isError={isError}>
         {isLoading ? (
           <Loading margin="120px 0 0" />
         ) : isError ? (

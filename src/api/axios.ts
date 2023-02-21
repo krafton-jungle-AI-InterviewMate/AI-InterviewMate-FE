@@ -42,7 +42,6 @@ const responseErrorHandler = err => {
   return Promise.reject(err);
 };
 
-
 /**
  * Axios Request Middleware
  */
@@ -55,15 +54,12 @@ axiosInstance.interceptors.request.use(
  * Axios Response Middleware
  */
 axiosInstance.interceptors.response.use(
-  (response) => response,
+  response => response,
   err => responseErrorHandler(err),
 );
 
 export const getAPI: CommonAPI = ({ endPoint, data, axiosOption }) => {
-  return axiosInstance.get(
-    data ? generateQueryEndPoint(endPoint, data) : endPoint,
-    axiosOption,
-  );
+  return axiosInstance.get(data ? generateQueryEndPoint(endPoint, data) : endPoint, axiosOption);
 };
 
 export const postAPI: CommonAPI = ({ endPoint, data, axiosOption }) => {
