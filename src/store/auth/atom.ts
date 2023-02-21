@@ -3,7 +3,7 @@ import { Member } from "types/auth";
 
 export const memberInitialState: Member = {
   accessToken: "",
-  username: "",
+  username: "테스트",
 };
 
 export const memberAtom = atom<Member>({

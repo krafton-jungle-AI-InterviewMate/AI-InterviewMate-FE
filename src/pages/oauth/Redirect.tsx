@@ -21,10 +21,10 @@ const Redirect = () => {
         isLoggedInCookie.set(true);
         // TODO: 멤버 정보 요청
 
-        setMember({
+        setMember((curr) => ({
           accessToken,
-          username: "", // TODO:
-        });
+          username: curr.username,
+        }));
       }
 
       navigate(PagesPath.LOBBY, {
