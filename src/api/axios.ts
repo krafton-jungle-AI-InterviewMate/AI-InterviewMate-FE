@@ -4,8 +4,6 @@ import qs from "qs";
 import { Dict, CommonAPI } from "types/apis";
 import { BASE_URL } from "constants/api";
 
-axios.defaults.withCredentials = true; // withCredentials 전역 설정
-
 const generateQueryEndPoint = (endPoint: string, data: Dict) => {
   const queryString = qs.stringify(data, {
     addQueryPrefix: true,
