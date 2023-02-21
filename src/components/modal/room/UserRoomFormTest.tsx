@@ -1,326 +1,142 @@
-import { StyledBtn } from "styles/StyledBtn";
-import { useForm } from "react-hook-form";
-import FormControl from "@mui/material/FormControl";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormLabel from "@mui/material/FormLabel";
-import styled from "@emotion/styled";
+import "./App.css";
+
+import OpenViduSession from "openvidu-react";
+import axios from "axios";
 import { useState } from "react";
-import { AiOutlineInfoCircle } from "react-icons/ai";
-import { useSetRecoilState } from "recoil";
-import { feedbackAtom } from "store/interview/atom";
-import { usePostInterviewRooms } from "hooks/queries/interview";
-import { useNavigate } from "react-router";
-import { RoomTypes } from "api/mypage/types";
-import { questionBoxes } from "api/questionBoxes/type";
-import { Component } from "react";
 
-interface InputRoomFormProps {
-  email?: string;
-  roomName: string;
-  roomPeopleNum?: number;
-  roomPassword?: string;
-  isPrivate?: boolean;
-  roomType: RoomTypes;
-  roomQuestionBoxIdx: number;
-  roomTime?: number;
-}
+const UserInterview = () => {
+  const APPLICATION_SERVER_URL = "http://localhost:5000/";
+  const [mySessionId, setMySessionId] = useState("SessionA");
+  const [myUserName, setMyUserName] = useState("OpenVidu_User_" + Math.floor(Math.random() * 100));
+  const [token, setToken] = useState();
+  const [session, setSession] = useState<boolean>();
+  // this.state = {
+  //   mySessionId: "SessionA",
+  //   myUserName: "OpenVidu_User_" + Math.floor(Math.random() * 100),
+  //   token: undefined,
+  // };
 
-class UserRoomFormTest extends Component {
-  render() {
-    const { roomType, onClickModalClose, questionBoxes } = this.props;
-    return <div></div>;
-  }
-}
+  // this.handlerJoinSessionEvent = this.handlerJoinSessionEvent.bind(this);
+  // this.handlerLeaveSessionEvent = this.handlerLeaveSessionEvent.bind(this);
+  // this.handlerErrorEvent = this.handlerErrorEvent.bind(this);
+  // this.handleChangeSessionId = this.handleChangeSessionId.bind(this);
+  // this.handleChangeUserName = this.handleChangeUserName.bind(this);
+  // this.joinSession = this.joinSession.bind(this);
 
-function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
-  const navigate = useNavigate();
-  const [isPrivate, setIsPrivate] = useState(false);
-  const feedback = useSetRecoilState(feedbackAtom);
-  const onChangePublic = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const {
-      currentTarget: { value },
-    } = event;
-    setIsPrivate(value === "true" ? true : false);
+  const handlerJoinSessionEvent = () => {
+    console.log("Join session");
   };
 
-  const onChangeFeedback = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const {
-      target: { value },
-    } = event;
-    feedback(value);
+  const handlerLeaveSessionEvent = () => {
+    console.log("Leave session");
+    // setSession(undefined);
+    // this.setState({
+    //   session: undefined,
+    // });
   };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<InputRoomFormProps>();
+  const handlerErrorEvent = () => {
+    console.log("Leave session");
+  };
 
-  const { mutate, isLoading } = usePostInterviewRooms();
+  const handleChangeSessionId = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMySessionId(e.target.value);
+  };
 
-  const onValid = (data: any) => {
-    data["roomType"] = roomType;
-    if (isLoading) {
-      return;
+  const handleChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMyUserName(e.target.value);
+  };
+
+  const joinSession = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (mySessionId && myUserName) {
+      const token = await getToken();
+      setToken(token);
+      setSession(true);
+      // this.setState({
+      //   token: token,
+      //   session: true,
+      // });
     }
-    mutate(
-      { data },
+  };
+
+  // const mySessionId = this.state.mySessionId;
+  // const myUserName = this.state.myUserName;
+  // const token = this.state.token;
+  const getToken = async () => {
+    const sessionId = await createSession(mySessionId);
+    return await createToken(sessionId);
+  };
+
+  const createSession = async sessionId => {
+    const response = await axios.post(
+      APPLICATION_SERVER_URL + "api/sessions",
+      { customSessionId: sessionId },
       {
-        onSuccess: () => {
-          navigate("/interview/ready");
-        },
-        onError(error) {
-          alert(error);
-        },
+        headers: { "Content-Type": "application/json" },
       },
     );
+    return response.data; // The sessionId
   };
-  const roomPeopleNumArr = [1, 2, 3];
-  const isPrivateArr = [false, true];
-  const FeedbackArr = ["ON", "OFF"];
-  const roomTimeArr = [15, 30, 45, 60];
+
+  const createToken = async sessionId => {
+    const response = await axios.post(
+      APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
+      {},
+      {
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+    return response.data; // The token
+  };
   return (
-    <StyledUserRoomForm
-      roomNameError={errors.roomName?.message}
-      passwordError={errors.roomPassword?.message}
-    >
-      <form onSubmit={handleSubmit(onValid)}>
-        <input {...register("email")} readOnly hidden value="user4@test.com" />
-        <div className="inputContent">
-          <label htmlFor="roomName">방 제목</label>
-          <input
-            {...register("roomName", {
-              required: "방 제목을 입력해주세요.",
-              minLength: {
-                value: 2,
-                message: "최소 2자 ~ 최대 10자까지 입력 가능합니다.",
-              },
-              maxLength: {
-                value: 10,
-                message: "최소 2자 ~ 최대 10자까지 입력 가능합니다.",
-              },
-              pattern: {
-                value: /[A-Z|a-z|0-9|ㄱ-ㅎ|가-힣|]+$/gi,
-                message: "특수문자는 사용 불가능합니다.",
-              },
-            })}
-            required
-            type="text"
-            id="roomName"
-            autoComplete="off"
+    <div>
+      {session === undefined ? (
+        <div id="join">
+          <div id="join-dialog">
+            <h1> Join a video session </h1>
+            <form onSubmit={joinSession}>
+              <p>
+                <label>Participant: </label>
+                <input
+                  type="text"
+                  id="userName"
+                  value={myUserName}
+                  onChange={handleChangeUserName}
+                  required
+                />
+              </p>
+              <p>
+                <label> Session: </label>
+                <input
+                  type="text"
+                  id="sessionId"
+                  value={mySessionId}
+                  onChange={handleChangeSessionId}
+                  required
+                />
+              </p>
+              <p>
+                <input name="commit" type="submit" value="JOIN" />
+              </p>
+            </form>
+          </div>
+        </div>
+      ) : (
+        <div id="session">
+          <OpenViduSession
+            id="opv-session"
+            sessionName={mySessionId}
+            user={myUserName}
+            token={token}
+            joinSession={handlerJoinSessionEvent}
+            leaveSession={handlerLeaveSessionEvent}
+            error={handlerErrorEvent}
           />
-          {errors.roomName?.message ? (
-            <span className="error">
-              <AiOutlineInfoCircle className="errorIcon" size={24} />
-              {errors.roomName.message}
-            </span>
-          ) : null}
         </div>
-        <span className="guide">
-          최소 2자 ~ 최대 10자까지 입력 가능합니다. 특수문자는 사용 불가능합니다. (띄어쓰기 제외)
-        </span>
-        <div className="inputContent">
-          <FormControl className="radioForm">
-            <FormLabel>면접관 수</FormLabel>
-            <RadioGroup row>
-              {roomPeopleNumArr.map((data, idx) => (
-                <FormControlLabel
-                  key={`roomPeopleNum${idx}`}
-                  value={data + 1}
-                  control={<Radio {...register("roomPeopleNum", { required: true })} />}
-                  label={`${data}명`}
-                />
-              ))}
-            </RadioGroup>
-          </FormControl>
-        </div>
-        <div className="inputContent">
-          <FormControl className="radioForm">
-            <FormLabel>공개 여부</FormLabel>
-            <RadioGroup row>
-              {isPrivateArr.map((data, idx) => (
-                <FormControlLabel
-                  key={`isPrivate${idx}`}
-                  value={data}
-                  control={
-                    <Radio
-                      {...register("isPrivate", { required: true })}
-                      onChange={onChangePublic}
-                    />
-                  }
-                  label={data ? "비공개" : "공개"}
-                />
-              ))}
-            </RadioGroup>
-          </FormControl>
-        </div>
-        {isPrivate ? (
-          <>
-            <div className="inputContent">
-              <label htmlFor="password">비밀번호</label>
-              <input
-                {...register("roomPassword", {
-                  required: "비밀번호를 입력해주세요.",
-                  minLength: {
-                    value: 3,
-                    message: "3 ~ 10자리의 숫자를 입력해주세요.",
-                  },
-                  maxLength: {
-                    value: 10,
-                    message: "3 ~ 10자리의 숫자를 입력해주세요.",
-                  },
-                  pattern: {
-                    value: /^[0-9|]+$/gi,
-                    message: "숫자만 입력해주세요.",
-                  },
-                })}
-                id="password"
-                type="password"
-                required
-                autoComplete="off"
-              />
-              {errors.roomPassword?.message ? (
-                <span className="error">
-                  <AiOutlineInfoCircle className="errorIcon" size={24} />
-                  {errors.roomPassword.message}
-                </span>
-              ) : null}
-            </div>
-            <span className="guide">비밀번호로 사용될 3 ~ 10자리의 숫자를 입력해주세요.</span>
-          </>
-        ) : null}
-        <div className="inputContent">
-          <FormControl className="radioForm">
-            <FormLabel>실시간 피드백</FormLabel>
-            <RadioGroup row>
-              {FeedbackArr.map((data, idx) => (
-                <FormControlLabel
-                  key={`Feedback${idx}`}
-                  value={data}
-                  control={<Radio onChange={onChangeFeedback} required />}
-                  label={data}
-                />
-              ))}
-            </RadioGroup>
-          </FormControl>
-        </div>
-        <span className="guide">실시간 피드백 설정은 방 생성 이후에는 수정하실 수 없습니다.</span>
-        <div className="inputContent">
-          <label htmlFor="question">질문 꾸러미</label>
-          <select id="question" {...register("roomQuestionBoxIdx", { required: true })}>
-            {questionBoxes.map((data: questionBoxes, idx: number) => (
-              <option key={idx} value={data.idx}>
-                {data.boxName}
-              </option>
-            ))}
-          </select>
-        </div>
-        <span className="guide">면접관에게 보여질 질문 꾸러미를 선택해주세요.</span>
-        <div className="inputContent">
-          <FormControl className="radioForm">
-            <FormLabel>시간 제한</FormLabel>
-            <RadioGroup row>
-              {roomTimeArr.map((data, idx) => (
-                <FormControlLabel
-                  key={`roomTime${idx}`}
-                  value={data}
-                  control={<Radio {...register("roomTime", { required: true })} />}
-                  label={`${data}분`}
-                />
-              ))}
-            </RadioGroup>
-          </FormControl>
-        </div>
-        <div className="submitAndCancel">
-          <StyledBtn width="380px" height="58px" color="orange">
-            확인
-          </StyledBtn>
-          <StyledBtn onClick={onClickModalClose} width="380px" height="58px" color="red">
-            취소
-          </StyledBtn>
-        </div>
-      </form>
-    </StyledUserRoomForm>
+      )}
+    </div>
   );
-}
+};
 
-interface StyledUserRoomFormProps {
-  roomNameError?: string;
-  passwordError?: string;
-}
-
-const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`
-  form {
-    display: flex;
-    flex-direction: column;
-    .inputContent {
-      display: flex;
-      align-items: center;
-      margin-top: 20px;
-      label {
-        display: inline-block;
-        text-align: left;
-        width: 140px;
-        font-size: 16px;
-        font-weight: 400;
-        font-family: "Archivo", "Spoqa Han Sans Neo", sans-serif;
-        color: var(--main-black);
-      }
-      input {
-        width: 360px;
-        height: 24px;
-        border-color: var(--main-black);
-        border-radius: 10px;
-        border: 0.5px solid;
-        padding: 5px 0 5px 10px;
-        &:focus {
-          outline: none;
-        }
-      }
-      #roomName {
-        border-color: ${props => (props.roomNameError ? "var(--main-alert)" : "var(--main-black)")};
-      }
-      #password {
-        border-color: ${props => (props.passwordError ? "var(--main-alert)" : "var(--main-black)")};
-      }
-      select {
-        width: 370px;
-        height: 34px;
-        border-color: var(--main-black);
-        border-radius: 10px;
-        padding-left: 8px;
-      }
-      .radioForm {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-      }
-      .error {
-        display: flex;
-        align-items: center;
-        color: var(--main-alert);
-        margin-left: 20px;
-        font-size: 12px;
-        .errorIcon {
-          margin-right: 5px;
-        }
-      }
-    }
-    span.guide {
-      font-size: 12px;
-      font-weight: 400;
-      text-align: left;
-      margin-left: 140px;
-      color: var(--font-gray);
-    }
-    .submitAndCancel {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 80px;
-    }
-  }
-`;
-
-export default UserRoomFormTest;
+export default UserInterview;
