@@ -62,11 +62,19 @@ const StyledLink = styled(ExternalLink)<{ provider: SocialLoginProviderType }>`
     background-color: var(--main-white);
     color: var(--main-black);
     box-shadow: 0px 1px 4px 0px var(--push-gray);
+
+    &:hover {
+      color: var(--main-black);
+    }
   `}
 
   ${({ provider }) => provider === "github" && css`
     background-color: var(--github-black);
     color: var(--main-white);
+
+    &:hover {
+      color: var(--main-white);
+    }
   `}
 
   &:hover {

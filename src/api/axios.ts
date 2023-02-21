@@ -1,5 +1,7 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { Axios, AxiosRequestConfig } from "axios";
 import qs from "qs";
+import { getRecoil } from "recoil-nexus";
+import { memberAtom } from "store/auth/atom";
 
 import { Dict, CommonAPI } from "types/apis";
 import { BASE_URL } from "constants/api";
@@ -23,7 +25,13 @@ export const axiosInstance = axios.create({
 /**
  * Request Success Handler - API 호출될 때마다 실행됨.
  */
-const requestSuccessHandler = config => {
+const requestSuccessHandler = (config: AxiosRequestConfig) => {
+  const { accessToken } = getRecoil(memberAtom);
+
+  if (accessToken) {
+    config.headers!["Authorization"] = `Bearer ${accessToken}`;
+  }
+
   return config;
 };
 
