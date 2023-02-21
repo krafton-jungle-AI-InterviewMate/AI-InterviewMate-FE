@@ -18,3 +18,14 @@ export type GetAuthorizationResponse = ResponseStatus & {
 
 export type GetAuthorization = (params: GetAuthorizationParams) =>
   Promise<AxiosResponse<GetAuthorizationResponse>>;
+
+
+type AccessToken = {
+  accessToken: string;
+};
+
+export type GetRefreshResponse = ResponseStatus & {
+  data: AccessToken;
+};
+
+export type GetRefresh = () => Promise<AxiosResponse<GetRefreshResponse>>;

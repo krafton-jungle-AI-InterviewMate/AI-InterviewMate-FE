@@ -14,6 +14,7 @@ export const API_PATH = {
   GET_QUESTIONBOXES: (memberIdx: string) => `/questionBoxes/temp/${memberIdx}`,
   GET_AUTHORIZATION: ({ social, redirect_uri }: GetAuthorizationParams) =>
     `/login/oauth2/authorization/${social}?redirect_uri=${window.location.origin}${redirect_uri}`,
+  GET_REFRESH: "/login/refresh",
 };
 
 export const AI_VIEWER_IDX = 79797979;
