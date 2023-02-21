@@ -7,10 +7,9 @@ import { SimpleLayout, BreadcrumbsLayout, InterviewLayout } from "components/lay
 
 import { InterviewAi, InterviewReady, InterviewEnd } from "pages/interview";
 import Home from "pages/Home";
-import { Mypage, Result, ResultDetails, QuestionDetails } from "pages/mypage";
+import { Mypage, Result, ResultDetails, QuestionList, QuestionDetails } from "pages/mypage";
 import Login from "pages/Login";
 import { Redirect } from "pages/oauth";
-import QuestionList from "pages/mypage/QuestionList";
 import Lobby from "pages/Lobby";
 import NotFound from "pages/NotFound";
 import NotAvailable from "pages/NotAvailable";
