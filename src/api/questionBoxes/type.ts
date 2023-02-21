@@ -20,6 +20,10 @@ export type GetQuestionBoxes = (
   memberIdx: string,
 ) => Promise<AxiosResponse<GetQuestionBoxesResponse>>;
 
+export type DELETEQuestionBoxes = (
+  questionBoxIdx: number,
+) => Promise<AxiosResponse<ResponseStatus>>;
+
 export type QuestionBox = { // ! TODO: QuestionBoxes 또는 이 타입 둘 중 하나만 남기기
   idx: number;
   member: Member;

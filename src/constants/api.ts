@@ -11,6 +11,7 @@ export const API_PATH = {
   POST_INTERVIEW_ROOMS: "/interview/rooms",
   GET_INTERVIEW_ROOMS: "/interview/rooms",
   GET_QUESTIONBOXES: (memberIdx: string) => `/questionBoxes/temp/${memberIdx}`,
+  DELETE_QUESTIONBOXES: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`,
   GET_QUESTION_DETAILS: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`,
 };
 
