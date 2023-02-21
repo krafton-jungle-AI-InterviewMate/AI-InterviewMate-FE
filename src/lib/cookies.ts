@@ -10,7 +10,6 @@ const getCookieExpireDate = (duration: number) => {
 
 export const CookieName = {
   IS_LOGGED_IN: "isLoggedIn",
-  USERNAME: "username",
 };
 
 export const isLoggedInCookie = {
@@ -30,30 +29,6 @@ export const isLoggedInCookie = {
   // uses when logout
   remove: () => {
     cookies.remove(CookieName.IS_LOGGED_IN, {
-      sameSite: "strict",
-      path: "/",
-      secure: true,
-    });
-  },
-};
-
-export const usernameCookie = {
-  set: (username: string) => {
-    const expireDate = getCookieExpireDate(1);
-
-    cookies.set(CookieName.USERNAME, username, {
-      sameSite: "strict",
-      path: "/",
-      expires: expireDate,
-      secure: true,
-    });
-  },
-
-  get: () => cookies.get(CookieName.USERNAME),
-
-  // uses when logout
-  remove: () => {
-    cookies.remove(CookieName.USERNAME, {
       sameSite: "strict",
       path: "/",
       secure: true,
