@@ -1,4 +1,9 @@
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { memberAtom } from "store/auth/atom";
+
+import { PagesPath } from "constants/pages";
+
 import mainIllust from "static/images/undraw_Interview_re_e5jn.png";
 import styled from "@emotion/styled";
 import { StyledBtn } from "styles/StyledBtn";
@@ -35,7 +40,19 @@ const StyledStart = styled.div`
 `;
 
 const Home = () => {
+  const {
+    accessToken,
+  } = useRecoilValue(memberAtom);
   const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    if (accessToken) {
+      navigate(PagesPath.LOBBY);
+    }
+    else {
+      navigate(PagesPath.LOGIN);
+    }
+  };
 
   return (
     <StyledHomeContents>
@@ -50,9 +67,7 @@ const Home = () => {
           width="250px"
           height="70px"
           color="orange"
-          onClick={() => {
-            navigate("/login");
-          }}
+          onClick={handleNavigate}
         >
           바로 시작하기
         </StyledBtn>
