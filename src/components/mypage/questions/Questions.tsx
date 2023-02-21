@@ -80,7 +80,7 @@ interface QuestionsProps {
 
 const Questions = ({ boxName, idx, questionNum }: QuestionsProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { refetch, isSuccess, isLoading, isError } = useDeleteQuestionBoxes(idx);
+  const { mutate, isLoading } = useDeleteQuestionBoxes();
   const handleClickDelete = () => {
     setIsOpen(true);
   };
@@ -88,8 +88,17 @@ const Questions = ({ boxName, idx, questionNum }: QuestionsProps) => {
     setIsOpen(false);
   };
   const handleClickClear = () => {
-    setIsOpen(false);
-    refetch();
+    if (isLoading) {
+      return;
+    }
+    mutate(idx, {
+      onSuccess: () => {
+        setIsOpen(false);
+      },
+      onError(error) {
+        alert(error);
+      },
+    });
   };
   return (
     <StyledQuestions>
