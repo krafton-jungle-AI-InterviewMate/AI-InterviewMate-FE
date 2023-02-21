@@ -13,3 +13,22 @@ export const useGetQuestionBoxes = (memberIdx: string) => {
     isError,
   };
 };
+
+export const useDeleteQuestionBoxes = (questionBoxIdx: number) => {
+  const { refetch, isSuccess, isLoading, isError } = useQuery(
+    ["fetchDeleteQuestionBoxes"],
+    () => {
+      return questionBoxesAPI.deleteQuestionBoxes(questionBoxIdx);
+    },
+    {
+      enabled: false,
+    },
+  );
+
+  return {
+    refetch,
+    isSuccess,
+    isLoading,
+    isError,
+  };
+};

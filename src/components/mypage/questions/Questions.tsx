@@ -2,7 +2,9 @@ import styled from "@emotion/styled";
 import { Dialog, DialogActions, DialogTitle } from "@mui/material";
 import { Link } from "react-router-dom";
 import { StyledBtn } from "styles/StyledBtn";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDeleteQuestionBoxes } from "hooks/queries/questionBoxes";
+import { resetSystemFetch } from "@tensorflow/tfjs-core/dist/platforms/platform_node";
 
 const StyledQuestions = styled.div`
   width: 900px;
@@ -78,11 +80,16 @@ interface QuestionsProps {
 
 const Questions = ({ boxName, idx, questionNum }: QuestionsProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { refetch, isSuccess, isLoading, isError } = useDeleteQuestionBoxes(idx);
   const handleClickDelete = () => {
     setIsOpen(true);
   };
   const handleClickClose = () => {
     setIsOpen(false);
+  };
+  const handleClickClear = () => {
+    setIsOpen(false);
+    refetch();
   };
   return (
     <StyledQuestions>
@@ -123,7 +130,7 @@ const Questions = ({ boxName, idx, questionNum }: QuestionsProps) => {
             꾸러미를 비우시겠습니까?
           </DialogTitle>
           <DialogActions className="dialogActions">
-            <StyledBtnStlyed onClick={handleClickClose} width="200px" height="42px" color="orange">
+            <StyledBtnStlyed onClick={handleClickClear} width="200px" height="42px" color="orange">
               네!
             </StyledBtnStlyed>
             <StyledBtn onClick={handleClickClose} width="200px" height="42px" color="red">
