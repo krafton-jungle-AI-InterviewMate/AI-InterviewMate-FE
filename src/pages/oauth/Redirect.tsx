@@ -1,13 +1,43 @@
-import { useNavigate } from "react-router-dom";
-import { useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { isLoggedInCookie } from "lib/cookies";
+import { useSetRecoilState } from "recoil";
+import { memberAtom } from "store/auth/atom";
+
+import Loading from "components/common/Loading";
+
+import { PagesPath } from "constants/pages";
 
 const Redirect = () => {
-  // TODO:
-  // 1. if (쿼리스트링에 토큰이 잘 담겨있다면)
-  // 2. atom에 토큰 저장 후 리다이렉트
+  const navigate = useNavigate();
+  const [ searchParams ] = useSearchParams();
+  const setMember = useSetRecoilState(memberAtom);
+
+  useEffect(() => {
+    if (searchParams) {
+      const accessToken = searchParams.get("accessToken");
+
+      if (accessToken) {
+        isLoggedInCookie.set(true);
+        // TODO: 멤버 정보 요청
+
+        setMember({
+          isLoggedIn: true,
+          accessToken,
+          username: "", // TODO:
+        });
+      }
+
+      navigate(PagesPath.LOBBY, {
+        replace: true,
+      });
+    }
+  }, [ searchParams ]);
+
   return (
     <div>
-      <p>TODO</p>
+      <Loading margin="60px 0 0" />
+      잠시만 기다려주세요.
     </div>
   );
 };
