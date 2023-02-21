@@ -12,6 +12,7 @@ export const API_PATH = {
   POST_INTERVIEW_ROOMS: "/interview/rooms",
   GET_INTERVIEW_ROOMS: "/interview/rooms",
   GET_QUESTIONBOXES: (memberIdx: string) => `/questionBoxes/temp/${memberIdx}`,
+  DELETE_QUESTIONBOXES: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`,
   GET_AUTHORIZATION: ({ social, redirect_uri }: GetAuthorizationParams) =>
     `/login/oauth2/authorization/${social}?redirect_uri=${window.location.origin}${redirect_uri}`,
   GET_REFRESH: "/login/refresh",

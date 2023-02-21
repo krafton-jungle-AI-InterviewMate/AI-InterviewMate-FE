@@ -18,3 +18,7 @@ export type GetQuestionBoxesResponse = ResponseStatus & {
 export type GetQuestionBoxes = (
   memberIdx: string,
 ) => Promise<AxiosResponse<GetQuestionBoxesResponse>>;
+
+export type DELETEQuestionBoxes = (
+  questionBoxIdx: number,
+) => Promise<AxiosResponse<ResponseStatus>>;

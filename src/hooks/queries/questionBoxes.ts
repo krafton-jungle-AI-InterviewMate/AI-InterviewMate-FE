@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import questionBoxesAPI from "api/questionBoxes";
 
 export const useGetQuestionBoxes = (memberIdx: string) => {
@@ -12,4 +12,15 @@ export const useGetQuestionBoxes = (memberIdx: string) => {
     isLoading,
     isError,
   };
+};
+
+export const useDeleteQuestionBoxes = () => {
+  return useMutation(questionBoxesAPI.deleteQuestionBoxes, {
+    onSuccess: questionBoxIdx => {
+      console.log(questionBoxIdx);
+    },
+    onError: e => {
+      console.log(e);
+    },
+  });
 };

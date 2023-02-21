@@ -67,7 +67,7 @@ const Mypage = () => {
         <h2>인터뷰 관리</h2>
         <hr />
         <Link to="/mypage/result">면접 결과 확인</Link>
-        <Link to="/*">질문 꾸러미 관리</Link>
+        <Link to="/mypage/questions">질문 꾸러미 관리</Link>
       </div>
       <div>
         <h2>고객 센터</h2>
