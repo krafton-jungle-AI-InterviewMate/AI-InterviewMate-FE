@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import questionBoxesAPI from "api/questionBoxes";
 
 export const useGetQuestionBoxes = (memberIdx: string) => {
-  const { data, isSuccess, isLoading, isError } = useQuery(["fetchQuestionBoxes"], () => {
+  const { data, isSuccess, isLoading, isError } = useQuery([ "fetchQuestionBoxes" ], () => {
     return questionBoxesAPI.getQuestionBoxes(memberIdx);
   });
 
@@ -23,4 +23,17 @@ export const useDeleteQuestionBoxes = () => {
       console.log(e);
     },
   });
+};
+
+export const useQuestionDetails = (questionBoxIdx: number) => {
+  const { data, isSuccess, isLoading, isError } = useQuery([ "fetchQuestionDetails" ], () => {
+    return questionBoxesAPI.getQuestionDetails(questionBoxIdx);
+  });
+
+  return {
+    data,
+    isSuccess,
+    isLoading,
+    isError,
+  };
 };
