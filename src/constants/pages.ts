@@ -8,11 +8,15 @@ export const PagesPath = {
   INTERVIEW_READY: "/interview/ready",
   INTERVIEW_END: "/interview/end",
   LOBBY: "/lobby",
+  LOGIN: "/login",
+  REDIRECT_URI: "/oauth/redirect",
 } as const;
 
 // ! Breadcrumbs를 나타내는 경우에만 추가해주세요.
 export const PagesName = {
   "/lobby": "로비",
+  "/login": "로그인",
+
   /** 마이페이지 */
   "/mypage": "마이페이지",
   "/mypage/result": "면접 결과 확인",
