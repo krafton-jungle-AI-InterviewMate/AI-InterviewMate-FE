@@ -20,7 +20,7 @@ export type GetQuestionBoxes = (
   memberIdx: string,
 ) => Promise<AxiosResponse<GetQuestionBoxesResponse>>;
 
-export type DELETEQuestionBoxes = (
+export type DeleteQuestionBoxes = (
   questionBoxIdx: number,
 ) => Promise<AxiosResponse<ResponseStatus>>;
 
