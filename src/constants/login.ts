@@ -1,4 +1,4 @@
-import { SocialLoginProviderType } from "types/login";
+import { SocialLoginProviderType } from "types/auth";
 
 export const Providers: Array<SocialLoginProviderType> = [
   "google", "github", "kakao",

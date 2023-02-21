@@ -1,4 +1,4 @@
-import { SocialLoginProviderType } from "types/login";
+import { SocialLoginProviderType } from "types/auth";
 import { ProviderName } from "constants/login";
 
 import ExternalLink from "components/common/ExternalLink";
