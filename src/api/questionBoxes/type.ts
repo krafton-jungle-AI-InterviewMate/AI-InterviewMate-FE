@@ -25,11 +25,11 @@ export type DeleteQuestionBoxes = (
 ) => Promise<AxiosResponse<ResponseStatus>>;
 
 export type Question = {
-  keyword1: string;
-  keyword2?: string;
-  keyword3?: string;
-  keyword4?: string;
-  keyword5?: string;
+  keyword1: string | null;
+  keyword2: string | null;
+  keyword3: string | null;
+  keyword4: string | null;
+  keyword5: string | null;
   questionTitle: string
 }
 
@@ -50,4 +50,18 @@ export type GetQuestionDetails = (
 
 export type DeleteQuestion = (
   questionIdx: number,
+) => Promise<AxiosResponse<ResponseStatus>>;
+
+export type PutQuestionDetailsPayload = {
+  questionBoxIdx: number;
+  keyword1: string | null;
+  keyword2: string | null;
+  keyword3: string | null;
+  keyword4: string | null;
+  keyword5: string | null;
+  questionTitle: string;
+};
+
+export type PutQuestionDetails = (
+  payload: PutQuestionDetailsPayload,
 ) => Promise<AxiosResponse<ResponseStatus>>;

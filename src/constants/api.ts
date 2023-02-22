@@ -14,6 +14,7 @@ export const API_PATH = {
   GET_QUESTIONBOXES: (memberIdx: string) => `/questionBoxes/temp/${memberIdx}`,
   DELETE_QUESTIONBOXES: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`,
   GET_QUESTION_DETAILS: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`,
+  PUT_QUESTION_DETAILS: (questionIdx: number) => `/questionBoxes/question/${questionIdx}`,
   DELETE_QUESTION: (questionIdx: number) => `/questionBoxes/question/${questionIdx}`,
   GET_AUTHORIZATION: ({ social, redirect_uri }: GetAuthorizationParams) =>
     `/login/oauth2/authorization/${social}?redirect_uri=${window.location.origin}${redirect_uri}`,

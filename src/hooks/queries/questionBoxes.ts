@@ -45,3 +45,7 @@ export const useQuestionDetails = (questionBoxIdx: number) => {
 export const useDeleteQuestion = () => {
   return useMutation(questionBoxesAPI.deleteQuestion);
 };
+
+export const usePutQuestionDetails = () => {
+  return useMutation(questionBoxesAPI.putQuestionDetails);
+};
