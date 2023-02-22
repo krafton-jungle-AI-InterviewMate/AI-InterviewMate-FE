@@ -24,26 +24,24 @@ export type DeleteQuestionBoxes = (
   questionBoxIdx: number,
 ) => Promise<AxiosResponse<ResponseStatus>>;
 
-export type QuestionBox = { // ! TODO: QuestionBoxes 또는 이 타입 둘 중 하나만 남기기
-  idx: number;
-  member: Member;
-  boxName: string;
-  questionNum: number;
-};
-
-export type QuestionDetail = {
-  idx: number;
-  questionBox: QuestionBox;
-  questionTitle: string;
+export type Question = {
   keyword1: string;
   keyword2?: string;
   keyword3?: string;
   keyword4?: string;
   keyword5?: string;
+  questionTitle: string
+}
+
+export type QuestionDetail = {
+  questionBoxIdx: number;
+  questionBoxName: string;
+  questionNum: number;
+  questions: Array<Question>;
 };
 
 export type GetQuestionDetailsResponse = ResponseStatus & {
-  data: Array<QuestionDetail>;
+  data: QuestionDetail;
 };
 
 export type GetQuestionDetails = (

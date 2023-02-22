@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useQuestionDetails } from "hooks/queries/questionBoxes";
 
@@ -8,11 +8,9 @@ import { StyledBtn } from "styles/StyledBtn";
 import styled from "@emotion/styled";
 import { a11yHidden } from "styles/common";
 
-import questionDetailList from "components/mypage/_mock/questionDetails";
-
 const QuestionDetails = () => {
   const [ searchParams ] = useSearchParams();
-  const [ title, setTitle ] = useState(questionDetailList[0].questionBox.boxName);
+  const [ title, setTitle ] = useState("");
 
   const {
     data,
@@ -23,11 +21,20 @@ const QuestionDetails = () => {
     Number(searchParams.get("box")),
   );
 
-  // useEffect(() => {
-  //   if (data) {
-  //     setTitle(data.data.data[0].questionTitle);
-  //   }
-  // }, [ data ]);
+  useEffect(() => {
+    if (data) {
+      setTitle(data.data?.data?.questionBoxName ?? "");
+    }
+  }, [ data ]);
+
+  const questions = useMemo(() => {
+    if (data) {
+      return data?.data?.data?.questions ?? [];
+    }
+    else {
+      return [];
+    }
+  }, [ data ]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -53,8 +60,8 @@ const QuestionDetails = () => {
             <StyledEditButton type="button" onClick={() => {}}>수정</StyledEditButton>
           </StyledTitleWrap>
           <StyledList>
-            {questionDetailList.map((question) =>
-              <StyledQuestion key={question.idx}>
+            {questions.length ? questions.map((question, idx) =>
+              <StyledQuestion key={idx}>
                 <StyledLeftSecion>
                   <StyledIcon>Q.</StyledIcon>
                   <StyledQuestionButton>
@@ -71,6 +78,8 @@ const QuestionDetails = () => {
                   삭제
                 </StyledBtn>
               </StyledQuestion>,
+            ) : (
+              <p className="empty">등록된 질문이 없습니다.</p>
             )}
             <StyledFixedBottom>
               <StyledAddQuestionButton type="button" onClick={() => {}}>
@@ -135,6 +144,13 @@ const StyledList = styled.ul`
   padding: 0;
   padding-bottom: 160px;
   margin: 0;
+
+  & .empty {
+    padding-top: 60px;
+    font-size: 16px;
+    color: var(--font-gray);
+    opacity: .6;
+  }
 `;
 
 const StyledQuestion = styled.li`
@@ -204,9 +220,9 @@ const StyledFixedBottom = styled.div`
 `;
 
 const StyledAddQuestionButton = styled.button`
-  width: 900px;
-  height: 80px;
-  margin: 0px auto 80px;
+  width: 442px;
+  height: 60px;
+  margin: 0px auto 60px;
   border-radius: var(--button-border-radius);
   background-color: var(--main-orange);
   color: var(--main-white);
