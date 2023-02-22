@@ -12,13 +12,13 @@ const StyledQuestionList = styled.div`
 `;
 
 const QuestionList = () => {
-  const [questionBoxes, setQuestionBoxes] = useState<questionBoxes[]>([]);
+  const [ questionBoxes, setQuestionBoxes ] = useState<questionBoxes[]>([]);
   const { data, isLoading, isSuccess, isError } = useGetQuestionBoxes("4");
   useEffect(() => {
     if (!isLoading && data) {
       setQuestionBoxes(data.data.data);
     }
-  }, [isLoading]);
+  }, [ isLoading ]);
   return (
     <StyledQuestionList>
       {isLoading ? (
@@ -28,9 +28,9 @@ const QuestionList = () => {
       ) : (
         questionBoxes.map(data => (
           <Questions
-            key={data.idx}
-            boxName={data.boxName}
-            idx={data.idx}
+            key={data.questionBoxIdx}
+            boxName={data.questionBoxName}
+            idx={data.questionBoxIdx}
             questionNum={data.questionNum}
           />
         ))
