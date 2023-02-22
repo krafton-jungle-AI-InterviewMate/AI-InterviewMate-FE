@@ -1,7 +1,13 @@
-import { RecoilRoot } from 'recoil';
+import { RecoilRoot } from "recoil";
+import RecoilNexus from "recoil-nexus";
 
 const RecoilProvider = ({ children }) => {
-  return <RecoilRoot>{children}</RecoilRoot>;
+  return (
+    <RecoilRoot>
+      <RecoilNexus />
+      {children}
+    </RecoilRoot>
+  );
 };
 
 export default RecoilProvider;

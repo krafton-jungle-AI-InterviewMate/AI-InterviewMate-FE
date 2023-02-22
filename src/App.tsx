@@ -4,8 +4,11 @@ import { PagesPath } from "constants/pages";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { SimpleLayout, BreadcrumbsLayout, InterviewLayout } from "components/layout";
+
 import { InterviewAi, InterviewReady, InterviewEnd } from "pages/interview";
 import Home from "pages/Home";
+import Login from "pages/Login";
+import { Redirect } from "pages/oauth";
 import { Mypage, Result, ResultDetails } from "pages/mypage";
 import QuestionList from "pages/mypage/QuestionList";
 import Lobby from "pages/Lobby";
@@ -13,11 +16,13 @@ import NotFound from "pages/NotFound";
 import NotAvailable from "pages/NotAvailable";
 
 import useCheckSTTAvailable from "hooks/useCheckSTTAvailable";
+import useCheckAuth from "hooks/useCheckAuth";
 
 import styled from "@emotion/styled";
 
 function App() {
   useCheckSTTAvailable();
+  useCheckAuth();
 
   return (
     <StyledWrapper>
@@ -31,6 +36,7 @@ function App() {
 
         {/* NavWithBreadcrumbs */}
         <Route element={<BreadcrumbsLayout />}>
+          <Route path={PagesPath.LOGIN} element={<Login />} />
           <Route path={PagesPath.LOBBY} element={<Lobby />} />
           <Route path={PagesPath.MYPAGE} element={<Mypage />} />
           <Route path={PagesPath.RESULT} element={<Result />} />
@@ -50,6 +56,7 @@ function App() {
 
         {/* Pages Without Nav */}
         <Route path={PagesPath.INTERVIEW_AI} element={<InterviewAi />} />
+        <Route path={PagesPath.REDIRECT_URI} element={<Redirect />} />
 
         <Route element={<SimpleLayout />}>
           <Route path="*" element={<NotFound />} />
