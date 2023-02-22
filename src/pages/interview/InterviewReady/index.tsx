@@ -1,16 +1,17 @@
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
-import { motionSnapshotAtom } from "store/interview/atom";
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import { motionSnapshotAtom, aiInterviewerAtom } from "store/interview/atom";
 
 import useInitializeInterviewState from "hooks/useInitializeInterviewState";
 import useFaceLandmarksDetection from "hooks/useFaceLandmarksDetection";
 
+import InterviewerSelectModal from "./InterviewerSelectModal";
 import Webcam from "react-webcam";
-import ai from "static/images/robot.jpg";
 import NameTag from "components/interview/InterviewNameTag";
 import Skeleton from "@mui/material/Skeleton";
 import { toast } from "react-toastify";
+import { getAiInterviewerProfile, getAiInterviewerThumbnail } from "lib/interview";
 
 import { BsThreeDots } from "react-icons/bs";
 import { AiOutlineInfoCircle } from "react-icons/ai";
@@ -28,8 +29,10 @@ const InterviewReady = () => {
   const [ isWebcamReady, setIsWebcamReady ] = useState(false);
   const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
   const [ disableGoButton, setDisableGoButton ] = useState(true);
+  const [ isModalOpen, setIsModalOpen ] = useState(false);
 
   const setMotionSnapshot = useSetRecoilState(motionSnapshotAtom);
+  const aiInterviewer = useRecoilValue(aiInterviewerAtom);
 
   useEffect(() => {
     if (isWebcamReady && webcamRef.current) {
@@ -97,8 +100,18 @@ const InterviewReady = () => {
     }
   };
 
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleInterviewerSelect = () => {
+    setIsModalOpen(true);
+  };
+
   return (
     <Styled.Wrapper>
+      <InterviewerSelectModal isOpen={isModalOpen} handleClose={handleModalClose} />
+
       <Styled.ReadyContainer>
         <Styled.Profile>
           <Styled.VideoWrap>
@@ -114,10 +127,14 @@ const InterviewReady = () => {
         <BsThreeDots size={60} />
 
         <Styled.Profile>
-          <Styled.ImageWrap>
-            <img src={ai} alt="AI 면접관" />
-          </Styled.ImageWrap>
-          <NameTag role="interviewer" profileName="AI" />
+          <Styled.SelectButton type="button" onClick={handleInterviewerSelect}>
+            면접관 선택하기
+          </Styled.SelectButton>
+          <Styled.ImageWrap bgImg={getAiInterviewerThumbnail(aiInterviewer)} />
+          <NameTag role="interviewer" profileName={aiInterviewer} />
+          <Styled.MiniProfile>
+            {getAiInterviewerProfile(aiInterviewer)}
+          </Styled.MiniProfile>
         </Styled.Profile>
       </Styled.ReadyContainer>
 
