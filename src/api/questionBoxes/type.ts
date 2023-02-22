@@ -65,3 +65,12 @@ export type PutQuestionDetailsPayload = {
 export type PutQuestionDetails = (
   payload: PutQuestionDetailsPayload,
 ) => Promise<AxiosResponse<ResponseStatus>>;
+
+export type PutQuestionBoxNamePayload = {
+  questionBoxIdx: number;
+  questionBoxName: string;
+};
+
+export type PutQuestionBoxName = (
+  payload: PutQuestionBoxNamePayload,
+) => Promise<AxiosResponse<ResponseStatus>>;

@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import {
   useQuestionDetails,
   useDeleteQuestion,
+  usePutQuestionBoxName,
 } from "hooks/queries/questionBoxes";
 
 import Loading from "components/common/Loading";
@@ -14,10 +15,11 @@ import { a11yHidden } from "styles/common";
 const QuestionDetails = () => {
   const [ searchParams ] = useSearchParams();
   const [ title, setTitle ] = useState("");
+  const [ showCheckIcon, setShowCheckIcon ] = useState(false);
 
   const {
     data,
-    refetch, // TODO: 타이틀 수정 기능
+    refetch,
     isSuccess,
     isFetching,
   } = useQuestionDetails(
@@ -27,6 +29,10 @@ const QuestionDetails = () => {
     mutate: deleteQuestion,
     isSuccess: isDeleteSuccess,
   } = useDeleteQuestion();
+  const {
+    mutate: modifyQuestionBoxName,
+    isSuccess: isModifyComplete,
+  } = usePutQuestionBoxName();
 
   useEffect(() => {
     if (data) {
@@ -39,6 +45,24 @@ const QuestionDetails = () => {
       refetch();
     }
   }, [ isDeleteSuccess ]);
+
+  useEffect(() => {
+    if (isModifyComplete) {
+      setShowCheckIcon(true);
+
+      const timerId = window.setTimeout(() => {
+        setShowCheckIcon(false);
+      }, 1000 * 3);
+
+      return (() => {
+        window.clearTimeout(timerId);
+      });
+    }
+  }, [ isModifyComplete ]);
+
+  const questionBoxIdx = useMemo(() => {
+    return Number(searchParams.get("box") ?? 999);
+  }, [ searchParams ]);
 
   const questions = useMemo(() => {
     if (data) {
@@ -55,6 +79,13 @@ const QuestionDetails = () => {
 
   const handleQuestionDelete = (questionIdx) => {
     deleteQuestion(questionIdx);
+  };
+
+  const handleTitleModify = () => {
+    modifyQuestionBoxName({
+      questionBoxIdx,
+      questionBoxName: title,
+    });
   };
 
   if (isFetching) {
@@ -74,7 +105,10 @@ const QuestionDetails = () => {
               질문 꾸러미 이름
             </StyledHiddenLabel>
             <StyledInput id="question-title" value={title} onChange={handleChange} />
-            <StyledEditButton type="button" onClick={() => {}}>수정</StyledEditButton>
+            <StyledEditButton type="button" onClick={handleTitleModify}>
+              수정
+            </StyledEditButton>
+            {showCheckIcon && <StyledCheckIcon>✅</StyledCheckIcon>}
           </StyledTitleWrap>
           <StyledList>
             {questions.length ? questions.map((question, idx) =>
@@ -129,6 +163,13 @@ const StyledTitleWrap = styled.div`
   align-items: center;
   width: 442px;
   margin-bottom: 44px;
+`;
+
+const StyledCheckIcon = styled.i`
+  position: absolute;
+  right: -30px;
+  font-size: 24px;
+  font-style: normal;
 `;
 
 const StyledHiddenLabel = styled.label`

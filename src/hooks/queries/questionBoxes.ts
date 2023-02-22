@@ -49,3 +49,7 @@ export const useDeleteQuestion = () => {
 export const usePutQuestionDetails = () => {
   return useMutation(questionBoxesAPI.putQuestionDetails);
 };
+
+export const usePutQuestionBoxName = () => {
+  return useMutation(questionBoxesAPI.putQuestionBoxName);
+};

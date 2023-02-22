@@ -6,6 +6,7 @@ import {
   GetQuestionBoxes,
   GetQuestionDetails,
   PutQuestionDetails,
+  PutQuestionBoxName,
 } from "./type";
 
 const getQuestionBoxes: GetQuestionBoxes = (memberIdx) =>
@@ -26,10 +27,17 @@ const putQuestionDetails: PutQuestionDetails = ({ questionBoxIdx, ...data }) =>
     data,
   });
 
+const putQuestionBoxName: PutQuestionBoxName = ({ questionBoxIdx, ...data }) =>
+  putAPI({
+    endPoint: API_PATH.PUT_QUESTIONBOX_NAME(questionBoxIdx),
+    data,
+  });
+
 export default {
   getQuestionBoxes,
   deleteQuestionBoxes,
   getQuestionDetails,
   deleteQuestion,
   putQuestionDetails,
+  putQuestionBoxName,
 };

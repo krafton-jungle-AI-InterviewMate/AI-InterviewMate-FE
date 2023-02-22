@@ -13,6 +13,7 @@ export const API_PATH = {
   GET_INTERVIEW_ROOMS: "/interview/rooms",
   GET_QUESTIONBOXES: (memberIdx: string) => `/questionBoxes/temp/${memberIdx}`,
   DELETE_QUESTIONBOXES: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`,
+  PUT_QUESTIONBOX_NAME: (questionBoxIdx) => `/questionBoxes/${questionBoxIdx}`,
   GET_QUESTION_DETAILS: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`,
   PUT_QUESTION_DETAILS: (questionIdx: number) => `/questionBoxes/question/${questionIdx}`,
   DELETE_QUESTION: (questionIdx: number) => `/questionBoxes/question/${questionIdx}`,
