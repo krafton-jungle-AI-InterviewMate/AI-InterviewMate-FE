@@ -47,3 +47,7 @@ export type GetQuestionDetailsResponse = ResponseStatus & {
 export type GetQuestionDetails = (
   questionBoxIdx: number,
 ) => Promise<AxiosResponse<GetQuestionDetailsResponse>>;
+
+export type DeleteQuestion = (
+  questionIdx: number,
+) => Promise<AxiosResponse<ResponseStatus>>;

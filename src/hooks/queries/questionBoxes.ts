@@ -41,3 +41,7 @@ export const useQuestionDetails = (questionBoxIdx: number) => {
     isError,
   };
 };
+
+export const useDeleteQuestion = () => {
+  return useMutation(questionBoxesAPI.deleteQuestion);
+};

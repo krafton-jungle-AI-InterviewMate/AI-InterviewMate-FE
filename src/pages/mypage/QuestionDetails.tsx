@@ -1,6 +1,9 @@
 import { useEffect, useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useQuestionDetails } from "hooks/queries/questionBoxes";
+import {
+  useQuestionDetails,
+  useDeleteQuestion,
+} from "hooks/queries/questionBoxes";
 
 import Loading from "components/common/Loading";
 import { StyledBtn } from "styles/StyledBtn";
@@ -20,12 +23,22 @@ const QuestionDetails = () => {
   } = useQuestionDetails(
     Number(searchParams.get("box")),
   );
+  const {
+    mutate: deleteQuestion,
+    isSuccess: isDeleteSuccess,
+  } = useDeleteQuestion();
 
   useEffect(() => {
     if (data) {
       setTitle(data.data?.data?.questionBoxName ?? "");
     }
   }, [ data ]);
+
+  useEffect(() => {
+    if (isDeleteSuccess) {
+      refetch();
+    }
+  }, [ isDeleteSuccess ]);
 
   const questions = useMemo(() => {
     if (data) {
@@ -38,6 +51,10 @@ const QuestionDetails = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
+  };
+
+  const handleQuestionDelete = (questionIdx) => {
+    deleteQuestion(questionIdx);
   };
 
   if (isFetching) {
@@ -70,7 +87,7 @@ const QuestionDetails = () => {
                 </StyledLeftSecion>
                 <StyledBtn
                   type="button"
-                  onClick={() => {}}
+                  onClick={() => handleQuestionDelete(idx)}
                   width="100px"
                   height="32px"
                   color="red"
@@ -142,7 +159,7 @@ const StyledList = styled.ul`
   width: 100%;
   list-style: none;
   padding: 0;
-  padding-bottom: 160px;
+  padding-bottom: 120px;
   margin: 0;
 
   & .empty {
@@ -215,8 +232,8 @@ const StyledFixedBottom = styled.div`
   left: 50%;
   transform: translate(-50%, 0);
   width: 100vw;
-  background-color: #ffffff90;
-  backdrop-filter: blur(5px);
+  background: var(--main-white);
+  background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(253,187,45,0) 100%);
 `;
 
 const StyledAddQuestionButton = styled.button`
