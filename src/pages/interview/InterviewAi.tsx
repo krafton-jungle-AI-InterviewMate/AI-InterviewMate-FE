@@ -52,6 +52,15 @@ const InterviewAi = () => {
               <source src={aiInterviewerListening} type="video/mp4" />
             </video>
           )}
+          <video
+            width={AI_VIDEO_WIDTH}
+            autoPlay={false}
+            muted
+            key={aiInterviewerListening + "_fallback"}
+            className={`${videoClassName} fallback`}
+          >
+            <source src={aiInterviewerListening} type="video/mp4" />
+          </video>
         </StyledImageWrap>
         <StyledExitButton type="button" onClick={handleExitButton}>
           면접 나가기
@@ -94,10 +103,17 @@ const StyledImageWrap = styled.div<{ w: number }>`
 
   & video {
     border-radius: 5px;
+    z-index: 11;
   }
 
   & video.jungle {
     transform: translateY(14%);
+  }
+
+  & video.fallback {
+    position: absolute;
+    left: 0;
+    z-index: 10;
   }
 `;
 
