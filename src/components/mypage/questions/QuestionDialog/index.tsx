@@ -109,7 +109,7 @@ const QuestionDialog = (props: QuestionDialogProps) => {
       </StyledFormWrap>
       <StyledButtonWrap>
         <StyledConfirmButton type="button">확인</StyledConfirmButton>
-        <StyledCancelButton type="button">취소</StyledCancelButton>
+        <StyledCancelButton type="button" onClick={handleClose}>취소</StyledCancelButton>
       </StyledButtonWrap>
     </Modal>
   );
