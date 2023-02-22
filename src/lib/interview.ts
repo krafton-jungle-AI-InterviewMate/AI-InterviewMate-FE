@@ -1,7 +1,54 @@
 import { AiInterviewerTypes } from "types/interview";
 
+import MinhoThumbnail from "static/images/interviewer/Minho.png";
+import SeungminThumbnail from "static/images/interviewer/Seungmin.png";
+import DonghyunThumbnail from "static/images/interviewer/Donghyun.png";
+import SuhyunThumbnail from "static/images/interviewer/Suhyun.png";
+import SeoyoungThumbnail from "static/images/interviewer/Seoyoung.png";
+import JeonghanThumbnail from "static/images/interviewer/Jeonghan.png";
+import HyunsooThumbnail from "static/images/interviewer/Hyunsoo.png";
+import SeunghyunThumbnail from "static/images/interviewer/Seunghyun.png";
+
+import MinhoVideo from "static/images/interviewer/Minho.mp4";
+import SeungminVideo from "static/images/interviewer/Seungmin.mp4";
+import DonghyunVideo from "static/images/interviewer/Donghyun.mp4";
+import SuhyunVideo from "static/images/interviewer/Suhyun.mp4";
+import SeoyoungVideo from "static/images/interviewer/Seoyoung.mp4";
+import JeonghanVideo from "static/images/interviewer/Jeonghan.mp4";
+import HyunsooVideo from "static/images/interviewer/Hyunsoo.mp4";
+import SeunghyunVideo from "static/images/interviewer/Seunghyun.mp4";
+
+import MinhoListening from "static/images/interviewer/Minho_listening.mp4";
+import SeungminListening from "static/images/interviewer/Seungmin_listening.mp4";
+import DonghyunListening from "static/images/interviewer/Donghyun_listening.mp4";
+import SuhyunListening from "static/images/interviewer/Suhyun_listening.mp4";
+import SeoyoungListening from "static/images/interviewer/Seoyoung_listening.mp4";
+import JeonghanListening from "static/images/interviewer/Jeonghan_listening.mp4";
+import HyunsooListening from "static/images/interviewer/Hyunsoo_listening.mp4";
+import SeunghyunListening from "static/images/interviewer/Seunghyun_listening.mp4";
+
 export const getAiInterviewerThumbnail = (interviewer: AiInterviewerTypes) => {
-  return `/src/static/images/interviewer/${interviewer}.png`;
+  switch (interviewer) {
+  case "Minho":
+    return MinhoThumbnail;
+  case "Seungmin":
+    return SeungminThumbnail;
+  case "Donghyun":
+    return DonghyunThumbnail;
+  case "Suhyun":
+    return SuhyunThumbnail;
+  case "Seoyoung":
+    return SeoyoungThumbnail;
+  case "Jeonghan":
+    return JeonghanThumbnail;
+  case "Hyunsoo":
+    return HyunsooThumbnail;
+  case "Seunghyun":
+    return SeunghyunThumbnail;
+
+  default:
+    return MinhoThumbnail;
+  }
 };
 
 export const getAiInterviewerProfile = (interviewer: AiInterviewerTypes) => {
@@ -23,9 +70,49 @@ export const getAiInterviewerProfile = (interviewer: AiInterviewerTypes) => {
 };
 
 export const getAiInterviewerVideo = (interviewer: AiInterviewerTypes) => {
-  return `/src/static/images/interviewer/${interviewer}.mp4`;
+  switch (interviewer) {
+  case "Minho":
+    return MinhoVideo;
+  case "Seungmin":
+    return SeungminVideo;
+  case "Donghyun":
+    return DonghyunVideo;
+  case "Suhyun":
+    return SuhyunVideo;
+  case "Seoyoung":
+    return SeoyoungVideo;
+  case "Jeonghan":
+    return JeonghanVideo;
+  case "Hyunsoo":
+    return HyunsooVideo;
+  case "Seunghyun":
+    return SeunghyunVideo;
+
+  default:
+    return MinhoVideo;
+  }
 };
 
 export const getAiInterviewerListening = (interviewer: AiInterviewerTypes) => {
-  return `/src/static/images/interviewer/${interviewer}_listening.mp4`;
+  switch (interviewer) {
+  case "Minho":
+    return MinhoListening;
+  case "Seungmin":
+    return SeungminListening;
+  case "Donghyun":
+    return DonghyunListening;
+  case "Suhyun":
+    return SuhyunListening;
+  case "Seoyoung":
+    return SeoyoungListening;
+  case "Jeonghan":
+    return JeonghanListening;
+  case "Hyunsoo":
+    return HyunsooListening;
+  case "Seunghyun":
+    return SeunghyunListening;
+
+  default:
+    return MinhoListening;
+  }
 };
