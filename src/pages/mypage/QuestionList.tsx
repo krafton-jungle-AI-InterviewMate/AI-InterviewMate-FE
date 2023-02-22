@@ -13,7 +13,7 @@ const StyledQuestionList = styled.div`
 
 const QuestionList = () => {
   const [ questionBoxes, setQuestionBoxes ] = useState<QuestionBoxes[]>([]);
-  const { data, isLoading, isSuccess, isError } = useGetQuestionBoxes("4");
+  const { data, isLoading, isSuccess, isError } = useGetQuestionBoxes("1");
   useEffect(() => {
     if (!isLoading && data) {
       setQuestionBoxes(data.data.data);
