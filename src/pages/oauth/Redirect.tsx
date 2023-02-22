@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { isLoggedInCookie } from "lib/cookies";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { memberAtom } from "store/auth/atom";
+import { useGetMyinfo } from "hooks/queries/auth";
 
 import Loading from "components/common/Loading";
 
@@ -11,7 +12,12 @@ import { PagesPath } from "constants/pages";
 const Redirect = () => {
   const navigate = useNavigate();
   const [ searchParams ] = useSearchParams();
-  const setMember = useSetRecoilState(memberAtom);
+  const [ member, setMember ] = useRecoilState(memberAtom);
+
+  const {
+    data: myinfo,
+    isSuccess: isMyinfoSuccess,
+  } = useGetMyinfo(!!member.accessToken);
 
   useEffect(() => {
     if (searchParams) {
@@ -19,19 +25,27 @@ const Redirect = () => {
 
       if (accessToken) {
         isLoggedInCookie.set(true);
-        // TODO: 멤버 정보 요청
 
         setMember((curr) => ({
           accessToken,
           username: curr.username,
         }));
       }
+    }
+  }, [ searchParams ]);
+
+  useEffect(() => {
+    if (isMyinfoSuccess && myinfo) {
+      setMember((curr) => ({
+        accessToken: curr.accessToken,
+        username: myinfo.data.data.nickname,
+      }));
 
       navigate(PagesPath.LOBBY, {
         replace: true,
       });
     }
-  }, [ searchParams ]);
+  }, [ isMyinfoSuccess ]);
 
   return (
     <div>
