@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 import * as FaceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
-import { InterviewModeTypes } from "types/interview";
+import { InterviewModeTypes, AiInterviewerTypes } from "types/interview";
 import { IRIS_PERFECT_SCORE, MOTION_PERFECT_SCORE } from "constants/interview";
 
 /** 인터뷰 프로세스 제어 */
@@ -59,4 +59,10 @@ export const motionSnapshotAtom = atom<FaceLandmarksDetection.Face>({
 export const feedbackAtom = atom<string>({
   key: "feedback",
   default: "ON",
+});
+
+/** 대체 면접관 */
+export const aiInterviewerAtom = atom<AiInterviewerTypes>({
+  key: "aiInterviewer",
+  default: "Minho",
 });

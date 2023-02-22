@@ -1,4 +1,8 @@
-import { InterviewModeTypes, InterviewFeedbackTypes } from "types/interview";
+import {
+  InterviewModeTypes,
+  InterviewFeedbackTypes,
+  AiInterviewerTypes,
+} from "types/interview";
 
 type CommentMode = Exclude<InterviewModeTypes, "question">;
 export const InterviewModeComment: { [mode in CommentMode]: string } = {
@@ -16,3 +20,24 @@ export const InterviewFeedbackComment: { [type in InterviewFeedbackTypes]: strin
   iris: "화면에 집중하세요.",
   motion: "올바른 자세를 유지하세요.",
 } as const;
+
+export const AiInterviewers: Array<AiInterviewerTypes> = [
+  "Minho",
+  "Seungmin",
+  "Donghyun",
+  "Suhyun",
+  "Seoyoung",
+  "Jeonghan",
+  "Hyunsoo",
+  "Seunghyun",
+];
+
+const JungleManagers = [
+  "Jeonghan",
+  "Hyunsoo",
+  "Seunghyun",
+];
+
+export const JungleManagersSet = new Set(JungleManagers);
+
+export const AI_VIDEO_WIDTH = 250;

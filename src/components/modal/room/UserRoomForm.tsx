@@ -203,8 +203,8 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
           <label htmlFor="question">질문 꾸러미</label>
           <select id="question" {...register("roomQuestionBoxIdx", { required: true })}>
             {questionBoxes.map((data: QuestionBoxes, idx: number) => (
-              <option key={idx} value={data.idx}>
-                {data.boxName}
+              <option key={idx} value={data.questionBoxIdx}>
+                {data.questionBoxName}
               </option>
             ))}
           </select>

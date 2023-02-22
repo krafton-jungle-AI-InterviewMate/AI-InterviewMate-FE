@@ -7,8 +7,8 @@ type ResponseStatus = {
 };
 
 export type QuestionBoxes = {
-  idx: number;
-  boxName: string;
+  questionBoxIdx: number;
+  questionBoxName: string;
   questionNum: number;
 };
 

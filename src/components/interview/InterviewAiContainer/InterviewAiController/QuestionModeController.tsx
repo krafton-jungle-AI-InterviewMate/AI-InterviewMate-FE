@@ -15,23 +15,9 @@ const QuestionModeController = (props: QuestionModeControllerProps) => {
   const { questionList } = props;
 
   const setInterviewMode = useSetRecoilState(interviewModeAtom);
-  const [interviewQuestionNumber, setInterviewQuestionNumber] = useRecoilState(
+  const [ interviewQuestionNumber, setInterviewQuestionNumber ] = useRecoilState(
     interviewQuestionNumberAtom,
   );
-
-  // ! FIXME: 실제로는 음성 플레이 종료 시점을 기준으로 인터뷰 모드 변경
-  // useEffect(() => {
-  //   const timerId = window.setTimeout(() => {
-  //     setInterviewMode("answer");
-  //     setInterviewQuestionNumber(curr => curr + 1);
-  //   }, 1000 * 5);
-
-  //   return () => {
-  //     window.clearTimeout(timerId);
-  //   };
-  // }, []);
-
-  console.log(interviewQuestionNumber);
 
   const synth = window.speechSynthesis;
 
