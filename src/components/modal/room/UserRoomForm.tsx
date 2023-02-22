@@ -13,7 +13,7 @@ import { feedbackAtom } from "store/interview/atom";
 import { usePostInterviewRooms } from "hooks/queries/interview";
 import { useNavigate } from "react-router";
 import { RoomTypes } from "api/mypage/types";
-import { questionBoxes } from "api/questionBoxes/type";
+import { QuestionBoxes } from "api/questionBoxes/type";
 
 interface InputRoomFormProps {
   email?: string;
@@ -28,7 +28,7 @@ interface InputRoomFormProps {
 
 function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
   const navigate = useNavigate();
-  const [isPrivate, setIsPrivate] = useState(false);
+  const [ isPrivate, setIsPrivate ] = useState(false);
   const feedback = useSetRecoilState(feedbackAtom);
   const onChangePublic = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -69,10 +69,10 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
       },
     );
   };
-  const roomPeopleNumArr = [1, 2, 3];
-  const isPrivateArr = [false, true];
-  const FeedbackArr = ["ON", "OFF"];
-  const roomTimeArr = [15, 30, 45, 60];
+  const roomPeopleNumArr = [ 1, 2, 3 ];
+  const isPrivateArr = [ false, true ];
+  const FeedbackArr = [ "ON", "OFF" ];
+  const roomTimeArr = [ 15, 30, 45, 60 ];
   return (
     <StyledUserRoomForm
       roomNameError={errors.roomName?.message}
@@ -202,7 +202,7 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
         <div className="inputContent">
           <label htmlFor="question">질문 꾸러미</label>
           <select id="question" {...register("roomQuestionBoxIdx", { required: true })}>
-            {questionBoxes.map((data: questionBoxes, idx: number) => (
+            {questionBoxes.map((data: QuestionBoxes, idx: number) => (
               <option key={idx} value={data.questionBoxIdx}>
                 {data.questionBoxName}
               </option>

@@ -7,10 +7,9 @@ import { SimpleLayout, BreadcrumbsLayout, InterviewLayout } from "components/lay
 
 import { InterviewAi, InterviewReady, InterviewEnd } from "pages/interview";
 import Home from "pages/Home";
+import { Mypage, Result, ResultDetails, QuestionList, QuestionDetails } from "pages/mypage";
 import Login from "pages/Login";
 import { Redirect } from "pages/oauth";
-import { Mypage, Result, ResultDetails } from "pages/mypage";
-import QuestionList from "pages/mypage/QuestionList";
 import Lobby from "pages/Lobby";
 import NotFound from "pages/NotFound";
 import NotAvailable from "pages/NotAvailable";
@@ -46,6 +45,7 @@ function App() {
             path={PagesPath.INTERVIEW_END}
             element={<InterviewEnd isAiInterview={true} isInterviewer={true} />}
           />
+          <Route path={PagesPath.QUESTIONS_DETAILS} element={<QuestionDetails />} />
           {/* 면접 진행 페이지 외에 새로 추가하시는 페이지는 모두 이 부분에 추가해주세요. */}
         </Route>
 
