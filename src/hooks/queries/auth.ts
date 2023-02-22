@@ -32,3 +32,20 @@ export const useGetRefresh = (enabled: boolean) => {
     isError,
   };
 };
+
+export const useGetMyinfo = (enabled: boolean) => {
+  const { data, isSuccess, isLoading, isFetching, isError } = useQuery([ "getMyinfo" ], () => {
+    return authAPI.getMyinfo();
+  }, {
+    enabled,
+  });
+
+  return {
+    data,
+    isSuccess,
+    isLoading,
+    isFetching,
+    isError,
+  };
+};
+

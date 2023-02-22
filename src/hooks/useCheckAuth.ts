@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { memberAtom } from "store/auth/atom";
 
-import { useGetRefresh } from "./queries/auth";
+import { useGetRefresh, useGetMyinfo } from "./queries/auth";
 import useLogout from "./useLogout";
 import { isLoggedInCookie } from "lib/cookies";
 
@@ -27,6 +27,10 @@ const useCheckAuth = () => {
     isSuccess,
     isFetching,
   } = useGetRefresh(isFetchingEnabled);
+  const {
+    data: myinfo,
+    isSuccess: isMyinfoSuccess,
+  } = useGetMyinfo(!!accessToken);
   
   const { handleLogout } = useLogout();
 
@@ -56,13 +60,22 @@ const useCheckAuth = () => {
 
       setMember((curr) => ({
         accessToken,
-        username: curr.username, // TODO: update
+        username: curr.username,
       }));
     }
     else { // * refresh token 자체가 만료된 경우 isError === true
       handleLogout();
     }
   }, [ isFetchingEnabled, isFetching ]);
+
+  useEffect(() => {
+    if (isMyinfoSuccess && myinfo) {
+      setMember((curr) => ({
+        accessToken: curr.accessToken,
+        username: myinfo.data.data.nickname,
+      }));
+    }
+  }, [ isMyinfoSuccess ]);
 
   return {
     isCheckingAuth: isFetching,
