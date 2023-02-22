@@ -5,7 +5,9 @@ import {
   useDeleteQuestion,
   usePutQuestionBoxName,
 } from "hooks/queries/questionBoxes";
+import { Question } from "api/questionBoxes/type";
 
+import QuestionDialog from "components/mypage/questions/QuestionDialog";
 import Loading from "components/common/Loading";
 import { StyledBtn } from "styles/StyledBtn";
 import * as Styled from "./style";
@@ -14,6 +16,9 @@ const QuestionDetails = () => {
   const [ searchParams ] = useSearchParams();
   const [ title, setTitle ] = useState("");
   const [ showCheckIcon, setShowCheckIcon ] = useState(false);
+  const [ isDialogOpen, setIsDialogOpen ] = useState(false);
+  const [ isModifying, setIsModifying ] = useState(false);
+  const [ currQuestion, setCurrQuestion ] = useState<null | Question>(null);
 
   const {
     data,
@@ -86,6 +91,18 @@ const QuestionDetails = () => {
     });
   };
 
+  const handleQuestionModifyButton = (question: Question) => {
+    setCurrQuestion(question);
+    setIsModifying(true);
+    setIsDialogOpen(true);
+  };
+
+  const handleQuestionAddButton = () => {
+    setCurrQuestion(null);
+    setIsModifying(false);
+    setIsDialogOpen(true);
+  };
+
   if (isFetching) {
     return (
       <Styled.Wrapper>
@@ -98,6 +115,14 @@ const QuestionDetails = () => {
     <Styled.Wrapper>
       {isSuccess && data ? (
         <>
+          {isDialogOpen && (
+            <QuestionDialog
+              isModifying={isModifying}
+              currQuestion={currQuestion}
+              isOpen={isDialogOpen}
+              handleClose={() => setIsDialogOpen(false)}
+            />
+          )}
           <Styled.TitleWrap>
             <Styled.HiddenLabel htmlFor="question-title">
               질문 꾸러미 이름
@@ -113,7 +138,12 @@ const QuestionDetails = () => {
               <Styled.Question key={idx}>
                 <Styled.LeftSecion>
                   <Styled.Icon>Q.</Styled.Icon>
-                  <Styled.QuestionButton>
+                  <Styled.QuestionButton
+                    type="button"
+                    onClick={() => {
+                      handleQuestionModifyButton(question);
+                    }}
+                  >
                     {question.questionTitle}
                   </Styled.QuestionButton>
                 </Styled.LeftSecion>
@@ -131,7 +161,7 @@ const QuestionDetails = () => {
               <p className="empty">등록된 질문이 없습니다.</p>
             )}
             <Styled.FixedBottom>
-              <Styled.AddQuestionButton type="button" onClick={() => {}}>
+              <Styled.AddQuestionButton type="button" onClick={handleQuestionAddButton}>
                 + 질문 추가하기
               </Styled.AddQuestionButton>
             </Styled.FixedBottom>

@@ -31,7 +31,7 @@ export type Question = {
   keyword4: string | null;
   keyword5: string | null;
   questionTitle: string
-}
+};
 
 export type QuestionDetail = {
   questionBoxIdx: number;
