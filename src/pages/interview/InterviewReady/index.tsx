@@ -130,9 +130,7 @@ const InterviewReady = () => {
           <Styled.SelectButton type="button" onClick={handleInterviewerSelect}>
             면접관 선택하기
           </Styled.SelectButton>
-          <Styled.ImageWrap>
-            <img src={getAiInterviewerThumbnail(aiInterviewer)} alt="AI 면접관" />
-          </Styled.ImageWrap>
+          <Styled.ImageWrap bgImg={getAiInterviewerThumbnail(aiInterviewer)} />
           <NameTag role="interviewer" profileName={aiInterviewer} />
           <Styled.MiniProfile>
             {getAiInterviewerProfile(aiInterviewer)}

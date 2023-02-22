@@ -27,4 +27,17 @@ export const AiInterviewers: Array<AiInterviewerTypes> = [
   "Donghyun",
   "Suhyun",
   "Seoyoung",
+  "Jeonghan",
+  "Hyunsoo",
+  "Seunghyun",
 ];
+
+const JungleManagers = [
+  "Jeonghan",
+  "Hyunsoo",
+  "Seunghyun",
+];
+
+export const JungleManagersSet = new Set(JungleManagers);
+
+export const AI_VIDEO_WIDTH = 250;

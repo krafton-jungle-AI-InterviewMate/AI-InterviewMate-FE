@@ -89,7 +89,9 @@ const StyledList = styled.ul`
   margin: 0;
 
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-content: center;
 `;
 
 const StyledInterviewer = styled.li`

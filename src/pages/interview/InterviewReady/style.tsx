@@ -66,13 +66,15 @@ export const Canvas = styled.canvas`
   /* border: 2px dashed gray; */
 `;
 
-export const ImageWrap = styled.div`
+export const ImageWrap = styled.div<{ bgImg: string }>`
   ${commonStyle}
   ${wrapStyle}
 
-  & img {
-    height: 100%;
-  }
+  background-image: ${({ bgImg }) => `url(${bgImg})`};
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: 20%;
 `;
 
 export const FlexContainer = styled.div`
