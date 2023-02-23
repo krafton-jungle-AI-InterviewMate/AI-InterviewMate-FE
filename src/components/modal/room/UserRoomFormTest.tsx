@@ -23,19 +23,11 @@ const UserRoomFormTest = () => {
   const [subscribers, setSubscribers] = useState<Array<any>>([]);
 
   useEffect(() => {
-    componentDidMount();
+    window.addEventListener("beforeunload", onbeforeunload);
     return () => {
-      componentWillUnmount();
+      window.removeEventListener("beforeunload", onbeforeunload);
     };
   }, []);
-
-  const componentDidMount = () => {
-    window.addEventListener("beforeunload", onbeforeunload);
-  };
-
-  const componentWillUnmount = () => {
-    window.removeEventListener("beforeunload", onbeforeunload);
-  };
 
   const onbeforeunload = event => {
     leaveSession();
@@ -66,20 +58,24 @@ const UserRoomFormTest = () => {
     }
   };
 
-  const joinSession = () => {
+  const joinSession = async () => {
     // --- 1) Get an OpenVidu object ---
-
+    // --- 1) OpenVidu 객체 가져오기 ---
     const newOV = new OpenVidu();
     newOV.enableProdMode();
 
     // --- 2) Init a session ---
+    // --- 2) 세션 초기화 ---
     setOV(newOV);
     const newSession = newOV.initSession();
     setSession(newSession);
     const mySession = session;
+
     // --- 3) Specify the actions when events take place in the session ---
+    // --- 3) 세션에서 이벤트가 발생할 때 수행할 작업 ---
 
     // On every new Stream received...
+    // 스트림이 새로 수신될 때마다
     mySession.on("streamCreated", event => {
       // Subscribe to the Stream to receive it. Second parameter is undefined
       // so OpenVidu doesn't create an HTML video by its own
