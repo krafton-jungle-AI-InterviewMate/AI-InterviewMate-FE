@@ -28,9 +28,9 @@ const QuestionList = () => {
       ) : (
         questionBoxes.map(data => (
           <Questions
-            key={data.idx}
-            boxName={data.boxName}
-            idx={data.idx}
+            key={data.questionBoxIdx}
+            boxName={data.questionBoxName}
+            idx={data.questionBoxIdx}
             questionNum={data.questionNum}
           />
         ))

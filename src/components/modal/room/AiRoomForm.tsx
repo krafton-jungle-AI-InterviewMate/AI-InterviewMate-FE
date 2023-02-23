@@ -160,8 +160,8 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
             {questionNum ? (
               questionBoxes.map((data: questionBoxes, idx: number) =>
                 data.questionNum >= questionNum ? (
-                  <option key={idx} value={data.idx}>
-                    {data.boxName}
+                  <option key={idx} value={data.questionBoxIdx}>
+                    {data.questionBoxName}
                   </option>
                 ) : null,
               )
