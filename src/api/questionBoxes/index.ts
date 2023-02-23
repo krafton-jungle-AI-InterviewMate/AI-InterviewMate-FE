@@ -1,4 +1,4 @@
-import { deleteAPI, getAPI, putAPI } from "api/axios";
+import { deleteAPI, getAPI, putAPI, postAPI } from "api/axios";
 import { API_PATH } from "constants/api";
 import {
   DeleteQuestion,
@@ -6,6 +6,7 @@ import {
   GetQuestionBoxes,
   GetQuestionDetails,
   PutQuestionDetails,
+  PostQuestionDetails,
   PutQuestionBoxName,
 } from "./type";
 
@@ -21,9 +22,15 @@ const getQuestionDetails: GetQuestionDetails = (questionBoxId) =>
 const deleteQuestion: DeleteQuestion = (questionIdx) =>
   deleteAPI({ endPoint: API_PATH.DELETE_QUESTION(questionIdx) });
 
-const putQuestionDetails: PutQuestionDetails = ({ questionBoxIdx, ...data }) =>
+const putQuestionDetails: PutQuestionDetails = ({ questionIdx, ...data }) =>
   putAPI({
-    endPoint: API_PATH.PUT_QUESTION_DETAILS(questionBoxIdx),
+    endPoint: API_PATH.PUT_QUESTION_DETAILS(questionIdx),
+    data,
+  });
+
+const postQuestionDetails: PostQuestionDetails = ({ questionBoxIdx, ...data }) =>
+  postAPI({
+    endPoint: API_PATH.POST_QUESTION_DETAILS(questionBoxIdx),
     data,
   });
 
@@ -39,5 +46,6 @@ export default {
   getQuestionDetails,
   deleteQuestion,
   putQuestionDetails,
+  postQuestionDetails,
   putQuestionBoxName,
 };

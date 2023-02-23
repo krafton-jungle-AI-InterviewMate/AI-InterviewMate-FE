@@ -119,23 +119,25 @@ const QuestionDetails = () => {
             <QuestionDialog
               isModifying={isModifying}
               currQuestion={currQuestion}
+              questionBoxIdx={questionBoxIdx}
+              refetch={refetch}
               isOpen={isDialogOpen}
               handleClose={() => setIsDialogOpen(false)}
             />
           )}
           <Styled.TitleWrap>
-            <Styled.HiddenLabel htmlFor="question-title">
+            <Styled.HiddenLabel htmlFor="question-box-name">
               질문 꾸러미 이름
             </Styled.HiddenLabel>
-            <Styled.Input id="question-title" value={title} onChange={handleChange} />
+            <Styled.Input id="question-box-name" value={title} onChange={handleChange} />
             <Styled.EditButton type="button" onClick={handleTitleModify}>
               수정
             </Styled.EditButton>
             {showCheckIcon && <Styled.CheckIcon>✅</Styled.CheckIcon>}
           </Styled.TitleWrap>
           <Styled.List>
-            {questions.length ? questions.map((question, idx) =>
-              <Styled.Question key={idx}>
+            {questions.length ? questions.map((question) =>
+              <Styled.Question key={question.questionIdx}>
                 <Styled.LeftSecion>
                   <Styled.Icon>Q.</Styled.Icon>
                   <Styled.QuestionButton
@@ -149,7 +151,7 @@ const QuestionDetails = () => {
                 </Styled.LeftSecion>
                 <StyledBtn
                   type="button"
-                  onClick={() => handleQuestionDelete(idx)}
+                  onClick={() => handleQuestionDelete(question.questionIdx)}
                   width="100px"
                   height="32px"
                   color="red"
@@ -158,7 +160,7 @@ const QuestionDetails = () => {
                 </StyledBtn>
               </Styled.Question>,
             ) : (
-              <p className="empty">등록된 질문이 없습니다.</p>
+              <p className="empty">📝 등록된 질문이 없습니다.</p>
             )}
             <Styled.FixedBottom>
               <Styled.AddQuestionButton type="button" onClick={handleQuestionAddButton}>
