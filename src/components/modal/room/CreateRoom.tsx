@@ -5,7 +5,6 @@ import UserRoomForm from "./UserRoomForm";
 import { useGetQuestionBoxes } from "hooks/queries/questionBoxes";
 import { questionBoxes } from "api/questionBoxes/type";
 import { RoomTypes } from "api/mypage/types";
-import UserRoomFormTest from "./UserRoomFormTest";
 
 const StyledCreateRoom = styled.div`
   display: flex;
@@ -100,7 +99,7 @@ const CreateRoom = ({ setModalCreateRoom }) => {
           </div>
         </div>
         {roomType === "USER" ? (
-          <UserRoomFormTest
+          <UserRoomForm
             roomType={roomType}
             onClickModalClose={onClickModalClose}
             questionBoxes={questionBoxes}

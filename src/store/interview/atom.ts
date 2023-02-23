@@ -60,3 +60,14 @@ export const feedbackAtom = atom<string>({
   key: "feedback",
   default: "ON",
 });
+
+/** 유저 면접 정보 */
+export const roomNameAtom = atom<null | string>({
+  key: "roomName",
+  default: null,
+});
+
+export const userNameAtom = atom<null | string>({
+  key: "userName",
+  default: null,
+});
