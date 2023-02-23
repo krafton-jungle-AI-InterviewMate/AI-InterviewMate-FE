@@ -29,6 +29,15 @@ export const InputWrap = styled.div`
   align-items: center;
   width: 560px;
   margin-top: 36px;
+
+  & em.questionTitle {
+    position: absolute;
+    right: -255px;
+    width: 240px;
+    font-size: 12px;
+    line-height: 1.2;
+    color: var(--light-alert);
+  }
 `;
 
 export const Label = styled.label`

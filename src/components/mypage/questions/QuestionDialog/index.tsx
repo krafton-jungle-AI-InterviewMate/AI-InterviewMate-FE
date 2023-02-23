@@ -6,7 +6,7 @@ import { IoMdClose } from "react-icons/io";
 
 import { usePutQuestionDetails } from "hooks/queries/questionBoxes";
 import { Question } from "api/questionBoxes/type";
-import { KEYWORD_NUMBER_LIMIT, KEYWORD_LENGTH_LIMIT } from "./constants";
+import { QUESTION_TITLE_LENGTH_LIMIT, KEYWORD_NUMBER_LIMIT, KEYWORD_LENGTH_LIMIT } from "./constants";
 
 import * as Styled from "./styles";
 
@@ -40,7 +40,9 @@ const QuestionDialog = (props: QuestionDialogProps) => {
     handleClose,
   } = props;
 
-  const [ questionTitle, setQuestionTitle ] = useState(isModifying ? currQuestion?.questionTitle : "");
+  const [ questionTitle, setQuestionTitle ] = useState(
+    isModifying ? currQuestion?.questionTitle ?? "" : "",
+  );
   const [ keyword, setKeyword ] = useState("");
   const [ keywordList, setKeywordList ] = useState<string[]>([]);
 
@@ -67,6 +69,11 @@ const QuestionDialog = (props: QuestionDialogProps) => {
   const handleKeywordEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       addKeyword();
+    }
+  };
+  const handleSubmit = () => {
+    if (questionTitle.length > QUESTION_TITLE_LENGTH_LIMIT) {
+      return;
     }
   };
 
@@ -111,6 +118,11 @@ const QuestionDialog = (props: QuestionDialogProps) => {
 
       <Styled.FormWrap>
         <Styled.InputWrap>
+          {questionTitle.length > QUESTION_TITLE_LENGTH_LIMIT && (
+            <em role="alert" className="questionTitle">
+              질문은 최대 {QUESTION_TITLE_LENGTH_LIMIT}자까지 입력이 가능합니다.
+            </em>
+          )}
           <Styled.Label htmlFor="question-title">질문</Styled.Label>
           <Styled.Input
             type="text"
@@ -133,7 +145,9 @@ const QuestionDialog = (props: QuestionDialogProps) => {
           {keywordList.length < KEYWORD_NUMBER_LIMIT && (
             <Styled.KeywordButtonWrap>
               {keyword.length > KEYWORD_LENGTH_LIMIT && (
-                <em role="alert">키워드는 최대 {KEYWORD_LENGTH_LIMIT}자까지 입력이 가능합니다.</em>
+                <em role="alert" className="questionKeywords">
+                  키워드는 최대 {KEYWORD_LENGTH_LIMIT}자까지 입력이 가능합니다.
+                </em>
               )}
               <Styled.KeywordButton onClick={addKeyword}>+ 추가하기</Styled.KeywordButton>
             </Styled.KeywordButtonWrap>
@@ -141,7 +155,7 @@ const QuestionDialog = (props: QuestionDialogProps) => {
         </Styled.InputWrap>
       </Styled.FormWrap>
       <Styled.ButtonWrap>
-        <Styled.ConfirmButton type="button">확인</Styled.ConfirmButton>
+        <Styled.ConfirmButton type="button" onClick={handleSubmit}>확인</Styled.ConfirmButton>
         <Styled.CancelButton type="button" onClick={handleClose}>취소</Styled.CancelButton>
       </Styled.ButtonWrap>
     </Modal>
