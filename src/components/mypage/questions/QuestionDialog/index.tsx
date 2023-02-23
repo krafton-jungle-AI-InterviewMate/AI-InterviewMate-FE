@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
+
 import "react-responsive-modal/styles.css";
 import { Modal, ModalProps } from "react-responsive-modal";
 import { IoMdClose } from "react-icons/io";
 
+import { usePutQuestionDetails } from "hooks/queries/questionBoxes";
 import { Question } from "api/questionBoxes/type";
+import { KEYWORD_NUMBER_LIMIT } from "constants/mypage";
 
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
@@ -41,22 +44,44 @@ const QuestionDialog = (props: QuestionDialogProps) => {
   const [ keyword, setKeyword ] = useState("");
   const [ keywordList, setKeywordList ] = useState<string[]>([]);
 
+  const addKeyword = () => {
+    if (!keyword.length) {
+      return;
+    }
+
+    setKeywordList((curr) => ([ ...curr, keyword ]));
+    setKeyword("");
+  };
+  const removeKeyword = (targetIdx: number) => {
+    setKeywordList((curr) => curr.filter((_, idx) => targetIdx !== idx));
+  };
+
   const handleQuestionTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuestionTitle(e.target.value);
   };
   const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
   };
+  const handleKeywordRemove = (targetIdx: number) => {
+    removeKeyword(targetIdx);
+  };
+  const handleKeywordEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      addKeyword();
+    }
+  };
 
   useEffect(() => {
     if (isModifying && currQuestion) {
-      let keywords = new Array(5).fill("").map((_, idx) => currQuestion[`keyword${idx + 1}`]);
+      let keywords =
+        new Array(KEYWORD_NUMBER_LIMIT)
+          .fill("")
+          .map((_, idx) => currQuestion[`keyword${idx + 1}`]);
+
       keywords = keywords.filter((k) => k);
       setKeywordList(keywords);
     }
   }, [ currQuestion ]);
-
-  console.log(keywordList);
 
   return (
     <Modal
@@ -74,6 +99,7 @@ const QuestionDialog = (props: QuestionDialogProps) => {
               className="closeButton"
               aria-label="키워드 삭제하기"
               title="키워드 삭제하기"
+              onClick={() => handleKeywordRemove(idx)}
             >
               <IoMdClose size={16} />
             </button>
@@ -102,9 +128,12 @@ const QuestionDialog = (props: QuestionDialogProps) => {
             id="question-keywords"
             value={keyword}
             onChange={handleKeywordChange}
+            onKeyUp={handleKeywordEnter}
           />
-          <StyledSmall>키워드는 최대 5개까지 추가하실 수 있습니다.</StyledSmall>
-          {keywordList.length < 5 && <StyledKeywordButton>+ 추가하기</StyledKeywordButton>}
+          <StyledSmall>키워드는 최대 {KEYWORD_NUMBER_LIMIT}개까지 추가하실 수 있습니다.</StyledSmall>
+          {keywordList.length < KEYWORD_NUMBER_LIMIT && (
+            <StyledKeywordButton onClick={addKeyword}>+ 추가하기</StyledKeywordButton>
+          )}
         </StyledInputWrap>
       </StyledFormWrap>
       <StyledButtonWrap>

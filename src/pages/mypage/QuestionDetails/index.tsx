@@ -158,7 +158,7 @@ const QuestionDetails = () => {
                 </StyledBtn>
               </Styled.Question>,
             ) : (
-              <p className="empty">등록된 질문이 없습니다.</p>
+              <p className="empty">📝 등록된 질문이 없습니다.</p>
             )}
             <Styled.FixedBottom>
               <Styled.AddQuestionButton type="button" onClick={handleQuestionAddButton}>
