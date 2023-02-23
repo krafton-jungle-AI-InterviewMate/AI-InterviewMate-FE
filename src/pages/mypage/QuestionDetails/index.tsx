@@ -124,10 +124,10 @@ const QuestionDetails = () => {
             />
           )}
           <Styled.TitleWrap>
-            <Styled.HiddenLabel htmlFor="question-title">
+            <Styled.HiddenLabel htmlFor="question-box-name">
               질문 꾸러미 이름
             </Styled.HiddenLabel>
-            <Styled.Input id="question-title" value={title} onChange={handleChange} />
+            <Styled.Input id="question-box-name" value={title} onChange={handleChange} />
             <Styled.EditButton type="button" onClick={handleTitleModify}>
               수정
             </Styled.EditButton>
