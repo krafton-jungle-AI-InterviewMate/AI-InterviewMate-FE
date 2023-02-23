@@ -59,12 +59,12 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
     if (isLoading) {
       return;
     }
+    setUserName(data.email);
+    setRoomName(data.roomName);
     mutate(
       { data },
       {
         onSuccess: () => {
-          setUserName(data.email);
-          setRoomName(data.roomName);
           navigate("/interview/readyuser");
         },
         onError(error) {

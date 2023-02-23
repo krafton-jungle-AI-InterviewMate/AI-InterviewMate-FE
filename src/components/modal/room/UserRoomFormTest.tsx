@@ -70,11 +70,13 @@ const UserRoomFormTest = () => {
     // --- 1) Get an OpenVidu object ---
 
     const newOV = new OpenVidu();
+    newOV.enableProdMode();
 
     // --- 2) Init a session ---
-    setOV(newOV.initSession());
+    setOV(newOV);
+    const newSession = newOV.initSession();
+    setSession(newSession);
     const mySession = session;
-
     // --- 3) Specify the actions when events take place in the session ---
 
     // On every new Stream received...
@@ -200,6 +202,12 @@ const UserRoomFormTest = () => {
     );
     return response.data; // The token
   };
+
+  useEffect(() => {
+    if (session !== undefined) {
+      joinSession();
+    }
+  }, [session]);
 
   return (
     <div className="container">
