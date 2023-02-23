@@ -12,7 +12,7 @@ export const FormWrap = styled.div`
   display: flex;
   flex-flow: column nowrap;
   align-items: flex-start;
-  margin: 42px auto 160px;
+  margin: 0 auto 224px;
 `;
 
 export const H2 = styled.h2`
@@ -45,9 +45,21 @@ export const Input = styled.input`
   padding-left: 10px;
 `;
 
-export const KeywordButton = styled.button`
+export const KeywordButtonWrap = styled.div`
   position: absolute;
   right: -176px;
+
+  & em {
+    position: absolute;
+    top: -20px;
+    width: 240px;
+    font-size: 12px;
+    line-height: 1.2;
+    color: var(--light-alert);
+  }
+`;
+
+export const KeywordButton = styled.button`
   ${commonFlexStyle};
   width: 160px;
   height: 32px;
@@ -67,7 +79,9 @@ export const Small = styled.small`
 export const KeywordWrap = styled.div`
   position: absolute;
   ${commonFlexStyle};
-  top: 300px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  top: 260px;
   left: 132px;
   margin-top: 26px;
 `;
@@ -82,6 +96,7 @@ export const Keyword = styled.div`
   font-size: 14px;
   color: var(--font-gray);
   margin-right: 24px;
+  margin-bottom: 10px;
   padding: 6px 8px;
 
   & .closeButton {

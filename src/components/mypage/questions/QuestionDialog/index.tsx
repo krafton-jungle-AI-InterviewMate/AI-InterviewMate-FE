@@ -6,7 +6,7 @@ import { IoMdClose } from "react-icons/io";
 
 import { usePutQuestionDetails } from "hooks/queries/questionBoxes";
 import { Question } from "api/questionBoxes/type";
-import { KEYWORD_NUMBER_LIMIT } from "./constants";
+import { KEYWORD_NUMBER_LIMIT, KEYWORD_LENGTH_LIMIT } from "./constants";
 
 import * as Styled from "./styles";
 
@@ -21,6 +21,7 @@ const modalStyles: ModalProps["styles"] = {
     padding: "69px 67px",
     boxShadow: "var(--box-shadow)",
     borderRadius: "15px",
+    overflow: "hidden",
   },
 };
 
@@ -44,10 +45,9 @@ const QuestionDialog = (props: QuestionDialogProps) => {
   const [ keywordList, setKeywordList ] = useState<string[]>([]);
 
   const addKeyword = () => {
-    if (!keyword.length) {
+    if (!keyword.length || keyword.length > KEYWORD_LENGTH_LIMIT) {
       return;
     }
-
     setKeywordList((curr) => ([ ...curr, keyword ]));
     setKeyword("");
   };
@@ -131,7 +131,12 @@ const QuestionDialog = (props: QuestionDialogProps) => {
           />
           <Styled.Small>키워드는 최대 {KEYWORD_NUMBER_LIMIT}개까지 추가하실 수 있습니다.</Styled.Small>
           {keywordList.length < KEYWORD_NUMBER_LIMIT && (
-            <Styled.KeywordButton onClick={addKeyword}>+ 추가하기</Styled.KeywordButton>
+            <Styled.KeywordButtonWrap>
+              {keyword.length > KEYWORD_LENGTH_LIMIT && (
+                <em role="alert">키워드는 최대 {KEYWORD_LENGTH_LIMIT}자까지 입력이 가능합니다.</em>
+              )}
+              <Styled.KeywordButton onClick={addKeyword}>+ 추가하기</Styled.KeywordButton>
+            </Styled.KeywordButtonWrap>
           )}
         </Styled.InputWrap>
       </Styled.FormWrap>
