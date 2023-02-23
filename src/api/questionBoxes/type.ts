@@ -25,6 +25,7 @@ export type DeleteQuestionBoxes = (
 ) => Promise<AxiosResponse<ResponseStatus>>;
 
 export type Question = {
+  questionIdx: number;
   keyword1: string | null;
   keyword2: string | null;
   keyword3: string | null;

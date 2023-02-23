@@ -134,8 +134,8 @@ const QuestionDetails = () => {
             {showCheckIcon && <Styled.CheckIcon>✅</Styled.CheckIcon>}
           </Styled.TitleWrap>
           <Styled.List>
-            {questions.length ? questions.map((question, idx) =>
-              <Styled.Question key={idx}>
+            {questions.length ? questions.map((question) =>
+              <Styled.Question key={question.questionIdx}>
                 <Styled.LeftSecion>
                   <Styled.Icon>Q.</Styled.Icon>
                   <Styled.QuestionButton
@@ -149,7 +149,7 @@ const QuestionDetails = () => {
                 </Styled.LeftSecion>
                 <StyledBtn
                   type="button"
-                  onClick={() => handleQuestionDelete(idx)}
+                  onClick={() => handleQuestionDelete(question.questionIdx)}
                   width="100px"
                   height="32px"
                   color="red"
