@@ -5,7 +5,7 @@ import { Modal, ModalProps } from "react-responsive-modal";
 import { IoMdClose } from "react-icons/io";
 
 import { usePutQuestionDetails } from "hooks/queries/questionBoxes";
-import { Question } from "api/questionBoxes/type";
+import { Question, PutQuestionDetailsPayload, PostQuestionDetailsPayload } from "api/questionBoxes/type";
 import { QUESTION_TITLE_LENGTH_LIMIT, KEYWORD_NUMBER_LIMIT, KEYWORD_LENGTH_LIMIT } from "./constants";
 
 import * as Styled from "./styles";
@@ -28,6 +28,7 @@ const modalStyles: ModalProps["styles"] = {
 type QuestionDialogProps = {
   isModifying: boolean;
   currQuestion: Question | null;
+  refetch: () => void;
   isOpen: boolean;
   handleClose: () => void;
 }
@@ -36,6 +37,7 @@ const QuestionDialog = (props: QuestionDialogProps) => {
   const {
     isModifying,
     currQuestion,
+    refetch,
     isOpen,
     handleClose,
   } = props;
@@ -45,6 +47,13 @@ const QuestionDialog = (props: QuestionDialogProps) => {
   );
   const [ keyword, setKeyword ] = useState("");
   const [ keywordList, setKeywordList ] = useState<string[]>([]);
+
+  const {
+    mutate: updateQuestion,
+    isLoading,
+    isSuccess,
+    isError,
+  } = usePutQuestionDetails();
 
   const addKeyword = () => {
     if (!keyword.length || keyword.length > KEYWORD_LENGTH_LIMIT) {
@@ -75,6 +84,36 @@ const QuestionDialog = (props: QuestionDialogProps) => {
     if (questionTitle.length > QUESTION_TITLE_LENGTH_LIMIT) {
       return;
     }
+    if (keywordList.length <= 0) {
+      return;
+    }
+
+    const commonPayload: PostQuestionDetailsPayload = {
+      questionTitle,
+      keyword1: keywordList[0],
+    };
+
+    keywordList.forEach((k, idx) => {
+      Object.assign(commonPayload, {
+        [`keyword${idx + 1}`]: k,
+      });
+    });
+
+    if (isModifying) {
+      if (!currQuestion) {
+        return;
+      }
+
+      const payload: PutQuestionDetailsPayload = {
+        ...commonPayload,
+        questionIdx: currQuestion.questionIdx,
+      };
+
+      updateQuestion(payload);
+      return;
+    }
+
+    // TODO: POST
   };
 
   useEffect(() => {
@@ -88,6 +127,16 @@ const QuestionDialog = (props: QuestionDialogProps) => {
       setKeywordList(keywords);
     }
   }, [ currQuestion ]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      refetch();
+      handleClose();
+    }
+    else if (isError) {
+      window.alert("요청 과정에서 에러가 발생했습니다.");
+    }
+  }, [ isLoading ]);
 
   return (
     <Modal
@@ -141,7 +190,10 @@ const QuestionDialog = (props: QuestionDialogProps) => {
             onChange={handleKeywordChange}
             onKeyUp={handleKeywordEnter}
           />
-          <Styled.Small>키워드는 최대 {KEYWORD_NUMBER_LIMIT}개까지 추가하실 수 있습니다.</Styled.Small>
+          <Styled.Small>
+            하나 이상의 키워드를 추가해 주세요.
+            키워드는 최대 {KEYWORD_NUMBER_LIMIT}개까지 추가하실 수 있습니다.
+          </Styled.Small>
           {keywordList.length < KEYWORD_NUMBER_LIMIT && (
             <Styled.KeywordButtonWrap>
               {keyword.length > KEYWORD_LENGTH_LIMIT && (
@@ -155,7 +207,9 @@ const QuestionDialog = (props: QuestionDialogProps) => {
         </Styled.InputWrap>
       </Styled.FormWrap>
       <Styled.ButtonWrap>
-        <Styled.ConfirmButton type="button" onClick={handleSubmit}>확인</Styled.ConfirmButton>
+        <Styled.ConfirmButton type="button" onClick={handleSubmit}>
+          확인
+        </Styled.ConfirmButton>
         <Styled.CancelButton type="button" onClick={handleClose}>취소</Styled.CancelButton>
       </Styled.ButtonWrap>
     </Modal>

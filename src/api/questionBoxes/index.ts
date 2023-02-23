@@ -21,9 +21,9 @@ const getQuestionDetails: GetQuestionDetails = (questionBoxId) =>
 const deleteQuestion: DeleteQuestion = (questionIdx) =>
   deleteAPI({ endPoint: API_PATH.DELETE_QUESTION(questionIdx) });
 
-const putQuestionDetails: PutQuestionDetails = ({ questionBoxIdx, ...data }) =>
+const putQuestionDetails: PutQuestionDetails = ({ questionIdx, ...data }) =>
   putAPI({
-    endPoint: API_PATH.PUT_QUESTION_DETAILS(questionBoxIdx),
+    endPoint: API_PATH.PUT_QUESTION_DETAILS(questionIdx),
     data,
   });
 
