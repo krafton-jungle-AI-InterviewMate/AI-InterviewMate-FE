@@ -53,8 +53,7 @@ export type DeleteQuestion = (
   questionIdx: number,
 ) => Promise<AxiosResponse<ResponseStatus>>;
 
-export type PutQuestionDetailsPayload = {
-  questionIdx: number;
+export type CommonQuestionDetailsPayload = {
   keyword1: string;
   keyword2?: string;
   keyword3?: string;
@@ -63,8 +62,20 @@ export type PutQuestionDetailsPayload = {
   questionTitle: string;
 };
 
+export type PutQuestionDetailsPayload = CommonQuestionDetailsPayload & {
+  questionIdx: number;
+};
+
 export type PutQuestionDetails = (
   payload: PutQuestionDetailsPayload,
+) => Promise<AxiosResponse<ResponseStatus>>;
+
+export type PostQuestionDetailsPayload = CommonQuestionDetailsPayload & {
+  questionBoxIdx: number;
+};
+
+export type PostQuestionDetails = (
+  payload: PostQuestionDetailsPayload,
 ) => Promise<AxiosResponse<ResponseStatus>>;
 
 export type PutQuestionBoxNamePayload = {
@@ -75,12 +86,3 @@ export type PutQuestionBoxNamePayload = {
 export type PutQuestionBoxName = (
   payload: PutQuestionBoxNamePayload,
 ) => Promise<AxiosResponse<ResponseStatus>>;
-
-export type PostQuestionDetailsPayload = {
-  keyword1: string;
-  keyword2?: string;
-  keyword3?: string;
-  keyword4?: string;
-  keyword5?: string;
-  questionTitle: string;
-};

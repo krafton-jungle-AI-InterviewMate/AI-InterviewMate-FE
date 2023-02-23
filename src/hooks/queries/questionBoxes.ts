@@ -50,6 +50,10 @@ export const usePutQuestionDetails = () => {
   return useMutation(questionBoxesAPI.putQuestionDetails);
 };
 
+export const usePostQuestionDetails = () => {
+  return useMutation(questionBoxesAPI.postQuestionDetails);
+};
+
 export const usePutQuestionBoxName = () => {
   return useMutation(questionBoxesAPI.putQuestionBoxName);
 };

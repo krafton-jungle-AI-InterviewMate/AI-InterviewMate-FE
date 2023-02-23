@@ -119,6 +119,7 @@ const QuestionDetails = () => {
             <QuestionDialog
               isModifying={isModifying}
               currQuestion={currQuestion}
+              questionBoxIdx={questionBoxIdx}
               refetch={refetch}
               isOpen={isDialogOpen}
               handleClose={() => setIsDialogOpen(false)}

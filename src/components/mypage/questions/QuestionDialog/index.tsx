@@ -4,9 +4,20 @@ import "react-responsive-modal/styles.css";
 import { Modal, ModalProps } from "react-responsive-modal";
 import { IoMdClose } from "react-icons/io";
 
-import { usePutQuestionDetails } from "hooks/queries/questionBoxes";
-import { Question, PutQuestionDetailsPayload, PostQuestionDetailsPayload } from "api/questionBoxes/type";
-import { QUESTION_TITLE_LENGTH_LIMIT, KEYWORD_NUMBER_LIMIT, KEYWORD_LENGTH_LIMIT } from "./constants";
+import {
+  usePutQuestionDetails,
+  usePostQuestionDetails,
+} from "hooks/queries/questionBoxes";
+import {
+  Question,
+  PutQuestionDetailsPayload,
+  PostQuestionDetailsPayload,
+  CommonQuestionDetailsPayload,
+} from "api/questionBoxes/type";
+import {
+  QUESTION_TITLE_LENGTH_LIMIT, KEYWORD_NUMBER_LIMIT,
+  KEYWORD_LENGTH_LIMIT, ERROR_MSG,
+} from "./constants";
 
 import * as Styled from "./styles";
 
@@ -28,6 +39,7 @@ const modalStyles: ModalProps["styles"] = {
 type QuestionDialogProps = {
   isModifying: boolean;
   currQuestion: Question | null;
+  questionBoxIdx: number;
   refetch: () => void;
   isOpen: boolean;
   handleClose: () => void;
@@ -37,6 +49,7 @@ const QuestionDialog = (props: QuestionDialogProps) => {
   const {
     isModifying,
     currQuestion,
+    questionBoxIdx,
     refetch,
     isOpen,
     handleClose,
@@ -50,10 +63,17 @@ const QuestionDialog = (props: QuestionDialogProps) => {
 
   const {
     mutate: updateQuestion,
-    isLoading,
-    isSuccess,
-    isError,
+    isLoading: isUpdating,
+    isSuccess: isUpdateSuccess,
+    isError: isUpdateError,
   } = usePutQuestionDetails();
+
+  const {
+    mutate: postQuestion,
+    isLoading: isPosting,
+    isSuccess: isPostSuccess,
+    isError: isPostError,
+  } = usePostQuestionDetails();
 
   const addKeyword = () => {
     if (!keyword.length || keyword.length > KEYWORD_LENGTH_LIMIT) {
@@ -88,7 +108,7 @@ const QuestionDialog = (props: QuestionDialogProps) => {
       return;
     }
 
-    const commonPayload: PostQuestionDetailsPayload = {
+    const commonPayload: CommonQuestionDetailsPayload = {
       questionTitle,
       keyword1: keywordList[0],
     };
@@ -113,7 +133,17 @@ const QuestionDialog = (props: QuestionDialogProps) => {
       return;
     }
 
-    // TODO: POST
+    const payload: PostQuestionDetailsPayload = {
+      ...commonPayload,
+      questionBoxIdx,
+    };
+
+    postQuestion(payload);
+  };
+
+  const handleAfterSubmit = () => {
+    refetch();
+    handleClose();
   };
 
   useEffect(() => {
@@ -129,14 +159,13 @@ const QuestionDialog = (props: QuestionDialogProps) => {
   }, [ currQuestion ]);
 
   useEffect(() => {
-    if (isSuccess) {
-      refetch();
-      handleClose();
+    if (isUpdateSuccess || isPostSuccess) {
+      handleAfterSubmit();
     }
-    else if (isError) {
-      window.alert("요청 과정에서 에러가 발생했습니다.");
+    else if (isUpdateError || isPostError) {
+      window.alert(ERROR_MSG);
     }
-  }, [ isLoading ]);
+  }, [ isUpdating, isPosting ]);
 
   return (
     <Modal
