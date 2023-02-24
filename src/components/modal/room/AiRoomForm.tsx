@@ -13,7 +13,7 @@ import { usePostInterviewRooms } from "hooks/queries/interview";
 import { useNavigate } from "react-router";
 import { RoomTypes } from "api/mypage/types";
 import { useState } from "react";
-import { questionBoxes } from "api/questionBoxes/type";
+import { QuestionBoxes } from "api/questionBoxes/type";
 
 interface InputRoomFormProps {
   email?: string;
@@ -27,7 +27,7 @@ interface InputRoomFormProps {
 const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
   const navigate = useNavigate();
   const setFeedback = useSetRecoilState(feedbackAtom);
-  const [questionNum, setQuestionNum] = useState(0);
+  const [ questionNum, setQuestionNum ] = useState(0);
 
   const onChangeFeedback = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -64,7 +64,7 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
       },
     );
   };
-  const FeedbackArr = ["ON", "OFF"];
+  const FeedbackArr = [ "ON", "OFF" ];
   return (
     <StyledUserRoomForm roomNameError={errors?.roomName?.message}>
       <form onSubmit={handleSubmit(onValid)}>
@@ -158,7 +158,7 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
           <label htmlFor="question">질문 꾸러미</label>
           <select id="question" {...register("roomQuestionBoxIdx", { required: true })}>
             {questionNum ? (
-              questionBoxes.map((data: questionBoxes, idx: number) =>
+              questionBoxes.map((data: QuestionBoxes, idx: number) =>
                 data.questionNum >= questionNum ? (
                   <option key={idx} value={data.questionBoxIdx}>
                     {data.questionBoxName}

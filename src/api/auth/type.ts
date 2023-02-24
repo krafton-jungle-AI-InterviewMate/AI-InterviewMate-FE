@@ -12,9 +12,7 @@ export type GetAuthorizationParams = {
   redirect_uri: string;
 };
 
-export type GetAuthorizationResponse = ResponseStatus & {
-  data: any; // FIXME: response 확인 후 변경
-};
+export type GetAuthorizationResponse = ResponseStatus;
 
 export type GetAuthorization = (params: GetAuthorizationParams) =>
   Promise<AxiosResponse<GetAuthorizationResponse>>;
@@ -29,3 +27,17 @@ export type GetRefreshResponse = ResponseStatus & {
 };
 
 export type GetRefresh = () => Promise<AxiosResponse<GetRefreshResponse>>;
+
+export type Myinfo = {
+  idx: number;
+  nickname: string;
+  email: string;
+  authProvider: SocialTypes;
+  refreshToken: string;
+}
+
+export type GetMyinfoResponse = ResponseStatus & {
+  data: Myinfo;
+};
+
+export type GetMyinfo = () => Promise<AxiosResponse<GetMyinfoResponse>>;

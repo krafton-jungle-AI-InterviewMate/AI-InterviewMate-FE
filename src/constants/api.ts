@@ -13,9 +13,15 @@ export const API_PATH = {
   GET_INTERVIEW_ROOMS: "/interview/rooms",
   GET_QUESTIONBOXES: (memberIdx: string) => `/questionBoxes/temp/${memberIdx}`,
   DELETE_QUESTIONBOXES: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`,
+  PUT_QUESTIONBOX_NAME: (questionBoxIdx) => `/questionBoxes/${questionBoxIdx}`,
+  GET_QUESTION_DETAILS: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`,
+  PUT_QUESTION_DETAILS: (questionIdx: number) => `/questionBoxes/question/${questionIdx}`,
+  POST_QUESTION_DETAILS: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`, // !
+  DELETE_QUESTION: (questionIdx: number) => `/questionBoxes/question/${questionIdx}`,
   GET_AUTHORIZATION: ({ social, redirect_uri }: GetAuthorizationParams) =>
     `/login/oauth2/authorization/${social}?redirect_uri=${window.location.origin}${redirect_uri}`,
   GET_REFRESH: "/login/refresh",
+  GET_MYINFO: "/mypage/myinfo",
 };
 
 export const AI_VIEWER_IDX = 79797979;

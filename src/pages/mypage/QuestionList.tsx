@@ -3,7 +3,7 @@ import Questions from "components/mypage/questions/Questions";
 import { useGetQuestionBoxes } from "hooks/queries/questionBoxes";
 import { useEffect } from "react";
 import { useState } from "react";
-import { questionBoxes } from "api/questionBoxes/type";
+import { QuestionBoxes } from "api/questionBoxes/type";
 import Loading from "components/common/Loading";
 import ServerError from "components/common/ServerError";
 
@@ -12,13 +12,13 @@ const StyledQuestionList = styled.div`
 `;
 
 const QuestionList = () => {
-  const [questionBoxes, setQuestionBoxes] = useState<questionBoxes[]>([]);
-  const { data, isLoading, isSuccess, isError } = useGetQuestionBoxes("4");
+  const [ questionBoxes, setQuestionBoxes ] = useState<QuestionBoxes[]>([]);
+  const { data, isLoading, isError } = useGetQuestionBoxes("1");
   useEffect(() => {
     if (!isLoading && data) {
       setQuestionBoxes(data.data.data);
     }
-  }, [isLoading]);
+  }, [ isLoading ]);
   return (
     <StyledQuestionList>
       {isLoading ? (
