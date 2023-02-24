@@ -5,6 +5,7 @@ import { motionSnapshotAtom, aiInterviewerAtom } from "store/interview/atom";
 
 import useInitializeInterviewState from "hooks/useInitializeInterviewState";
 import useFaceLandmarksDetection from "hooks/useFaceLandmarksDetection";
+import useSetAzureToken from "hooks/useSetAzureToken";
 
 import InterviewerSelectModal from "./InterviewerSelectModal";
 import Webcam from "react-webcam";
@@ -53,11 +54,20 @@ const InterviewReady = () => {
     isOneOff: true,
   });
 
+  const {
+    isAzureTokenFetching,
+    isAzureTokenSuccess,
+    isAzureTokenError,
+  } = useSetAzureToken();
+
   useEffect(() => {
-    if (isWebcamReady && isVideoReady) {
+    if (isWebcamReady && isVideoReady && isAzureTokenSuccess) {
       setDisableGoButton(false);
     }
-  }, [ isWebcamReady, isVideoReady ]);
+    else if (isAzureTokenError) {
+      window.alert("죄송합니다. 음성 파일을 가져오지 못했습니다. 관리자에게 문의해 주세요.");
+    }
+  }, [ isWebcamReady, isVideoReady, isAzureTokenFetching ]);
 
   useEffect(() => {
     if (isVideoReady) {

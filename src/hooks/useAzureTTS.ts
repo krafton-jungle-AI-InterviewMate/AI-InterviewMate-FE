@@ -1,12 +1,14 @@
 import { useEffect } from "react";
-import { useSetRecoilState, useRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilState, useRecoilValue } from "recoil";
 import { interviewModeAtom, interviewQuestionNumberAtom } from "store/interview/atom";
+import { azureTokenAtom } from "store/auth/atom";
 
 const useAzureTTS = (questionList: string[]) => {
   const [ interviewQuestionNumber, setInterviewQuestionNumber ] = useRecoilState(
     interviewQuestionNumberAtom,
   );
   const setInterviewMode = useSetRecoilState(interviewModeAtom);
+  const azureToken = useRecoilValue(azureTokenAtom);
 
   const synth = window.speechSynthesis;
 
