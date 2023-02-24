@@ -23,6 +23,7 @@ export const API_PATH = {
     `/login/oauth2/authorization/${social}?redirect_uri=${window.location.origin}${redirect_uri}`,
   GET_REFRESH: "/login/refresh",
   GET_MYINFO: "/mypage/myinfo",
+  POST_JOIN_ROOM: (roomIdx: number) => `/interview/rooms/${roomIdx}`,
 };
 
 export const AI_VIEWER_IDX = 79797979;
