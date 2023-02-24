@@ -6,13 +6,11 @@ import UserVideoComponent from "./UserVideoComponent";
 import { useRecoilState } from "recoil";
 import { roomNameAtom, userNameAtom } from "store/interview/atom";
 
-const APPLICATION_SERVER_URL = "http://localhost:5000/";
+const APPLICATION_SERVER_URL = "http://localhost:5000/"; // ! TODO: 우리 서버 URL로 바꿔야 함.
 
 const UserRoomFormTest = () => {
   const [ userName, setUserName ] = useRecoilState(userNameAtom);
   const [ roomName, setRoomName ] = useRecoilState(roomNameAtom);
-  console.log(userName);
-  console.log(roomName);
   const [ OV, setOV ] = useState<any>(null);
 
   const [ mySessionId, setMySessionId ] = useState(roomName);
@@ -33,15 +31,13 @@ const UserRoomFormTest = () => {
     leaveSession();
   };
 
-  // const handleChangeSessionId = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   console.log("romeName" + e.target.value);
-  //   setMySessionId(e.target.value);
-  // };
+  const handleChangeSessionId = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMySessionId(e.target.value);
+  };
 
-  // const handleChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   console.log("userName" + e.target.value);
-  //   setMyUserName(e.target.value);
-  // };
+  const handleChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMyUserName(e.target.value);
+  };
 
   const handleMainVideoStream = (stream: any) => {
     if (mainStreamManager !== stream) {
@@ -68,31 +64,31 @@ const UserRoomFormTest = () => {
     // --- 2) 세션 초기화 ---
     setOV(newOV);
     const newSession = newOV.initSession();
+    console.log("newSession", newSession);
     setSession(newSession);
-    const mySession = session;
 
     // --- 3) Specify the actions when events take place in the session ---
     // --- 3) 세션에서 이벤트가 발생할 때 수행할 작업 ---
 
     // On every new Stream received...
     // 스트림이 새로 수신될 때마다
-    mySession.on("streamCreated", event => {
+    newSession.on("streamCreated", event => {
       // Subscribe to the Stream to receive it. Second parameter is undefined
       // so OpenVidu doesn't create an HTML video by its own
-      const newSubscriber = mySession.subscribe(event.stream, undefined);
+      const newSubscriber = newSession.subscribe(event.stream, undefined);
 
       // Update the state with the new subscribers
       setSubscribers([ ...subscribers, newSubscriber ]);
     });
 
     // On every Stream destroyed...
-    mySession.on("streamDestroyed", event => {
+    newSession.on("streamDestroyed", event => {
       // Remove the stream from 'subscribers' array
       deleteSubscriber(event.stream.streamManager);
     });
 
     // On every asynchronous exception...
-    mySession.on("exception", exception => {
+    newSession.on("exception", exception => {
       console.warn(exception);
     });
 
@@ -102,7 +98,7 @@ const UserRoomFormTest = () => {
     getToken().then(token => {
       // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
       // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-      mySession
+      newSession
         .connect(token, { clientData: myUserName })
         .then(async () => {
           // --- 5) Get your own camera stream ---
@@ -122,7 +118,7 @@ const UserRoomFormTest = () => {
 
           // --- 6) Publish your stream ---
 
-          mySession.publish(publisher);
+          newSession.publish(publisher);
 
           // Obtain the current video device in use
           const devices = await OV.getDevices();
@@ -152,11 +148,8 @@ const UserRoomFormTest = () => {
 
   const leaveSession = () => {
     // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
-
-    const mySession = session;
-
-    if (mySession) {
-      mySession.disconnect();
+    if (session) {
+      session.disconnect();
     }
 
     // Empty all properties...
@@ -178,7 +171,7 @@ const UserRoomFormTest = () => {
   };
 
   const createSession = async sessionId => {
-    const response: any = await axios.post(
+    const response: any = await axios.post( // ! TODO: 기존에 API 사용하는 방식에 맞추기
       APPLICATION_SERVER_URL + "api/sessions",
       { customSessionId: sessionId },
       {
@@ -189,7 +182,7 @@ const UserRoomFormTest = () => {
   };
 
   const createToken = async sessionId => {
-    const response: any = await axios.post(
+    const response: any = await axios.post( // ! TODO: 기존에 API 사용하는 방식에 맞추기
       APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
       {},
       {
@@ -199,19 +192,25 @@ const UserRoomFormTest = () => {
     return response.data; // The token
   };
 
+  // useEffect(() => {
+  //   if (session) {
+  //     joinSession();
+  //     // ! 여기서 joinSession이 실행되려면 session이 존재해야 하는데
+  //     // ! joinSession 전에 session이 초기화되는 로직이 없음.
+  //   }
+  // }, [ session ]);
+
   useEffect(() => {
-    if (session !== undefined) {
-      joinSession();
-    }
-  }, [ session ]);
+    setUserName("안예인"); // FIXME: 임시로 설정 (로그인 기능 잠깐 안돼서)
+    joinSession();
+    // ! 이 컴포넌트가 렌더링 되자마자
+    // ! joinSession을 최초로 한번 실행해줘야 함.
+  }, []);
 
   return (
     <div className="container">
       {/* {session === undefined ? (
         <div id="join">
-          <div id="img-div">
-            <img src="resources/images/openvidu_grey_bg_transp_cropped.png" alt="OpenVidu logo" />
-          </div>
           <div id="join-dialog" className="jumbotron vertical-center">
             <h1> Join a video session </h1>
             <form className="form-group" onSubmit={joinSession}>
@@ -221,7 +220,7 @@ const UserRoomFormTest = () => {
                   className="form-control"
                   type="text"
                   id="userName"
-                  value={myUserName}
+                  value={myUserName ?? ""}
                   onChange={handleChangeUserName}
                   required
                 />
@@ -250,7 +249,7 @@ const UserRoomFormTest = () => {
         </div>
       ) : null} */}
 
-      {session !== undefined ? (
+      {session ? (
         <div id="session">
           <div id="session-header">
             <h1 id="session-title">{mySessionId}</h1>
@@ -263,7 +262,7 @@ const UserRoomFormTest = () => {
             />
           </div>
 
-          {mainStreamManager !== undefined ? (
+          {mainStreamManager ? (
             <div id="main-video" className="col-md-6">
               <UserVideoComponent streamManager={mainStreamManager} />
               {/* <input
@@ -276,7 +275,7 @@ const UserRoomFormTest = () => {
             </div>
           ) : null}
           <div id="video-container" className="col-md-6">
-            {publisher !== undefined ? (
+            {publisher ? (
               <div
                 className="stream-container col-md-6 col-xs-6"
                 onClick={() => handleMainVideoStream(publisher)}

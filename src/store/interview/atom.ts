@@ -62,9 +62,9 @@ export const feedbackAtom = atom<string>({
 });
 
 /** 유저 면접 정보 */
-export const roomNameAtom = atom<null | string>({
+export const roomNameAtom = atom<string>({
   key: "roomName",
-  default: null,
+  default: "testroom",
 });
 
 export const userNameAtom = atom<null | string>({
