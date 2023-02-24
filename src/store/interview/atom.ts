@@ -72,6 +72,11 @@ export const userNameAtom = atom<null | string>({
   default: null,
 });
 
+export const connectionTokenAtom = atom<null | string>({
+  key: "connectionToken",
+  default: null,
+});
+
 /** 대체 면접관 */
 export const aiInterviewerAtom = atom<AiInterviewerTypes>({
   key: "aiInterviewer",
