@@ -1,5 +1,5 @@
 import { selector } from "recoil";
-import { motionSnapshotAtom } from "./atom";
+import { motionSnapshotAtom, aiInterviewerAtom } from "./atom";
 import {
   BOUNDING_BOX_BUFFER, DISTANCE_THRESHOLD,
 } from "constants/faceLandmarkDetection";
@@ -41,5 +41,22 @@ export const distanceThresholdSelector = selector({
       rightThreshold: getThreshold(right),
       leftThreshold: getThreshold(left),
     };
+  },
+});
+
+export const aiInterviewerGenderSelector = selector({
+  key: "AiInterviewerGender",
+  get: ({ get }) => {
+    const aiInterviewer = get(aiInterviewerAtom);
+
+    switch (aiInterviewer) {
+    case "Seoyoung":
+      return "Female";
+    case "Seunghyun":
+      return "Female";
+
+    default:
+      return "Male";
+    }
   },
 });

@@ -1,31 +1,48 @@
 import { useEffect } from "react";
-import { useSetRecoilState, useRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState, useRecoilState } from "recoil";
 import { interviewModeAtom, interviewQuestionNumberAtom } from "store/interview/atom";
-import { azureTokenAtom } from "store/auth/atom";
 
-const useAzureTTS = (questionList: string[]) => {
+import * as speechsdk from "microsoft-cognitiveservices-speech-sdk";
+
+export type UseAzureTTSParams = {
+  questionList: string[];
+  synthesizer: speechsdk.SpeechSynthesizer;
+  player: speechsdk.SpeakerAudioDestination;
+};
+
+const useAzureTTS = (params: UseAzureTTSParams) => {
+  const { questionList, synthesizer, player } = params;
+
   const [ interviewQuestionNumber, setInterviewQuestionNumber ] = useRecoilState(
     interviewQuestionNumberAtom,
   );
   const setInterviewMode = useSetRecoilState(interviewModeAtom);
-  const azureToken = useRecoilValue(azureTokenAtom);
 
-  const synth = window.speechSynthesis;
+  const synthesizeSpeech = async () => {
+    synthesizer.speakTextAsync(
+      questionList[interviewQuestionNumber],
+      result => {
+        if (result) {
+          synthesizer.close();
+          player.onAudioEnd = () => {
+            setInterviewMode("answer");
+            setInterviewQuestionNumber(curr => curr + 1);
+          };
+        }
+      },
+      error => {
+        console.log(error);
+        synthesizer.close();
+      });
+  };
 
   useEffect(() => {
-    const msg = new SpeechSynthesisUtterance(questionList[interviewQuestionNumber]);
-    msg.rate = 1;
-    msg.pitch = 1.5;
-
-    msg.onend = () => {
-      setInterviewMode("answer");
-      setInterviewQuestionNumber(curr => curr + 1);
-    };
-
-    synth.speak(msg);
+    (async () => {
+      await synthesizeSpeech();
+    })();
 
     return () => {
-      synth.cancel();
+      synthesizer.close();
     };
   }, []);
 };

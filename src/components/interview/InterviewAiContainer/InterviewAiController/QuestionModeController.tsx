@@ -1,15 +1,13 @@
 import { useRecoilValue } from "recoil";
 import { interviewQuestionNumberAtom } from "store/interview/atom";
 
-import useAzureTTS from "hooks/useAzureTTS";
+import useAzureTTS, { UseAzureTTSParams } from "hooks/useAzureTTS";
 
 import InterviewComment from "../InterviewComment";
 
 import styled from "@emotion/styled";
 
-type QuestionModeControllerProps = {
-  questionList: string[];
-};
+type QuestionModeControllerProps = UseAzureTTSParams;
 
 const QuestionModeController = (props: QuestionModeControllerProps) => {
   const { questionList } = props;
@@ -18,7 +16,7 @@ const QuestionModeController = (props: QuestionModeControllerProps) => {
     interviewQuestionNumberAtom,
   );
 
-  useAzureTTS(questionList);
+  useAzureTTS(props);
 
   return (
     <StyledWrap>
