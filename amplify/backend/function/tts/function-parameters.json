@@ -1,3 +1,6 @@
 {
-  "lambdaLayers": []
+  "lambdaLayers": [],
+  "secretNames": [
+    "AZURE_SECRET_KEY"
+  ]
 }

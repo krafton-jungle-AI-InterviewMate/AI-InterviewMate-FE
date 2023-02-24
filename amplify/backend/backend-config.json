@@ -30,8 +30,35 @@
   "function": {
     "tts": {
       "build": true,
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_tts_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "tts"
+        }
+      ]
+    },
+    "AMPLIFY_function_tts_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "tts"
+        }
+      ]
+    },
+    "AMPLIFY_function_tts_secretsPathAmplifyAppId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "tts"
+        }
+      ]
     }
   },
   "storage": {
