@@ -9,18 +9,18 @@ import { roomNameAtom, userNameAtom } from "store/interview/atom";
 const APPLICATION_SERVER_URL = "http://localhost:5000/";
 
 const UserRoomFormTest = () => {
-  const [userName, setUserName] = useRecoilState(userNameAtom);
-  const [roomName, setRoomName] = useRecoilState(roomNameAtom);
+  const [ userName, setUserName ] = useRecoilState(userNameAtom);
+  const [ roomName, setRoomName ] = useRecoilState(roomNameAtom);
   console.log(userName);
   console.log(roomName);
-  const [OV, setOV] = useState<any>(null);
+  const [ OV, setOV ] = useState<any>(null);
 
-  const [mySessionId, setMySessionId] = useState(roomName);
-  const [myUserName, setMyUserName] = useState(userName);
-  const [session, setSession] = useState<any>(undefined);
-  const [mainStreamManager, setMainStreamManager] = useState(undefined);
-  const [publisher, setPublisher] = useState(undefined);
-  const [subscribers, setSubscribers] = useState<Array<any>>([]);
+  const [ mySessionId, setMySessionId ] = useState(roomName);
+  const [ myUserName, setMyUserName ] = useState(userName);
+  const [ session, setSession ] = useState<any>(undefined);
+  const [ mainStreamManager, setMainStreamManager ] = useState(undefined);
+  const [ publisher, setPublisher ] = useState(undefined);
+  const [ subscribers, setSubscribers ] = useState<Array<any>>([]);
 
   useEffect(() => {
     window.addEventListener("beforeunload", onbeforeunload);
@@ -82,7 +82,7 @@ const UserRoomFormTest = () => {
       const newSubscriber = mySession.subscribe(event.stream, undefined);
 
       // Update the state with the new subscribers
-      setSubscribers([...subscribers, newSubscriber]);
+      setSubscribers([ ...subscribers, newSubscriber ]);
     });
 
     // On every Stream destroyed...
@@ -203,7 +203,7 @@ const UserRoomFormTest = () => {
     if (session !== undefined) {
       joinSession();
     }
-  }, [session]);
+  }, [ session ]);
 
   return (
     <div className="container">
