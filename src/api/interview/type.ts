@@ -29,7 +29,9 @@ export type PostInterviewRoomsResponse = PostInterviewRoomsPayloadData & {
   roomIdx: number;
   nickName: string;
   createdAt: string;
-  roomStatus: string;
+  roomStatus: RoomStatus;
+  connectionToken: string;
+  questionList: Array<string>;
 };
 
 export type PostInterviewRooms = (
