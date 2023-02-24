@@ -65,6 +65,10 @@ axiosInstance.interceptors.request.use(
   config => requestSuccessHandler(config),
   err => requestErrorHandler(err),
 );
+lambdaClient.interceptors.request.use(
+  config => requestSuccessHandler(config),
+  err => requestErrorHandler(err),
+);
 
 /**
  * Axios Response Middleware
