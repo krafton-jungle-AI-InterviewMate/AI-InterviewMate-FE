@@ -22,7 +22,7 @@
         "tts": {
           "secretsPathAmplifyAppId": "dyc1nf18avg6y",
           "deploymentBucketName": "amplify-amplifye60a35a70f234-staging-182644-deployment",
-          "s3Key": "amplify-builds/tts-4c566f4d735747513734-build.zip"
+          "s3Key": "amplify-builds/tts-78677a6272445a4f6c75-build.zip"
         }
       }
     }
