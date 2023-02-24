@@ -71,10 +71,7 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
       { data },
       {
         onSuccess: ({ data }) => {
-          console.log(`token ${data.connectionToken}`);
-          console.log(`roomName ${data.roomName}`);
-          setConnectionToken(data.connectionToken);
-          console.log(`data string ${JSON.stringify(data)}`);
+          setConnectionToken(data.data.connectionToken);
           navigate("/interview/readyuser");
         },
         onError(error) {

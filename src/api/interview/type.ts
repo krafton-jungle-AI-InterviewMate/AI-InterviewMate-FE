@@ -25,13 +25,15 @@ export type PostInterviewRoomsPayload = {
   data: PostInterviewRoomsPayloadData;
 };
 
-export type PostInterviewRoomsResponse = PostInterviewRoomsPayloadData & {
-  roomIdx: number;
-  nickName: string;
-  createdAt: string;
-  roomStatus: RoomStatus;
-  connectionToken: string;
-  questionList: Array<string>;
+export type PostInterviewRoomsResponse = ResponseStatus & {
+  data: PostInterviewRoomsPayloadData & {
+    roomIdx: number;
+    nickName: string;
+    createdAt: string;
+    roomStatus: RoomStatus;
+    connectionToken: string;
+    questionList: Array<string>;
+  };
 };
 
 export type PostInterviewRooms = (
