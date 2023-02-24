@@ -2,6 +2,7 @@ import { atom } from "recoil";
 import * as FaceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
 import { InterviewModeTypes, AiInterviewerTypes } from "types/interview";
 import { IRIS_PERFECT_SCORE, MOTION_PERFECT_SCORE } from "constants/interview";
+import { PostJoinRoomResponseData } from "api/interview/type";
 
 /** 인터뷰 프로세스 제어 */
 export const faceLandmarksDetectorAtom = atom<null | FaceLandmarksDetection.FaceLandmarksDetector>({
@@ -62,19 +63,9 @@ export const feedbackAtom = atom<string>({
 });
 
 /** 유저 면접 정보 */
-export const roomNameAtom = atom<string>({
-  key: "roomName",
-  default: "testroom",
-});
-
-export const userNameAtom = atom<null | string>({
-  key: "userName",
+export const userInterviewDataAtom = atom<null | PostJoinRoomResponseData>({
+  key: "userInterviewData",
   default: null,
-});
-
-export const connectionTokenAtom = atom<string>({
-  key: "connectionToken",
-  default: "",
 });
 
 /** 대체 면접관 */

@@ -5,6 +5,9 @@ import { MdPublic } from "react-icons/md";
 import { RoomStatus } from "api/interview/type";
 import { RoomTypes } from "api/mypage/types";
 import { Link } from "react-router-dom";
+import { usePostJoinRoom } from "./../../hooks/queries/interview";
+import { useSetRecoilState } from "recoil";
+import { userInterviewDataAtom } from "store/interview/atom";
 
 interface IRoomProps {
   roomType: RoomTypes;
@@ -106,9 +109,22 @@ const Room = ({
   idx,
   setIsJoinError,
 }: RoomProps) => {
+  const setUserInterviewData = useSetRecoilState(userInterviewDataAtom);
+  const { mutate, isLoading } = usePostJoinRoom();
   const onClickJoin = () => {
     if (roomType === "AI" || roomPeopleNow === roomPeopleNum || roomStatus === "PROCEED") {
       setIsJoinError(true);
+      return;
+    }
+    if (!isLoading) {
+      mutate(idx, {
+        onSuccess: ({ data }) => {
+          setUserInterviewData(data.data);
+        },
+        onError(error) {
+          alert(error);
+        },
+      });
     }
   };
   return (

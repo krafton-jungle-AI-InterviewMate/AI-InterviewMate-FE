@@ -7,14 +7,9 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import styled from "@emotion/styled";
 import { useState } from "react";
-import { AiOutlineConsoleSql, AiOutlineInfoCircle } from "react-icons/ai";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 import { useSetRecoilState } from "recoil";
-import {
-  connectionTokenAtom,
-  feedbackAtom,
-  roomNameAtom,
-  userNameAtom,
-} from "store/interview/atom";
+import { feedbackAtom, userInterviewDataAtom } from "store/interview/atom";
 import { usePostInterviewRooms } from "hooks/queries/interview";
 import { useNavigate } from "react-router";
 import { RoomTypes } from "api/mypage/types";
@@ -32,9 +27,7 @@ interface InputRoomFormProps {
 }
 
 function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
-  const setRoomName = useSetRecoilState(roomNameAtom);
-  const setUserName = useSetRecoilState(userNameAtom);
-  const setConnectionToken = useSetRecoilState(connectionTokenAtom);
+  const setUserInterviewData = useSetRecoilState(userInterviewDataAtom);
   const navigate = useNavigate();
   const [isPrivate, setIsPrivate] = useState(false);
   const feedback = useSetRecoilState(feedbackAtom);
@@ -65,13 +58,11 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
     if (isLoading) {
       return;
     }
-    setUserName(data.email);
-    setRoomName(data.roomName);
     mutate(
       { data },
       {
         onSuccess: ({ data }) => {
-          setConnectionToken(data.data.connectionToken);
+          setUserInterviewData(data.data);
           navigate("/interview/readyuser");
         },
         onError(error) {
