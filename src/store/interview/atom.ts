@@ -72,9 +72,9 @@ export const userNameAtom = atom<null | string>({
   default: null,
 });
 
-export const connectionTokenAtom = atom<null | string>({
+export const connectionTokenAtom = atom<string>({
   key: "connectionToken",
-  default: null,
+  default: "",
 });
 
 /** 대체 면접관 */

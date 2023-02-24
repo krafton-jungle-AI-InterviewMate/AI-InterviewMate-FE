@@ -7,9 +7,14 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import styled from "@emotion/styled";
 import { useState } from "react";
-import { AiOutlineInfoCircle } from "react-icons/ai";
+import { AiOutlineConsoleSql, AiOutlineInfoCircle } from "react-icons/ai";
 import { useSetRecoilState } from "recoil";
-import { feedbackAtom, roomNameAtom, userNameAtom } from "store/interview/atom";
+import {
+  connectionTokenAtom,
+  feedbackAtom,
+  roomNameAtom,
+  userNameAtom,
+} from "store/interview/atom";
 import { usePostInterviewRooms } from "hooks/queries/interview";
 import { useNavigate } from "react-router";
 import { RoomTypes } from "api/mypage/types";
@@ -29,8 +34,9 @@ interface InputRoomFormProps {
 function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
   const setRoomName = useSetRecoilState(roomNameAtom);
   const setUserName = useSetRecoilState(userNameAtom);
+  const setConnectionToken = useSetRecoilState(connectionTokenAtom);
   const navigate = useNavigate();
-  const [ isPrivate, setIsPrivate ] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(false);
   const feedback = useSetRecoilState(feedbackAtom);
   const onChangePublic = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -64,7 +70,11 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
     mutate(
       { data },
       {
-        onSuccess: () => {
+        onSuccess: ({ data }) => {
+          console.log(`token ${data.connectionToken}`);
+          console.log(`roomName ${data.roomName}`);
+          setConnectionToken(data.connectionToken);
+          console.log(`data string ${JSON.stringify(data)}`);
           navigate("/interview/readyuser");
         },
         onError(error) {
@@ -73,10 +83,10 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
       },
     );
   };
-  const roomPeopleNumArr = [ 1, 2, 3 ];
-  const isPrivateArr = [ false, true ];
-  const FeedbackArr = [ "ON", "OFF" ];
-  const roomTimeArr = [ 15, 30, 45, 60 ];
+  const roomPeopleNumArr = [1, 2, 3];
+  const isPrivateArr = [false, true];
+  const FeedbackArr = ["ON", "OFF"];
+  const roomTimeArr = [15, 30, 45, 60];
   return (
     <StyledUserRoomForm
       roomNameError={errors.roomName?.message}

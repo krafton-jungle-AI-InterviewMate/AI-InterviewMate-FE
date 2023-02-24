@@ -3,22 +3,26 @@ import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import UserVideoComponent from "./UserVideoComponent";
-import { useRecoilState } from "recoil";
-import { roomNameAtom, userNameAtom } from "store/interview/atom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { connectionTokenAtom, roomNameAtom, userNameAtom } from "store/interview/atom";
+import { BASE_URL } from "constants/api";
 
-const APPLICATION_SERVER_URL = "http://localhost:5000/"; // ! TODO: 우리 서버 URL로 바꿔야 함.
+// const APPLICATION_SERVER_URL = BASE_URL; // ! TODO: 우리 서버 URL로 바꿔야 함.
+const APPLICATION_SERVER_URL = "https://denia-wwdt.shop"; // ! TODO: 우리 서버 URL로 바꿔야 함.
 
 const UserRoomFormTest = () => {
-  const [ userName, setUserName ] = useRecoilState(userNameAtom);
-  const [ roomName, setRoomName ] = useRecoilState(roomNameAtom);
-  const [ OV, setOV ] = useState<any>(null);
+  const [userName, setUserName] = useRecoilState(userNameAtom);
+  const [roomName, setRoomName] = useRecoilState(roomNameAtom);
+  const [OV, setOV] = useState<any>(null);
 
-  const [ mySessionId, setMySessionId ] = useState(roomName);
-  const [ myUserName, setMyUserName ] = useState(userName);
-  const [ session, setSession ] = useState<any>(undefined);
-  const [ mainStreamManager, setMainStreamManager ] = useState(undefined);
-  const [ publisher, setPublisher ] = useState(undefined);
-  const [ subscribers, setSubscribers ] = useState<Array<any>>([]);
+  const [mySessionId, setMySessionId] = useState(roomName);
+  const [myUserName, setMyUserName] = useState(userName);
+  const [session, setSession] = useState<any>(undefined);
+  const [mainStreamManager, setMainStreamManager] = useState(undefined);
+  const [publisher, setPublisher] = useState(undefined);
+  const [subscribers, setSubscribers] = useState<Array<any>>([]);
+
+  const connectionToken = useRecoilValue(connectionTokenAtom);
 
   useEffect(() => {
     window.addEventListener("beforeunload", onbeforeunload);
@@ -78,7 +82,7 @@ const UserRoomFormTest = () => {
       const newSubscriber = newSession.subscribe(event.stream, undefined);
 
       // Update the state with the new subscribers
-      setSubscribers([ ...subscribers, newSubscriber ]);
+      setSubscribers([...subscribers, newSubscriber]);
     });
 
     // On every Stream destroyed...
@@ -166,12 +170,15 @@ const UserRoomFormTest = () => {
   // const myUserName = this.state.myUserName;
 
   const getToken = async () => {
-    const sessionId = await createSession(mySessionId);
-    return await createToken(sessionId);
+    console.log("token" + connectionToken);
+    return connectionToken;
+    // const sessionId = await createSession(mySessionId);
+    // return await createToken(sessionId);
   };
 
   const createSession = async sessionId => {
-    const response: any = await axios.post( // ! TODO: 기존에 API 사용하는 방식에 맞추기
+    const response: any = await axios.post(
+      // ! TODO: 기존에 API 사용하는 방식에 맞추기
       APPLICATION_SERVER_URL + "api/sessions",
       { customSessionId: sessionId },
       {
@@ -182,7 +189,8 @@ const UserRoomFormTest = () => {
   };
 
   const createToken = async sessionId => {
-    const response: any = await axios.post( // ! TODO: 기존에 API 사용하는 방식에 맞추기
+    const response: any = await axios.post(
+      // ! TODO: 기존에 API 사용하는 방식에 맞추기
       APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
       {},
       {
