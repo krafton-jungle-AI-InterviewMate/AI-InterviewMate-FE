@@ -1,28 +1,24 @@
 import { OpenVidu } from "openvidu-browser";
-
-import axios from "axios";
 import { useState, useEffect } from "react";
 import UserVideoComponent from "../../../components/interview/userInterview/UserVideoComponent";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { connectionTokenAtom, roomNameAtom, userNameAtom } from "store/interview/atom";
+import { useRecoilValue } from "recoil";
+import { userInterviewDataAtom } from "store/interview/atom";
 import { BASE_URL } from "constants/api";
 
 // const APPLICATION_SERVER_URL = BASE_URL; // ! TODO: 우리 서버 URL로 바꿔야 함.
 const APPLICATION_SERVER_URL = "https://denia-wwdt.shop"; // ! TODO: 우리 서버 URL로 바꿔야 함.
 
 const UserInterview = () => {
-  const [userName, setUserName] = useRecoilState(userNameAtom);
-  const [roomName, setRoomName] = useRecoilState(roomNameAtom);
   const [OV, setOV] = useState<any>(null);
 
-  const [mySessionId, setMySessionId] = useState(roomName);
-  const [myUserName, setMyUserName] = useState(userName);
+  const userInterviewData = useRecoilValue(userInterviewDataAtom);
+
+  const [mySessionId, setMySessionId] = useState(userInterviewData?.roomName);
+  const [myUserName, setMyUserName] = useState(userInterviewData?.nickName);
   const [session, setSession] = useState<any>(undefined);
   const [mainStreamManager, setMainStreamManager] = useState(undefined);
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState<Array<any>>([]);
-
-  const connectionToken = useRecoilValue(connectionTokenAtom);
 
   useEffect(() => {
     window.addEventListener("beforeunload", onbeforeunload);
@@ -33,14 +29,6 @@ const UserInterview = () => {
 
   const onbeforeunload = event => {
     leaveSession();
-  };
-
-  const handleChangeSessionId = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMySessionId(e.target.value);
-  };
-
-  const handleChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMyUserName(e.target.value);
   };
 
   const handleMainVideoStream = (stream: any) => {
@@ -59,51 +47,51 @@ const UserInterview = () => {
   };
 
   const joinSession = async () => {
-    // --- 1) Get an OpenVidu object ---
     // --- 1) OpenVidu 객체 가져오기 ---
     const newOV = new OpenVidu();
+    console.log(newOV);
     newOV.enableProdMode();
 
-    // --- 2) Init a session ---
     // --- 2) 세션 초기화 ---
     setOV(newOV);
     const newSession = newOV.initSession();
-    console.log("newSession", newSession);
     setSession(newSession);
+  };
 
-    // --- 3) Specify the actions when events take place in the session ---
+  useEffect(() => {
     // --- 3) 세션에서 이벤트가 발생할 때 수행할 작업 ---
-
-    // On every new Stream received...
+    if (!session) {
+      return;
+    }
     // 스트림이 새로 수신될 때마다
-    newSession.on("streamCreated", event => {
+    session.on("streamCreated", event => {
       // Subscribe to the Stream to receive it. Second parameter is undefined
       // so OpenVidu doesn't create an HTML video by its own
-      const newSubscriber = newSession.subscribe(event.stream, undefined);
+      const newSubscriber = session.subscribe(event.stream, undefined);
 
       // Update the state with the new subscribers
       setSubscribers([...subscribers, newSubscriber]);
     });
 
     // On every Stream destroyed...
-    newSession.on("streamDestroyed", event => {
+    session.on("streamDestroyed", event => {
       // Remove the stream from 'subscribers' array
       deleteSubscriber(event.stream.streamManager);
     });
 
     // On every asynchronous exception...
-    newSession.on("exception", exception => {
+    session.on("exception", exception => {
       console.warn(exception);
     });
 
     // --- 4) Connect to the session with a valid user token ---
 
     // Get a token from the OpenVidu deployment
-    // getToken().then(token => {
+
     // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
     // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-    newSession
-      .connect(connectionToken, { clientData: myUserName })
+    session
+      .connect(userInterviewData?.connectionToken, { clientData: myUserName })
       .then(async () => {
         // --- 5) Get your own camera stream ---
 
@@ -122,7 +110,7 @@ const UserInterview = () => {
 
         // --- 6) Publish your stream ---
 
-        newSession.publish(publisher);
+        session.publish(publisher);
 
         // Obtain the current video device in use
         const devices = await OV.getDevices();
@@ -138,17 +126,11 @@ const UserInterview = () => {
         // Set the main video in the page to display our webcam and store our Publisher
         setMainStreamManager(publisher);
         setPublisher(publisher);
-        // this.setState({
-        //   currentVideoDevice: currentVideoDevice,
-        //   mainStreamManager: publisher,
-        //   publisher: publisher,
-        // });
       })
       .catch(error => {
         console.log("There was an error connecting to the session:", error.code, error.message);
       });
-    // });
-  };
+  }, [session]);
 
   const leaveSession = () => {
     // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
@@ -166,48 +148,7 @@ const UserInterview = () => {
     setPublisher(undefined);
   };
 
-  // const mySessionId = this.state.mySessionId;
-  // const myUserName = this.state.myUserName;
-
-  const getToken = async () => {
-    const sessionId = await createSession(mySessionId);
-    return await createToken(sessionId);
-  };
-
-  const createSession = async sessionId => {
-    const response: any = await axios.post(
-      // ! TODO: 기존에 API 사용하는 방식에 맞추기
-      APPLICATION_SERVER_URL + "api/sessions",
-      { customSessionId: sessionId },
-      {
-        headers: { "Content-Type": "application/json" },
-      },
-    );
-    return response.data; // The sessionId
-  };
-
-  const createToken = async sessionId => {
-    const response: any = await axios.post(
-      // ! TODO: 기존에 API 사용하는 방식에 맞추기
-      APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
-      {},
-      {
-        headers: { "Content-Type": "application/json" },
-      },
-    );
-    return response.data; // The token
-  };
-
-  // useEffect(() => {
-  //   if (session) {
-  //     joinSession();
-  //     // ! 여기서 joinSession이 실행되려면 session이 존재해야 하는데
-  //     // ! joinSession 전에 session이 초기화되는 로직이 없음.
-  //   }
-  // }, [ session ]);
-
   useEffect(() => {
-    setUserName("안예인"); // FIXME: 임시로 설정 (로그인 기능 잠깐 안돼서)
     joinSession();
     // ! 이 컴포넌트가 렌더링 되자마자
     // ! joinSession을 최초로 한번 실행해줘야 함.
@@ -215,46 +156,6 @@ const UserInterview = () => {
 
   return (
     <div className="container">
-      {/* {session === undefined ? (
-        <div id="join">
-          <div id="join-dialog" className="jumbotron vertical-center">
-            <h1> Join a video session </h1>
-            <form className="form-group" onSubmit={joinSession}>
-              <p>
-                <label>Participant: </label>
-                <input
-                  className="form-control"
-                  type="text"
-                  id="userName"
-                  value={myUserName ?? ""}
-                  onChange={handleChangeUserName}
-                  required
-                />
-              </p>
-              <p>
-                <label> Session: </label>
-                <input
-                  className="form-control"
-                  type="text"
-                  id="sessionId"
-                  value={mySessionId}
-                  onChange={handleChangeSessionId}
-                  required
-                />
-              </p>
-              <p className="text-center">
-                <input
-                  className="btn btn-lg btn-success"
-                  name="commit"
-                  type="submit"
-                  value="JOIN"
-                />
-              </p>
-            </form>
-          </div>
-        </div>
-      ) : null} */}
-
       {session ? (
         <div id="session">
           <div id="session-header">
@@ -271,13 +172,6 @@ const UserInterview = () => {
           {mainStreamManager ? (
             <div id="main-video" className="col-md-6">
               <UserVideoComponent streamManager={mainStreamManager} />
-              {/* <input
-                className="btn btn-large btn-success"
-                type="button"
-                id="buttonSwitchCamera"
-                onClick={switchCamera}
-                value="Switch Camera"
-              /> */}
             </div>
           ) : null}
           <div id="video-container" className="col-md-6">
@@ -303,22 +197,6 @@ const UserInterview = () => {
       ) : null}
     </div>
   );
-
-  /**
-   * --------------------------------------------
-   * GETTING A TOKEN FROM YOUR APPLICATION SERVER
-   * --------------------------------------------
-   * The methods below request the creation of a Session and a Token to
-   * your application server. This keeps your OpenVidu deployment secure.
-   *
-   * In this sample code, there is no user control at all. Anybody could
-   * access your application server endpoints! In a real production
-   * environment, your application server must identify the user to allow
-   * access to the endpoints.
-   *
-   * Visit https://docs.openvidu.io/en/stable/application-server to learn
-   * more about the integration of OpenVidu in your application server.
-   */
 };
 
 export default UserInterview;
