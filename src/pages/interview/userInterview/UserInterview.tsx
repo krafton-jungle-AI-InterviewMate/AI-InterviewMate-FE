@@ -144,8 +144,6 @@ const UserInterview = () => {
 
   useEffect(() => {
     joinSession();
-    // ! 이 컴포넌트가 렌더링 되자마자
-    // ! joinSession을 최초로 한번 실행해줘야 함.
   }, []);
 
   return (
@@ -163,11 +161,6 @@ const UserInterview = () => {
             />
           </div>
 
-          {/* {mainStreamManager ? (
-            <div id="main-video" className="col-md-6">
-              <UserVideoComponent streamManager={mainStreamManager} />
-            </div>
-          ) : null} */}
           <div id="video-container" className="col-md-6">
             {publisher ? (
               <div
