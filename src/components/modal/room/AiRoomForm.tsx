@@ -56,7 +56,7 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
       },
       {
         onSuccess: () => {
-          navigate("/interview/ready");
+          navigate("/interview/ready/user");
         },
         onError(error) {
           alert(error);

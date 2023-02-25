@@ -4,7 +4,10 @@ import { RiGitRepositoryPrivateFill } from "react-icons/ri";
 import { MdPublic } from "react-icons/md";
 import { RoomStatus } from "api/interview/type";
 import { RoomTypes } from "api/mypage/types";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { usePostJoinRoom } from "./../../hooks/queries/interview";
+import { useSetRecoilState } from "recoil";
+import { InterviewDataAtom } from "store/interview/atom";
 
 interface IRoomProps {
   roomType: RoomTypes;
@@ -24,6 +27,9 @@ const StyledRoom = styled.div<IRoomProps>`
     background-color: var(--main-white);
     padding: 28px 42px;
     filter: drop-shadow(0px 6px 24px rgba(0, 0, 0, 0.03));
+    &:hover {
+      cursor: pointer;
+    }
     .roomHeader {
       display: flex;
       justify-content: space-between;
@@ -106,57 +112,63 @@ const Room = ({
   idx,
   setIsJoinError,
 }: RoomProps) => {
+  const setUserInterviewData = useSetRecoilState(InterviewDataAtom);
+  const navigate = useNavigate();
+  const { mutate, isLoading } = usePostJoinRoom();
   const onClickJoin = () => {
     if (roomType === "AI" || roomPeopleNow === roomPeopleNum || roomStatus === "PROCEED") {
       setIsJoinError(true);
+      return;
+    }
+    if (!isLoading) {
+      mutate(idx, {
+        onSuccess: ({ data }) => {
+          setUserInterviewData(data.data);
+          navigate("/interview/readyuser");
+        },
+        onError(error) {
+          alert(error);
+        },
+      });
     }
   };
   return (
     <StyledRoom roomType={roomType} roomStatus={roomStatus}>
-      <Link
-        to={
-          roomStatus === "CREATE" && roomType === "USER" && roomPeopleNow < roomPeopleNum
-            ? "/interview/ready"
-            : ""
-        }
-        onClick={onClickJoin}
-      >
-        <div className="room">
-          <div className="roomHeader">
-            <div className="roomName">
-              <p>{roomName}</p>
-              {roomType === "AI" ? null : <span>진행 시간: {roomTime}분</span>}
-            </div>
-            <div className="interviewer">{roomType === "AI" ? "AI 면접관" : "유저 면접관"}</div>
+      <div className="room" onClick={onClickJoin}>
+        <div className="roomHeader">
+          <div className="roomName">
+            <p>{roomName}</p>
+            {roomType === "AI" ? null : <span>진행 시간: {roomTime}분</span>}
           </div>
-          <div className="roomState">
-            <p className="roomStatus">{roomStatus === "CREATE" ? "대기 중" : "진행 중"}</p>
-            {roomType === "AI" ? (
-              <div className="warningComment">
-                <AiOutlineInfoCircle size={25} color="var(--push-gray)" />
-                <p>
-                  AI 면접관 방에는 입장하실 수 없습니다.
-                  <br />방 만들기 기능을 이용해주세요.
-                </p>
-              </div>
-            ) : roomIsPrivate ? (
-              <div className="roomInfo">
-                <span>
-                  {roomPeopleNow} / {roomPeopleNum}
-                </span>
-                <RiGitRepositoryPrivateFill size={32} color="var(--push-gray)" />
-              </div>
-            ) : (
-              <div className="roomInfo">
-                <span>
-                  {roomPeopleNow} / {roomPeopleNum}
-                </span>
-                <MdPublic size={32} color="var(--push-gray)" />
-              </div>
-            )}
-          </div>
+          <div className="interviewer">{roomType === "AI" ? "AI 면접관" : "유저 면접관"}</div>
         </div>
-      </Link>
+        <div className="roomState">
+          <p className="roomStatus">{roomStatus === "CREATE" ? "대기 중" : "진행 중"}</p>
+          {roomType === "AI" ? (
+            <div className="warningComment">
+              <AiOutlineInfoCircle size={25} color="var(--push-gray)" />
+              <p>
+                AI 면접관 방에는 입장하실 수 없습니다.
+                <br />방 만들기 기능을 이용해주세요.
+              </p>
+            </div>
+          ) : roomIsPrivate ? (
+            <div className="roomInfo">
+              <span>
+                {roomPeopleNow} / {roomPeopleNum}
+              </span>
+              <RiGitRepositoryPrivateFill size={32} color="var(--push-gray)" />
+            </div>
+          ) : (
+            <div className="roomInfo">
+              <span>
+                {roomPeopleNow} / {roomPeopleNum}
+              </span>
+              <MdPublic size={32} color="var(--push-gray)" />
+            </div>
+          )}
+        </div>
+      </div>
     </StyledRoom>
   );
 };

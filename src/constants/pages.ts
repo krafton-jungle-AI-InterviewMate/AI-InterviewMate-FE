@@ -7,6 +7,7 @@ export const PagesPath = {
   QUESTIONS_DETAILS: "/mypage/questions/details",
   INTERVIEW_AI: "/interview/ai",
   INTERVIEW_READY: "/interview/ready",
+  INTERVIEW_READY_USER: "interview/readyuser",
   INTERVIEW_END: "/interview/end",
   LOBBY: "/lobby",
   LOGIN: "/login",
@@ -27,5 +28,6 @@ export const PagesName = {
 
   /** 면접방 */
   "/interview/ready": "면접 대기방",
+  "/interview/readyuser": "면접 대기방",
   "/interview/end": "면접 종료",
 } as const;

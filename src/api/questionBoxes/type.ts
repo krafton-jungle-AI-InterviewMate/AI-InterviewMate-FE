@@ -6,19 +6,28 @@ type ResponseStatus = {
   statusMsg: string;
 };
 
+export type Questions = {
+  questionIdx: number;
+  keyword1: string;
+  keyword2: string;
+  keyword3: string;
+  keyword4: string;
+  keyword5: string;
+  questionTitle: string;
+};
+
 export type QuestionBoxes = {
   questionBoxIdx: number;
   questionBoxName: string;
   questionNum: number;
+  questions: Array<Questions>;
 };
 
 export type GetQuestionBoxesResponse = ResponseStatus & {
   data: Array<QuestionBoxes>;
 };
 
-export type GetQuestionBoxes = (
-  memberIdx: string,
-) => Promise<AxiosResponse<GetQuestionBoxesResponse>>;
+export type GetQuestionBoxes = () => Promise<AxiosResponse<GetQuestionBoxesResponse>>;
 
 export type DeleteQuestionBoxes = (
   questionBoxIdx: number,
@@ -31,7 +40,7 @@ export type Question = {
   keyword3: string | null;
   keyword4: string | null;
   keyword5: string | null;
-  questionTitle: string
+  questionTitle: string;
 };
 
 export type QuestionDetail = {
@@ -49,9 +58,7 @@ export type GetQuestionDetails = (
   questionBoxIdx: number,
 ) => Promise<AxiosResponse<GetQuestionDetailsResponse>>;
 
-export type DeleteQuestion = (
-  questionIdx: number,
-) => Promise<AxiosResponse<ResponseStatus>>;
+export type DeleteQuestion = (questionIdx: number) => Promise<AxiosResponse<ResponseStatus>>;
 
 export type CommonQuestionDetailsPayload = {
   keyword1: string;

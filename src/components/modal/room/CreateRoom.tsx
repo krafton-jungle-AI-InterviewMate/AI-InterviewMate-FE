@@ -56,15 +56,14 @@ const StyledTabBtn = styled.button`
 `;
 
 const CreateRoom = ({ setModalCreateRoom }) => {
-  const [ roomType, setRoomType ] = useState<RoomTypes>("USER");
-  const [ questionBoxes, SetQuestionBoxes ] = useState<QuestionBoxes[]>([]);
-  const { data, isLoading, isError, isSuccess } = useGetQuestionBoxes("4"); // 임시 파라미터값
-
+  const [roomType, setRoomType] = useState<RoomTypes>("USER");
+  const [questionBoxes, SetQuestionBoxes] = useState<QuestionBoxes[]>([]);
+  const { data, isLoading, isError, isSuccess } = useGetQuestionBoxes();
   useEffect(() => {
     if (!isLoading && data) {
       SetQuestionBoxes(data.data.data);
     }
-  }, [ isLoading ]);
+  }, [isLoading]);
 
   const onClickTabBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
     const {
