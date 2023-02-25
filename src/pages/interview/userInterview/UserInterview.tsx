@@ -2,12 +2,12 @@ import { OpenVidu } from "openvidu-browser";
 import { useState, useEffect } from "react";
 import UserVideoComponent from "../../../components/interview/userInterview/UserVideoComponent";
 import { useRecoilValue } from "recoil";
-import { userInterviewDataAtom } from "store/interview/atom";
+import { InterviewDataAtom } from "store/interview/atom";
 
 const UserInterview = () => {
   const [OV, setOV] = useState<any>(null);
 
-  const userInterviewData = useRecoilValue(userInterviewDataAtom);
+  const userInterviewData = useRecoilValue(InterviewDataAtom);
 
   const [mySessionId, setMySessionId] = useState<string | undefined>(userInterviewData?.roomName);
   const [myUserName, setMyUserName] = useState<string | undefined>(userInterviewData?.nickName);
@@ -163,11 +163,11 @@ const UserInterview = () => {
             />
           </div>
 
-          {mainStreamManager ? (
+          {/* {mainStreamManager ? (
             <div id="main-video" className="col-md-6">
               <UserVideoComponent streamManager={mainStreamManager} />
             </div>
-          ) : null}
+          ) : null} */}
           <div id="video-container" className="col-md-6">
             {publisher ? (
               <div

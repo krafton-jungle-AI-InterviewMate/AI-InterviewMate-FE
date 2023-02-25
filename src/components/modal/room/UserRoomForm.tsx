@@ -9,7 +9,7 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { useSetRecoilState } from "recoil";
-import { feedbackAtom, userInterviewDataAtom } from "store/interview/atom";
+import { feedbackAtom, InterviewDataAtom } from "store/interview/atom";
 import { usePostInterviewRooms } from "hooks/queries/interview";
 import { useNavigate } from "react-router";
 import { RoomTypes } from "api/mypage/types";
@@ -27,7 +27,7 @@ interface InputRoomFormProps {
 }
 
 function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
-  const setUserInterviewData = useSetRecoilState(userInterviewDataAtom);
+  const setUserInterviewData = useSetRecoilState(InterviewDataAtom);
   const navigate = useNavigate();
   const [isPrivate, setIsPrivate] = useState(false);
   const feedback = useSetRecoilState(feedbackAtom);

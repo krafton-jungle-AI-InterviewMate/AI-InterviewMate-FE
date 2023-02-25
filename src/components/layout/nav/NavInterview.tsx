@@ -3,8 +3,11 @@ import Logo from "components/layout/common/Logo";
 import Breadcrumbs from "components/layout/common/Breadcrumbs";
 
 import styled from "@emotion/styled";
+import { useRecoilValue } from "recoil";
+import { InterviewDataAtom } from "store/interview/atom";
 
 const NavInterview = () => {
+  const roomType = useRecoilValue(InterviewDataAtom);
   return (
     <Nav>
       <StyledLeftSection>
@@ -12,7 +15,9 @@ const NavInterview = () => {
         <Breadcrumbs />
       </StyledLeftSection>
       {/* TODO: AI 면접관/유저 면접관 구분 */}
-      <StyledInterviewType>AI 면접</StyledInterviewType>
+      <StyledInterviewType>
+        {roomType?.roomType === "AI" ? "AI 면접" : "유저 면접"}
+      </StyledInterviewType>
     </Nav>
   );
 };

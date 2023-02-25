@@ -7,7 +7,7 @@ import { RoomTypes } from "api/mypage/types";
 import { Link, useNavigate } from "react-router-dom";
 import { usePostJoinRoom } from "./../../hooks/queries/interview";
 import { useSetRecoilState } from "recoil";
-import { userInterviewDataAtom } from "store/interview/atom";
+import { InterviewDataAtom } from "store/interview/atom";
 
 interface IRoomProps {
   roomType: RoomTypes;
@@ -112,7 +112,7 @@ const Room = ({
   idx,
   setIsJoinError,
 }: RoomProps) => {
-  const setUserInterviewData = useSetRecoilState(userInterviewDataAtom);
+  const setUserInterviewData = useSetRecoilState(InterviewDataAtom);
   const navigate = useNavigate();
   const { mutate, isLoading } = usePostJoinRoom();
   const onClickJoin = () => {
