@@ -11,7 +11,7 @@ const useInitializeSynthesizer = () => {
       ? "ko-KR-SunHiNeural"
       : "ko-KR-InJoonNeural";
   }, [ aiInterviewerGender ]);
-  const player = useMemo(() => new window.SpeechSDK.SpeakerAudioDestination(), []);
+  const player = new window.SpeechSDK.SpeakerAudioDestination();
 
   const initializeSynthesizer = async () => {
     const speechConfig = window.SpeechSDK.SpeechConfig.fromAuthorizationToken(

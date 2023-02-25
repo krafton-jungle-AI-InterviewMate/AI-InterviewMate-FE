@@ -66,3 +66,15 @@ export const aiInterviewerAtom = atom<AiInterviewerTypes>({
   key: "aiInterviewer",
   default: "Minho",
 });
+
+export const synthesizerAtom = atom<null | SpeechSynthesizer>({
+  key: "Synthesizer",
+  default: null,
+  dangerouslyAllowMutability: true,
+});
+
+export const playerAtom = atom<null | SpeakerAudioDestination>({
+  key: "Player",
+  default: null,
+  dangerouslyAllowMutability: true,
+});
