@@ -76,7 +76,11 @@ const QuestionDialog = (props: QuestionDialogProps) => {
   } = usePostQuestionDetails();
 
   const addKeyword = () => {
-    if (!keyword.length || keyword.length > KEYWORD_LENGTH_LIMIT) {
+    if (
+      !keyword.length
+      || keyword.length > KEYWORD_LENGTH_LIMIT
+      || keywordList.length >= KEYWORD_NUMBER_LIMIT
+    ) {
       return;
     }
     setKeywordList((curr) => ([ ...curr, keyword ]));
