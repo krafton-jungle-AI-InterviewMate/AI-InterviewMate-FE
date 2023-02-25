@@ -58,7 +58,7 @@ const StyledTabBtn = styled.button`
 const CreateRoom = ({ setModalCreateRoom }) => {
   const [roomType, setRoomType] = useState<RoomTypes>("USER");
   const [questionBoxes, SetQuestionBoxes] = useState<QuestionBoxes[]>([]);
-  const { data, isLoading, isError, isSuccess } = useGetQuestionBoxes("4"); // 임시 파라미터값
+  const { data, isLoading, isError, isSuccess } = useGetQuestionBoxes; // 임시 파라미터값
 
   useEffect(() => {
     if (!isLoading && data) {

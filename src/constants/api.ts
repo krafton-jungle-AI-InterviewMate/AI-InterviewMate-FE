@@ -2,8 +2,7 @@ import { ImageQueryParams } from "api/example/types";
 import { RoomTypes } from "api/mypage/types";
 import { GetAuthorizationParams } from "api/auth/type";
 
-export const BASE_URL = "https://denia-wwdt.shop";
-// export const BASE_URL = "https://jungle-weat.shop";
+export const BASE_URL = "https://jungle-weat.shop";
 
 export const API_PATH = {
   GET_IMAGE: (queryParams?: ImageQueryParams) => `/images/search?${queryParams || ""}`,
@@ -12,7 +11,7 @@ export const API_PATH = {
   POST_RATING_VIEWEE: (roomIdx: number) => `/rating/${roomIdx}/viewee`,
   POST_INTERVIEW_ROOMS: "/interview/rooms",
   GET_INTERVIEW_ROOMS: "/interview/rooms",
-  GET_QUESTIONBOXES: (memberIdx: string) => `/questionBoxes/temp/${memberIdx}`,
+  GET_QUESTIONBOXES: "/questionBoxes",
   DELETE_QUESTIONBOXES: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`,
   PUT_QUESTIONBOX_NAME: questionBoxIdx => `/questionBoxes/${questionBoxIdx}`,
   GET_QUESTION_DETAILS: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`,

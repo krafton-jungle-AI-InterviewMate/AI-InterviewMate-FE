@@ -10,16 +10,15 @@ import {
   PutQuestionBoxName,
 } from "./type";
 
-const getQuestionBoxes: GetQuestionBoxes = (memberIdx) =>
-  getAPI({ endPoint: API_PATH.GET_QUESTIONBOXES(memberIdx) });
+const getQuestionBoxes: GetQuestionBoxes = () => getAPI({ endPoint: API_PATH.GET_QUESTIONBOXES });
 
 const deleteQuestionBoxes: DeleteQuestionBoxes = questionBoxIdx =>
   deleteAPI({ endPoint: API_PATH.DELETE_QUESTIONBOXES(questionBoxIdx) });
 
-const getQuestionDetails: GetQuestionDetails = (questionBoxId) =>
+const getQuestionDetails: GetQuestionDetails = questionBoxId =>
   getAPI({ endPoint: API_PATH.GET_QUESTION_DETAILS(questionBoxId) });
 
-const deleteQuestion: DeleteQuestion = (questionIdx) =>
+const deleteQuestion: DeleteQuestion = questionIdx =>
   deleteAPI({ endPoint: API_PATH.DELETE_QUESTION(questionIdx) });
 
 const putQuestionDetails: PutQuestionDetails = ({ questionIdx, ...data }) =>
