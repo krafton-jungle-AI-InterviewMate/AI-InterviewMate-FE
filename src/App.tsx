@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.min.css";
 import { SimpleLayout, BreadcrumbsLayout, InterviewLayout } from "components/layout";
 
 import { InterviewAi, InterviewReady, InterviewEnd } from "pages/interview";
-import UserRoomFormTest from "./components/modal/room/UserRoomFormTest";
+import UserInterview from "./pages/interview/userInterview/UserInterview";
 import Home from "pages/Home";
 import { Mypage, Result, ResultDetails, QuestionList, QuestionDetails } from "pages/mypage";
 import Login from "pages/Login";
@@ -53,7 +53,7 @@ function App() {
         {/* NavInterview */}
         <Route element={<InterviewLayout />}>
           <Route path={PagesPath.INTERVIEW_READY} element={<InterviewReady />} />
-          <Route path={PagesPath.INTERVIEW_READY_USER} element={<UserRoomFormTest />} />
+          <Route path={PagesPath.INTERVIEW_READY_USER} element={<UserInterview />} />
         </Route>
 
         {/* Pages Without Nav */}

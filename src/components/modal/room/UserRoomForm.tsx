@@ -9,7 +9,7 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { useSetRecoilState } from "recoil";
-import { feedbackAtom, roomNameAtom, userNameAtom } from "store/interview/atom";
+import { feedbackAtom, InterviewDataAtom } from "store/interview/atom";
 import { usePostInterviewRooms } from "hooks/queries/interview";
 import { useNavigate } from "react-router";
 import { RoomTypes } from "api/mypage/types";
@@ -27,10 +27,9 @@ interface InputRoomFormProps {
 }
 
 function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
-  const setRoomName = useSetRecoilState(roomNameAtom);
-  const setUserName = useSetRecoilState(userNameAtom);
+  const setUserInterviewData = useSetRecoilState(InterviewDataAtom);
   const navigate = useNavigate();
-  const [ isPrivate, setIsPrivate ] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(false);
   const feedback = useSetRecoilState(feedbackAtom);
   const onChangePublic = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -59,12 +58,11 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
     if (isLoading) {
       return;
     }
-    setUserName(data.email);
-    setRoomName(data.roomName);
     mutate(
       { data },
       {
-        onSuccess: () => {
+        onSuccess: ({ data }) => {
+          setUserInterviewData(data.data);
           navigate("/interview/readyuser");
         },
         onError(error) {
@@ -73,17 +71,17 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
       },
     );
   };
-  const roomPeopleNumArr = [ 1, 2, 3 ];
-  const isPrivateArr = [ false, true ];
-  const FeedbackArr = [ "ON", "OFF" ];
-  const roomTimeArr = [ 15, 30, 45, 60 ];
+  const roomPeopleNumArr = [1, 2, 3];
+  const isPrivateArr = [false, true];
+  const FeedbackArr = ["ON", "OFF"];
+  const roomTimeArr = [15, 30, 45, 60];
   return (
     <StyledUserRoomForm
       roomNameError={errors.roomName?.message}
       passwordError={errors.roomPassword?.message}
     >
       <form onSubmit={handleSubmit(onValid)}>
-        <input {...register("email")} readOnly hidden value="user4@test.com" />
+        <input {...register("email")} readOnly hidden value="user1@test.com" />
         <div className="inputContent">
           <label htmlFor="roomName">방 제목</label>
           <input

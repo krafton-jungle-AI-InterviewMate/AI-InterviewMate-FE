@@ -31,3 +31,14 @@ export const usePostInterviewRooms = () => {
     },
   });
 };
+
+export const usePostJoinRoom = () => {
+  return useMutation(interviewAPI.postJoinRoom, {
+    onSuccess: data => {
+      console.log(data);
+    },
+    onError: e => {
+      console.log(e);
+    },
+  });
+};
