@@ -63,7 +63,9 @@ const InterviewAiContainer = () => {
             <BreakModeController />
           )}
           {interviewMode === "question" && (
-            <QuestionModeController questionList={questions} />
+            <QuestionModeController
+              questionList={questions}
+            />
           )}
           {interviewMode === "answer" && (
             <AnswerModeController video={video} canvasRef={canvasRef} />

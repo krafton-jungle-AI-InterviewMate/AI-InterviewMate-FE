@@ -41,3 +41,10 @@ export type GetMyinfoResponse = ResponseStatus & {
 };
 
 export type GetMyinfo = () => Promise<AxiosResponse<GetMyinfoResponse>>;
+
+export type GetAzureTokenResponse = {
+  token: string;
+  region: string;
+};
+
+export type GetAzureToken = () => Promise<AxiosResponse<GetAzureTokenResponse>>;

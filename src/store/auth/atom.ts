@@ -10,3 +10,8 @@ export const memberAtom = atom<Member>({
   key: "Member",
   default: memberInitialState,
 });
+
+export const azureTokenAtom = atom<string>({
+  key: "AzureToken",
+  default: "",
+});

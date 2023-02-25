@@ -1,10 +1,10 @@
-import axios, { Axios, AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import qs from "qs";
 import { getRecoil } from "recoil-nexus";
 import { memberAtom } from "store/auth/atom";
 
 import { Dict, CommonAPI } from "types/apis";
-import { BASE_URL } from "constants/api";
+import { BASE_URL, AWS_API_GATEWAY_URL } from "constants/api";
 
 const generateQueryEndPoint = (endPoint: string, data: Dict) => {
   const queryString = qs.stringify(data, {
@@ -21,6 +21,14 @@ export const axiosInstance = axios.create({
     Accept: "application/json",
   },
   withCredentials: true,
+});
+
+export const lambdaClient = axios.create({
+  baseURL: `${AWS_API_GATEWAY_URL}`,
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
 });
 
 /**
@@ -57,6 +65,10 @@ axiosInstance.interceptors.request.use(
   config => requestSuccessHandler(config),
   err => requestErrorHandler(err),
 );
+lambdaClient.interceptors.request.use(
+  config => requestSuccessHandler(config),
+  err => requestErrorHandler(err),
+);
 
 /**
  * Axios Response Middleware
@@ -84,4 +96,8 @@ export const deleteAPI: CommonAPI = ({ endPoint, axiosOption }) => {
 
 export const patchAPI: CommonAPI = ({ endPoint, data, axiosOption }) => {
   return axiosInstance.patch(endPoint, data, axiosOption);
+};
+
+export const lambdaGetAPI: CommonAPI = ({ endPoint, axiosOption }) => {
+  return lambdaClient.get(endPoint, axiosOption);
 };

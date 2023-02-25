@@ -49,3 +49,16 @@ export const useGetMyinfo = (enabled: boolean) => {
   };
 };
 
+export const useGetAzureToken = () => {
+  const { data, isSuccess, isLoading, isFetching, isError } = useQuery([ "getAzureToken" ], () => {
+    return authAPI.getAzureToken();
+  });
+
+  return {
+    data,
+    isSuccess,
+    isLoading,
+    isFetching,
+    isError,
+  };
+};
