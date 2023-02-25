@@ -17,7 +17,6 @@ import Skeleton from "@mui/material/Skeleton";
 
 import useSTT from "hooks/useSTT";
 import useInitializeSynthesizer from "hooks/useInitializeSynthesizer";
-import * as speechsdk from "microsoft-cognitiveservices-speech-sdk";
 
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
@@ -35,7 +34,7 @@ const InterviewAiContainer = () => {
   const [ isWebcamReady, setIsWebcamReady ] = useState(false);
   const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
 
-  const [ synthesizer, setSynthesizer ] = useState<null | speechsdk.SpeechSynthesizer>(null);
+  const [ synthesizer, setSynthesizer ] = useState<null | SpeechSynthesizer>(null);
 
   useSTT();
   const {

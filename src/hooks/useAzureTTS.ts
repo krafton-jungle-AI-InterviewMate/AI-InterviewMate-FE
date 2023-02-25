@@ -2,12 +2,10 @@ import { useEffect } from "react";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import { interviewModeAtom, interviewQuestionNumberAtom } from "store/interview/atom";
 
-import * as speechsdk from "microsoft-cognitiveservices-speech-sdk";
-
 export type UseAzureTTSParams = {
   questionList: string[];
-  synthesizer: speechsdk.SpeechSynthesizer;
-  player: speechsdk.SpeakerAudioDestination;
+  synthesizer: SpeechSynthesizer;
+  player: SpeakerAudioDestination;
 };
 
 const useAzureTTS = (params: UseAzureTTSParams) => {

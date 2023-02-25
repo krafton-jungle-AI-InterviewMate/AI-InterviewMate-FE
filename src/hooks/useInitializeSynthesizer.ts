@@ -3,8 +3,6 @@ import { useRecoilValue } from "recoil";
 import { aiInterviewerGenderSelector } from "store/interview/selector";
 import { azureTokenAtom } from "store/auth/atom";
 
-import * as speechsdk from "microsoft-cognitiveservices-speech-sdk";
-
 const useInitializeSynthesizer = () => {
   const azureToken = useRecoilValue(azureTokenAtom);
   const aiInterviewerGender = useRecoilValue(aiInterviewerGenderSelector);
@@ -13,20 +11,20 @@ const useInitializeSynthesizer = () => {
       ? "ko-KR-SunHiNeural"
       : "ko-KR-InJoonNeural";
   }, [ aiInterviewerGender ]);
-  const player = useMemo(() => new speechsdk.SpeakerAudioDestination(), []);
+  const player = useMemo(() => new window.SpeechSDK.SpeakerAudioDestination(), []);
 
   const initializeSynthesizer = async () => {
-    const speechConfig = speechsdk.SpeechConfig.fromAuthorizationToken(
+    const speechConfig = window.SpeechSDK.SpeechConfig.fromAuthorizationToken(
       azureToken,
       "koreacentral",
     );
 
-    const audioConfig = speechsdk.AudioConfig.fromSpeakerOutput(player);
+    const audioConfig = window.SpeechSDK.AudioConfig.fromSpeakerOutput(player);
 
     speechConfig.setProperty("SpeechServiceConnection_SynthLanguage", "ko-KR");
     speechConfig.setProperty("SpeechServiceConnection_SynthVoice", synthVoice);
 
-    return new speechsdk.SpeechSynthesizer(speechConfig, audioConfig);
+    return new window.SpeechSDK.SpeechSynthesizer(speechConfig, audioConfig);
   };
 
   return {
