@@ -52,7 +52,7 @@ export const aiInterviewerGenderSelector = selector({
     switch (aiInterviewer) {
     case "Seoyoung":
       return "Female";
-    case "Seunghyun":
+    case "Suhyun":
       return "Female";
 
     default:

@@ -16,7 +16,6 @@ import Webcam from "react-webcam";
 import Skeleton from "@mui/material/Skeleton";
 
 import useSTT from "hooks/useSTT";
-import useInitializeSynthesizer from "hooks/useInitializeSynthesizer";
 
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
@@ -34,13 +33,7 @@ const InterviewAiContainer = () => {
   const [ isWebcamReady, setIsWebcamReady ] = useState(false);
   const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
 
-  const [ synthesizer, setSynthesizer ] = useState<null | SpeechSynthesizer>(null);
-
   useSTT();
-  const {
-    player,
-    initializeSynthesizer,
-  } = useInitializeSynthesizer();
 
   useEffect(() => {
     if (isWebcamReady && webcamRef.current) {
@@ -49,11 +42,6 @@ const InterviewAiContainer = () => {
   }, [ isWebcamReady, webcamRef ]);
 
   useEffect(() => {
-    (async () => {
-      const synth = await initializeSynthesizer();
-      setSynthesizer(synth);
-    })();
-
     // ! FIXME: 질문 fetching API 연동 이후 실제 질문 개수로 세팅
     setInterviewQuestionTotal(questions.length);
     setAnswerScript(new Array(questions.length).fill(""));
@@ -69,7 +57,7 @@ const InterviewAiContainer = () => {
         <StyledCanvas ref={canvasRef} />
       </StyledVideoWrap>
 
-      {isWebcamReady && video && synthesizer && (
+      {isWebcamReady && video && (
         <>
           {interviewMode === "break" && (
             <BreakModeController />
@@ -77,8 +65,6 @@ const InterviewAiContainer = () => {
           {interviewMode === "question" && (
             <QuestionModeController
               questionList={questions}
-              synthesizer={synthesizer}
-              player={player}
             />
           )}
           {interviewMode === "answer" && (
