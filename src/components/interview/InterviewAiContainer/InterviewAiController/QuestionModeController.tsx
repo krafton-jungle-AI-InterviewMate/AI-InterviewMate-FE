@@ -1,42 +1,22 @@
-import { useEffect, useMemo } from "react";
-import { useSetRecoilState, useRecoilState } from "recoil";
-import { interviewModeAtom, interviewQuestionNumberAtom } from "store/interview/atom";
+import { useRecoilValue } from "recoil";
+import { interviewQuestionNumberAtom } from "store/interview/atom";
+
+import useAzureTTS, { UseAzureTTSParams } from "hooks/useAzureTTS";
 
 import InterviewComment from "../InterviewComment";
 
 import styled from "@emotion/styled";
-import questions from "components/interview/_mock/questions";
 
-type QuestionModeControllerProps = {
-  questionList: string[];
-};
+type QuestionModeControllerProps = UseAzureTTSParams;
 
 const QuestionModeController = (props: QuestionModeControllerProps) => {
   const { questionList } = props;
 
-  const setInterviewMode = useSetRecoilState(interviewModeAtom);
-  const [ interviewQuestionNumber, setInterviewQuestionNumber ] = useRecoilState(
+  const interviewQuestionNumber = useRecoilValue(
     interviewQuestionNumberAtom,
   );
 
-  const synth = window.speechSynthesis;
-
-  useEffect(() => {
-    const msg = new SpeechSynthesisUtterance(questions[interviewQuestionNumber]);
-    msg.rate = 1;
-    msg.pitch = 1.5;
-
-    msg.onend = () => {
-      setInterviewMode("answer");
-      setInterviewQuestionNumber(curr => curr + 1);
-    };
-
-    synth.speak(msg);
-
-    return () => {
-      synth.cancel();
-    };
-  }, []);
+  useAzureTTS(props);
 
   return (
     <StyledWrap>
