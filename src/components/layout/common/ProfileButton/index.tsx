@@ -16,7 +16,7 @@ const ProfileButton = () => {
 
   const {
     accessToken,
-    username,
+    nickname,
   } = useRecoilValue(memberAtom);
 
   const {
@@ -42,7 +42,7 @@ const ProfileButton = () => {
   return accessToken ? (
     <>
       <button type="button" className="profile" onClick={handleProfileButtonClick}>
-        {username}
+        {nickname}
       </button>
       <Popover
         open={Boolean(anchorEl)}

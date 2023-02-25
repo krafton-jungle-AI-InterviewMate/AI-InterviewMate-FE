@@ -26,9 +26,12 @@ const Redirect = () => {
       if (accessToken) {
         isLoggedInCookie.set(true);
 
-        setMember((curr) => ({
+        setMember(({ idx, nickname, email, authProvider }) => ({
           accessToken,
-          username: curr.username,
+          idx,
+          nickname,
+          email,
+          authProvider,
         }));
       }
     }
@@ -36,9 +39,12 @@ const Redirect = () => {
 
   useEffect(() => {
     if (isMyinfoSuccess && myinfo) {
-      setMember((curr) => ({
-        accessToken: curr.accessToken,
-        username: myinfo.data.data.nickname,
+      setMember(({ accessToken }) => ({
+        accessToken,
+        idx: myinfo.data.data.idx,
+        nickname: myinfo.data.data.nickname,
+        email: myinfo.data.data.email,
+        authProvider: myinfo.data.data.authProvider,
       }));
 
       navigate(PagesPath.LOBBY, {
