@@ -11,9 +11,9 @@ export const API_PATH = {
   POST_RATING_VIEWEE: (roomIdx: number) => `/rating/${roomIdx}/viewee`,
   POST_INTERVIEW_ROOMS: "/interview/rooms",
   GET_INTERVIEW_ROOMS: "/interview/rooms",
-  GET_QUESTIONBOXES: (memberIdx: string) => `/questionBoxes/temp/${memberIdx}`,
+  GET_QUESTIONBOXES: "/questionBoxes",
   DELETE_QUESTIONBOXES: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`,
-  PUT_QUESTIONBOX_NAME: (questionBoxIdx) => `/questionBoxes/${questionBoxIdx}`,
+  PUT_QUESTIONBOX_NAME: questionBoxIdx => `/questionBoxes/${questionBoxIdx}`,
   GET_QUESTION_DETAILS: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`,
   PUT_QUESTION_DETAILS: (questionIdx: number) => `/questionBoxes/question/${questionIdx}`,
   POST_QUESTION_DETAILS: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`,
@@ -22,6 +22,7 @@ export const API_PATH = {
     `/login/oauth2/authorization/${social}?redirect_uri=${window.location.origin}${redirect_uri}`,
   GET_REFRESH: "/login/refresh",
   GET_MYINFO: "/mypage/myinfo",
+  POST_JOIN_ROOM: (roomIdx: number) => `/interview/rooms/${roomIdx}`,
 };
 
 export const AI_VIEWER_IDX = 79797979;
