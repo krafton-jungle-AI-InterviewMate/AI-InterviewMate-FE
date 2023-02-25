@@ -3,6 +3,10 @@ import { useState, useEffect } from "react";
 import UserVideoComponent from "../../../components/interview/userInterview/UserVideoComponent";
 import { useRecoilValue } from "recoil";
 import { InterviewDataAtom } from "store/interview/atom";
+import styled from "@emotion/styled";
+import Loading from "components/common/Loading";
+import { StyledBtn } from "styles/StyledBtn";
+import { Dialog, DialogTitle } from "@mui/material";
 
 const UserInterview = () => {
   const [OV, setOV] = useState<any>(null);
@@ -146,44 +150,76 @@ const UserInterview = () => {
     joinSession();
   }, []);
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleClickClose = () => {
+    setIsOpen(false);
+  };
+
+  const handleClickLeave = () => {
+    setIsOpen(true);
+  };
+
   return (
-    <div className="container">
+    <StyledUserInterview>
       {session ? (
-        <div id="session">
-          <div id="session-header">
-            <h1 id="session-title">{mySessionId}</h1>
-            <input
-              className="btn btn-large btn-danger"
-              type="button"
-              id="buttonLeaveSession"
-              onClick={leaveSession}
-              value="Leave session"
-            />
+        <>
+          <div>
+            <h1>{mySessionId}</h1>
+            <input type="button" onClick={leaveSession} value="Leave session" />
           </div>
 
-          <div id="video-container" className="col-md-6">
+          <div>
             {publisher ? (
-              <div
-                className="stream-container col-md-6 col-xs-6"
-                onClick={() => handleMainVideoStream(publisher)}
-              >
+              <div>
                 <UserVideoComponent streamManager={publisher} />
               </div>
             ) : null}
             {subscribers.map((sub, i) => (
-              <div
-                key={i}
-                className="stream-container col-md-6 col-xs-6"
-                onClick={() => handleMainVideoStream(sub)}
-              >
+              <div key={i}>
                 <UserVideoComponent streamManager={sub} />
               </div>
             ))}
           </div>
-        </div>
-      ) : null}
-    </div>
+          <div>
+            <StyledBtn onClick={handleClickLeave} width="200px" height="48px" color="red">
+              나가기
+            </StyledBtn>
+            <StyledBtn width="200px" height="48px" color="orange">
+              READY
+            </StyledBtn>
+          </div>
+          <Dialog
+            open={isOpen}
+            onClose={handleClickClose}
+            PaperProps={{ style: { padding: "50px 35px" } }}
+          >
+            <DialogTitle
+              fontSize={16}
+              fontWeight={400}
+              color={"var(--main-black)"}
+              marginBottom={9}
+              padding={0}
+            >
+              현재 면접 방을 나가고
+              <br />
+              로비로 이동하시겠습니까?
+            </DialogTitle>
+            <StyledBtn onClick={leaveSession} width="200px" height="42px" color="orange">
+              네!
+            </StyledBtn>
+            <StyledBtn onClick={handleClickClose} width="200px" height="42px" color="red">
+              취소
+            </StyledBtn>
+          </Dialog>
+        </>
+      ) : (
+        <Loading margin="250px" />
+      )}
+    </StyledUserInterview>
   );
 };
+
+const StyledUserInterview = styled.div``;
 
 export default UserInterview;
