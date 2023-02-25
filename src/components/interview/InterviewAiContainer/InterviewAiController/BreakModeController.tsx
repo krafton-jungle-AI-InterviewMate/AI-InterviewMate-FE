@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
-import { interviewModeAtom } from "store/interview/atom";
+import { interviewModeAtom, synthesizerAtom, playerAtom } from "store/interview/atom";
+
+import useInitializeSynthesizer from "hooks/useInitializeSynthesizer";
 
 import { InterviewModeComment } from "constants/interview";
 import InterviewComment from "../InterviewComment";
@@ -9,12 +11,25 @@ import styled from "@emotion/styled";
 
 const BreakModeController = () => {
   const setInterviewMode = useSetRecoilState(interviewModeAtom);
+  const setSynthesizer = useSetRecoilState(synthesizerAtom);
+  const setPlayer = useSetRecoilState(playerAtom);
+
+  const {
+    player: newPlayer,
+    initializeSynthesizer,
+  } = useInitializeSynthesizer();
 
   useEffect(() => {
+    (async () => {
+      const synth = await initializeSynthesizer();
+      setSynthesizer(synth);
+      setPlayer(newPlayer);
+    })();
+
     const timerId = window.setTimeout(() => {
       setInterviewMode("question");
     }, 1000 * 3);
-
+  
     return () => {
       window.clearTimeout(timerId);
     };

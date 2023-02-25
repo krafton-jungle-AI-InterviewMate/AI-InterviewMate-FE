@@ -16,7 +16,7 @@ export const API_PATH = {
   PUT_QUESTIONBOX_NAME: (questionBoxIdx) => `/questionBoxes/${questionBoxIdx}`,
   GET_QUESTION_DETAILS: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`,
   PUT_QUESTION_DETAILS: (questionIdx: number) => `/questionBoxes/question/${questionIdx}`,
-  POST_QUESTION_DETAILS: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`, // !
+  POST_QUESTION_DETAILS: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`,
   DELETE_QUESTION: (questionIdx: number) => `/questionBoxes/question/${questionIdx}`,
   GET_AUTHORIZATION: ({ social, redirect_uri }: GetAuthorizationParams) =>
     `/login/oauth2/authorization/${social}?redirect_uri=${window.location.origin}${redirect_uri}`,
@@ -25,3 +25,9 @@ export const API_PATH = {
 };
 
 export const AI_VIEWER_IDX = 79797979;
+
+export const AWS_API_GATEWAY_URL = "https://jqyikrv9ta.execute-api.ap-northeast-2.amazonaws.com";
+
+export const AWS_API_PATH = {
+  GET_AZURE_TOKEN: "/v1/azure-token",
+};
