@@ -3,18 +3,14 @@ import { useState, useEffect } from "react";
 import UserVideoComponent from "../../../components/interview/userInterview/UserVideoComponent";
 import { useRecoilValue } from "recoil";
 import { userInterviewDataAtom } from "store/interview/atom";
-import { BASE_URL } from "constants/api";
-
-// const APPLICATION_SERVER_URL = BASE_URL; // ! TODO: 우리 서버 URL로 바꿔야 함.
-const APPLICATION_SERVER_URL = "https://denia-wwdt.shop"; // ! TODO: 우리 서버 URL로 바꿔야 함.
 
 const UserInterview = () => {
   const [OV, setOV] = useState<any>(null);
 
   const userInterviewData = useRecoilValue(userInterviewDataAtom);
 
-  const [mySessionId, setMySessionId] = useState(userInterviewData?.roomName);
-  const [myUserName, setMyUserName] = useState(userInterviewData?.nickName);
+  const [mySessionId, setMySessionId] = useState<string | undefined>(userInterviewData?.roomName);
+  const [myUserName, setMyUserName] = useState<string | undefined>(userInterviewData?.nickName);
   const [session, setSession] = useState<any>(undefined);
   const [mainStreamManager, setMainStreamManager] = useState(undefined);
   const [publisher, setPublisher] = useState(undefined);
@@ -49,7 +45,6 @@ const UserInterview = () => {
   const joinSession = async () => {
     // --- 1) OpenVidu 객체 가져오기 ---
     const newOV = new OpenVidu();
-    console.log(newOV);
     newOV.enableProdMode();
 
     // --- 2) 세션 초기화 ---
@@ -109,7 +104,6 @@ const UserInterview = () => {
         });
 
         // --- 6) Publish your stream ---
-
         session.publish(publisher);
 
         // Obtain the current video device in use
