@@ -13,6 +13,7 @@ import NameTag from "components/interview/InterviewNameTag";
 import Skeleton from "@mui/material/Skeleton";
 import { toast } from "react-toastify";
 import { getAiInterviewerProfile, getAiInterviewerThumbnail } from "lib/interview";
+import Popup from "components/common/Popup";
 
 import { BsThreeDots } from "react-icons/bs";
 import { AiOutlineInfoCircle } from "react-icons/ai";
@@ -31,6 +32,7 @@ const InterviewReady = () => {
   const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
   const [ disableGoButton, setDisableGoButton ] = useState(true);
   const [ isModalOpen, setIsModalOpen ] = useState(false);
+  const [ isConfirmPopupOpen, setIsConfirmPopupOpen ] = useState(false);
 
   const setMotionSnapshot = useSetRecoilState(motionSnapshotAtom);
   const aiInterviewer = useRecoilValue(aiInterviewerAtom);
@@ -77,8 +79,7 @@ const InterviewReady = () => {
     }
   }, [ isVideoReady ]);
 
-  const handleCancelButton = () => {
-    // TODO: 컨펌 팝업
+  const handleCancel = () => {
     navigate("/lobby");
   };
 
@@ -120,6 +121,21 @@ const InterviewReady = () => {
 
   return (
     <Styled.Wrapper>
+      {isConfirmPopupOpen && (
+        <Popup
+          open={isConfirmPopupOpen}
+          onClose={() => setIsConfirmPopupOpen(false)}
+          confirmText="네!"
+          cancelText="취소"
+          onConfirm={handleCancel}
+        >
+          <Styled.CancelText>
+            면접을 취소 하시겠습니까?
+            <br />
+            현재 면접방도 삭제됩니다.
+          </Styled.CancelText>
+        </Popup>
+      )}
       <InterviewerSelectModal isOpen={isModalOpen} handleClose={handleModalClose} />
 
       <Styled.ReadyContainer>
@@ -150,7 +166,7 @@ const InterviewReady = () => {
 
       <Styled.FlexContainer>
         <Styled.ButtonBox>
-          <Styled.CancelButton type="button" onClick={handleCancelButton}>
+          <Styled.CancelButton type="button" onClick={() => setIsConfirmPopupOpen(true)}>
             면접 취소하기
           </Styled.CancelButton>
           <Styled.GoButtonWrap>
