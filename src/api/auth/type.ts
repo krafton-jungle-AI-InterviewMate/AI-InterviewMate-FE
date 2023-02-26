@@ -33,7 +33,6 @@ export type Myinfo = {
   nickname: string;
   email: string;
   authProvider: SocialTypes;
-  refreshToken: string;
 }
 
 export type GetMyinfoResponse = ResponseStatus & {
@@ -48,3 +47,12 @@ export type GetAzureTokenResponse = {
 };
 
 export type GetAzureToken = () => Promise<AxiosResponse<GetAzureTokenResponse>>;
+
+export type PutNicknameParams = {
+  nickname: string;
+  email: string;
+};
+
+export type PutNicknameResponse = ResponseStatus;
+
+export type PutNickname = (params: PutNicknameParams) => Promise<AxiosResponse<PutNicknameResponse>>;

@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import authAPI from "api/auth";
 import { GetAuthorizationParams } from "api/auth/type";
 
@@ -34,7 +34,7 @@ export const useGetRefresh = (enabled: boolean) => {
 };
 
 export const useGetMyinfo = (enabled: boolean) => {
-  const { data, isSuccess, isLoading, isFetching, isError } = useQuery([ "getMyinfo" ], () => {
+  const { data, isSuccess, isLoading, isFetching, isError, refetch } = useQuery([ "getMyinfo" ], () => {
     return authAPI.getMyinfo();
   }, {
     enabled,
@@ -46,6 +46,7 @@ export const useGetMyinfo = (enabled: boolean) => {
     isLoading,
     isFetching,
     isError,
+    refetch,
   };
 };
 
@@ -61,4 +62,8 @@ export const useGetAzureToken = () => {
     isFetching,
     isError,
   };
+};
+
+export const usePutNickname = () => {
+  return useMutation(authAPI.putNickname);
 };
