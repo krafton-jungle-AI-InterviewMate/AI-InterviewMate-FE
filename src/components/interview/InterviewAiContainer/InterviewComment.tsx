@@ -23,7 +23,8 @@ const StyledInterviewComment = styled.div`
   height: 48px;
   margin: 0 auto;
   background-color: var(--main-white);
-  border: 1px solid var(--main-orange);
+  border: 1px solid var(--main-gray);
   border-radius: var(--button-border-radius);
+  box-shadow: var(--box-shadow);
   color: var(--font-gray);
 `;

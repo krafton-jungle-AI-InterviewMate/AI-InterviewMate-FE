@@ -172,7 +172,7 @@ const StyledTimer = styled.div`
 
 const StyledNextButton = styled.button`
   position: absolute;
-  top: 50%;
+  top: -120px;
   right: 60px;
   width: 100px;
   height: 100px;
