@@ -29,7 +29,7 @@ interface InputRoomFormProps {
 function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
   const setUserInterviewData = useSetRecoilState(InterviewDataAtom);
   const navigate = useNavigate();
-  const [isPrivate, setIsPrivate] = useState(false);
+  const [ isPrivate, setIsPrivate ] = useState(false);
   const feedback = useSetRecoilState(feedbackAtom);
   const onChangePublic = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -71,10 +71,10 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
       },
     );
   };
-  const roomPeopleNumArr = [1, 2, 3];
-  const isPrivateArr = [false, true];
-  const FeedbackArr = ["ON", "OFF"];
-  const roomTimeArr = [15, 30, 45, 60];
+  const roomPeopleNumArr = [ 1, 2, 3 ];
+  const isPrivateArr = [ false, true ];
+  const FeedbackArr = [ "ON", "OFF" ];
+  const roomTimeArr = [ 15, 30, 45, 60 ];
   return (
     <StyledUserRoomForm
       roomNameError={errors.roomName?.message}
@@ -228,10 +228,10 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
           </FormControl>
         </div>
         <div className="submitAndCancel">
-          <StyledBtn width="380px" height="58px" color="orange">
+          <StyledBtn width="300px" height="58px" color="orange">
             확인
           </StyledBtn>
-          <StyledBtn onClick={onClickModalClose} width="380px" height="58px" color="red">
+          <StyledBtn onClick={onClickModalClose} width="300px" height="58px" color="red">
             취소
           </StyledBtn>
         </div>
@@ -311,7 +311,7 @@ const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`
     }
     .submitAndCancel {
       display: flex;
-      justify-content: space-between;
+      justify-content: space-evenly;
       margin-top: 80px;
     }
   }
