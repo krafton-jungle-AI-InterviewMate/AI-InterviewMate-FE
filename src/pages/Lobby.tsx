@@ -32,19 +32,19 @@ const StyledRoomContents = styled.div<StyledRoomContentsProps>`
 `;
 
 const Lobby = () => {
-  const [modalCreateRoom, setModalCreateRoom] = useState(false);
-  const [interviewRooms, setInterviewRooms] = useState<InterviewRooms[]>([]);
+  const [ modalCreateRoom, setModalCreateRoom ] = useState(false);
+  const [ interviewRooms, setInterviewRooms ] = useState<InterviewRooms[]>([]);
   const { data, isSuccess, isLoading, isError, refetch } = useGetInterviewRooms();
   useEffect(() => {
     if (!isLoading && data) {
       setInterviewRooms(data.data.data);
     }
-  }, [data]);
+  }, [ data ]);
 
   const onClickReload = () => {
     refetch();
   };
-  const [isJoinError, setIsJoinError] = useState(false);
+  const [ isJoinError, setIsJoinError ] = useState(false);
   return (
     <>
       {modalCreateRoom ? <CreateRoom setModalCreateRoom={setModalCreateRoom} /> : null}

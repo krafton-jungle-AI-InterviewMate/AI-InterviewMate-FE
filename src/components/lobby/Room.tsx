@@ -50,7 +50,7 @@ const StyledRoom = styled.div<IRoomProps>`
         height: 24px;
         font-size: 12px;
         background-color: ${props =>
-          props.roomType === "AI" ? "var(--push-gray)" : "var(--main-black)"};
+    props.roomType === "AI" ? "var(--push-gray)" : "var(--main-black)"};
         border-radius: 5px;
         color: var(--main-white);
       }
@@ -66,7 +66,7 @@ const StyledRoom = styled.div<IRoomProps>`
       }
       .roomStatus {
         color: ${props =>
-          props.roomStatus === "CREATE" ? "var(--main-orange)" : "var(--main-black)"};
+    props.roomStatus === "CREATE" ? "var(--main-orange)" : "var(--main-black)"};
       }
       .warningComment {
         display: flex;
