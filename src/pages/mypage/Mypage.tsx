@@ -7,6 +7,7 @@ import useLogout from "hooks/useLogout";
 import { useGetMyinfo } from "hooks/queries/auth";
 
 import ProfileUpdatePopup from "components/mypage/ProfileUpdatePopup";
+import Popup from "components/common/Popup";
 
 import styled from "@emotion/styled";
 
@@ -61,6 +62,7 @@ const StyledMypage = styled.div`
 const Mypage = () => {
   const setMember = useSetRecoilState(memberAtom);
   const [ isProfileUpdatePopupOpen, setIsProfileUpdatePopupOpen ] = useState(false);
+  const [ isLogoutPopupOpen, setIsLogoutPopupOpen ] = useState(false);
 
   const {
     handleLogout,
@@ -106,13 +108,24 @@ const Mypage = () => {
           refetch={refetch}
         />
       )}
+      {isLogoutPopupOpen && (
+        <Popup
+          open={isLogoutPopupOpen}
+          onClose={() => setIsLogoutPopupOpen(false)}
+          confirmText="네!"
+          cancelText="취소"
+          onConfirm={handleLogout}
+        >
+          로그아웃 하시겠습니까?
+        </Popup>
+      )}
       <div>
         <h2>회원 정보</h2>
         <hr />
         <button type="button" className="profile" onClick={() => setIsProfileUpdatePopupOpen(true)}>
           프로필 수정
         </button>
-        <button type="button" className="logout" onClick={handleLogout}>
+        <button type="button" className="logout" onClick={() => setIsLogoutPopupOpen(true)}>
           로그아웃
         </button>
       </div>
