@@ -43,7 +43,7 @@ const FinishedModeController = () => {
       data,
     }, {
       onSuccess: () => {
-        navigate("/interview/end");
+        navigate("/interview/end", { replace: true });
       },
       onError ( error ) {
         alert(error);
