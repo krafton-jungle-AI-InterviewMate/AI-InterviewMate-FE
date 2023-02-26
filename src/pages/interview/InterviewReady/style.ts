@@ -4,7 +4,7 @@ import { commonButtonStyle } from "styles/common";
 import { ToastOptions } from "react-toastify";
 
 export const Wrapper = styled.section`
-  width: 1400px;
+  width: 1440px;
 `;
 
 export const ConfirmText = styled.p`
