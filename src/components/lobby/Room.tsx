@@ -100,6 +100,8 @@ interface RoomProps {
   roomPeopleNum: number; // 총 인원 수
   idx: number;
   setIsJoinError: (text: boolean) => void;
+  setIsPasswordPopupOpen: (b: boolean) => void;
+  setTargetRoomIdx: (idx: number) => void;
 }
 const Room = ({
   roomName,
@@ -111,11 +113,21 @@ const Room = ({
   roomPeopleNum,
   idx,
   setIsJoinError,
+  setIsPasswordPopupOpen,
+  setTargetRoomIdx,
 }: RoomProps) => {
   const setUserInterviewData = useSetRecoilState(InterviewDataAtom);
   const navigate = useNavigate();
   const { mutate, isLoading } = usePostJoinRoom();
   const onClickJoin = () => {
+    setTargetRoomIdx(idx);
+
+    if (roomIsPrivate) {
+      // ! TODO: 비밀번호 검증
+      // ! src/components/modal/lobby/RoomPasswordPopup/index.tsx에서도 추가 작업 필요
+      setIsPasswordPopupOpen(true);
+      return;
+    }
     if (roomType === "AI" || roomPeopleNow === roomPeopleNum || roomStatus === "PROCEED") {
       setIsJoinError(true);
       return;
