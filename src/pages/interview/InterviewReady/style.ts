@@ -7,7 +7,7 @@ export const Wrapper = styled.section`
   width: 1000px;
 `;
 
-export const CancelText = styled.p`
+export const ConfirmText = styled.p`
   font-size: 16px;
   text-align: center;
 `;
