@@ -4,7 +4,7 @@ import { commonButtonStyle } from "styles/common";
 import { ToastOptions } from "react-toastify";
 
 export const Wrapper = styled.section`
-  width: 1000px;
+  width: 1400px;
 `;
 
 export const ConfirmText = styled.p`
@@ -40,12 +40,12 @@ export const commonStyle = css`
   position: relative;
   text-align: center;
   z-index: 9;
-  width: 272px;
-  height: 204px;
+  width: 640px;
+  height: 480px;
 `;
 
 export const wrapStyle = css`
-  border-radius: 5px;
+  border-radius: 16px;
   overflow: hidden;
   box-shadow: var(--box-shadow);
 `;
@@ -53,7 +53,7 @@ export const wrapStyle = css`
 export const VideoWrap = styled.div`
   ${commonStyle}
   ${wrapStyle}
-  border-radius: 5px;
+  border-radius: 16px;
   overflow: hidden;
   box-shadow: var(--box-shadow);
 
@@ -99,12 +99,12 @@ export const ButtonBox = styled.div`
 export const CancelButton = styled.button`
   ${commonButtonStyle}
   background-color: var(--main-white);
-  border: 1px solid var(--main-black);
+  border: 1px solid var(--main-gray);
+  box-shadow: var(--box-shadow);
 
   &:hover {
     background-color: var(--light-alert);
     color: var(--main-white);
-    border-color: transparent;
   }
   &:active {
     background-color: var(--push-alert);
@@ -176,15 +176,20 @@ export const toastOptions: ToastOptions = {
 };
 
 export const SelectButton = styled.button`
+  ${commonButtonStyle}
   position: absolute;
-  top: -42px;
-  width: 200px;
-  height: 24px;
-  border-radius: 5px;
-  background-color: var(--main-black);
-  color: var(--main-white);
-  font-size: 14px;
-  padding: 0;
+  top: -62px;
+  background-color: var(--main-white);
+  border: 1px solid var(--main-gray);
+  box-shadow: var(--box-shadow);
+
+  &:hover {
+    background-color: var(--main-blue);
+    color: var(--main-white);
+  }
+  &:active {
+    background-color: var(--push-blue);
+  }
 `;
 
 export const MiniProfile = styled.span`

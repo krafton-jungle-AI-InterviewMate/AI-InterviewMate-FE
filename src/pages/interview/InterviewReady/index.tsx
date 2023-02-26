@@ -144,7 +144,7 @@ const InterviewReady = () => {
         <Styled.Profile>
           <Styled.VideoWrap>
             {!isWebcamReady && (
-              <Skeleton variant="rectangular" width={272} height={204} />
+              <Skeleton variant="rectangular" width={640} height={480} />
             )}
             <Webcam ref={webcamRef} mirrored={false} onCanPlay={() => setIsWebcamReady(true)} />
             <Styled.Canvas ref={canvasRef} />
@@ -160,9 +160,6 @@ const InterviewReady = () => {
           </Styled.SelectButton>
           <Styled.ImageWrap bgImg={getAiInterviewerThumbnail(aiInterviewer)} />
           <NameTag role="interviewer" profileName={aiInterviewer} />
-          <Styled.MiniProfile>
-            {getAiInterviewerProfile(aiInterviewer)}
-          </Styled.MiniProfile>
         </Styled.Profile>
       </Styled.ReadyContainer>
 
