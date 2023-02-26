@@ -6,12 +6,14 @@ import { InterviewDataAtom } from "store/interview/atom";
 import styled from "@emotion/styled";
 import Loading from "components/common/Loading";
 import { StyledBtn } from "styles/StyledBtn";
-import { Dialog, DialogTitle } from "@mui/material";
+import { Dialog, DialogActions, DialogTitle } from "@mui/material";
+import { useNavigate } from "react-router";
 
 const UserInterview = () => {
   const [OV, setOV] = useState<any>(null);
 
   const userInterviewData = useRecoilValue(InterviewDataAtom);
+  const navigate = useNavigate();
 
   const [mySessionId, setMySessionId] = useState<string | undefined>(userInterviewData?.roomName);
   const [myUserName, setMyUserName] = useState<string | undefined>(userInterviewData?.nickName);
@@ -29,12 +31,6 @@ const UserInterview = () => {
 
   const onbeforeunload = event => {
     leaveSession();
-  };
-
-  const handleMainVideoStream = (stream: any) => {
-    if (mainStreamManager !== stream) {
-      setMainStreamManager(stream);
-    }
   };
 
   const deleteSubscriber = (streamManager: any) => {
@@ -144,6 +140,7 @@ const UserInterview = () => {
     setMyUserName("");
     setMainStreamManager(undefined);
     setPublisher(undefined);
+    navigate("/lobby");
   };
 
   useEffect(() => {
@@ -164,24 +161,23 @@ const UserInterview = () => {
     <StyledUserInterview>
       {session ? (
         <>
-          <div>
-            <h1>{mySessionId}</h1>
-            <input type="button" onClick={leaveSession} value="Leave session" />
-          </div>
-
-          <div>
+          <div className="video_contents">
             {publisher ? (
-              <div>
+              <div className="publisher">
                 <UserVideoComponent streamManager={publisher} />
               </div>
-            ) : null}
-            {subscribers.map((sub, i) => (
-              <div key={i}>
-                <UserVideoComponent streamManager={sub} />
-              </div>
-            ))}
+            ) : (
+              <div className="publisher skeleton"></div>
+            )}
+            <div>
+              {subscribers.map((sub, i) => (
+                <div key={i}>
+                  <UserVideoComponent streamManager={sub} />
+                </div>
+              ))}
+            </div>
           </div>
-          <div>
+          <div className="interview_actions">
             <StyledBtn onClick={handleClickLeave} width="200px" height="48px" color="red">
               나가기
             </StyledBtn>
@@ -192,25 +188,33 @@ const UserInterview = () => {
           <Dialog
             open={isOpen}
             onClose={handleClickClose}
-            PaperProps={{ style: { padding: "50px 35px" } }}
+            PaperProps={{
+              style: {
+                padding: "50px 35px",
+                borderRadius: "10px",
+              },
+            }}
           >
             <DialogTitle
               fontSize={16}
               fontWeight={400}
               color={"var(--main-black)"}
-              marginBottom={9}
+              marginBottom={3}
               padding={0}
+              textAlign={"center"}
             >
               현재 면접 방을 나가고
               <br />
               로비로 이동하시겠습니까?
             </DialogTitle>
-            <StyledBtn onClick={leaveSession} width="200px" height="42px" color="orange">
-              네!
-            </StyledBtn>
-            <StyledBtn onClick={handleClickClose} width="200px" height="42px" color="red">
-              취소
-            </StyledBtn>
+            <DialogActions>
+              <StyledBtn onClick={leaveSession} width="200px" height="42px" color="orange">
+                네!
+              </StyledBtn>
+              <StyledBtn onClick={handleClickClose} width="200px" height="42px" color="red">
+                취소
+              </StyledBtn>
+            </DialogActions>
           </Dialog>
         </>
       ) : (
@@ -220,6 +224,19 @@ const UserInterview = () => {
   );
 };
 
-const StyledUserInterview = styled.div``;
+const StyledUserInterview = styled.div`
+  width: 1440px;
+  min-width: 1440px;
+  .video_contents {
+    display: flex;
+  }
+  .interview_actions {
+    display: flex;
+    justify-content: flex-end;
+    button {
+      margin-left: 28px;
+    }
+  }
+`;
 
 export default UserInterview;

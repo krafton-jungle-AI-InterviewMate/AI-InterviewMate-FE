@@ -447,7 +447,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/react@npm:^11.10.5":
+"@emotion/react@npm:^11.10.6":
   version: 11.10.6
   resolution: "@emotion/react@npm:11.10.6"
   dependencies:
@@ -488,7 +488,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/styled@npm:^11.10.5":
+"@emotion/styled@npm:^11.10.6":
   version: 11.10.6
   resolution: "@emotion/styled@npm:11.10.6"
   dependencies:
@@ -1412,12 +1412,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:18.0.6":
-  version: 18.0.6
-  resolution: "@types/react-dom@npm:18.0.6"
+"@types/react-dom@npm:latest":
+  version: 18.0.11
+  resolution: "@types/react-dom@npm:18.0.11"
   dependencies:
     "@types/react": "*"
-  checksum: db571047af1a567631758700b9f7d143e566df939cfe5fbf7535347cc0c726a1cdbb5e3f8566d076e54cf708b6c1166689de194a9ba09ee35efc9e1d45911685
+  checksum: 579691e4d5ec09688087568037c35edf8cfb1ab3e07f6c60029280733ee7b5c06d66df6fcc90786702c93ac8cb13bc7ff16c79ddfc75d082938fbaa36e1cdbf4
   languageName: node
   linkType: hard
 
@@ -1439,7 +1439,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*":
+"@types/react@npm:*, @types/react@npm:latest":
   version: 18.0.28
   resolution: "@types/react@npm:18.0.28"
   dependencies:
@@ -1447,17 +1447,6 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: e752df961105e5127652460504785897ca6e77259e0da8f233f694f9e8f451cde7fa0709d4456ade0ff600c8ce909cfe29f9b08b9c247fa9b734e126ec53edd7
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:18.0.21":
-  version: 18.0.21
-  resolution: "@types/react@npm:18.0.21"
-  dependencies:
-    "@types/prop-types": "*"
-    "@types/scheduler": "*"
-    csstype: ^3.0.2
-  checksum: 36c1a7c9d507e81e2e629c1ad3db51d7b84d8b010c2d5008da411874286c6a5ccc711ae1d4c470efc0bdc77153cc8804a40e927e929e5164c669ca41b84b846d
   languageName: node
   linkType: hard
 
@@ -5560,8 +5549,8 @@ __metadata:
   dependencies:
     "@babel/plugin-transform-runtime": ^7.21.0
     "@emotion/babel-plugin": ^11.10.5
-    "@emotion/react": ^11.10.5
-    "@emotion/styled": ^11.10.5
+    "@emotion/react": ^11.10.6
+    "@emotion/styled": ^11.10.6
     "@mediapipe/face_mesh": ^0.4.1633559619
     "@mui/material": ^5.11.10
     "@tanstack/react-query": 4.6.0
@@ -5571,8 +5560,8 @@ __metadata:
     "@types/dom-speech-recognition": ^0.0.1
     "@types/node": 18.7.1
     "@types/qs": ^6.9.7
-    "@types/react": 18.0.21
-    "@types/react-dom": 18.0.6
+    "@types/react": latest
+    "@types/react-dom": latest
     "@typescript-eslint/eslint-plugin": 5.38.0
     "@typescript-eslint/parser": ^5.50.0
     "@vitejs/plugin-react": 2.1.0
