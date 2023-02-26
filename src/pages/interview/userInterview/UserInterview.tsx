@@ -18,7 +18,6 @@ const UserInterview = () => {
   const [mySessionId, setMySessionId] = useState<string | undefined>(userInterviewData?.roomName);
   const [myUserName, setMyUserName] = useState<string | undefined>(userInterviewData?.nickName);
   const [session, setSession] = useState<any>(undefined);
-  const [mainStreamManager, setMainStreamManager] = useState(undefined);
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState<Array<any>>([]);
 
@@ -118,7 +117,6 @@ const UserInterview = () => {
         );
 
         // Set the main video in the page to display our webcam and store our Publisher
-        setMainStreamManager(publisher);
         setPublisher(publisher);
       })
       .catch(error => {
@@ -138,7 +136,6 @@ const UserInterview = () => {
     setSubscribers([]);
     setMySessionId("");
     setMyUserName("");
-    setMainStreamManager(undefined);
     setPublisher(undefined);
     navigate("/lobby");
   };
@@ -163,11 +160,12 @@ const UserInterview = () => {
         <>
           <div className="video_contents">
             {publisher ? (
-              <div className="publisher">
+              <div>
                 <UserVideoComponent streamManager={publisher} />
+                {userInterviewData?.nickName}
               </div>
             ) : (
-              <div className="publisher skeleton"></div>
+              <div className="publisher_skeleton"></div>
             )}
             <div>
               {subscribers.map((sub, i) => (
@@ -229,6 +227,10 @@ const StyledUserInterview = styled.div`
   min-width: 1440px;
   .video_contents {
     display: flex;
+    justify-content: space-between;
+    .publisher_skeleton {
+      background-color: var(--main-gray);
+    }
   }
   .interview_actions {
     display: flex;
