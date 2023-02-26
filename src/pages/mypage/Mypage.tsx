@@ -1,5 +1,12 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { memberAtom } from "store/auth/atom";
+
 import useLogout from "hooks/useLogout";
+import { useGetMyinfo } from "hooks/queries/auth";
+
+import ProfileUpdatePopup from "components/mypage/ProfileUpdatePopup";
 
 import styled from "@emotion/styled";
 
@@ -27,8 +34,10 @@ const StyledMypage = styled.div`
       border: none;
     }
     a,
-    button.logout {
+    button.logout,
+    button.profile {
       display: block;
+      margin-bottom: 10px;
       font-size: 16px;
       font-weight: 500;
       color: var(--font-gray);
@@ -39,7 +48,8 @@ const StyledMypage = styled.div`
     a:first-of-type {
       margin-bottom: 10px;
     }
-    button.logout {
+    button.logout,
+    button.profile {
       background: none;
       padding: 0;
       outline: none;
@@ -49,16 +59,59 @@ const StyledMypage = styled.div`
 `;
 
 const Mypage = () => {
+  const setMember = useSetRecoilState(memberAtom);
+  const [ isProfileUpdatePopupOpen, setIsProfileUpdatePopupOpen ] = useState(false);
+
   const {
     handleLogout,
   } = useLogout();
 
+  const {
+    refetch,
+    isFetching,
+    isSuccess,
+    data,
+  } = useGetMyinfo(false);
+
+  useEffect(() => {
+    if (isFetching) {
+      return;
+    }
+
+    if (isSuccess && data) {
+      const {
+        data: {
+          data: {
+            idx, nickname, email, authProvider,
+          },
+        },
+      } = data;
+
+      setMember(({ accessToken }) => ({
+        accessToken,
+        idx,
+        nickname,
+        email,
+        authProvider,
+      }));
+    }
+  }, [ isFetching ]);
+
   return (
     <StyledMypage>
+      {isProfileUpdatePopupOpen && (
+        <ProfileUpdatePopup
+          open={isProfileUpdatePopupOpen}
+          onClose={() => setIsProfileUpdatePopupOpen(false)}
+          refetch={refetch}
+        />
+      )}
       <div>
         <h2>회원 정보</h2>
         <hr />
-        <Link to="/*">프로필 수정</Link>
+        <button type="button" className="profile" onClick={() => setIsProfileUpdatePopupOpen(true)}>
+          프로필 수정
+        </button>
         <button type="button" className="logout" onClick={handleLogout}>
           로그아웃
         </button>

@@ -39,12 +39,20 @@ const Redirect = () => {
 
   useEffect(() => {
     if (isMyinfoSuccess && myinfo) {
+      const {
+        data: {
+          data: {
+            idx, nickname, email, authProvider,
+          },
+        },
+      } = myinfo;
+
       setMember(({ accessToken }) => ({
         accessToken,
-        idx: myinfo.data.data.idx,
-        nickname: myinfo.data.data.nickname,
-        email: myinfo.data.data.email,
-        authProvider: myinfo.data.data.authProvider,
+        idx,
+        nickname,
+        email,
+        authProvider,
       }));
 
       navigate(PagesPath.LOBBY, {

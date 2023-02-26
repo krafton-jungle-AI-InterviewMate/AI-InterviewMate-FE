@@ -6,7 +6,7 @@ import { css } from "@emotion/react";
 
 const modalStyles: ModalProps["styles"] = {
   root: {
-    top: "30vh",
+    top: "24%",
   },
   modal: {
     position: "relative",
