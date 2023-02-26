@@ -7,6 +7,7 @@ import {
 } from "hooks/queries/questionBoxes";
 import { Question } from "api/questionBoxes/type";
 
+import Popup from "components/common/Popup";
 import QuestionDialog from "components/mypage/questions/QuestionDialog";
 import Loading from "components/common/Loading";
 import { StyledBtn } from "styles/StyledBtn";
@@ -19,6 +20,8 @@ const QuestionDetails = () => {
   const [ isDialogOpen, setIsDialogOpen ] = useState(false);
   const [ isModifying, setIsModifying ] = useState(false);
   const [ currQuestion, setCurrQuestion ] = useState<null | Question>(null);
+  const [ isDeletePopupOpen, setIsDeletePopupOpen ] = useState(false);
+  const [ deleteTarget, setDeleteTarget ] = useState<null | Question>(null);
 
   const {
     data,
@@ -80,8 +83,18 @@ const QuestionDetails = () => {
     setTitle(e.target.value);
   };
 
-  const handleQuestionDelete = (questionIdx) => {
-    deleteQuestion(questionIdx);
+  const handleQuestionDelete = (question: Question) => {
+    setDeleteTarget(question);
+    setIsDeletePopupOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (!deleteTarget) {
+      setIsDeletePopupOpen(false);
+      return;
+    }
+
+    deleteQuestion(deleteTarget.questionIdx);
   };
 
   const handleTitleModify = () => {
@@ -125,6 +138,17 @@ const QuestionDetails = () => {
               handleClose={() => setIsDialogOpen(false)}
             />
           )}
+          {isDeletePopupOpen && (
+            <Popup
+              open={isDeletePopupOpen}
+              onClose={() => setIsDeletePopupOpen(false)}
+              onConfirm={handleDeleteConfirm}
+              confirmText="네!"
+              cancelText="취소"
+            >
+              <p>질문을 삭제하시겠습니까?</p>
+            </Popup>
+          )}
           <Styled.TitleWrap>
             <Styled.HiddenLabel htmlFor="question-box-name">
               질문 꾸러미 이름
@@ -151,7 +175,7 @@ const QuestionDetails = () => {
                 </Styled.LeftSecion>
                 <StyledBtn
                   type="button"
-                  onClick={() => handleQuestionDelete(question.questionIdx)}
+                  onClick={() => handleQuestionDelete(question)}
                   width="100px"
                   height="32px"
                   color="red"

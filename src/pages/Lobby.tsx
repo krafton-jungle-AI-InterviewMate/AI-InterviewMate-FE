@@ -8,6 +8,7 @@ import { InterviewRooms } from "api/interview/type";
 import Loading from "components/common/Loading";
 import ServerError from "components/common/ServerError";
 import JoinError from "components/modal/lobby/JoinError";
+import RoomPasswordPopup from "components/modal/lobby/RoomPasswordPopup";
 
 const StyledLobbyInterface = styled.div`
   min-width: 1000px;
@@ -32,21 +33,30 @@ const StyledRoomContents = styled.div<StyledRoomContentsProps>`
 `;
 
 const Lobby = () => {
-  const [modalCreateRoom, setModalCreateRoom] = useState(false);
-  const [interviewRooms, setInterviewRooms] = useState<InterviewRooms[]>([]);
+  const [ targetRoomIdx, setTargetRoomIdx ] = useState(0);
+  const [ isPasswordPopupOpen, setIsPasswordPopupOpen ] = useState(false); // TODO: 방 입장할 때 비밀번호 체크
+  const [ modalCreateRoom, setModalCreateRoom ] = useState(false);
+  const [ interviewRooms, setInterviewRooms ] = useState<InterviewRooms[]>([]);
   const { data, isSuccess, isLoading, isError, refetch } = useGetInterviewRooms();
   useEffect(() => {
     if (!isLoading && data) {
       setInterviewRooms(data.data.data);
     }
-  }, [data]);
+  }, [ data ]);
 
   const onClickReload = () => {
     refetch();
   };
-  const [isJoinError, setIsJoinError] = useState(false);
+  const [ isJoinError, setIsJoinError ] = useState(false);
   return (
     <>
+      {isPasswordPopupOpen && (
+        <RoomPasswordPopup
+          open={isPasswordPopupOpen}
+          onClose={() => setIsPasswordPopupOpen(false)}
+          roomIdx={targetRoomIdx}
+        />
+      )}
       {modalCreateRoom ? <CreateRoom setModalCreateRoom={setModalCreateRoom} /> : null}
       {isJoinError ? <JoinError setIsJoinError={setIsJoinError} /> : null}
       <StyledLobbyInterface>
@@ -82,6 +92,8 @@ const Lobby = () => {
               roomPeopleNum={room.roomPeopleNum}
               idx={room.idx}
               setIsJoinError={setIsJoinError}
+              setIsPasswordPopupOpen={setIsPasswordPopupOpen}
+              setTargetRoomIdx={setTargetRoomIdx}
             />
           ))
         )}

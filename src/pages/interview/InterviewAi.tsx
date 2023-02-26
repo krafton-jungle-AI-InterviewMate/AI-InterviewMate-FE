@@ -1,8 +1,9 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { interviewModeAtom, aiInterviewerAtom } from "store/interview/atom";
 
+import Popup from "components/common/Popup";
 import InterviewAiContainer from "components/interview/InterviewAiContainer";
 import { getAiInterviewerVideo, getAiInterviewerListening } from "lib/interview";
 import { JungleManagersSet, AI_VIDEO_WIDTH } from "constants/interview";
@@ -15,9 +16,9 @@ const InterviewAi = () => {
 
   const interviewMode = useRecoilValue(interviewModeAtom);
   const aiInterviewer = useRecoilValue(aiInterviewerAtom);
+  const [ isConfirmPopupOpen, setIsConfirmPopupOpen ] = useState(false);
 
-  const handleExitButton = () => {
-    // TODO: 컨펌 팝업
+  const handleLeave = () => {
     navigate("/lobby");
   };
 
@@ -27,6 +28,21 @@ const InterviewAi = () => {
 
   return (
     <StyledWrap>
+      {isConfirmPopupOpen && (
+        <Popup
+          open={isConfirmPopupOpen}
+          onClose={() => setIsConfirmPopupOpen(false)}
+          confirmText="네!"
+          cancelText="취소"
+          onConfirm={handleLeave}
+        >
+          <StyledConfirmText>
+            면접을 취소 하시겠습니까?
+            <br />
+            현재 면접방도 삭제됩니다.
+          </StyledConfirmText>
+        </Popup>
+      )}
       <StyledInterviewerSection>
         <StyledImageWrap w={AI_VIDEO_WIDTH}>
           {interviewMode === "question" ? (
@@ -62,7 +78,7 @@ const InterviewAi = () => {
             <source src={aiInterviewerListening} type="video/mp4" />
           </video>
         </StyledImageWrap>
-        <StyledExitButton type="button" onClick={handleExitButton}>
+        <StyledExitButton type="button" onClick={() => setIsConfirmPopupOpen(true)}>
           면접 나가기
         </StyledExitButton>
       </StyledInterviewerSection>
@@ -76,6 +92,11 @@ export default InterviewAi;
 const StyledWrap = styled.div`
   width: 100vw;
   min-width: 1000px;
+`;
+
+const StyledConfirmText = styled.p`
+  font-size: 16px;
+  text-align: center;
 `;
 
 const StyledInterviewerSection = styled.section`

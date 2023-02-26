@@ -58,9 +58,12 @@ const useCheckAuth = () => {
     if (isSuccess && data) {
       const accessToken = data.data.data.accessToken;
 
-      setMember((curr) => ({
+      setMember(({ idx, nickname, email, authProvider }) => ({
         accessToken,
-        username: curr.username,
+        idx,
+        nickname,
+        email,
+        authProvider,
       }));
     }
     else { // * refresh token 자체가 만료된 경우 isError === true
@@ -70,9 +73,20 @@ const useCheckAuth = () => {
 
   useEffect(() => {
     if (isMyinfoSuccess && myinfo) {
-      setMember((curr) => ({
-        accessToken: curr.accessToken,
-        username: myinfo.data.data.nickname,
+      const {
+        data: {
+          data: {
+            idx, nickname, email, authProvider,
+          },
+        },
+      } = myinfo;
+
+      setMember(({ accessToken }) => ({
+        accessToken,
+        idx,
+        nickname,
+        email,
+        authProvider,
       }));
     }
   }, [ isMyinfoSuccess ]);

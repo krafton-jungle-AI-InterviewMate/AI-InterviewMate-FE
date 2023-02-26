@@ -50,7 +50,7 @@ const StyledRoom = styled.div<IRoomProps>`
         height: 24px;
         font-size: 12px;
         background-color: ${props =>
-          props.roomType === "AI" ? "var(--push-gray)" : "var(--main-black)"};
+    props.roomType === "AI" ? "var(--push-gray)" : "var(--main-black)"};
         border-radius: 5px;
         color: var(--main-white);
       }
@@ -66,7 +66,7 @@ const StyledRoom = styled.div<IRoomProps>`
       }
       .roomStatus {
         color: ${props =>
-          props.roomStatus === "CREATE" ? "var(--main-orange)" : "var(--main-black)"};
+    props.roomStatus === "CREATE" ? "var(--main-orange)" : "var(--main-black)"};
       }
       .warningComment {
         display: flex;
@@ -100,6 +100,8 @@ interface RoomProps {
   roomPeopleNum: number; // 총 인원 수
   idx: number;
   setIsJoinError: (text: boolean) => void;
+  setIsPasswordPopupOpen: (b: boolean) => void;
+  setTargetRoomIdx: (idx: number) => void;
 }
 const Room = ({
   roomName,
@@ -111,11 +113,21 @@ const Room = ({
   roomPeopleNum,
   idx,
   setIsJoinError,
+  setIsPasswordPopupOpen,
+  setTargetRoomIdx,
 }: RoomProps) => {
   const setUserInterviewData = useSetRecoilState(InterviewDataAtom);
   const navigate = useNavigate();
   const { mutate, isLoading } = usePostJoinRoom();
   const onClickJoin = () => {
+    setTargetRoomIdx(idx);
+
+    if (roomIsPrivate) {
+      // ! TODO: 비밀번호 검증
+      // ! src/components/modal/lobby/RoomPasswordPopup/index.tsx에서도 추가 작업 필요
+      setIsPasswordPopupOpen(true);
+      return;
+    }
     if (roomType === "AI" || roomPeopleNow === roomPeopleNum || roomStatus === "PROCEED") {
       setIsJoinError(true);
       return;

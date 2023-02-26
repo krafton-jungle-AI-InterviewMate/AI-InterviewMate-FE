@@ -3,7 +3,10 @@ import { Member } from "types/auth";
 
 export const memberInitialState: Member = {
   accessToken: "",
-  username: "",
+  idx: 0,
+  nickname: "",
+  email: "",
+  authProvider: "google",
 };
 
 export const memberAtom = atom<Member>({

@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { motionSnapshotAtom, aiInterviewerAtom } from "store/interview/atom";
+import { memberAtom } from "store/auth/atom";
 
 import useInitializeInterviewState from "hooks/useInitializeInterviewState";
 import useFaceLandmarksDetection from "hooks/useFaceLandmarksDetection";
@@ -13,6 +14,7 @@ import NameTag from "components/interview/InterviewNameTag";
 import Skeleton from "@mui/material/Skeleton";
 import { toast } from "react-toastify";
 import { getAiInterviewerProfile, getAiInterviewerThumbnail } from "lib/interview";
+import Popup from "components/common/Popup";
 
 import { BsThreeDots } from "react-icons/bs";
 import { AiOutlineInfoCircle } from "react-icons/ai";
@@ -31,9 +33,11 @@ const InterviewReady = () => {
   const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
   const [ disableGoButton, setDisableGoButton ] = useState(true);
   const [ isModalOpen, setIsModalOpen ] = useState(false);
+  const [ isConfirmPopupOpen, setIsConfirmPopupOpen ] = useState(false);
 
   const setMotionSnapshot = useSetRecoilState(motionSnapshotAtom);
   const aiInterviewer = useRecoilValue(aiInterviewerAtom);
+  const { nickname } = useRecoilValue(memberAtom);
 
   useEffect(() => {
     if (isWebcamReady && webcamRef.current) {
@@ -77,8 +81,7 @@ const InterviewReady = () => {
     }
   }, [ isVideoReady ]);
 
-  const handleCancelButton = () => {
-    // TODO: 컨펌 팝업
+  const handleLeave = () => {
     navigate("/lobby");
   };
 
@@ -120,6 +123,21 @@ const InterviewReady = () => {
 
   return (
     <Styled.Wrapper>
+      {isConfirmPopupOpen && (
+        <Popup
+          open={isConfirmPopupOpen}
+          onClose={() => setIsConfirmPopupOpen(false)}
+          confirmText="네!"
+          cancelText="취소"
+          onConfirm={handleLeave}
+        >
+          <Styled.ConfirmText>
+            현재 면접 방을 나가고
+            <br />
+            로비로 이동하시겠습니까?
+          </Styled.ConfirmText>
+        </Popup>
+      )}
       <InterviewerSelectModal isOpen={isModalOpen} handleClose={handleModalClose} />
 
       <Styled.ReadyContainer>
@@ -131,7 +149,7 @@ const InterviewReady = () => {
             <Webcam ref={webcamRef} mirrored={false} onCanPlay={() => setIsWebcamReady(true)} />
             <Styled.Canvas ref={canvasRef} />
           </Styled.VideoWrap>
-          <NameTag role="interviewee" profileName="김기태님" />
+          <NameTag role="interviewee" profileName={nickname + "님"} />
         </Styled.Profile>
 
         <BsThreeDots size={60} />
@@ -150,7 +168,7 @@ const InterviewReady = () => {
 
       <Styled.FlexContainer>
         <Styled.ButtonBox>
-          <Styled.CancelButton type="button" onClick={handleCancelButton}>
+          <Styled.CancelButton type="button" onClick={() => setIsConfirmPopupOpen(true)}>
             면접 취소하기
           </Styled.CancelButton>
           <Styled.GoButtonWrap>
