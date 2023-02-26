@@ -81,7 +81,7 @@ const InterviewReady = () => {
     }
   }, [ isVideoReady ]);
 
-  const handleCancel = () => {
+  const handleLeave = () => {
     navigate("/lobby");
   };
 
@@ -129,13 +129,13 @@ const InterviewReady = () => {
           onClose={() => setIsConfirmPopupOpen(false)}
           confirmText="네!"
           cancelText="취소"
-          onConfirm={handleCancel}
+          onConfirm={handleLeave}
         >
-          <Styled.CancelText>
-            면접을 취소 하시겠습니까?
+          <Styled.ConfirmText>
+            현재 면접 방을 나가고
             <br />
-            현재 면접방도 삭제됩니다.
-          </Styled.CancelText>
+            로비로 이동하시겠습니까?
+          </Styled.ConfirmText>
         </Popup>
       )}
       <InterviewerSelectModal isOpen={isModalOpen} handleClose={handleModalClose} />
