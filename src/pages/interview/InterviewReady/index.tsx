@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { motionSnapshotAtom, aiInterviewerAtom } from "store/interview/atom";
+import { memberAtom } from "store/auth/atom";
 
 import useInitializeInterviewState from "hooks/useInitializeInterviewState";
 import useFaceLandmarksDetection from "hooks/useFaceLandmarksDetection";
@@ -36,6 +37,7 @@ const InterviewReady = () => {
 
   const setMotionSnapshot = useSetRecoilState(motionSnapshotAtom);
   const aiInterviewer = useRecoilValue(aiInterviewerAtom);
+  const { nickname } = useRecoilValue(memberAtom);
 
   useEffect(() => {
     if (isWebcamReady && webcamRef.current) {
@@ -147,7 +149,7 @@ const InterviewReady = () => {
             <Webcam ref={webcamRef} mirrored={false} onCanPlay={() => setIsWebcamReady(true)} />
             <Styled.Canvas ref={canvasRef} />
           </Styled.VideoWrap>
-          <NameTag role="interviewee" profileName="김기태님" />
+          <NameTag role="interviewee" profileName={nickname + "님"} />
         </Styled.Profile>
 
         <BsThreeDots size={60} />
