@@ -81,7 +81,6 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
       passwordError={errors.roomPassword?.message}
     >
       <form onSubmit={handleSubmit(onValid)}>
-        <input {...register("email")} readOnly hidden value="user1@test.com" />
         <div className="inputContent">
           <label htmlFor="roomName">방 제목</label>
           <input

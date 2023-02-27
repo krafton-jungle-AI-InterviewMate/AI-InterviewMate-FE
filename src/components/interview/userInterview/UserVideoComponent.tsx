@@ -1,23 +1,47 @@
+import styled from "@emotion/styled";
 import OpenViduVideoComponent from "./OvVideo";
+import { useRecoilValue } from "recoil";
+import { InterviewDataAtom } from "store/interview/atom";
 
 const UserVideoComponent = ({ streamManager }) => {
-  const getNicknameTag = () => {
-    // Gets the nickName of the user
-    return JSON.parse(streamManager.stream.connection.data).clientData;
-  };
-
+  const InterviewData = useRecoilValue(InterviewDataAtom);
   return (
-    <div>
+    <StyledUserVideoComponent>
       {streamManager !== undefined ? (
-        <div className="streamcomponent">
-          <OpenViduVideoComponent streamManager={streamManager} />
-          <div>
-            <p>{getNicknameTag()}</p>
+        <>
+          <div className="streamcomponent">
+            <OpenViduVideoComponent streamManager={streamManager} />
           </div>
-        </div>
-      ) : null}
-    </div>
+          <p>
+            <span className="interviewr">면접자</span>
+            <span>{InterviewData?.nickname}</span>
+          </p>
+        </>
+      ) : (
+        <div className="streamcomponent"></div>
+      )}
+    </StyledUserVideoComponent>
   );
 };
+
+const StyledUserVideoComponent = styled.div`
+  p {
+    display: flex;
+    justify-content: center;
+    font-size: 16px;
+    span {
+      display: block;
+    }
+  }
+  .interviewr {
+    width: 70px;
+    height: 24px;
+    border-radius: 5px;
+    margin-right: 12px;
+    font-size: 12px;
+    background-color: var(--main-blue);
+    color: var(--main-white);
+  }
+`;
 
 export default UserVideoComponent;
