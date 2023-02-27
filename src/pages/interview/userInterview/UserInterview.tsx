@@ -16,7 +16,7 @@ const UserInterview = () => {
   const navigate = useNavigate();
 
   const [mySessionId, setMySessionId] = useState<string | undefined>(userInterviewData?.roomName);
-  const [myUserName, setMyUserName] = useState<string | undefined>(userInterviewData?.nickName);
+  const [myUserName, setMyUserName] = useState<string | undefined>(userInterviewData?.nickname);
   const [session, setSession] = useState<any>(undefined);
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState<Array<any>>([]);
