@@ -32,11 +32,7 @@ const InterviewAi = () => {
           </StyledConfirmText>
         </Popup>
       )}
-      <StyledFeedbackSection>
-        <span>
-          실시간 피드백 모드 ON
-        </span>
-      </StyledFeedbackSection>
+      <StyledFeedbackSection />
       <InterviewAiContainer />
       <StyledExitButton type="button" onClick={() => setIsConfirmPopupOpen(true)}>
         면접 나가기
@@ -66,7 +62,7 @@ const StyledFeedbackSection = styled.section`
   justify-content: flex-start;
   align-items: center;
   width: 100%;
-  height: 170px;
+  height: 120px;
   background-color: transparent;
 
   & span {

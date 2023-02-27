@@ -27,13 +27,13 @@ export const AiInterviewers: Array<AiInterviewerTypes> = [
   "Donghyun",
   "Suhyun",
   "Seoyoung",
-  "Jeonghan",
+  "Junghan",
   "Hyunsoo",
   "Seunghyun",
 ];
 
 const JungleManagers = [
-  "Jeonghan",
+  "Junghan",
   "Hyunsoo",
   "Seunghyun",
 ];

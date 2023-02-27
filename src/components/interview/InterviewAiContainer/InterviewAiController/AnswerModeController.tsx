@@ -152,7 +152,7 @@ const StyledComment = styled.strong`
   flex-flow: row nowrap;
   justify-content: center;
   align-items: center;
-  font-size: 20px;
+  font-size: 28px;
   font-weight: 400;
 `;
 
@@ -172,7 +172,7 @@ const StyledTimer = styled.div`
 
 const StyledNextButton = styled.button`
   position: absolute;
-  top: -120px;
+  top: -100px;
   right: 60px;
   width: 100px;
   height: 100px;

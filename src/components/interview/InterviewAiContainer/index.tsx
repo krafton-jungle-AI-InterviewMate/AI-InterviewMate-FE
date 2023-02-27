@@ -127,7 +127,7 @@ export default InterviewAiContainer;
 
 const StyledWrap = styled.section`
   width: 100%;
-  min-height: calc(100vh - 170px);
+  min-height: calc(100vh - 120px);
   margin-top: 20px;
   position: relative;
 `;
@@ -146,9 +146,11 @@ const wrapStyle = css`
 `;
 
 const StyledVideoSection = styled.section`
+  max-width: 1440px;
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-evenly;
+  margin: 0 auto;
 `;
 
 const StyledAiVideoWrap = styled.div`
@@ -159,7 +161,7 @@ const StyledAiVideoWrap = styled.div`
   overflow: hidden;
   box-shadow: var(--box-shadow);
   margin: 0 auto;
-  margin-top: 70px;
+  margin-top: 140px;
   border: 1px solid var(--main-gray);
 
   & video {
@@ -183,7 +185,7 @@ const StyledVideoWrap = styled.div`
   overflow: hidden;
   box-shadow: var(--box-shadow);
   margin: 0 auto;
-  margin-top: 70px;
+  margin-top: 140px;
   border: 1px solid var(--main-gray);
 
   & video {

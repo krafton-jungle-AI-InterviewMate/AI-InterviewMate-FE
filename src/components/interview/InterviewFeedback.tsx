@@ -32,7 +32,7 @@ const StyledWrap = styled.div<InterviewFeedbackProps>`
   justify-content: space-evenly;
   align-items: center;
   position: absolute;
-  top: -140px;
+  top: -120px;
   transform: translate(-50%, 0);
   width: 280px;
   height: 84px;
