@@ -33,12 +33,8 @@ const UserInterview = () => {
   };
 
   const deleteSubscriber = (streamManager: any) => {
-    const newSubscribers = subscribers;
-    let index = newSubscribers.indexOf(streamManager, 0);
-    if (index > -1) {
-      subscribers.splice(index, 1);
-      setSubscribers(newSubscribers);
-    }
+    const newSubscribers = [...subscribers];
+    setSubscribers(newSubscribers.filter(v => v !== streamManager));
   };
 
   const joinSession = async () => {
@@ -62,9 +58,8 @@ const UserInterview = () => {
       // Subscribe to the Stream to receive it. Second parameter is undefined
       // so OpenVidu doesn't create an HTML video by its own
       const newSubscriber = session.subscribe(event.stream, undefined);
-
       // Update the state with the new subscribers
-      setSubscribers([...subscribers, newSubscriber]);
+      setSubscribers(curr => [...curr, newSubscriber]);
     });
 
     // On every Stream destroyed...
@@ -96,7 +91,7 @@ const UserInterview = () => {
           videoSource: undefined, // The source of video. If undefined default webcam
           publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
           publishVideo: true, // Whether you want to start publishing with your video enabled or not
-          resolution: "272x204", // The resolution of your video
+          // resolution: "272x204", // The resolution of your video
           frameRate: 30, // The frame rate of your video
           insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
           mirror: false, // Whether to mirror your local video or not
@@ -154,6 +149,10 @@ const UserInterview = () => {
     setIsOpen(true);
   };
 
+  useEffect(() => {
+    console.log(subscribers);
+  }, [subscribers]);
+
   return (
     <StyledUserInterview>
       {session ? (
@@ -161,7 +160,7 @@ const UserInterview = () => {
           <div className="video_contents">
             {publisher ? (
               <div>
-                <UserVideoComponent streamManager={publisher} />
+                <UserVideoComponent streamManager={publisher} isInterviewer={false} />
               </div>
             ) : (
               <Loading margin="0" />
@@ -169,7 +168,7 @@ const UserInterview = () => {
             <div>
               {subscribers.map((sub, i) => (
                 <div key={i}>
-                  <UserVideoComponent streamManager={sub} />
+                  <UserVideoComponent streamManager={sub} isInterviewer={true} />
                 </div>
               ))}
             </div>
