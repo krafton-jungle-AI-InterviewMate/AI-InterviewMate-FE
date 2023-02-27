@@ -6,6 +6,6 @@ export type AiInterviewerTypes =
   | "Donghyun"
   | "Seungmin"
   | "Minho"
-  | "Jeonghan"
+  | "Junghan"
   | "Hyunsoo"
   | "Seunghyun";

@@ -1,30 +1,19 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { interviewModeAtom, aiInterviewerAtom } from "store/interview/atom";
 
 import Popup from "components/common/Popup";
 import InterviewAiContainer from "components/interview/InterviewAiContainer";
-import { getAiInterviewerVideo, getAiInterviewerListening } from "lib/interview";
-import { JungleManagersSet, AI_VIDEO_WIDTH } from "constants/interview";
-
 import styled from "@emotion/styled";
 import { commonButtonStyle } from "styles/common";
 
 const InterviewAi = () => {
   const navigate = useNavigate();
 
-  const interviewMode = useRecoilValue(interviewModeAtom);
-  const aiInterviewer = useRecoilValue(aiInterviewerAtom);
   const [ isConfirmPopupOpen, setIsConfirmPopupOpen ] = useState(false);
 
   const handleLeave = () => {
-    navigate("/lobby");
+    navigate("/lobby", { replace: true });
   };
-
-  const aiInterviewerVideo = useMemo(() => getAiInterviewerVideo(aiInterviewer), [ aiInterviewer ]);
-  const aiInterviewerListening = useMemo(() => getAiInterviewerListening(aiInterviewer), [ aiInterviewer ]);
-  const videoClassName = useMemo(() => JungleManagersSet.has(aiInterviewer) ? "jungle" : "", [ aiInterviewer ]);
 
   return (
     <StyledWrap>
@@ -43,46 +32,11 @@ const InterviewAi = () => {
           </StyledConfirmText>
         </Popup>
       )}
-      <StyledInterviewerSection>
-        <StyledImageWrap w={AI_VIDEO_WIDTH}>
-          {interviewMode === "question" ? (
-            <video
-              width={AI_VIDEO_WIDTH}
-              autoPlay
-              loop
-              muted
-              key={aiInterviewerVideo}
-              className={videoClassName}
-            >
-              <source src={aiInterviewerVideo} type="video/mp4" />
-            </video>
-          ) : (
-            <video
-              width={AI_VIDEO_WIDTH}
-              autoPlay
-              loop
-              muted
-              key={aiInterviewerListening}
-              className={videoClassName}
-            >
-              <source src={aiInterviewerListening} type="video/mp4" />
-            </video>
-          )}
-          <video
-            width={AI_VIDEO_WIDTH}
-            autoPlay={false}
-            muted
-            key={aiInterviewerListening + "_fallback"}
-            className={`${videoClassName} fallback`}
-          >
-            <source src={aiInterviewerListening} type="video/mp4" />
-          </video>
-        </StyledImageWrap>
-        <StyledExitButton type="button" onClick={() => setIsConfirmPopupOpen(true)}>
-          면접 나가기
-        </StyledExitButton>
-      </StyledInterviewerSection>
+      <StyledFeedbackSection />
       <InterviewAiContainer />
+      <StyledExitButton type="button" onClick={() => setIsConfirmPopupOpen(true)}>
+        면접 나가기
+      </StyledExitButton>
     </StyledWrap>
   );
 };
@@ -90,6 +44,8 @@ const InterviewAi = () => {
 export default InterviewAi;
 
 const StyledWrap = styled.div`
+  display: flex;
+  flex-flow: column nowrap;
   width: 100vw;
   min-width: 1000px;
 `;
@@ -99,59 +55,37 @@ const StyledConfirmText = styled.p`
   text-align: center;
 `;
 
-const StyledInterviewerSection = styled.section`
+const StyledFeedbackSection = styled.section`
   position: relative;
   display: flex;
   flex-flow: row nowrap;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
-  height: 170px;
-  background-color: var(--main-gray);
-`;
+  height: 120px;
+  background-color: transparent;
 
-const StyledImageWrap = styled.div<{ w: number }>`
-  position: relative;
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  text-align: center;
-  z-index: 9;
-  width: ${({ w }) => `${w}px`};
-  height: 100%;
-  overflow: hidden;
-  border-radius: 5px;
-
-  & video {
-    border-radius: 5px;
-    z-index: 11;
-  }
-
-  & video.jungle {
-    transform: translateY(14%);
-  }
-
-  & video.fallback {
-    position: absolute;
-    left: 0;
-    z-index: 10;
+  & span {
+    display: inline;
+    margin-left: 60px;
+    font-size: 20px;
+    color: var(--font-gray);
+    box-shadow: inset 0 -14px 0 #fffb006e;
   }
 `;
 
 const StyledExitButton = styled.button`
-  position: absolute;
-  top: 30px;
-  right: 60px;
   ${commonButtonStyle}
+  margin-right: 28px;
+  align-self: flex-end;
+
   background-color: var(--main-white);
-  color: var(--main-black);
-  margin-left: 28px;
-  border: 1px solid var(--main-black);
+  border: 1px solid var(--main-gray);
+  box-shadow: var(--box-shadow);
 
   &:hover {
     background-color: var(--light-alert);
     color: var(--main-white);
-    border-color: transparent;
   }
   &:active {
     background-color: var(--push-alert);

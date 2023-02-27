@@ -5,22 +5,28 @@ import UserRoomForm from "./UserRoomForm";
 import { useGetQuestionBoxes } from "hooks/queries/questionBoxes";
 import { QuestionBoxes } from "api/questionBoxes/type";
 import { RoomTypes } from "api/mypage/types";
+import "react-responsive-modal/styles.css";
+import { Modal, ModalProps } from "react-responsive-modal";
 
-const StyledCreateRoom = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  z-index: 999;
-  background-color: rgba(0, 0, 0, 0.5);
-  .contents {
-    border-radius: 10px;
-    padding: 60px;
-    width: 815px;
-    background-color: var(--main-white);
-    .contentsHeader {
+type CreateRoomProps = ModalProps;
+
+const modalStyles: ModalProps["styles"] = {
+  root: {
+    top: "0",
+  },
+  modal: {
+    position: "relative",
+    width: "815px",
+    padding: "50px 35px",
+    boxSizing: "border-box",
+    boxShadow: "var(--box-shadow)",
+    borderRadius: "15px",
+    overflow: "hidden",
+  },
+};
+
+const StyledWrap = styled.div`
+  .contentsHeader {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -35,7 +41,6 @@ const StyledCreateRoom = styled.div`
         }
       }
     }
-  }
 `;
 
 const StyledTabBtn = styled.button`
@@ -55,15 +60,20 @@ const StyledTabBtn = styled.button`
   }
 `;
 
-const CreateRoom = ({ setModalCreateRoom }) => {
-  const [roomType, setRoomType] = useState<RoomTypes>("USER");
-  const [questionBoxes, SetQuestionBoxes] = useState<QuestionBoxes[]>([]);
+const CreateRoom = (props: CreateRoomProps) => {
+  const {
+    open,
+    onClose,
+  } = props;
+
+  const [ roomType, setRoomType ] = useState<RoomTypes>("USER");
+  const [ questionBoxes, SetQuestionBoxes ] = useState<QuestionBoxes[]>([]);
   const { data, isLoading, isError, isSuccess } = useGetQuestionBoxes();
   useEffect(() => {
     if (!isLoading && data) {
       SetQuestionBoxes(data.data.data);
     }
-  }, [isLoading]);
+  }, [ isLoading ]);
 
   const onClickTabBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
     const {
@@ -72,46 +82,51 @@ const CreateRoom = ({ setModalCreateRoom }) => {
     setRoomType(name as RoomTypes);
   };
 
-  const onClickModalClose = () => {
-    setModalCreateRoom(false);
-  };
   return (
-    <StyledCreateRoom>
-      <div className="contents">
-        <div className="contentsHeader">
-          <h2>방 만들기</h2>
-          <div className="tabBtn">
-            <StyledTabBtn
-              className={roomType === "USER" ? "active" : ""}
-              onClick={onClickTabBtn}
-              name="USER"
-            >
-              유저 면접관
-            </StyledTabBtn>
-            <StyledTabBtn
-              className={roomType === "AI" ? "active" : ""}
-              onClick={onClickTabBtn}
-              name="AI"
-            >
-              AI 면접관
-            </StyledTabBtn>
+    <Modal
+      open={open}
+      onClose={onClose}
+      closeOnOverlayClick={false}
+      showCloseIcon={false}
+      styles={modalStyles}
+    >
+      <StyledWrap>
+        <div className="contents">
+          <div className="contentsHeader">
+            <h2>방 만들기</h2>
+            <div className="tabBtn">
+              <StyledTabBtn
+                className={roomType === "USER" ? "active" : ""}
+                onClick={onClickTabBtn}
+                name="USER"
+              >
+                유저 면접관
+              </StyledTabBtn>
+              <StyledTabBtn
+                className={roomType === "AI" ? "active" : ""}
+                onClick={onClickTabBtn}
+                name="AI"
+              >
+                AI 면접관
+              </StyledTabBtn>
+            </div>
           </div>
+          {roomType === "USER" ? (
+            <UserRoomForm
+              roomType={roomType}
+              onClickModalClose={onClose}
+              questionBoxes={questionBoxes}
+            />
+          ) : (
+            <AiRoomForm
+              roomType={roomType}
+              onClickModalClose={onClose}
+              questionBoxes={questionBoxes}
+            />
+          )}
         </div>
-        {roomType === "USER" ? (
-          <UserRoomForm
-            roomType={roomType}
-            onClickModalClose={onClickModalClose}
-            questionBoxes={questionBoxes}
-          />
-        ) : (
-          <AiRoomForm
-            roomType={roomType}
-            onClickModalClose={onClickModalClose}
-            questionBoxes={questionBoxes}
-          />
-        )}
-      </div>
-    </StyledCreateRoom>
+      </StyledWrap>
+    </Modal>
   );
 };
 

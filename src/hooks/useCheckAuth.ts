@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { memberAtom } from "store/auth/atom";
 
@@ -17,6 +17,8 @@ import { PagesPath } from "constants/pages";
  */
 const useCheckAuth = () => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+
 
   const { accessToken } = useRecoilValue(memberAtom);
   const setMember = useSetRecoilState(memberAtom);
@@ -38,6 +40,12 @@ const useCheckAuth = () => {
     if (pathname === PagesPath.REDIRECT_URI || accessToken) {
       setIsFetchingEnabled(false);
       return;
+    }
+
+    if (pathname.includes("/interview/") && !accessToken) {
+      setIsFetchingEnabled(false);
+      window.alert("비정상적인 접근입니다.");
+      navigate(PagesPath.INDEX, { replace: true });
     }
 
     const isLoggedIn = isLoggedInCookie.get();
