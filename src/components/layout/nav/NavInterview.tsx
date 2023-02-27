@@ -10,7 +10,6 @@ import { MdPublic } from "react-icons/md";
 const NavInterview = () => {
   const roomInfo = useRecoilValue(interviewDataAtom);
   const viewer = [roomInfo?.roomViewer1Idx, roomInfo?.roomViewer2Idx, roomInfo?.roomViewer3Idx];
-  console.log(viewer);
   let roomViewer = 1;
   viewer.forEach(v => {
     if (v !== null && v !== undefined) {
