@@ -1,4 +1,12 @@
+import styled from "@emotion/styled";
 import { useEffect, useRef } from "react";
+
+const StyledOpenViduVideoComponent = styled.div`
+  video {
+    width: 272px;
+    height: 204px;
+  }
+`;
 
 const OpenViduVideoComponent = ({ streamManager }) => {
   const videoRef = useRef(null);
@@ -8,7 +16,11 @@ const OpenViduVideoComponent = ({ streamManager }) => {
     }
   }, [streamManager]);
 
-  return <video autoPlay={true} ref={videoRef} />;
+  return (
+    <StyledOpenViduVideoComponent>
+      <video autoPlay={true} ref={videoRef} />
+    </StyledOpenViduVideoComponent>
+  );
 };
 
 export default OpenViduVideoComponent;
