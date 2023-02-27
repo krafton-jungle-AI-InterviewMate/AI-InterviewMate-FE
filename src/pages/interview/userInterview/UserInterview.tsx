@@ -2,7 +2,7 @@ import { OpenVidu } from "openvidu-browser";
 import { useState, useEffect } from "react";
 import UserVideoComponent from "../../../components/interview/userInterview/UserVideoComponent";
 import { useRecoilValue } from "recoil";
-import { InterviewDataAtom } from "store/interview/atom";
+import { interviewDataAtom } from "store/interview/atom";
 import styled from "@emotion/styled";
 import Loading from "components/common/Loading";
 import { StyledBtn } from "styles/StyledBtn";
@@ -12,7 +12,7 @@ import { useNavigate } from "react-router";
 const UserInterview = () => {
   const [OV, setOV] = useState<any>(null);
 
-  const userInterviewData = useRecoilValue(InterviewDataAtom);
+  const userInterviewData = useRecoilValue(interviewDataAtom);
   const navigate = useNavigate();
 
   const [mySessionId, setMySessionId] = useState<string | undefined>(userInterviewData?.roomName);
@@ -161,15 +161,15 @@ const UserInterview = () => {
           <div className="video_contents">
             {publisher ? (
               <div>
-                <UserVideoComponent streamManager={publisher} />
+                <UserVideoComponent streamManager={publisher} isInterviewer={false} />
               </div>
             ) : (
               <Loading margin="0" />
             )}
-            <div>
+            <div className="subscribers">
               {subscribers.map((sub, i) => (
                 <div key={i}>
-                  <UserVideoComponent streamManager={sub} />
+                  <UserVideoComponent streamManager={sub} isInterviewer={true} />
                 </div>
               ))}
             </div>
@@ -179,7 +179,7 @@ const UserInterview = () => {
               나가기
             </StyledBtn>
             <StyledBtn width="200px" height="48px" color="orange">
-              READY
+              GO
             </StyledBtn>
           </div>
           <Dialog
@@ -229,8 +229,10 @@ const StyledUserInterview = styled.div`
     justify-content: space-between;
     align-items: center;
     height: 654px;
-    .publisher_skeleton {
-      background-color: var(--main-gray);
+    .subscribers {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
   }
   .interview_actions {

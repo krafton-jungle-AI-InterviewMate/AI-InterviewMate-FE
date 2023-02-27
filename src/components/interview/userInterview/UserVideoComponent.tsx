@@ -1,19 +1,19 @@
 import styled from "@emotion/styled";
 import OpenViduVideoComponent from "./OvVideo";
 import { useRecoilValue } from "recoil";
-import { InterviewDataAtom } from "store/interview/atom";
+import { interviewDataAtom } from "store/interview/atom";
 
-const UserVideoComponent = ({ streamManager }) => {
-  const InterviewData = useRecoilValue(InterviewDataAtom);
+const UserVideoComponent = ({ streamManager, isInterviewer }) => {
+  const InterviewData = useRecoilValue(interviewDataAtom);
   return (
-    <StyledUserVideoComponent>
+    <StyledUserVideoComponent isInterviewer={isInterviewer}>
       {streamManager !== undefined ? (
         <>
           <div className="streamcomponent">
             <OpenViduVideoComponent streamManager={streamManager} />
           </div>
           <p>
-            <span className="interviewr">면접자</span>
+            <span className="interviewr">{isInterviewer ? "면접관" : "면접자"}</span>
             <span>{InterviewData?.nickname}</span>
           </p>
         </>
@@ -24,7 +24,11 @@ const UserVideoComponent = ({ streamManager }) => {
   );
 };
 
-const StyledUserVideoComponent = styled.div`
+interface StyledUserVideoComponentProps {
+  isInterviewer: boolean;
+}
+
+const StyledUserVideoComponent = styled.div<StyledUserVideoComponentProps>`
   p {
     display: flex;
     justify-content: center;
@@ -39,7 +43,7 @@ const StyledUserVideoComponent = styled.div`
     border-radius: 5px;
     margin-right: 12px;
     font-size: 12px;
-    background-color: var(--main-blue);
+    background-color: ${props => (props.isInterviewer ? "var(--push-gray)" : "var(--main-blue)")};
     color: var(--main-white);
   }
 `;
