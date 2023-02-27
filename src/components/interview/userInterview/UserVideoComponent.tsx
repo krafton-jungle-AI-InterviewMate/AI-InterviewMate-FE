@@ -1,10 +1,10 @@
 import styled from "@emotion/styled";
 import OpenViduVideoComponent from "./OvVideo";
 import { useRecoilValue } from "recoil";
-import { InterviewDataAtom } from "store/interview/atom";
+import { interviewDataAtom } from "store/interview/atom";
 
 const UserVideoComponent = ({ streamManager }) => {
-  const InterviewData = useRecoilValue(InterviewDataAtom);
+  const InterviewData = useRecoilValue(interviewDataAtom);
   return (
     <StyledUserVideoComponent>
       {streamManager !== undefined ? (

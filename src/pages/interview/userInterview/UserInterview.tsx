@@ -2,7 +2,7 @@ import { OpenVidu } from "openvidu-browser";
 import { useState, useEffect } from "react";
 import UserVideoComponent from "../../../components/interview/userInterview/UserVideoComponent";
 import { useRecoilValue } from "recoil";
-import { InterviewDataAtom } from "store/interview/atom";
+import { interviewDataAtom } from "store/interview/atom";
 import styled from "@emotion/styled";
 import Loading from "components/common/Loading";
 import { StyledBtn } from "styles/StyledBtn";
@@ -12,7 +12,7 @@ import { useNavigate } from "react-router";
 const UserInterview = () => {
   const [OV, setOV] = useState<any>(null);
 
-  const userInterviewData = useRecoilValue(InterviewDataAtom);
+  const userInterviewData = useRecoilValue(interviewDataAtom);
   const navigate = useNavigate();
 
   const [mySessionId, setMySessionId] = useState<string | undefined>(userInterviewData?.roomName);

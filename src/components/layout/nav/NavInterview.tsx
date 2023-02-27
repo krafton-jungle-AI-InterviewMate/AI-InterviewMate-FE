@@ -4,11 +4,11 @@ import Breadcrumbs from "components/layout/common/Breadcrumbs";
 
 import styled from "@emotion/styled";
 import { useRecoilValue } from "recoil";
-import { InterviewDataAtom } from "store/interview/atom";
+import { interviewDataAtom } from "store/interview/atom";
 import { MdPublic } from "react-icons/md";
 
 const NavInterview = () => {
-  const roomInfo = useRecoilValue(InterviewDataAtom);
+  const roomInfo = useRecoilValue(interviewDataAtom);
   const viewer = [roomInfo?.roomViewer1Idx, roomInfo?.roomViewer2Idx, roomInfo?.roomViewer3Idx];
   console.log(viewer);
   let roomViewer = 1;

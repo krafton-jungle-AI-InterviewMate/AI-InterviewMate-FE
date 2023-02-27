@@ -63,7 +63,7 @@ export const feedbackAtom = atom<string>({
 });
 
 /** 인터뷰 정보 */
-export const InterviewDataAtom = atom<null | PostJoinRoomResponseData>({
+export const interviewDataAtom = atom<null | PostJoinRoomResponseData>({
   key: "userInterviewData",
   default: null,
 });

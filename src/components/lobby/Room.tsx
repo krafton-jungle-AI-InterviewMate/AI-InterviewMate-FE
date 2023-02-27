@@ -7,7 +7,7 @@ import { RoomTypes } from "api/mypage/types";
 import { Link, useNavigate } from "react-router-dom";
 import { usePostJoinRoom } from "./../../hooks/queries/interview";
 import { useSetRecoilState } from "recoil";
-import { InterviewDataAtom } from "store/interview/atom";
+import { interviewDataAtom } from "store/interview/atom";
 
 interface IRoomProps {
   roomType: RoomTypes;
@@ -50,7 +50,7 @@ const StyledRoom = styled.div<IRoomProps>`
         height: 24px;
         font-size: 12px;
         background-color: ${props =>
-    props.roomType === "AI" ? "var(--push-gray)" : "var(--main-black)"};
+          props.roomType === "AI" ? "var(--push-gray)" : "var(--main-black)"};
         border-radius: 5px;
         color: var(--main-white);
       }
@@ -66,7 +66,7 @@ const StyledRoom = styled.div<IRoomProps>`
       }
       .roomStatus {
         color: ${props =>
-    props.roomStatus === "CREATE" ? "var(--main-orange)" : "var(--main-black)"};
+          props.roomStatus === "CREATE" ? "var(--main-orange)" : "var(--main-black)"};
       }
       .warningComment {
         display: flex;
@@ -116,7 +116,7 @@ const Room = ({
   setIsPasswordPopupOpen,
   setTargetRoomIdx,
 }: RoomProps) => {
-  const setUserInterviewData = useSetRecoilState(InterviewDataAtom);
+  const setUserInterviewData = useSetRecoilState(interviewDataAtom);
   const navigate = useNavigate();
   const { mutate, isLoading } = usePostJoinRoom();
   const onClickJoin = () => {
