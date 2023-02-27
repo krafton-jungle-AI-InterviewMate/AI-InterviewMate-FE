@@ -10,7 +10,6 @@ export type RoomTypes = "USER" | "AI";
 export type RoomStatus = "CREATE" | "PROCEED" | "EXIT";
 
 export type PostInterviewRoomsPayloadData = {
-  email?: string;
   roomName: string;
   roomPeopleNum?: number;
   roomPassword?: string;
@@ -28,7 +27,7 @@ export type PostInterviewRoomsPayload = {
 export type PostInterviewRoomsResponse = ResponseStatus & {
   data: PostInterviewRoomsPayloadData & {
     roomIdx: number;
-    nickName: string;
+    nickname: string;
     createdAt: string;
     roomStatus: RoomStatus;
     connectionToken: string;
@@ -61,7 +60,7 @@ export type GetInterviewRooms = () => Promise<AxiosResponse<GetInterviewRoomsRes
 
 export type PostJoinRoomResponseData = PostInterviewRoomsPayloadData & {
   roomIdx: number;
-  nickName: string;
+  nickname: string;
   createdAt: string;
   roomStatus: RoomStatus;
   connectionToken: string;

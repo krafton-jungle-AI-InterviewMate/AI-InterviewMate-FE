@@ -33,10 +33,6 @@ const StyledQuestions = styled.div`
         margin-right: 24px;
       }
     }
-    .dialogContents {
-      font-size: 24px;
-      font-weight: 400;
-    }
   }
 `;
 
@@ -81,7 +77,7 @@ interface QuestionsProps {
 }
 
 const Questions = ({ boxName, idx, questionNum }: QuestionsProps) => {
-  const [ isOpen, setIsOpen ] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const { mutate, isLoading } = useDeleteQuestionBoxes();
   const handleClickDelete = () => {
     setIsOpen(true);
@@ -140,7 +136,7 @@ const Questions = ({ boxName, idx, questionNum }: QuestionsProps) => {
           >
             꾸러미를 비우시겠습니까?
           </DialogTitle>
-          <DialogActions className="dialogActions">
+          <DialogActions>
             <StyledBtnStlyed onClick={handleClickClear} width="200px" height="42px" color="orange">
               네!
             </StyledBtnStlyed>
