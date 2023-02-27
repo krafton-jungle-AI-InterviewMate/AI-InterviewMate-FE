@@ -96,7 +96,7 @@ const UserInterview = () => {
           videoSource: undefined, // The source of video. If undefined default webcam
           publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
           publishVideo: true, // Whether you want to start publishing with your video enabled or not
-          resolution: "640x480", // The resolution of your video
+          resolution: "272x204", // The resolution of your video
           frameRate: 30, // The frame rate of your video
           insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
           mirror: false, // Whether to mirror your local video or not
@@ -162,10 +162,9 @@ const UserInterview = () => {
             {publisher ? (
               <div>
                 <UserVideoComponent streamManager={publisher} />
-                {userInterviewData?.nickName}
               </div>
             ) : (
-              <div className="publisher_skeleton"></div>
+              <Loading margin="0" />
             )}
             <div>
               {subscribers.map((sub, i) => (
@@ -223,11 +222,13 @@ const UserInterview = () => {
 };
 
 const StyledUserInterview = styled.div`
-  width: 1440px;
-  min-width: 1440px;
+  width: 1000px;
+  min-width: 1000px;
   .video_contents {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    height: 654px;
     .publisher_skeleton {
       background-color: var(--main-gray);
     }
