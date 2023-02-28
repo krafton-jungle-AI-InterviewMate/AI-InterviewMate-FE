@@ -1,7 +1,7 @@
 import { OpenVidu } from "openvidu-browser";
 import { useState, useEffect } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { interviewDataAtom, roomPeopleNowAtom } from "store/interview/atom";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { interviewDataAtom, isInterviewStartAtom, roomPeopleNowAtom } from "store/interview/atom";
 import styled from "@emotion/styled";
 import { StyledBtn } from "styles/StyledBtn";
 import { useNavigate } from "react-router";
@@ -9,21 +9,23 @@ import UserInterviewReady from "components/interview/userInterview/UserInterview
 import { Dialog, DialogActions, DialogTitle } from "@mui/material";
 import UserVideoComponent from "components/interview/userInterview/UserVideoComponent";
 import Loading from "components/common/Loading";
+import { usePutInterviewRooms } from "hooks/queries/interview";
 
 const UserInterview = () => {
-  const [OV, setOV] = useState<any>(null);
+  const { mutate } = usePutInterviewRooms();
 
   const userInterviewData = useRecoilValue(interviewDataAtom);
   const setRoomPeopleNow = useSetRecoilState(roomPeopleNowAtom);
+  const [isInterviewStart, setIsInterviewStart] = useRecoilState(isInterviewStartAtom);
   const navigate = useNavigate();
 
+  const [OV, setOV] = useState<any>(null);
   const [myUserName, setMyUserName] = useState<string | undefined>(userInterviewData?.nickname);
   const [session, setSession] = useState<any>(undefined);
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState<Array<any>>([]);
   const [ready, setReady] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [start, setStart] = useState(false);
 
   useEffect(() => {
     window.addEventListener("beforeunload", onbeforeunload);
@@ -74,7 +76,7 @@ const UserInterview = () => {
     });
 
     session.on("signal:start", event => {
-      setStart(event.data);
+      setIsInterviewStart(event.data);
     });
 
     session
@@ -129,6 +131,7 @@ const UserInterview = () => {
   };
 
   useEffect(() => {
+    setIsInterviewStart(false);
     joinSession();
   }, []);
 
@@ -142,7 +145,15 @@ const UserInterview = () => {
 
   const handleClickStart = () => {
     if (ready) {
-      setStart(true);
+      mutate(userInterviewData!.roomIdx, {
+        onSuccess: () => {
+          setIsInterviewStart(true);
+        },
+        onError(error) {
+          alert(error);
+        },
+      });
+      setIsInterviewStart(true);
       session
         .signal({
           data: true,
@@ -170,7 +181,7 @@ const UserInterview = () => {
 
   return (
     <>
-      {start ? (
+      {isInterviewStart ? (
         <div>
           {session ? (
             <>

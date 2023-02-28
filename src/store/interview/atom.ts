@@ -78,6 +78,11 @@ export const roomPeopleNowAtom = atom<number>({
   default: 0,
 });
 
+export const isInterviewStartAtom = atom<boolean>({
+  key: "IsInterviewStart",
+  default: false,
+});
+
 /** 대체 면접관 */
 export const aiInterviewerAtom = atom<AiInterviewerTypes>({
   key: "AiInterviewer",

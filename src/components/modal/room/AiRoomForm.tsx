@@ -8,7 +8,7 @@ import FormLabel from "@mui/material/FormLabel";
 import styled from "@emotion/styled";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { useSetRecoilState } from "recoil";
-import { feedbackAtom, aiRoomResponseAtom } from "store/interview/atom";
+import { feedbackAtom, aiRoomResponseAtom, interviewDataAtom } from "store/interview/atom";
 import { usePostInterviewRooms } from "hooks/queries/interview";
 import { useNavigate } from "react-router-dom";
 import { RoomTypes } from "api/mypage/types";
@@ -30,7 +30,8 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
   const navigate = useNavigate();
   const setFeedback = useSetRecoilState(feedbackAtom);
   const setAiRoomResponse = useSetRecoilState(aiRoomResponseAtom);
-  const [ questionNum, setQuestionNum ] = useState(0);
+  const setInterviewData = useSetRecoilState(interviewDataAtom);
+  const [questionNum, setQuestionNum] = useState(0);
 
   const onChangeFeedback = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -60,6 +61,7 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
       {
         onSuccess: ({ data }) => {
           setAiRoomResponse(data);
+          setInterviewData(data.data);
           navigate(PagesPath.INTERVIEW_READY);
         },
         onError(error) {

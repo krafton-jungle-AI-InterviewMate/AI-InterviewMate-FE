@@ -27,20 +27,20 @@ const modalStyles: ModalProps["styles"] = {
 
 const StyledWrap = styled.div`
   .contentsHeader {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 45px;
-      h2 {
-        color: var(--main-black);
-        font-size: 24px;
-      }
-      .tabBtn {
-        button {
-          margin-left: 20px;
-        }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 45px;
+    h2 {
+      color: var(--main-black);
+      font-size: 24px;
+    }
+    .tabBtn {
+      button {
+        margin-left: 20px;
       }
     }
+  }
 `;
 
 const StyledTabBtn = styled.button`
@@ -61,19 +61,16 @@ const StyledTabBtn = styled.button`
 `;
 
 const CreateRoom = (props: CreateRoomProps) => {
-  const {
-    open,
-    onClose,
-  } = props;
+  const { open, onClose } = props;
 
-  const [ roomType, setRoomType ] = useState<RoomTypes>("USER");
-  const [ questionBoxes, SetQuestionBoxes ] = useState<QuestionBoxes[]>([]);
+  const [roomType, setRoomType] = useState<RoomTypes>("USER");
+  const [questionBoxes, SetQuestionBoxes] = useState<QuestionBoxes[]>([]);
   const { data, isLoading, isError, isSuccess } = useGetQuestionBoxes();
   useEffect(() => {
     if (!isLoading && data) {
       SetQuestionBoxes(data.data.data);
     }
-  }, [ isLoading ]);
+  }, [isLoading]);
 
   const onClickTabBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
     const {
