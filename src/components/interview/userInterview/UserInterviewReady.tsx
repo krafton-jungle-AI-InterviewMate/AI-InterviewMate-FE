@@ -1,11 +1,12 @@
 import { Dialog, DialogActions, DialogTitle } from "@mui/material";
-import UserVideoComponent from "../../../components/interview/userInterview/UserVideoComponent";
+import UserVideoComponent from "./UserVideoComponent";
 import Loading from "components/common/Loading";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import styled from "@emotion/styled";
 import { StyledBtn } from "styles/StyledBtn";
 import { isInterviewerAtom } from "store/interview/atom";
 import { useRecoilValue } from "recoil";
+import { css } from "@emotion/react";
 
 interface UserInterviewReadyProps {
   session: any;
@@ -36,7 +37,7 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
     <StyledUserInterview>
       {session ? (
         <>
-          <div className="video_contents">
+          <div className="videoContents">
             {publisher ? (
               <div>
                 <UserVideoComponent streamManager={publisher} isInterviewer={false} />
@@ -52,7 +53,7 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
               ))}
             </div>
           </div>
-          <div className="interview_actions">
+          <div className="interviewActions">
             <StyledBtn onClick={handleClickLeave} width="200px" height="48px" color="red">
               나가기
             </StyledBtn>
@@ -69,7 +70,7 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
             )}
           </div>
           {!ready && (
-            <div className="ready_text">
+            <div className="readyText">
               <AiOutlineInfoCircle size={24} color="var(--font-gray)" />
               <span>
                 참가 면접관이 한명이라도 있어야
@@ -119,8 +120,7 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
 
 const StyledUserInterview = styled.div`
   width: 1000px;
-  min-width: 1000px;
-  .ready_text {
+  .readyText {
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -133,16 +133,13 @@ const StyledUserInterview = styled.div`
       margin-right: 5px;
     }
   }
-  .video_contents {
+  .videoContents {
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 654px;
-    .publisher_skeleton {
-      background-color: var(--main-gray);
-    }
   }
-  .interview_actions {
+  .interviewActions {
     display: flex;
     justify-content: flex-end;
     button {
@@ -156,10 +153,14 @@ interface NewStyledBtnProps {
 }
 
 const NewStyledBtn = styled(StyledBtn)<NewStyledBtnProps>`
-  background-color: ${props => !props.ready && "var(--push-gray)"};
-  &:hover {
-    background-color: ${props => !props.ready && "var(--push-gray)"};
-  }
+  ${({ ready }) =>
+    !ready &&
+    css`
+      background-color: var(--push-gray);
+      &:hover {
+        background-color: var(--push-gray);
+      }
+    `}
 `;
 
 export default UserInterviewReady;
