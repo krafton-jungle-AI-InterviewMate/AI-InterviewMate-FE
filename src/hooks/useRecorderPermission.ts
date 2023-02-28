@@ -4,10 +4,6 @@ import RecordRTC, { RecordRTCPromisesHandler } from "recordrtc";
 export const useRecorderPermission = (
   recordingType: RecordRTC.Options["type"],
 ) => {
-  useEffect(() => {
-    getPermissionInitializeRecorder();
-  }, []);
-
   const getPermissionInitializeRecorder = async () => {
     let stream = await (navigator as any).mediaDevices.getUserMedia({
       video: true,
@@ -19,6 +15,10 @@ export const useRecorderPermission = (
 
     return recorder;
   };
+
+  useEffect(() => {
+    getPermissionInitializeRecorder();
+  }, []);
 
   return {
     getPermissionInitializeRecorder,

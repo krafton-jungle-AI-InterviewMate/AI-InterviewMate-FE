@@ -50,45 +50,37 @@ const InterviewAiContainer = () => {
     getPermissionInitializeRecorder,
   } = useRecorderPermission("video");
 
-  const startRecording = async () => {
-    if (recorder) {
-      await recorder.startRecording();
-    }
-  };
-
   const stopRecording = async () => {
     if (recorder) {
       await recorder.stopRecording();
-      let blob = await recorder.getBlob();
+      const blob = await recorder.getBlob();
       RecordRTC.invokeSaveAsDialog(blob, `interview${interviewQuestionNumber}.webm`);
+      console.log(blob); // TODO: POST /result req body에 포함
     }
   };
 
   useEffect(() => {
     (async () => {
       const rec = await getPermissionInitializeRecorder();
+      await rec.startRecording();
 
       setRecorder(rec);
     })();
-  }, []);
-
-  useEffect(() => {
-    if (interviewMode === "answer") {
-      (async () => {
-        await startRecording();
-      })();
-    }
-    else {
-      (async () => {
-        await stopRecording();
-      })();
-    }
 
     return (() => {
       (async () => {
         await stopRecording();
+        await recorder?.destroy();
       })();
     });
+  }, []);
+
+  useEffect(() => {
+    if (interviewMode === "finished") {
+      (async () => {
+        await stopRecording();
+      })();
+    }
   }, [ interviewMode ]);
 
   useEffect(() => {
