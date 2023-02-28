@@ -6,6 +6,9 @@ import styled from "@emotion/styled";
 import { StyledBtn } from "styles/StyledBtn";
 import { useNavigate } from "react-router";
 import UserInterviewReady from "components/interview/userInterview/UserInterviewReady";
+import { Dialog, DialogActions, DialogTitle } from "@mui/material";
+import UserVideoComponent from "components/interview/userInterview/UserVideoComponent";
+import Loading from "components/common/Loading";
 
 const UserInterview = () => {
   const [OV, setOV] = useState<any>(null);
@@ -68,6 +71,10 @@ const UserInterview = () => {
     // On every asynchronous exception...
     session.on("exception", exception => {
       console.warn(exception);
+    });
+
+    session.on("signal:start", event => {
+      setStart(event.data);
     });
 
     session
@@ -136,6 +143,18 @@ const UserInterview = () => {
   const handleClickStart = () => {
     if (ready) {
       setStart(true);
+      session
+        .signal({
+          data: true,
+          to: subscribers,
+          type: "start",
+        })
+        .then(() => {
+          console.log("면접을 시작합니다.");
+        })
+        .catch(error => {
+          console.error(error);
+        });
     }
   };
 
@@ -152,7 +171,66 @@ const UserInterview = () => {
   return (
     <>
       {start ? (
-        <div></div>
+        <div>
+          {session ? (
+            <>
+              <div className="videoContents">
+                {publisher ? (
+                  <div>
+                    <UserVideoComponent streamManager={publisher} isInterviewer={false} />
+                  </div>
+                ) : (
+                  <Loading margin="0 0 0 30px" />
+                )}
+                <div>
+                  {subscribers.map((sub, i) => (
+                    <div key={i}>
+                      <UserVideoComponent streamManager={sub} isInterviewer={true} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="interviewActions">
+                <StyledBtn onClick={handleClickLeave} width="200px" height="48px" color="red">
+                  나가기
+                </StyledBtn>
+              </div>
+              <Dialog
+                open={isOpen}
+                onClose={handleClickClose}
+                PaperProps={{
+                  style: {
+                    padding: "50px 35px",
+                    borderRadius: "10px",
+                  },
+                }}
+              >
+                <DialogTitle
+                  fontSize={16}
+                  fontWeight={400}
+                  color={"var(--main-black)"}
+                  marginBottom={3}
+                  padding={0}
+                  textAlign={"center"}
+                >
+                  현재 면접 방을 나가고
+                  <br />
+                  로비로 이동하시겠습니까?
+                </DialogTitle>
+                <DialogActions>
+                  <StyledBtn onClick={leaveSession} width="200px" height="42px" color="orange">
+                    네!
+                  </StyledBtn>
+                  <StyledBtn onClick={handleClickClose} width="200px" height="42px" color="red">
+                    취소
+                  </StyledBtn>
+                </DialogActions>
+              </Dialog>
+            </>
+          ) : (
+            <Loading margin="250px" />
+          )}
+        </div>
       ) : (
         <UserInterviewReady
           session={session}
