@@ -1,9 +1,15 @@
 import { useEffect } from "react";
 import { useSetRecoilState, useRecoilState } from "recoil";
-import { interviewModeAtom, interviewQuestionNumberAtom, synthesizerAtom, playerAtom } from "store/interview/atom";
+import {
+  interviewModeAtom,
+  interviewQuestionNumberAtom,
+  synthesizerAtom,
+  playerAtom,
+} from "store/interview/atom";
+import { QuestionListItem } from "api/interview/type";
 
 export type UseAzureTTSParams = {
-  questionList: string[];
+  questionList: QuestionListItem[];
 };
 
 const useAzureTTS = (params: UseAzureTTSParams) => {
@@ -23,7 +29,7 @@ const useAzureTTS = (params: UseAzureTTSParams) => {
     }
 
     synthesizer.speakTextAsync(
-      questionList[interviewQuestionNumber],
+      questionList[interviewQuestionNumber].questionTitle,
       result => {
         if (result) {
           try {

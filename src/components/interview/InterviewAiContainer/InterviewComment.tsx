@@ -19,11 +19,15 @@ const InterviewComment = (props: InterviewCommentProps) => {
 export default InterviewComment;
 
 const StyledInterviewComment = styled.div`
-  width: 742px;
-  height: 48px;
+  width: 900px;
+  height: 88px;
   margin: 0 auto;
   background-color: var(--main-white);
-  border: 1px solid var(--main-orange);
+  border: 1px solid var(--main-gray);
   border-radius: var(--button-border-radius);
+  box-shadow: var(--box-shadow);
   color: var(--font-gray);
+  word-break: keep-all;
+  line-height: 1.2;
+  padding: 0 10px;
 `;

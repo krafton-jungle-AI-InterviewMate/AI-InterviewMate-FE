@@ -57,7 +57,7 @@ const Lobby = () => {
           roomIdx={targetRoomIdx}
         />
       )}
-      {modalCreateRoom ? <CreateRoom setModalCreateRoom={setModalCreateRoom} /> : null}
+      {modalCreateRoom && <CreateRoom open={modalCreateRoom} onClose={() => setModalCreateRoom(false)} />}
       {isJoinError ? <JoinError setIsJoinError={setIsJoinError} /> : null}
       <StyledLobbyInterface>
         <StyledBtn
