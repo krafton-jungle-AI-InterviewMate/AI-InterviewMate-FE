@@ -58,29 +58,29 @@ export const motionSnapshotAtom = atom<FaceLandmarksDetection.Face>({
 });
 
 export const feedbackAtom = atom<string>({
-  key: "feedback",
+  key: "Feedback",
   default: "ON",
 });
 
 /** 인터뷰 정보 */
 export const interviewDataAtom = atom<null | PostJoinRoomResponseData>({
-  key: "userInterviewData",
+  key: "UserInterviewData",
   default: null,
 });
 
 export const isInterviewerAtom = atom<boolean>({
-  key: "isInterviewer",
+  key: "IsInterviewer",
   default: false,
 });
 
 export const roomPeopleNowAtom = atom<number>({
-  key: "roomPeopleNow",
+  key: "RoomPeopleNow",
   default: 0,
 });
 
 /** 대체 면접관 */
 export const aiInterviewerAtom = atom<AiInterviewerTypes>({
-  key: "aiInterviewer",
+  key: "AiInterviewer",
   default: "Minho",
 });
 
