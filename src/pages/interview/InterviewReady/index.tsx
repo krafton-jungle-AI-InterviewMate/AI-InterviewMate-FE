@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState, useRecoilValue } from "recoil";
-import { motionSnapshotAtom, aiInterviewerAtom } from "store/interview/atom";
+import { motionSnapshotAtom, aiInterviewerAtom, aiInterviewNextProcessAtom } from "store/interview/atom";
 import { memberAtom } from "store/auth/atom";
 
 import useInitializeInterviewState from "hooks/useInitializeInterviewState";
@@ -13,7 +13,7 @@ import Webcam from "react-webcam";
 import NameTag from "components/interview/InterviewNameTag";
 import Skeleton from "@mui/material/Skeleton";
 import { toast } from "react-toastify";
-import { getAiInterviewerProfile, getAiInterviewerThumbnail } from "lib/interview";
+import { getAiInterviewerThumbnail } from "lib/interview";
 import Popup from "components/common/Popup";
 
 import { BsThreeDots } from "react-icons/bs";
@@ -35,6 +35,7 @@ const InterviewReady = () => {
   const [ isModalOpen, setIsModalOpen ] = useState(false);
   const [ isConfirmPopupOpen, setIsConfirmPopupOpen ] = useState(false);
 
+  const setAiInterviewNextProcess = useSetRecoilState(aiInterviewNextProcessAtom);
   const setMotionSnapshot = useSetRecoilState(motionSnapshotAtom);
   const aiInterviewer = useRecoilValue(aiInterviewerAtom);
   const { nickname } = useRecoilValue(memberAtom);
@@ -82,7 +83,7 @@ const InterviewReady = () => {
   }, [ isVideoReady ]);
 
   const handleLeave = () => {
-    navigate("/lobby");
+    navigate("/lobby", { replace: true });
   };
 
   const handleGoButton = async () => {
@@ -101,7 +102,8 @@ const InterviewReady = () => {
         setIsDetectionOn(false);
         toast.clearWaitingQueue();
         setMotionSnapshot(newFace);
-        navigate("/interview/ai");
+        setAiInterviewNextProcess("ongoing");
+        navigate("/interview/ai", { replace: true });
       }
       else {
         toast("화면에서 얼굴이 인식되지 않습니다.", Styled.toastOptions);
@@ -144,7 +146,7 @@ const InterviewReady = () => {
         <Styled.Profile>
           <Styled.VideoWrap>
             {!isWebcamReady && (
-              <Skeleton variant="rectangular" width={272} height={204} />
+              <Skeleton variant="rectangular" width={640} height={480} />
             )}
             <Webcam ref={webcamRef} mirrored={false} onCanPlay={() => setIsWebcamReady(true)} />
             <Styled.Canvas ref={canvasRef} />
@@ -160,9 +162,6 @@ const InterviewReady = () => {
           </Styled.SelectButton>
           <Styled.ImageWrap bgImg={getAiInterviewerThumbnail(aiInterviewer)} />
           <NameTag role="interviewer" profileName={aiInterviewer} />
-          <Styled.MiniProfile>
-            {getAiInterviewerProfile(aiInterviewer)}
-          </Styled.MiniProfile>
         </Styled.Profile>
       </Styled.ReadyContainer>
 

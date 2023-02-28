@@ -1,8 +1,8 @@
 import { atom } from "recoil";
 import * as FaceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
-import { InterviewModeTypes, AiInterviewerTypes } from "types/interview";
+import { InterviewModeTypes, AiInterviewerTypes, AiInterviewProcessTypes } from "types/interview";
 import { IRIS_PERFECT_SCORE, MOTION_PERFECT_SCORE } from "constants/interview";
-import { PostJoinRoomResponseData } from "api/interview/type";
+import { PostInterviewRoomsResponse, PostJoinRoomResponseData } from "api/interview/type";
 
 /** 인터뷰 프로세스 제어 */
 export const faceLandmarksDetectorAtom = atom<null | FaceLandmarksDetection.FaceLandmarksDetector>({
@@ -94,4 +94,14 @@ export const playerAtom = atom<null | SpeakerAudioDestination>({
   key: "Player",
   default: null,
   dangerouslyAllowMutability: true,
+});
+
+export const aiInterviewNextProcessAtom = atom<AiInterviewProcessTypes>({
+  key: "AiInterviewNextProcess",
+  default: "ready",
+});
+
+export const aiRoomResponseAtom = atom<null | PostInterviewRoomsResponse>({
+  key: "AiRoomResponse",
+  default: null,
 });

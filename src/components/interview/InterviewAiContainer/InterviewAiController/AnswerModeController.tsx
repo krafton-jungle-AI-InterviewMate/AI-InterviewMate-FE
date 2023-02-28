@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import {
   interviewModeAtom,
   interviewQuestionNumberAtom,
   interviewQuestionTotalAtom,
+  feedbackAtom,
 } from "store/interview/atom";
 import useFaceLandmarksDetection from "hooks/useFaceLandmarksDetection";
 import useCheckIrisPosition from "hooks/useCheckIrisPosition";
@@ -32,7 +33,10 @@ const AnswerModeController = (props: AnswerModeControllerProps) => {
   const setInterviewMode = useSetRecoilState(interviewModeAtom);
   const interviewQuestionNumber = useRecoilValue(interviewQuestionNumberAtom);
   const interviewQuestionTotal = useRecoilValue(interviewQuestionTotalAtom);
+  const feedbackMode = useRecoilValue(feedbackAtom);
   const [ countDown, setCountDown ] = useState(ANSWER_LIMIT_SECONDS);
+
+  const isRealtimeMode = useMemo(() => feedbackMode === "ON", [ feedbackMode ]);
 
   const {
     face,
@@ -57,13 +61,13 @@ const AnswerModeController = (props: AnswerModeControllerProps) => {
   const {
     showFeedback: showIrisFeedback,
   } = useIrisAssessment({
-    isRealtimeMode: true,
+    isRealtimeMode,
     horizontalRatio,
   });
   const {
     showFeedback: showMotionFeedback,
   } = useMotionAssessment({
-    isRealtimeMode: true,
+    isRealtimeMode,
     isBadMotion,
   });
 
@@ -152,7 +156,7 @@ const StyledComment = styled.strong`
   flex-flow: row nowrap;
   justify-content: center;
   align-items: center;
-  font-size: 20px;
+  font-size: 28px;
   font-weight: 400;
 `;
 
@@ -172,7 +176,7 @@ const StyledTimer = styled.div`
 
 const StyledNextButton = styled.button`
   position: absolute;
-  top: 50%;
+  top: -100px;
   right: 60px;
   width: 100px;
   height: 100px;
