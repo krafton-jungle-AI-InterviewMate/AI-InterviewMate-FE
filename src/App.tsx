@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { PagesPath } from "constants/pages";
 
 import { ToastContainer } from "react-toastify";
@@ -24,8 +24,10 @@ function App() {
   useCheckSTTAvailable();
   useCheckAuth();
 
+  const { pathname } = useLocation();
+
   return (
-    <StyledWrapper>
+    <StyledWrapper noNav={pathname === "/interview/ai"}>
       <ToastContainer limit={1} />
 
       <Routes>
@@ -69,13 +71,14 @@ function App() {
   );
 }
 
-const StyledWrapper = styled.section`
+const StyledWrapper = styled.section<{ noNav: boolean }>`
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
   max-width: 1440px;
   min-width: 1000px;
   margin: 0 auto;
+  padding-top: ${({ noNav }) => noNav ? 0 : "150px"};
   padding-bottom: 68px;
   text-align: center;
 `;

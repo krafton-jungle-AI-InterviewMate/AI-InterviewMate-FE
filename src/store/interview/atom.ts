@@ -1,8 +1,8 @@
 import { atom } from "recoil";
 import * as FaceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
-import { InterviewModeTypes, AiInterviewerTypes } from "types/interview";
+import { InterviewModeTypes, AiInterviewerTypes, AiInterviewProcessTypes } from "types/interview";
 import { IRIS_PERFECT_SCORE, MOTION_PERFECT_SCORE } from "constants/interview";
-import { PostJoinRoomResponseData, RoomTypes } from "api/interview/type";
+import { PostInterviewRoomsResponse, PostJoinRoomResponseData } from "api/interview/type";
 
 /** 인터뷰 프로세스 제어 */
 export const faceLandmarksDetectorAtom = atom<null | FaceLandmarksDetection.FaceLandmarksDetector>({
@@ -58,19 +58,29 @@ export const motionSnapshotAtom = atom<FaceLandmarksDetection.Face>({
 });
 
 export const feedbackAtom = atom<string>({
-  key: "feedback",
+  key: "Feedback",
   default: "ON",
 });
 
-/** 면접 정보 */
+/** 인터뷰 정보 */
 export const interviewDataAtom = atom<null | PostJoinRoomResponseData>({
-  key: "userInterviewData",
+  key: "UserInterviewData",
   default: null,
+});
+
+export const isInterviewerAtom = atom<boolean>({
+  key: "IsInterviewer",
+  default: false,
+});
+
+export const roomPeopleNowAtom = atom<number>({
+  key: "RoomPeopleNow",
+  default: 0,
 });
 
 /** 대체 면접관 */
 export const aiInterviewerAtom = atom<AiInterviewerTypes>({
-  key: "aiInterviewer",
+  key: "AiInterviewer",
   default: "Minho",
 });
 
@@ -84,4 +94,14 @@ export const playerAtom = atom<null | SpeakerAudioDestination>({
   key: "Player",
   default: null,
   dangerouslyAllowMutability: true,
+});
+
+export const aiInterviewNextProcessAtom = atom<AiInterviewProcessTypes>({
+  key: "AiInterviewNextProcess",
+  default: "ready",
+});
+
+export const aiRoomResponseAtom = atom<null | PostInterviewRoomsResponse>({
+  key: "AiRoomResponse",
+  default: null,
 });

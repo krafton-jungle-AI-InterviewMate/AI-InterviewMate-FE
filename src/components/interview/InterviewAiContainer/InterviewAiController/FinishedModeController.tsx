@@ -3,8 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { InterviewModeComment } from "constants/interview";
 import InterviewComment from "../InterviewComment";
 
-import { useRecoilValue } from "recoil";
-import { answerScriptAtom, motionScoreAtom, irisScoreAtom } from "store/interview/atom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  answerScriptAtom,
+  motionScoreAtom,
+  irisScoreAtom,
+  aiInterviewNextProcessAtom,
+  aiRoomResponseAtom,
+} from "store/interview/atom";
 import { usePostRatingViewee } from "hooks/queries/mypage";
 import { PostRatingVieweePayloadData } from "api/mypage/types";
 import { AI_VIEWER_IDX } from "constants/api";
@@ -16,7 +22,9 @@ const FinishedModeController = () => {
 
   const motionScore = useRecoilValue(motionScoreAtom);
   const irisScore = useRecoilValue(irisScoreAtom);
+  const aiRoomResponse = useRecoilValue(aiRoomResponseAtom);
   const answerScript = useRecoilValue(answerScriptAtom);
+  const setAiInterviewNextProcess = useSetRecoilState(aiInterviewNextProcessAtom);
 
   const {
     mutate,
@@ -27,6 +35,16 @@ const FinishedModeController = () => {
     if (isLoading) {
       return;
     }
+
+    if (!aiRoomResponse) {
+      return;
+    }
+
+    const {
+      data: {
+        roomIdx,
+      },
+    } = aiRoomResponse;
 
     const data: PostRatingVieweePayloadData = {
       viewerIdx: AI_VIEWER_IDX, // TODO: user/ai 구분
@@ -39,11 +57,12 @@ const FinishedModeController = () => {
     };
 
     mutate({
-      roomIdx: 1, // ! TODO: 실제 roomIdx로 교체
+      roomIdx,
       data,
     }, {
       onSuccess: () => {
-        navigate("/interview/end");
+        setAiInterviewNextProcess("end");
+        navigate("/interview/end", { replace: true });
       },
       onError ( error ) {
         alert(error);
@@ -56,13 +75,11 @@ const FinishedModeController = () => {
       <InterviewComment>
         <StyledComment>
           {InterviewModeComment.finished}
+          <StyledSubmitButton type="button" onClick={handleSubmit}>
+            📝 면접 결과 제출하고 나가기
+          </StyledSubmitButton>
         </StyledComment>
       </InterviewComment>
-      <StyledLayer>
-        <StyledSubmitButton type="button" onClick={handleSubmit}>
-          📝 면접 결과 제출하고 나가기
-        </StyledSubmitButton>
-      </StyledLayer>
     </StyledWrap>
   );
 };
@@ -79,7 +96,7 @@ const StyledWrap = styled.div`
   height: 100%;
 `;
 
-const StyledComment = styled.strong`
+const StyledComment = styled.div`
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
@@ -90,24 +107,19 @@ const StyledComment = styled.strong`
   font-weight: 400;
 `;
 
-const StyledLayer = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  align-items: center;
-  width: 400px;
-  height: 300px;
-  border-radius: 5px;
-  `;
-
 const StyledSubmitButton = styled.button`
   border-radius: 5px;
   padding: 10px;
   font-size: 14px;
   color: var(--main-white);
-  background-color: var(--push-orange);
+  margin-left: 50px;
+  transition: all 200ms;
+  background-color: var(--main-orange);
+
+  &:hover {
+    background-color: var(--light-orange);
+  }
+  &:active {
+    background-color: var(--push-orange);
+  }
 `;

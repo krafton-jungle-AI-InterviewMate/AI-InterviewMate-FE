@@ -1,25 +1,26 @@
 import { OpenVidu } from "openvidu-browser";
 import { useState, useEffect } from "react";
-import UserVideoComponent from "../../../components/interview/userInterview/UserVideoComponent";
-import { useRecoilValue } from "recoil";
-import { interviewDataAtom } from "store/interview/atom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { interviewDataAtom, roomPeopleNowAtom } from "store/interview/atom";
 import styled from "@emotion/styled";
-import Loading from "components/common/Loading";
 import { StyledBtn } from "styles/StyledBtn";
-import { Dialog, DialogActions, DialogTitle } from "@mui/material";
 import { useNavigate } from "react-router";
+import UserInterviewReady from "components/interview/userInterview/UserInterviewReady";
 
 const UserInterview = () => {
   const [OV, setOV] = useState<any>(null);
 
   const userInterviewData = useRecoilValue(interviewDataAtom);
+  const setRoomPeopleNow = useSetRecoilState(roomPeopleNowAtom);
   const navigate = useNavigate();
 
-  const [mySessionId, setMySessionId] = useState<string | undefined>(userInterviewData?.roomName);
   const [myUserName, setMyUserName] = useState<string | undefined>(userInterviewData?.nickname);
   const [session, setSession] = useState<any>(undefined);
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState<Array<any>>([]);
+  const [ready, setReady] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [start, setStart] = useState(false);
 
   useEffect(() => {
     window.addEventListener("beforeunload", onbeforeunload);
@@ -33,12 +34,8 @@ const UserInterview = () => {
   };
 
   const deleteSubscriber = (streamManager: any) => {
-    const newSubscribers = subscribers;
-    let index = newSubscribers.indexOf(streamManager, 0);
-    if (index > -1) {
-      subscribers.splice(index, 1);
-      setSubscribers(newSubscribers);
-    }
+    const newSubscribers = [...subscribers];
+    setSubscribers(newSubscribers.filter(v => v !== streamManager));
   };
 
   const joinSession = async () => {
@@ -59,17 +56,12 @@ const UserInterview = () => {
     }
     // 스트림이 새로 수신될 때마다
     session.on("streamCreated", event => {
-      // Subscribe to the Stream to receive it. Second parameter is undefined
-      // so OpenVidu doesn't create an HTML video by its own
       const newSubscriber = session.subscribe(event.stream, undefined);
-
-      // Update the state with the new subscribers
-      setSubscribers([...subscribers, newSubscriber]);
+      setSubscribers(curr => [...curr, newSubscriber]);
     });
 
     // On every Stream destroyed...
     session.on("streamDestroyed", event => {
-      // Remove the stream from 'subscribers' array
       deleteSubscriber(event.stream.streamManager);
     });
 
@@ -78,25 +70,15 @@ const UserInterview = () => {
       console.warn(exception);
     });
 
-    // --- 4) Connect to the session with a valid user token ---
-
-    // Get a token from the OpenVidu deployment
-
-    // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
-    // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
     session
       .connect(userInterviewData?.connectionToken, { clientData: myUserName })
       .then(async () => {
-        // --- 5) Get your own camera stream ---
-
-        // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
-        // element: we will manage it on our own) and with the desired properties
         let publisher = await OV.initPublisherAsync(undefined, {
           audioSource: undefined, // The source of audio. If undefined default microphone
           videoSource: undefined, // The source of video. If undefined default webcam
           publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
           publishVideo: true, // Whether you want to start publishing with your video enabled or not
-          resolution: "272x204", // The resolution of your video
+          // resolution: "272x204", // The resolution of your video
           frameRate: 30, // The frame rate of your video
           insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
           mirror: false, // Whether to mirror your local video or not
@@ -134,7 +116,6 @@ const UserInterview = () => {
     setOV(null);
     setSession(undefined);
     setSubscribers([]);
-    setMySessionId("");
     setMyUserName("");
     setPublisher(undefined);
     navigate("/lobby");
@@ -144,8 +125,6 @@ const UserInterview = () => {
     joinSession();
   }, []);
 
-  const [isOpen, setIsOpen] = useState(false);
-
   const handleClickClose = () => {
     setIsOpen(false);
   };
@@ -154,94 +133,41 @@ const UserInterview = () => {
     setIsOpen(true);
   };
 
+  const handleClickStart = () => {
+    if (ready) {
+      setStart(true);
+    }
+  };
+
+  useEffect(() => {
+    console.log(subscribers);
+    setRoomPeopleNow(subscribers.length);
+    if (subscribers.length) {
+      setReady(true);
+    } else {
+      setReady(false);
+    }
+  }, [subscribers]);
+
   return (
-    <StyledUserInterview>
-      {session ? (
-        <>
-          <div className="video_contents">
-            {publisher ? (
-              <div>
-                <UserVideoComponent streamManager={publisher} isInterviewer={false} />
-              </div>
-            ) : (
-              <Loading margin="0" />
-            )}
-            <div className="subscribers">
-              {subscribers.map((sub, i) => (
-                <div key={i}>
-                  <UserVideoComponent streamManager={sub} isInterviewer={true} />
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="interview_actions">
-            <StyledBtn onClick={handleClickLeave} width="200px" height="48px" color="red">
-              나가기
-            </StyledBtn>
-            <StyledBtn width="200px" height="48px" color="orange">
-              GO
-            </StyledBtn>
-          </div>
-          <Dialog
-            open={isOpen}
-            onClose={handleClickClose}
-            PaperProps={{
-              style: {
-                padding: "50px 35px",
-                borderRadius: "10px",
-              },
-            }}
-          >
-            <DialogTitle
-              fontSize={16}
-              fontWeight={400}
-              color={"var(--main-black)"}
-              marginBottom={3}
-              padding={0}
-              textAlign={"center"}
-            >
-              현재 면접 방을 나가고
-              <br />
-              로비로 이동하시겠습니까?
-            </DialogTitle>
-            <DialogActions>
-              <StyledBtn onClick={leaveSession} width="200px" height="42px" color="orange">
-                네!
-              </StyledBtn>
-              <StyledBtn onClick={handleClickClose} width="200px" height="42px" color="red">
-                취소
-              </StyledBtn>
-            </DialogActions>
-          </Dialog>
-        </>
+    <>
+      {start ? (
+        <div></div>
       ) : (
-        <Loading margin="250px" />
+        <UserInterviewReady
+          session={session}
+          publisher={publisher}
+          subscribers={subscribers}
+          ready={ready}
+          isOpen={isOpen}
+          handleClickLeave={handleClickLeave}
+          handleClickStart={handleClickStart}
+          handleClickClose={handleClickClose}
+          leaveSession={leaveSession}
+        />
       )}
-    </StyledUserInterview>
+    </>
   );
 };
-
-const StyledUserInterview = styled.div`
-  width: 1000px;
-  min-width: 1000px;
-  .video_contents {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 654px;
-    .subscribers {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-  }
-  .interview_actions {
-    display: flex;
-    justify-content: flex-end;
-    button {
-      margin-left: 28px;
-    }
-  }
-`;
 
 export default UserInterview;

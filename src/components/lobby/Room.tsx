@@ -5,7 +5,7 @@ import { MdPublic } from "react-icons/md";
 import { RoomStatus } from "api/interview/type";
 import { RoomTypes } from "api/mypage/types";
 import { useNavigate } from "react-router-dom";
-import { usePostJoinRoom } from "./../../hooks/queries/interview";
+import { usePostJoinRoom } from "hooks/queries/interview";
 import { useSetRecoilState } from "recoil";
 import { interviewDataAtom, isInterviewerAtom } from "store/interview/atom";
 
