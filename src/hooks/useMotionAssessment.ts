@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { useSetRecoilState } from "recoil";
-import { motionCountAtom } from "store/interview/atom";
+import { useSetRecoilState, useRecoilState } from "recoil";
+import { motionCountAtom, timelineRecordAtom } from "store/interview/atom";
+import { createTimeline } from "lib/interview";
 
 type UseMotionAssessmentParams = {
   isRealtimeMode: boolean;
@@ -15,6 +16,7 @@ const useMotionAssessment = (params: UseMotionAssessmentParams) => {
 
   const [ showFeedback, setShowFeedback ] = useState(false);
   const setMotionCount = useSetRecoilState(motionCountAtom);
+  const [ timelineRecord, setTimelineRecord ] = useRecoilState(timelineRecordAtom);
   const [ increments, setIncrements ] = useState(0);
 
   const assess = () => {
@@ -24,6 +26,13 @@ const useMotionAssessment = (params: UseMotionAssessmentParams) => {
 
     if (isBadMotion) {
       setMotionCount((curr) => curr + 1);
+      setTimelineRecord((curr) => ({
+        ...curr,
+        timeline: {
+          ...curr.timeline,
+          attitude: [ ...curr.timeline.attitude, createTimeline(timelineRecord.startTime) ],
+        },
+      }));
     }
   };
 
