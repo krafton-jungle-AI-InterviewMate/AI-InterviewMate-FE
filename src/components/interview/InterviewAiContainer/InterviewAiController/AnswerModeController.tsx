@@ -97,8 +97,6 @@ const AnswerModeController = (props: AnswerModeControllerProps) => {
     };
   }, []);
 
-  console.log("실시간 피드백 모드: ", isRealtimeMode);
-
   return (
     <StyledWrap>
       <InterviewComment>

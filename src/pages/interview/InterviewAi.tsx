@@ -21,7 +21,6 @@ const InterviewAi = () => {
 
   useEffect(() => {
     if (aiInterviewNextProcess !== "ongoing") {
-      console.log("잘못된 접근입니다.");
       navigate("/lobby", { replace: true });
     }
     else {
