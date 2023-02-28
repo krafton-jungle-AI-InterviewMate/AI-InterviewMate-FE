@@ -31,7 +31,7 @@ export type QuestionListItem = {
   keyword4: string | null;
   keyword5: string | null;
   questionTitle: string;
-}
+};
 
 export type PostInterviewRoomsResponse = ResponseStatus & {
   data: PostInterviewRoomsPayloadData & {
@@ -84,3 +84,5 @@ export type PostJoinRoomResponse = ResponseStatus & {
 };
 
 export type PostJoinRoom = (roomIdx: number) => Promise<AxiosResponse<PostJoinRoomResponse>>;
+
+export type PutInterviewRooms = (roomIdx: number) => Promise<AxiosResponse<ResponseStatus>>;

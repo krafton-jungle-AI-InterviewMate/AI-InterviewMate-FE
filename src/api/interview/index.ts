@@ -1,6 +1,11 @@
-import { getAPI, postAPI } from "api/axios";
+import { getAPI, postAPI, putAPI } from "api/axios";
 import { API_PATH } from "constants/api";
-import { PostInterviewRooms, GetInterviewRooms, PostJoinRoom } from "api/interview/type";
+import {
+  PostInterviewRooms,
+  GetInterviewRooms,
+  PostJoinRoom,
+  PutInterviewRooms,
+} from "api/interview/type";
 
 const getInterviewRooms: GetInterviewRooms = () =>
   getAPI({ endPoint: API_PATH.GET_INTERVIEW_ROOMS });
@@ -16,8 +21,14 @@ const postJoinRoom: PostJoinRoom = roomIdx =>
     endPoint: API_PATH.POST_JOIN_ROOM(roomIdx),
   });
 
+const putInterviewRooms: PutInterviewRooms = roomIdx =>
+  putAPI({
+    endPoint: API_PATH.PUT_INTERVIEW_ROOMS(roomIdx),
+  });
+
 export default {
   getInterviewRooms,
   postInterviewRooms,
   postJoinRoom,
+  putInterviewRooms,
 };
