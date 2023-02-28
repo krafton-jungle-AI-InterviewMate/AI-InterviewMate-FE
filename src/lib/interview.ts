@@ -2,6 +2,10 @@ import { AiInterviewerTypes } from "types/interview";
 
 const S3_URL = "https://bucket1182644-staging.s3.ap-northeast-2.amazonaws.com/interviewer/";
 
+export const getAiInterviewerMiniThumbnail = (interviewer: AiInterviewerTypes) => {
+  return `${S3_URL}${interviewer}_mini.png`;
+};
+
 export const getAiInterviewerThumbnail = (interviewer: AiInterviewerTypes) => {
   return `${S3_URL}${interviewer}.png`;
 };
