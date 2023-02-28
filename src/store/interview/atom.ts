@@ -1,7 +1,13 @@
 import { atom } from "recoil";
 import * as FaceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
-import { InterviewModeTypes, AiInterviewerTypes, AiInterviewProcessTypes } from "types/interview";
+import {
+  InterviewModeTypes,
+  AiInterviewerTypes,
+  AiInterviewProcessTypes,
+  TimelineRecord,
+} from "types/interview";
 import { PostInterviewRoomsResponse, PostJoinRoomResponseData } from "api/interview/type";
+import { InitialTimelineRecord } from "constants/interview";
 
 /** 인터뷰 프로세스 제어 */
 export const faceLandmarksDetectorAtom = atom<null | FaceLandmarksDetection.FaceLandmarksDetector>({
@@ -103,4 +109,9 @@ export const aiInterviewNextProcessAtom = atom<AiInterviewProcessTypes>({
 export const aiRoomResponseAtom = atom<null | PostInterviewRoomsResponse>({
   key: "AiRoomResponse",
   default: null,
+});
+
+export const timelineRecordAtom = atom<TimelineRecord>({
+  key: "TimelineRecord",
+  default: InitialTimelineRecord,
 });

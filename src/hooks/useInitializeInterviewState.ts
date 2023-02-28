@@ -5,7 +5,9 @@ import {
   irisCountAtom,
   motionCountAtom,
   answerScriptAtom,
+  timelineRecordAtom,
 } from "store/interview/atom";
+import { InitialTimelineRecord } from "constants/interview";
 
 const useInitializeInterviewState = () => {
   const setInterviewMode = useSetRecoilState(interviewModeAtom);
@@ -13,6 +15,7 @@ const useInitializeInterviewState = () => {
   const setIrisCount = useSetRecoilState(irisCountAtom);
   const setMotionCount = useSetRecoilState(motionCountAtom);
   const setAnswerScript = useSetRecoilState(answerScriptAtom);
+  const setTimelineRecord = useSetRecoilState(timelineRecordAtom);
 
   const initializeInterviewState = () => {
     setInterviewMode("break");
@@ -20,6 +23,7 @@ const useInitializeInterviewState = () => {
     setIrisCount(0);
     setMotionCount(0);
     setAnswerScript([]);
+    setTimelineRecord(InitialTimelineRecord);
   };
 
   return {

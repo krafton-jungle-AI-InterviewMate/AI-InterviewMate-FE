@@ -2,6 +2,7 @@ import {
   InterviewModeTypes,
   InterviewFeedbackTypes,
   AiInterviewerTypes,
+  TimelineRecord,
 } from "types/interview";
 
 type CommentMode = Exclude<InterviewModeTypes, "question">;
@@ -34,7 +35,16 @@ export const AiInterviewers: Array<AiInterviewerTypes> = [
   ...JungleManagers,
 ];
 
-
 export const AI_VIDEO_WIDTH = 640;
 
 export const FeedbackArr = [ "ON", "OFF" ];
+
+export const InitialTimelineRecord: TimelineRecord = {
+  startTime: 0,
+  endTime: 0,
+  timeline: {
+    eyes: [],
+    attitude: [],
+    questionModeStart: [],
+  },
+};
