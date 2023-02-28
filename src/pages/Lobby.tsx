@@ -38,6 +38,7 @@ const Lobby = () => {
   const [ modalCreateRoom, setModalCreateRoom ] = useState(false);
   const [ interviewRooms, setInterviewRooms ] = useState<InterviewRooms[]>([]);
   const { data, isSuccess, isLoading, isError, refetch } = useGetInterviewRooms();
+
   useEffect(() => {
     if (!isLoading && data) {
       setInterviewRooms(data.data.data);

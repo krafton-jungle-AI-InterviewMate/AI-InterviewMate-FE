@@ -58,13 +58,13 @@ export const motionSnapshotAtom = atom<FaceLandmarksDetection.Face>({
 });
 
 export const feedbackAtom = atom<string>({
-  key: "feedback",
+  key: "Feedback",
   default: "ON",
 });
 
 /** 인터뷰 정보 */
 export const InterviewDataAtom = atom<null | PostJoinRoomResponseData>({
-  key: "userInterviewData",
+  key: "UserInterviewData",
   default: null,
 });
 
@@ -94,4 +94,9 @@ export const aiInterviewNextProcessAtom = atom<AiInterviewProcessTypes>({
 export const aiRoomResponseAtom = atom<null | PostInterviewRoomsResponse>({
   key: "AiRoomResponse",
   default: null,
+});
+
+export const recordModeAtom = atom<boolean>({
+  key: "RecordMode",
+  default: true,
 });

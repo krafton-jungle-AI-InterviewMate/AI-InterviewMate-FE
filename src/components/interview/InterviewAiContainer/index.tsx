@@ -7,6 +7,7 @@ import {
   answerScriptAtom,
   aiInterviewerAtom,
   aiRoomResponseAtom,
+  recordModeAtom,
 } from "store/interview/atom";
 
 import {
@@ -34,6 +35,7 @@ const InterviewAiContainer = () => {
   const setAnswerScript = useSetRecoilState(answerScriptAtom);
   const aiInterviewer = useRecoilValue(aiInterviewerAtom);
   const aiRoomResponse = useRecoilValue(aiRoomResponseAtom);
+  const isRecordMode = useRecoilValue(recordModeAtom);
 
   const webcamRef = useRef<null | Webcam>(null);
   const [ isWebcamReady, setIsWebcamReady ] = useState(false);
@@ -60,23 +62,22 @@ const InterviewAiContainer = () => {
   };
 
   useEffect(() => {
-    (async () => {
-      const rec = await getPermissionInitializeRecorder();
-      await rec.startRecording();
-
-      setRecorder(rec);
-    })();
-
-    return (() => {
+    if (isRecordMode) {
       (async () => {
-        await stopRecording();
-        await recorder?.destroy();
+        const rec = await getPermissionInitializeRecorder();
+        await rec.startRecording();
+  
+        setRecorder(rec);
       })();
-    });
+  
+      return (() => {
+        recorder?.destroy();
+      });
+    }
   }, []);
 
   useEffect(() => {
-    if (interviewMode === "finished") {
+    if (interviewMode === "finished" && isRecordMode) {
       (async () => {
         await stopRecording();
       })();
@@ -237,11 +238,4 @@ const StyledVideoWrap = styled.div`
   & video {
     ${commonStyle}
   }
-`;
-
-const StyledCanvas = styled.canvas`
-  ${commonStyle}
-  position: absolute;
-  left: 0;
-  right: 0;
 `;
