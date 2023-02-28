@@ -73,7 +73,7 @@ export type PostJoinRoomResponseData = PostInterviewRoomsPayloadData & {
   createdAt: string;
   roomStatus: RoomStatus;
   connectionToken: string;
-  questionList: Array<string>;
+  questionList: Array<QuestionListItem>;
   roomViewer1Idx?: number;
   roomViewer2Idx?: number;
   roomViewer3Idx?: number;
