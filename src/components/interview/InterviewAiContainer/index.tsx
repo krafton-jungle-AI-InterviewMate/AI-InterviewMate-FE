@@ -6,6 +6,7 @@ import {
   answerScriptAtom,
   aiInterviewerAtom,
   aiRoomResponseAtom,
+  timelineRecordAtom,
 } from "store/interview/atom";
 
 import InterviewVideo from "./InterviewVideo";
@@ -31,6 +32,7 @@ const InterviewAiContainer = () => {
   const setAnswerScript = useSetRecoilState(answerScriptAtom);
   const aiInterviewer = useRecoilValue(aiInterviewerAtom);
   const aiRoomResponse = useRecoilValue(aiRoomResponseAtom);
+  const setTimelineRecord = useSetRecoilState(timelineRecordAtom);
 
   const canvasRef = useRef<null | HTMLCanvasElement>(null);
   const webcamRef = useRef<null | Webcam>(null);
@@ -61,6 +63,23 @@ const InterviewAiContainer = () => {
       setAnswerScript(new Array(questionList.length).fill(""));
     }
   }, [ aiRoomResponse ]);
+
+  // TODO: 16(녹화 기능) merge 후, startTime - 녹화 시작 시점 & endTime - 녹화 종료 시점과 동일하게 맞추기
+  useEffect(() => {
+    setTimelineRecord((curr) => ({
+      ...curr,
+      startTime: Date.now(),
+    }));
+  }, []);
+
+  useEffect(() => {
+    if (interviewMode === "finished") {
+      setTimelineRecord((curr) => ({
+        ...curr,
+        endTime: Date.now(),
+      }));
+    }
+  }, [ interviewMode ]);
 
   return aiRoomResponse ? (
     <StyledWrap>
