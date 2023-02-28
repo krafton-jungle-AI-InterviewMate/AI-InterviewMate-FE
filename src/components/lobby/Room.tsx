@@ -4,10 +4,10 @@ import { RiGitRepositoryPrivateFill } from "react-icons/ri";
 import { MdPublic } from "react-icons/md";
 import { RoomStatus } from "api/interview/type";
 import { RoomTypes } from "api/mypage/types";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { usePostJoinRoom } from "./../../hooks/queries/interview";
 import { useSetRecoilState } from "recoil";
-import { interviewDataAtom } from "store/interview/atom";
+import { interviewDataAtom, isInterviewerAtom } from "store/interview/atom";
 
 interface IRoomProps {
   roomType: RoomTypes;
@@ -117,6 +117,7 @@ const Room = ({
   setTargetRoomIdx,
 }: RoomProps) => {
   const setUserInterviewData = useSetRecoilState(interviewDataAtom);
+  const setIsInterviewer = useSetRecoilState(isInterviewerAtom);
   const navigate = useNavigate();
   const { mutate, isLoading } = usePostJoinRoom();
   const onClickJoin = () => {
@@ -136,6 +137,7 @@ const Room = ({
       mutate(idx, {
         onSuccess: ({ data }) => {
           setUserInterviewData(data.data);
+          setIsInterviewer(true);
           navigate("/interview/readyuser");
         },
         onError(error) {

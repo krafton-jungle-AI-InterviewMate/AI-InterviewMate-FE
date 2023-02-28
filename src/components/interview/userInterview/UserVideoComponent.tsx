@@ -1,13 +1,19 @@
 import OpenViduVideoComponent from "./OvVideo";
-import { useRecoilValue } from "recoil";
-import { interviewDataAtom } from "store/interview/atom";
 import styled from "@emotion/styled";
+import Loading from "components/common/Loading";
+import { useEffect, useState } from "react";
 
 const UserVideoComponent = ({ streamManager, isInterviewer }) => {
-  const interviewData = useRecoilValue(interviewDataAtom);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (streamManager) {
+      setIsLoading(false);
+    }
+  }, [streamManager]);
   return (
     <StyledUserVideoComponent isInterviewer={isInterviewer}>
-      {streamManager !== undefined ? (
+      {!isLoading ? (
         <div className="streamcomponent">
           <OpenViduVideoComponent streamManager={streamManager} />
           <p>
@@ -15,7 +21,9 @@ const UserVideoComponent = ({ streamManager, isInterviewer }) => {
             <span className="nickname">{streamManager.stream.connection.data.split('"')[3]}</span>
           </p>
         </div>
-      ) : null}
+      ) : (
+        <Loading margin="0" />
+      )}
     </StyledUserVideoComponent>
   );
 };
