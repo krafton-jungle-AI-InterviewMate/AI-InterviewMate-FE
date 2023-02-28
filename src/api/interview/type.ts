@@ -24,6 +24,15 @@ export type PostInterviewRoomsPayload = {
   data: PostInterviewRoomsPayloadData;
 };
 
+export type QuestionListItem = {
+  keyword1: string;
+  keyword2: string | null;
+  keyword3: string | null;
+  keyword4: string | null;
+  keyword5: string | null;
+  questionTitle: string;
+}
+
 export type PostInterviewRoomsResponse = ResponseStatus & {
   data: PostInterviewRoomsPayloadData & {
     roomIdx: number;
@@ -31,7 +40,7 @@ export type PostInterviewRoomsResponse = ResponseStatus & {
     createdAt: string;
     roomStatus: RoomStatus;
     connectionToken: string;
-    questionList: Array<string>;
+    questionList: Array<QuestionListItem>;
   };
 };
 

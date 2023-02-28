@@ -6,6 +6,7 @@ import {
   interviewQuestionNumberAtom,
   answerScriptAtom,
   aiInterviewerAtom,
+  aiRoomResponseAtom,
 } from "store/interview/atom";
 
 import {
@@ -26,15 +27,13 @@ import RecordRTC from "recordrtc";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 
-// ! TODO: 질문 fetching API 연동 이후 제거
-import questions from "../_mock/questions";
-
 const InterviewAiContainer = () => {
   const interviewMode = useRecoilValue(interviewModeAtom);
   const interviewQuestionNumber = useRecoilValue(interviewQuestionNumberAtom);
   const setInterviewQuestionTotal = useSetRecoilState(interviewQuestionTotalAtom);
   const setAnswerScript = useSetRecoilState(answerScriptAtom);
   const aiInterviewer = useRecoilValue(aiInterviewerAtom);
+  const aiRoomResponse = useRecoilValue(aiRoomResponseAtom);
 
   const canvasRef = useRef<null | HTMLCanvasElement>(null);
   const webcamRef = useRef<null | Webcam>(null);
@@ -100,12 +99,19 @@ const InterviewAiContainer = () => {
   }, [ isWebcamReady, webcamRef ]);
 
   useEffect(() => {
-    // ! FIXME: 질문 fetching API 연동 이후 실제 질문 개수로 세팅
-    setInterviewQuestionTotal(questions.length);
-    setAnswerScript(new Array(questions.length).fill(""));
-  }, []);
+    if (aiRoomResponse) {
+      const {
+        data: {
+          questionList,
+        },
+      } = aiRoomResponse;
 
-  return (
+      setInterviewQuestionTotal(questionList.length);
+      setAnswerScript(new Array(questionList.length).fill(""));
+    }
+  }, [ aiRoomResponse ]);
+
+  return aiRoomResponse ? (
     <StyledWrap>
       <StyledVideoSection>
         <StyledVideoWrap>
@@ -158,7 +164,7 @@ const InterviewAiContainer = () => {
           )}
           {interviewMode === "question" && (
             <QuestionModeController
-              questionList={questions}
+              questionList={aiRoomResponse.data.questionList}
             />
           )}
           {interviewMode === "answer" && (
@@ -170,7 +176,7 @@ const InterviewAiContainer = () => {
         </>
       )}
     </StyledWrap>
-  );
+  ) : null;
 };
 
 export default InterviewAiContainer;

@@ -23,7 +23,7 @@ const QuestionModeController = (props: QuestionModeControllerProps) => {
       <InterviewComment>
         <StyledComment>
           <span>Q.</span>
-          {questionList[interviewQuestionNumber]}
+          {questionList[interviewQuestionNumber].questionTitle}
         </StyledComment>
       </InterviewComment>
     </StyledWrap>

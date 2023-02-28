@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState, useRecoilValue } from "recoil";
-import { motionSnapshotAtom, aiInterviewerAtom } from "store/interview/atom";
+import { motionSnapshotAtom, aiInterviewerAtom, aiInterviewNextProcessAtom } from "store/interview/atom";
 import { memberAtom } from "store/auth/atom";
 
 import useInitializeInterviewState from "hooks/useInitializeInterviewState";
@@ -35,6 +35,7 @@ const InterviewReady = () => {
   const [ isModalOpen, setIsModalOpen ] = useState(false);
   const [ isConfirmPopupOpen, setIsConfirmPopupOpen ] = useState(false);
 
+  const setAiInterviewNextProcess = useSetRecoilState(aiInterviewNextProcessAtom);
   const setMotionSnapshot = useSetRecoilState(motionSnapshotAtom);
   const aiInterviewer = useRecoilValue(aiInterviewerAtom);
   const { nickname } = useRecoilValue(memberAtom);
@@ -101,6 +102,7 @@ const InterviewReady = () => {
         setIsDetectionOn(false);
         toast.clearWaitingQueue();
         setMotionSnapshot(newFace);
+        setAiInterviewNextProcess("ongoing");
         navigate("/interview/ai", { replace: true });
       }
       else {

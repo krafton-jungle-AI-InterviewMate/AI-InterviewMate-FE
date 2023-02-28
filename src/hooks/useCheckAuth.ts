@@ -53,6 +53,10 @@ const useCheckAuth = () => {
     if (isLoggedIn) {
       setIsFetchingEnabled(true);
     }
+    else if (!(pathname === PagesPath.INDEX || pathname === PagesPath.LOGIN)) {
+      window.alert("로그인이 필요한 페이지입니다.");
+      navigate(PagesPath.LOGIN);
+    }
   }, [ pathname ]);
 
   useEffect(() => {

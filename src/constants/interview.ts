@@ -21,23 +21,23 @@ export const InterviewFeedbackComment: { [type in InterviewFeedbackTypes]: strin
   motion: "올바른 자세를 유지하세요.",
 } as const;
 
+const JungleManagers: Array<AiInterviewerTypes> = [
+  "Junghan",
+  "Hyunsoo",
+  "Seunghyun",
+];
+export const JungleManagersSet = new Set(JungleManagers);
+
 export const AiInterviewers: Array<AiInterviewerTypes> = [
   "Minho",
   "Seungmin",
   "Donghyun",
   "Suhyun",
   "Seoyoung",
-  "Junghan",
-  "Hyunsoo",
-  "Seunghyun",
+  ...JungleManagers,
 ];
 
-const JungleManagers = [
-  "Junghan",
-  "Hyunsoo",
-  "Seunghyun",
-];
-
-export const JungleManagersSet = new Set(JungleManagers);
 
 export const AI_VIDEO_WIDTH = 640;
+
+export const FeedbackArr = [ "ON", "OFF" ];
