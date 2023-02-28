@@ -9,3 +9,4 @@ export type AiInterviewerTypes =
   | "Junghan"
   | "Hyunsoo"
   | "Seunghyun";
+export type AiInterviewProcessTypes = "ready" | "ongoing" | "end";

@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { aiInterviewNextProcessAtom } from "store/interview/atom";
 
 import Popup from "components/common/Popup";
 import InterviewAiContainer from "components/interview/InterviewAiContainer";
@@ -8,12 +10,23 @@ import { commonButtonStyle } from "styles/common";
 
 const InterviewAi = () => {
   const navigate = useNavigate();
+  const [ aiInterviewNextProcess, setAiInterviewNextProcess ] = useRecoilState(aiInterviewNextProcessAtom);
 
   const [ isConfirmPopupOpen, setIsConfirmPopupOpen ] = useState(false);
 
   const handleLeave = () => {
     navigate("/lobby", { replace: true });
   };
+
+  useEffect(() => {
+    if (aiInterviewNextProcess !== "ongoing") {
+      console.log("잘못된 접근입니다.");
+      navigate("/lobby", { replace: true });
+    }
+    else {
+      setAiInterviewNextProcess("end");
+    }
+  }, []);
 
   return (
     <StyledWrap>

@@ -3,8 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { InterviewModeComment } from "constants/interview";
 import InterviewComment from "../InterviewComment";
 
-import { useRecoilValue } from "recoil";
-import { answerScriptAtom, motionScoreAtom, irisScoreAtom } from "store/interview/atom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  answerScriptAtom,
+  motionScoreAtom,
+  irisScoreAtom,
+  aiInterviewNextProcessAtom,
+} from "store/interview/atom";
 import { usePostRatingViewee } from "hooks/queries/mypage";
 import { PostRatingVieweePayloadData } from "api/mypage/types";
 import { AI_VIEWER_IDX } from "constants/api";
@@ -17,6 +22,7 @@ const FinishedModeController = () => {
   const motionScore = useRecoilValue(motionScoreAtom);
   const irisScore = useRecoilValue(irisScoreAtom);
   const answerScript = useRecoilValue(answerScriptAtom);
+  const setAiInterviewNextProcess = useSetRecoilState(aiInterviewNextProcessAtom);
 
   const {
     mutate,
@@ -43,6 +49,7 @@ const FinishedModeController = () => {
       data,
     }, {
       onSuccess: () => {
+        setAiInterviewNextProcess("end");
         navigate("/interview/end", { replace: true });
       },
       onError ( error ) {
