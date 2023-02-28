@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import {
   interviewModeAtom,
   interviewQuestionNumberAtom,
   interviewQuestionTotalAtom,
+  feedbackAtom,
 } from "store/interview/atom";
 import useFaceLandmarksDetection from "hooks/useFaceLandmarksDetection";
 import useCheckIrisPosition from "hooks/useCheckIrisPosition";
@@ -32,7 +33,10 @@ const AnswerModeController = (props: AnswerModeControllerProps) => {
   const setInterviewMode = useSetRecoilState(interviewModeAtom);
   const interviewQuestionNumber = useRecoilValue(interviewQuestionNumberAtom);
   const interviewQuestionTotal = useRecoilValue(interviewQuestionTotalAtom);
+  const feedbackMode = useRecoilValue(feedbackAtom);
   const [ countDown, setCountDown ] = useState(ANSWER_LIMIT_SECONDS);
+
+  const isRealtimeMode = useMemo(() => feedbackMode === "ON", [ feedbackMode ]);
 
   const {
     face,
@@ -57,13 +61,13 @@ const AnswerModeController = (props: AnswerModeControllerProps) => {
   const {
     showFeedback: showIrisFeedback,
   } = useIrisAssessment({
-    isRealtimeMode: true,
+    isRealtimeMode,
     horizontalRatio,
   });
   const {
     showFeedback: showMotionFeedback,
   } = useMotionAssessment({
-    isRealtimeMode: true,
+    isRealtimeMode,
     isBadMotion,
   });
 
@@ -92,6 +96,8 @@ const AnswerModeController = (props: AnswerModeControllerProps) => {
       window.clearInterval(intervalId);
     };
   }, []);
+
+  console.log("실시간 피드백 모드: ", isRealtimeMode);
 
   return (
     <StyledWrap>

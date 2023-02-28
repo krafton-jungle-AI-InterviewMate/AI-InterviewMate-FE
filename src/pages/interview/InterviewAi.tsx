@@ -15,6 +15,7 @@ const InterviewAi = () => {
   const [ isConfirmPopupOpen, setIsConfirmPopupOpen ] = useState(false);
 
   const handleLeave = () => {
+    setAiInterviewNextProcess("ready");
     navigate("/lobby", { replace: true });
   };
 

@@ -9,6 +9,7 @@ import {
   motionScoreAtom,
   irisScoreAtom,
   aiInterviewNextProcessAtom,
+  aiRoomResponseAtom,
 } from "store/interview/atom";
 import { usePostRatingViewee } from "hooks/queries/mypage";
 import { PostRatingVieweePayloadData } from "api/mypage/types";
@@ -21,6 +22,7 @@ const FinishedModeController = () => {
 
   const motionScore = useRecoilValue(motionScoreAtom);
   const irisScore = useRecoilValue(irisScoreAtom);
+  const aiRoomResponse = useRecoilValue(aiRoomResponseAtom);
   const answerScript = useRecoilValue(answerScriptAtom);
   const setAiInterviewNextProcess = useSetRecoilState(aiInterviewNextProcessAtom);
 
@@ -34,6 +36,16 @@ const FinishedModeController = () => {
       return;
     }
 
+    if (!aiRoomResponse) {
+      return;
+    }
+
+    const {
+      data: {
+        roomIdx,
+      },
+    } = aiRoomResponse;
+
     const data: PostRatingVieweePayloadData = {
       viewerIdx: AI_VIEWER_IDX, // TODO: user/ai 구분
       eyesRating: irisScore,
@@ -45,7 +57,7 @@ const FinishedModeController = () => {
     };
 
     mutate({
-      roomIdx: 1, // ! TODO: 실제 roomIdx로 교체
+      roomIdx,
       data,
     }, {
       onSuccess: () => {
