@@ -1,7 +1,7 @@
 import { OpenVidu } from "openvidu-browser";
 import { useState, useEffect } from "react";
-import { useRecoilValue } from "recoil";
-import { interviewDataAtom } from "store/interview/atom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { interviewDataAtom, roomPeopleNowAtom } from "store/interview/atom";
 import styled from "@emotion/styled";
 import { StyledBtn } from "styles/StyledBtn";
 import { useNavigate } from "react-router";
@@ -11,6 +11,7 @@ const UserInterview = () => {
   const [OV, setOV] = useState<any>(null);
 
   const userInterviewData = useRecoilValue(interviewDataAtom);
+  const setRoomPeopleNow = useSetRecoilState(roomPeopleNowAtom);
   const navigate = useNavigate();
 
   const [myUserName, setMyUserName] = useState<string | undefined>(userInterviewData?.nickname);
@@ -133,15 +134,14 @@ const UserInterview = () => {
   };
 
   const handleClickStart = () => {
-    console.log(`ready: ${ready}`);
     if (ready) {
       setStart(true);
-      console.log(`start: ${start}`);
     }
   };
 
   useEffect(() => {
     console.log(subscribers);
+    setRoomPeopleNow(subscribers.length);
     if (subscribers.length) {
       setReady(true);
     } else {

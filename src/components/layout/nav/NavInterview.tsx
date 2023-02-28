@@ -4,18 +4,17 @@ import Breadcrumbs from "components/layout/common/Breadcrumbs";
 
 import styled from "@emotion/styled";
 import { useRecoilValue } from "recoil";
-import { interviewDataAtom } from "store/interview/atom";
+import { interviewDataAtom, roomPeopleNowAtom } from "store/interview/atom";
 import { MdPublic } from "react-icons/md";
+import { useEffect, useState } from "react";
 
 const NavInterview = () => {
   const roomInfo = useRecoilValue(interviewDataAtom);
-  const viewer = [roomInfo?.roomViewer1Idx, roomInfo?.roomViewer2Idx, roomInfo?.roomViewer3Idx];
-  let roomViewer = 1;
-  viewer.forEach(v => {
-    if (v !== null && v !== undefined) {
-      roomViewer += 1;
-    }
-  });
+  const roomPeopleNow = useRecoilValue(roomPeopleNowAtom);
+  const [interviewer, setInterviewer] = useState(1);
+  useEffect(() => {
+    setInterviewer(roomPeopleNow);
+  }, [roomPeopleNow]);
 
   return (
     <Nav>
@@ -30,7 +29,7 @@ const NavInterview = () => {
         ) : (
           <>
             <span className="roomPeopleNum">
-              {roomViewer} / {roomInfo?.roomPeopleNum}
+              {interviewer + 1} / {roomInfo?.roomPeopleNum}
               <MdPublic size={27} color="var(--push-gray)" />
             </span>
           </>
