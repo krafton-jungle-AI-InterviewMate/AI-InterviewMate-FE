@@ -3,7 +3,13 @@ import styled from "@emotion/styled";
 import Loading from "components/common/Loading";
 import { useEffect, useState } from "react";
 
-const UserVideoComponent = ({ streamManager, isInterviewer }) => {
+interface UserVideoComponentProps {
+  streamManager: any;
+  isInterviewer: boolean;
+}
+
+const UserVideoComponent = (props: UserVideoComponentProps) => {
+  const { streamManager, isInterviewer } = props;
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
