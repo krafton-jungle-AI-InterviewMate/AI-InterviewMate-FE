@@ -8,6 +8,7 @@ import {
   aiRoomResponseAtom,
 } from "store/interview/atom";
 
+import InterviewVideo from "./InterviewVideo";
 import {
   BreakModeController,
   QuestionModeController,
@@ -16,7 +17,7 @@ import {
 } from "./InterviewAiController";
 import Webcam from "react-webcam";
 import Skeleton from "@mui/material/Skeleton";
-import { JungleManagersSet, AI_VIDEO_WIDTH } from "constants/interview";
+import { JungleManagersSet } from "constants/interview";
 import { getAiInterviewerVideo, getAiInterviewerListening } from "lib/interview";
 
 import useSTT from "hooks/useSTT";
@@ -73,37 +74,24 @@ const InterviewAiContainer = () => {
         </StyledVideoWrap>
         <StyledAiVideoWrap>
           {interviewMode === "question" ? (
-            <video
-              width={AI_VIDEO_WIDTH}
-              autoPlay
-              loop
-              muted
-              key={aiInterviewerVideo}
+            <InterviewVideo
+              videoKey={aiInterviewerVideo}
               className={videoClassName}
-            >
-              <source src={aiInterviewerVideo} type="video/mp4" />
-            </video>
+              src={aiInterviewerVideo}
+            />
           ) : (
-            <video
-              width={AI_VIDEO_WIDTH}
-              autoPlay
-              loop
-              muted
-              key={aiInterviewerListening}
+            <InterviewVideo
+              videoKey={aiInterviewerListening}
               className={videoClassName}
-            >
-              <source src={aiInterviewerListening} type="video/mp4" />
-            </video>
+              src={aiInterviewerListening}
+            />
           )}
-          <video
-            width={AI_VIDEO_WIDTH}
-            autoPlay={false}
-            muted
-            key={aiInterviewerListening + "_fallback"}
+          <InterviewVideo
+            videoKey={aiInterviewerListening + "_fallback"}
             className={`${videoClassName} fallback`}
-          >
-            <source src={aiInterviewerListening} type="video/mp4" />
-          </video>
+            isFallback={true}
+            src={aiInterviewerListening}
+          />
         </StyledAiVideoWrap>
       </StyledVideoSection>
 
