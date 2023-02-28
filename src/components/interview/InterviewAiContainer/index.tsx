@@ -35,7 +35,6 @@ const InterviewAiContainer = () => {
   const aiInterviewer = useRecoilValue(aiInterviewerAtom);
   const aiRoomResponse = useRecoilValue(aiRoomResponseAtom);
 
-  const canvasRef = useRef<null | HTMLCanvasElement>(null);
   const webcamRef = useRef<null | Webcam>(null);
   const [ isWebcamReady, setIsWebcamReady ] = useState(false);
   const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
@@ -119,7 +118,6 @@ const InterviewAiContainer = () => {
             <Skeleton variant="rectangular" width={640} height={480} />
           )}
           <Webcam ref={webcamRef} mirrored={false} onCanPlay={() => setIsWebcamReady(true)} />
-          <StyledCanvas ref={canvasRef} />
         </StyledVideoWrap>
         <StyledAiVideoWrap>
           {interviewMode === "question" ? (
@@ -168,7 +166,7 @@ const InterviewAiContainer = () => {
             />
           )}
           {interviewMode === "answer" && (
-            <AnswerModeController video={video} canvasRef={canvasRef} />
+            <AnswerModeController video={video} />
           )}
           {interviewMode === "finished" && (
             <FinishedModeController />
