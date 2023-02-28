@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import InterviewRadio from "components/interview/InterviewRadio";
 import { StyledBtn } from "styles/StyledBtn";
+import { useSetRecoilState } from "recoil";
+import { aiInterviewNextProcessAtom } from "store/interview/atom";
 
 const StyledInterviewEnd = styled.div`
   color: var(--main-black);
@@ -47,6 +49,8 @@ interface InterviewEndProps {
 }
 
 const InterviewEnd = ({ isAiInterview, isInterviewer }: InterviewEndProps) => {
+  const setAiInterviewNextProcess = useSetRecoilState(aiInterviewNextProcessAtom);
+
   const [ eyeScore, setEyeScore ] = useState(3);
   const [ poseScore, setPoseScore ] = useState(3);
   const [ answerScore, setAnswerScore ] = useState(3);
@@ -69,6 +73,10 @@ const InterviewEnd = ({ isAiInterview, isInterviewer }: InterviewEndProps) => {
     console.log(poseScore);
     console.log(answerScore);
   }, [ eyeScore, poseScore, answerScore ]);
+
+  useEffect(() => {
+    setAiInterviewNextProcess("ready");
+  }, []);
 
   return (
     <StyledInterviewEnd>
