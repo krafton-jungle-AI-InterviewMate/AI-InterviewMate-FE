@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   interviewModeAtom,
   interviewQuestionTotalAtom,
   interviewQuestionNumberAtom,
   answerScriptAtom,
+  aiInterviewerAtom,
 } from "store/interview/atom";
 
 import {
@@ -15,6 +16,8 @@ import {
 } from "./InterviewAiController";
 import Webcam from "react-webcam";
 import Skeleton from "@mui/material/Skeleton";
+import { JungleManagersSet, AI_VIDEO_WIDTH } from "constants/interview";
+import { getAiInterviewerVideo, getAiInterviewerListening } from "lib/interview";
 
 import useSTT from "hooks/useSTT";
 import { useRecorderPermission } from "hooks/useRecorderPermission";
@@ -31,12 +34,17 @@ const InterviewAiContainer = () => {
   const interviewQuestionNumber = useRecoilValue(interviewQuestionNumberAtom);
   const setInterviewQuestionTotal = useSetRecoilState(interviewQuestionTotalAtom);
   const setAnswerScript = useSetRecoilState(answerScriptAtom);
+  const aiInterviewer = useRecoilValue(aiInterviewerAtom);
 
   const canvasRef = useRef<null | HTMLCanvasElement>(null);
   const webcamRef = useRef<null | Webcam>(null);
   const [ isWebcamReady, setIsWebcamReady ] = useState(false);
   const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
   const [ recorder, setRecorder ] = useState<null | RecordRTC.RecordRTCPromisesHandler>();
+
+  const aiInterviewerVideo = useMemo(() => getAiInterviewerVideo(aiInterviewer), [ aiInterviewer ]);
+  const aiInterviewerListening = useMemo(() => getAiInterviewerListening(aiInterviewer), [ aiInterviewer ]);
+  const videoClassName = useMemo(() => JungleManagersSet.has(aiInterviewer) ? "jungle" : "", [ aiInterviewer ]);
 
   useSTT();
 
@@ -99,13 +107,49 @@ const InterviewAiContainer = () => {
 
   return (
     <StyledWrap>
-      <StyledVideoWrap>
-        {!isWebcamReady && (
-          <Skeleton variant="rectangular" width={640} height={480} />
-        )}
-        <Webcam ref={webcamRef} mirrored={false} onCanPlay={() => setIsWebcamReady(true)} />
-        <StyledCanvas ref={canvasRef} />
-      </StyledVideoWrap>
+      <StyledVideoSection>
+        <StyledVideoWrap>
+          {!isWebcamReady && (
+            <Skeleton variant="rectangular" width={640} height={480} />
+          )}
+          <Webcam ref={webcamRef} mirrored={false} onCanPlay={() => setIsWebcamReady(true)} />
+          <StyledCanvas ref={canvasRef} />
+        </StyledVideoWrap>
+        <StyledAiVideoWrap>
+          {interviewMode === "question" ? (
+            <video
+              width={AI_VIDEO_WIDTH}
+              autoPlay
+              loop
+              muted
+              key={aiInterviewerVideo}
+              className={videoClassName}
+            >
+              <source src={aiInterviewerVideo} type="video/mp4" />
+            </video>
+          ) : (
+            <video
+              width={AI_VIDEO_WIDTH}
+              autoPlay
+              loop
+              muted
+              key={aiInterviewerListening}
+              className={videoClassName}
+            >
+              <source src={aiInterviewerListening} type="video/mp4" />
+            </video>
+          )}
+          <video
+            width={AI_VIDEO_WIDTH}
+            autoPlay={false}
+            muted
+            key={aiInterviewerListening + "_fallback"}
+            className={`${videoClassName} fallback`}
+          >
+            <source src={aiInterviewerListening} type="video/mp4" />
+          </video>
+        </StyledAiVideoWrap>
+      </StyledVideoSection>
 
       {isWebcamReady && video && (
         <>
@@ -113,7 +157,9 @@ const InterviewAiContainer = () => {
             <BreakModeController />
           )}
           {interviewMode === "question" && (
-            <QuestionModeController questionList={questions} />
+            <QuestionModeController
+              questionList={questions}
+            />
           )}
           {interviewMode === "answer" && (
             <AnswerModeController video={video} canvasRef={canvasRef} />
@@ -131,7 +177,7 @@ export default InterviewAiContainer;
 
 const StyledWrap = styled.section`
   width: 100%;
-  min-height: calc(100vh - 170px);
+  min-height: calc(100vh - 120px);
   margin-top: 20px;
   position: relative;
 `;
@@ -144,19 +190,53 @@ const commonStyle = css`
 `;
 
 const wrapStyle = css`
-  border-radius: 5px;
+  border-radius: 16px;
   overflow: hidden;
   box-shadow: var(--box-shadow);
+`;
+
+const StyledVideoSection = styled.section`
+  max-width: 1440px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
+  margin: 0 auto;
+`;
+
+const StyledAiVideoWrap = styled.div`
+  ${commonStyle}
+  ${wrapStyle}
+  background-color: #000;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+  margin: 0 auto;
+  margin-top: 140px;
+  border: 1px solid var(--main-gray);
+
+  & video {
+    ${commonStyle}
+    border-radius: 16px;
+    z-index: 11;
+  }
+
+  & video.fallback {
+    position: absolute;
+    left: 0;
+    z-index: 10;
+  }
 `;
 
 const StyledVideoWrap = styled.div`
   ${commonStyle}
   ${wrapStyle}
-  border-radius: 5px;
+  background-color: #000;
+  border-radius: 16px;
   overflow: hidden;
   box-shadow: var(--box-shadow);
   margin: 0 auto;
-  padding-top: 70px;
+  margin-top: 140px;
+  border: 1px solid var(--main-gray);
 
   & video {
     ${commonStyle}

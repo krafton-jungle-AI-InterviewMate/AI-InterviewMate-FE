@@ -4,7 +4,12 @@ import { commonButtonStyle } from "styles/common";
 import { ToastOptions } from "react-toastify";
 
 export const Wrapper = styled.section`
-  width: 1000px;
+  width: 1440px;
+`;
+
+export const ConfirmText = styled.p`
+  font-size: 16px;
+  text-align: center;
 `;
 
 export const ReadyContainer = styled.div`
@@ -17,6 +22,7 @@ export const ReadyContainer = styled.div`
 `;
 
 export const Profile = styled.div`
+  position: relative;
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
@@ -34,12 +40,12 @@ export const commonStyle = css`
   position: relative;
   text-align: center;
   z-index: 9;
-  width: 272px;
-  height: 204px;
+  width: 640px;
+  height: 480px;
 `;
 
 export const wrapStyle = css`
-  border-radius: 5px;
+  border-radius: 16px;
   overflow: hidden;
   box-shadow: var(--box-shadow);
 `;
@@ -47,7 +53,7 @@ export const wrapStyle = css`
 export const VideoWrap = styled.div`
   ${commonStyle}
   ${wrapStyle}
-  border-radius: 5px;
+  border-radius: 16px;
   overflow: hidden;
   box-shadow: var(--box-shadow);
 
@@ -65,13 +71,15 @@ export const Canvas = styled.canvas`
   /* border: 2px dashed gray; */
 `;
 
-export const ImageWrap = styled.div`
+export const ImageWrap = styled.div<{ bgImg: string }>`
   ${commonStyle}
   ${wrapStyle}
 
-  & img {
-    width: 100%;
-  }
+  background-image: ${({ bgImg }) => `url(${bgImg})`};
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: 20%;
 `;
 
 export const FlexContainer = styled.div`
@@ -91,12 +99,12 @@ export const ButtonBox = styled.div`
 export const CancelButton = styled.button`
   ${commonButtonStyle}
   background-color: var(--main-white);
-  border: 1px solid var(--main-black);
+  border: 1px solid var(--main-gray);
+  box-shadow: var(--box-shadow);
 
   &:hover {
     background-color: var(--light-alert);
     color: var(--main-white);
-    border-color: transparent;
   }
   &:active {
     background-color: var(--push-alert);
@@ -166,3 +174,30 @@ export const toastOptions: ToastOptions = {
   progressClassName: "progress-bar",
   type: "warning",
 };
+
+export const SelectButton = styled.button`
+  ${commonButtonStyle}
+  position: absolute;
+  top: -62px;
+  background-color: var(--main-white);
+  border: 1px solid var(--main-gray);
+  box-shadow: var(--box-shadow);
+
+  &:hover {
+    background-color: var(--main-blue);
+    color: var(--main-white);
+  }
+  &:active {
+    background-color: var(--push-blue);
+  }
+`;
+
+export const MiniProfile = styled.span`
+  position: absolute;
+  bottom: -40px;
+  width: 272px;
+  word-break: keep-all;
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--font-gray);
+`;

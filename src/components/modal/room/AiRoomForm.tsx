@@ -10,10 +10,10 @@ import { AiOutlineInfoCircle } from "react-icons/ai";
 import { useSetRecoilState } from "recoil";
 import { feedbackAtom } from "store/interview/atom";
 import { usePostInterviewRooms } from "hooks/queries/interview";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { RoomTypes } from "api/mypage/types";
 import { useState } from "react";
-import { questionBoxes } from "api/questionBoxes/type";
+import { QuestionBoxes } from "api/questionBoxes/type";
 
 interface InputRoomFormProps {
   email?: string;
@@ -56,7 +56,7 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
       },
       {
         onSuccess: () => {
-          navigate("/interview/ready");
+          navigate("/interview/ready/user");
         },
         onError(error) {
           alert(error);
@@ -158,10 +158,10 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
           <label htmlFor="question">질문 꾸러미</label>
           <select id="question" {...register("roomQuestionBoxIdx", { required: true })}>
             {questionNum ? (
-              questionBoxes.map((data: questionBoxes, idx: number) =>
-                data.questionNum === questionNum ? (
-                  <option key={idx} value={data.idx}>
-                    {data.boxName}
+              questionBoxes.map((data: QuestionBoxes, idx: number) =>
+                data.questionNum >= questionNum ? (
+                  <option key={idx} value={data.questionBoxIdx}>
+                    {data.questionBoxName}
                   </option>
                 ) : null,
               )
@@ -172,10 +172,10 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
         </div>
         <span className="guide">면접관에게 보여질 질문 꾸러미를 선택해주세요.</span>
         <div className="submitAndCancel">
-          <StyledBtn width="380px" height="58px" color="orange">
+          <StyledBtn width="300px" height="58px" color="orange">
             확인
           </StyledBtn>
-          <StyledBtn onClick={onClickModalClose} width="380px" height="58px" color="red">
+          <StyledBtn onClick={onClickModalClose} width="300px" height="58px" color="red">
             취소
           </StyledBtn>
         </div>
@@ -251,7 +251,7 @@ const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`
     }
     .submitAndCancel {
       display: flex;
-      justify-content: space-between;
+      justify-content: space-evenly;
       margin-top: 80px;
     }
   }

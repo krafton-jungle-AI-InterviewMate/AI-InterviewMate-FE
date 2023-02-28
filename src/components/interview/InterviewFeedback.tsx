@@ -17,8 +17,8 @@ const InterviewFeedback = (props: InterviewFeedbackProps) => {
 
   return (
     <StyledWrap role="alert" feedbackType={feedbackType}>
-      {feedbackType === "iris" && <AiOutlineEye />}
-      {feedbackType === "motion" && <GrUserManager />}
+      {feedbackType === "iris" && <AiOutlineEye size={36} />}
+      {feedbackType === "motion" && <GrUserManager size={36} />}
       <p>{InterviewFeedbackComment[feedbackType]}</p>
     </StyledWrap>
   );
@@ -32,23 +32,27 @@ const StyledWrap = styled.div<InterviewFeedbackProps>`
   justify-content: space-evenly;
   align-items: center;
   position: absolute;
-  top: 100px;
+  top: -120px;
   transform: translate(-50%, 0);
-  width: 254px;
-  height: 38px;
-  background-color: #ff9900d6;
-  border-radius: var(--button-border-radius);
+  width: 280px;
+  height: 84px;
+  background-color: var(--main-black);
   color: var(--main-white);
+  border-radius: 5px;
 
   ${({ feedbackType }) => feedbackType === "iris" && css`
-    left: calc(50% - 140px);
+    left: calc(50% - 160px);
   `}
   ${({ feedbackType }) => feedbackType === "motion" && css`
-    left: calc(50% + 140px);
+    left: calc(50% + 160px);
   `}
 
   & p {
-    font-size: 14px;
+    width: calc(100% - 120px);
+    font-size: 20px;
+    line-height: 1.5;
+    font-weight: 500;
+    word-break: keep-all;
   }
   & path {
     color: var(--main-white);

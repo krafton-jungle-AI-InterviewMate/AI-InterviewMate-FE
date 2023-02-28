@@ -1,30 +1,42 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import ai from "static/images/robot.jpg";
+import Popup from "components/common/Popup";
 import InterviewAiContainer from "components/interview/InterviewAiContainer";
-
 import styled from "@emotion/styled";
 import { commonButtonStyle } from "styles/common";
 
 const InterviewAi = () => {
   const navigate = useNavigate();
 
-  const handleExitButton = () => {
-    // TODO: 컨펌 팝업
-    navigate("/lobby");
+  const [ isConfirmPopupOpen, setIsConfirmPopupOpen ] = useState(false);
+
+  const handleLeave = () => {
+    navigate("/lobby", { replace: true });
   };
 
   return (
     <StyledWrap>
-      <StyledInterviewerSection>
-        <StyledImageWrap>
-          <img src={ai} alt="AI 면접관" />
-        </StyledImageWrap>
-        <StyledExitButton type="button" onClick={handleExitButton}>
-          면접 나가기
-        </StyledExitButton>
-      </StyledInterviewerSection>
+      {isConfirmPopupOpen && (
+        <Popup
+          open={isConfirmPopupOpen}
+          onClose={() => setIsConfirmPopupOpen(false)}
+          confirmText="네!"
+          cancelText="취소"
+          onConfirm={handleLeave}
+        >
+          <StyledConfirmText>
+            면접을 취소 하시겠습니까?
+            <br />
+            현재 면접방도 삭제됩니다.
+          </StyledConfirmText>
+        </Popup>
+      )}
+      <StyledFeedbackSection />
       <InterviewAiContainer />
+      <StyledExitButton type="button" onClick={() => setIsConfirmPopupOpen(true)}>
+        면접 나가기
+      </StyledExitButton>
     </StyledWrap>
   );
 };
@@ -32,52 +44,48 @@ const InterviewAi = () => {
 export default InterviewAi;
 
 const StyledWrap = styled.div`
+  display: flex;
+  flex-flow: column nowrap;
   width: 100vw;
   min-width: 1000px;
 `;
 
-const StyledInterviewerSection = styled.section`
+const StyledConfirmText = styled.p`
+  font-size: 16px;
+  text-align: center;
+`;
+
+const StyledFeedbackSection = styled.section`
   position: relative;
   display: flex;
   flex-flow: row nowrap;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
-  height: 170px;
-  background-color: var(--main-gray);
-`;
+  height: 120px;
+  background-color: transparent;
 
-const StyledImageWrap = styled.div`
-  position: relative;
-  text-align: center;
-  z-index: 9;
-  width: 200px;
-  height: 125px;
-  overflow: hidden;
-  border-radius: 5px;
-
-  & img {
-    position: absolute;
-    top: -20px;
-    left: 0;
-    width: 100%;
+  & span {
+    display: inline;
+    margin-left: 60px;
+    font-size: 20px;
+    color: var(--font-gray);
+    box-shadow: inset 0 -14px 0 #fffb006e;
   }
 `;
 
 const StyledExitButton = styled.button`
-  position: absolute;
-  top: 30px;
-  right: 60px;
   ${commonButtonStyle}
+  margin-right: 28px;
+  align-self: flex-end;
+
   background-color: var(--main-white);
-  color: var(--main-black);
-  margin-left: 28px;
-  border: 1px solid var(--main-black);
+  border: 1px solid var(--main-gray);
+  box-shadow: var(--box-shadow);
 
   &:hover {
     background-color: var(--light-alert);
     color: var(--main-white);
-    border-color: transparent;
   }
   &:active {
     background-color: var(--push-alert);

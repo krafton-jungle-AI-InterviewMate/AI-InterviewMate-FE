@@ -6,20 +6,21 @@ import { useEffect, useState } from "react";
 import { RatingHistory } from "api/mypage/types";
 import Loading from "components/common/Loading";
 import ServerError from "components/common/ServerError";
+import { PagesPath } from "constants/pages";
 
 const StyledResult = styled.div`
   margin-top: 120px;
 `;
 
 function Result() {
-  const [historys, setHistorys] = useState<RatingHistory[]>([]);
-  const { data, isSuccess, isLoading, isError } = useGetRatingHistory();
+  const [ historys, setHistorys ] = useState<RatingHistory[]>([]);
+  const { data, isLoading, isError } = useGetRatingHistory();
 
   useEffect(() => {
     if (!isLoading && data) {
       setHistorys(data.data.data);
     }
-  }, [isLoading]);
+  }, [ isLoading ]);
   return (
     <StyledResult>
       {isLoading ? (
@@ -30,7 +31,7 @@ function Result() {
         historys.map(history => (
           <Link
             key={history.roomIdx}
-            to={`/mypage/result/details?room=${history.roomIdx}&type=${history.roomType}`}
+            to={`${PagesPath.RESULT_DETAILS}?room=${history.roomIdx}&type=${history.roomType}`}
           >
             <InterviewResult
               roomName={history.roomName}

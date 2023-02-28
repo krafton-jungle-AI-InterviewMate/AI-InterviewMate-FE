@@ -46,7 +46,8 @@ const StyledRoleTag = styled.dt<{ role: RoleType }>`
   height: 24px;
   border-radius: 5px;
   margin-right: 12px;
-  font-size: 12px;
+  font-size: 16px;
+  font-weight: 500;
 
   ${({ role }) => role === "interviewee" && css`
     background-color: var(--main-blue);
@@ -60,5 +61,6 @@ const StyledRoleTag = styled.dt<{ role: RoleType }>`
 
 const StyledProfileName = styled.dd`
   color: var(--main-black);
-  font-size: 16px;
+  font-size: 24px;
+  font-weight: 500;
 `;

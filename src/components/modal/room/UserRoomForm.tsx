@@ -9,11 +9,11 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { useSetRecoilState } from "recoil";
-import { feedbackAtom } from "store/interview/atom";
+import { feedbackAtom, InterviewDataAtom } from "store/interview/atom";
 import { usePostInterviewRooms } from "hooks/queries/interview";
 import { useNavigate } from "react-router";
 import { RoomTypes } from "api/mypage/types";
-import { questionBoxes } from "api/questionBoxes/type";
+import { QuestionBoxes } from "api/questionBoxes/type";
 
 interface InputRoomFormProps {
   email?: string;
@@ -27,6 +27,7 @@ interface InputRoomFormProps {
 }
 
 function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
+  const setUserInterviewData = useSetRecoilState(InterviewDataAtom);
   const navigate = useNavigate();
   const [ isPrivate, setIsPrivate ] = useState(false);
   const feedback = useSetRecoilState(feedbackAtom);
@@ -60,8 +61,9 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
     mutate(
       { data },
       {
-        onSuccess: () => {
-          navigate("/interview/ready");
+        onSuccess: ({ data }) => {
+          setUserInterviewData(data.data);
+          navigate("/interview/readyuser");
         },
         onError(error) {
           alert(error);
@@ -79,7 +81,6 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
       passwordError={errors.roomPassword?.message}
     >
       <form onSubmit={handleSubmit(onValid)}>
-        <input {...register("email")} readOnly hidden value="user4@test.com" />
         <div className="inputContent">
           <label htmlFor="roomName">방 제목</label>
           <input
@@ -202,9 +203,9 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
         <div className="inputContent">
           <label htmlFor="question">질문 꾸러미</label>
           <select id="question" {...register("roomQuestionBoxIdx", { required: true })}>
-            {questionBoxes.map((data: questionBoxes, idx: number) => (
-              <option key={idx} value={data.idx}>
-                {data.boxName}
+            {questionBoxes.map((data: QuestionBoxes, idx: number) => (
+              <option key={idx} value={data.questionBoxIdx}>
+                {data.questionBoxName}
               </option>
             ))}
           </select>
@@ -226,10 +227,10 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
           </FormControl>
         </div>
         <div className="submitAndCancel">
-          <StyledBtn width="380px" height="58px" color="orange">
+          <StyledBtn width="300px" height="58px" color="orange">
             확인
           </StyledBtn>
-          <StyledBtn onClick={onClickModalClose} width="380px" height="58px" color="red">
+          <StyledBtn onClick={onClickModalClose} width="300px" height="58px" color="red">
             취소
           </StyledBtn>
         </div>
@@ -309,7 +310,7 @@ const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`
     }
     .submitAndCancel {
       display: flex;
-      justify-content: space-between;
+      justify-content: space-evenly;
       margin-top: 80px;
     }
   }

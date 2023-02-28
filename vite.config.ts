@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import mkcert from "vite-plugin-mkcert";
 import path from "path";
+import babel from "vite-plugin-babel";
 
 export default defineConfig(({ mode }) => {
   /**
@@ -73,6 +74,16 @@ export default defineConfig(({ mode }) => {
         },
       }),
       mkcert(),
+      babel({
+        babelConfig: {
+          babelrc: false,
+          configFile: false,
+          plugins: [
+            "@babel/plugin-transform-runtime",
+          ],
+          compact: true,
+        },
+      }),
     ],
     optimizeDeps: {
       disabled: false,
