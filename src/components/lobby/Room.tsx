@@ -50,7 +50,7 @@ const StyledRoom = styled.div<IRoomProps>`
         height: 24px;
         font-size: 12px;
         background-color: ${props =>
-          props.roomType === "AI" ? "var(--push-gray)" : "var(--main-black)"};
+    props.roomType === "AI" ? "var(--push-gray)" : "var(--main-black)"};
         border-radius: 5px;
         color: var(--main-white);
       }
@@ -66,7 +66,7 @@ const StyledRoom = styled.div<IRoomProps>`
       }
       .roomStatus {
         color: ${props =>
-          props.roomStatus === "CREATE" ? "var(--main-orange)" : "var(--main-black)"};
+    props.roomStatus === "CREATE" ? "var(--main-orange)" : "var(--main-black)"};
       }
       .warningComment {
         display: flex;
@@ -123,7 +123,7 @@ const Room = ({
   const onClickJoin = () => {
     setTargetRoomIdx(idx);
 
-    if (roomIsPrivate) {
+    if (roomType === "USER" && roomIsPrivate) {
       // ! TODO: 비밀번호 검증
       // ! src/components/modal/lobby/RoomPasswordPopup/index.tsx에서도 추가 작업 필요
       setIsPasswordPopupOpen(true);
