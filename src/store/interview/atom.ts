@@ -83,7 +83,7 @@ export const isInterviewStartAtom = atom<boolean>({
   default: false,
 });
 
-export const interviewComment = atom<string>({
+export const interviewCommentAtom = atom<string>({
   key: "InterviewComment",
   default: "",
 });
