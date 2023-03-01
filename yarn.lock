@@ -1480,6 +1480,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash.throttle@npm:^4.1.7":
+  version: 4.1.7
+  resolution: "@types/lodash.throttle@npm:4.1.7"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: 6e1b3836488fecbdc537b6ad9b3fe4855c7336b0fa388773cd57d486619f565a48cabc04b28677fd3819be3f2d13d2bb8f9d4428aa5632885c86cb99729bfd69
+  languageName: node
+  linkType: hard
+
+"@types/lodash@npm:*":
+  version: 4.14.191
+  resolution: "@types/lodash@npm:4.14.191"
+  checksum: ba0d5434e10690869f32d5ea49095250157cae502f10d57de0a723fd72229ce6c6a4979576f0f13e0aa9fbe3ce2457bfb9fa7d4ec3d6daba56730a51906d1491
+  languageName: node
+  linkType: hard
+
 "@types/long@npm:^4.0.1":
   version: 4.0.2
   resolution: "@types/long@npm:4.0.2"
@@ -4082,6 +4098,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.throttle@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "lodash.throttle@npm:4.1.1"
+  checksum: 129c0a28cee48b348aef146f638ef8a8b197944d4e9ec26c1890c19d9bf5a5690fe11b655c77a4551268819b32d27f4206343e30c78961f60b561b8608c8c805
+  languageName: node
+  linkType: hard
+
 "long@npm:4.0.0":
   version: 4.0.0
   resolution: "long@npm:4.0.0"
@@ -5718,6 +5741,7 @@ __metadata:
     "@tensorflow-models/face-landmarks-detection": ^1.0.2
     "@tensorflow/tfjs": ^4.2.0
     "@types/dom-speech-recognition": ^0.0.1
+    "@types/lodash.throttle": ^4.1.7
     "@types/node": 18.7.1
     "@types/qs": ^6.9.7
     "@types/react": 18.0.21
@@ -5731,6 +5755,7 @@ __metadata:
     eslint-config-prettier: 8.5.0
     eslint-plugin-react: ^7.32.2
     eslint-plugin-react-hooks: 4.6.0
+    lodash.throttle: ^4.1.1
     openvidu-react: ^2.25.0
     prettier: 2.7.1
     qs: ^6.11.0
