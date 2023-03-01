@@ -138,7 +138,7 @@ const Room = ({
         onSuccess: ({ data }) => {
           setUserInterviewData(data.data);
           setIsInterviewer(true);
-          navigate("/interview/readyuser");
+          navigate("/interview/user");
         },
         onError(error) {
           alert(error);

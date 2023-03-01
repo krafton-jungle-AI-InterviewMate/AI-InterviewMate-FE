@@ -86,3 +86,28 @@ export type PostJoinRoomResponse = ResponseStatus & {
 export type PostJoinRoom = (roomIdx: number) => Promise<AxiosResponse<PostJoinRoomResponse>>;
 
 export type PutInterviewRooms = (roomIdx: number) => Promise<AxiosResponse<ResponseStatus>>;
+
+export type GetQuestionDetailsResponseData = {
+  questionBoxIdx: number;
+  questionBoxName: string;
+  questionNum: number;
+  questions: [
+    {
+      questionIdx: number;
+      keyword1: string;
+      keyword2: string;
+      keyword3: string;
+      keyword4: string;
+      keyword5: string;
+      questionTitle: string;
+    },
+  ];
+};
+
+export type GetQuestionDetailsResponse = ResponseStatus & {
+  data: GetQuestionDetailsResponseData;
+};
+
+export type GetQuestionDetails = (
+  questionBoxIdx: number,
+) => Promise<AxiosResponse<GetQuestionDetailsResponse>>;

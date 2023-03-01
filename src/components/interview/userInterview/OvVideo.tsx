@@ -1,12 +1,17 @@
 import styled from "@emotion/styled";
 import { useEffect, useRef } from "react";
+import { css } from "@emotion/react";
+import { useRecoilValue } from "recoil";
+import { isInterviewStartAtom } from "store/interview/atom";
 
 interface OpenViduVideoComponentProps {
   streamManager: any;
+  isInterviewer: boolean;
 }
 
 const OpenViduVideoComponent = (props: OpenViduVideoComponentProps) => {
-  const { streamManager } = props;
+  const { streamManager, isInterviewer } = props;
+  const isInterviewStart = useRecoilValue(isInterviewStartAtom);
   const videoRef = useRef(null);
   useEffect(() => {
     if (streamManager && videoRef) {
@@ -15,16 +20,31 @@ const OpenViduVideoComponent = (props: OpenViduVideoComponentProps) => {
   }, [streamManager]);
 
   return (
-    <StyledOpenViduVideoComponent>
+    <StyledOpenViduVideoComponent isInterviewer={isInterviewer} isInterviewStart={isInterviewStart}>
       <video autoPlay={true} ref={videoRef} />
     </StyledOpenViduVideoComponent>
   );
 };
 
-const StyledOpenViduVideoComponent = styled.div`
+interface StyledOpenViduVideoComponentProps {
+  isInterviewer: boolean;
+  isInterviewStart: boolean;
+}
+
+const StyledOpenViduVideoComponent = styled.div<StyledOpenViduVideoComponentProps>`
   video {
-    width: 272px;
-    height: 204px;
+    width: ${props =>
+      props.isInterviewStart && !props.isInterviewer
+        ? "1000px"
+        : props.isInterviewer
+        ? "250px"
+        : "272px"};
+    height: ${props =>
+      props.isInterviewStart && !props.isInterviewer
+        ? "667px"
+        : props.isInterviewer
+        ? "180px"
+        : "204px"};
   }
 `;
 

@@ -19,15 +19,19 @@ import useCheckSTTAvailable from "hooks/useCheckSTTAvailable";
 import useCheckAuth from "hooks/useCheckAuth";
 
 import styled from "@emotion/styled";
+import { useRecoilValue } from "recoil";
+import { isInterviewStartAtom } from "store/interview/atom";
 
 function App() {
   useCheckSTTAvailable();
   useCheckAuth();
 
+  const isInterviewStart = useRecoilValue(isInterviewStartAtom);
+
   const { pathname } = useLocation();
 
   return (
-    <StyledWrapper noNav={pathname === "/interview/ai"}>
+    <StyledWrapper noNav={pathname === "/interview/ai"} isInterviewStart={isInterviewStart}>
       <ToastContainer limit={1} />
 
       <Routes>
@@ -55,7 +59,7 @@ function App() {
         {/* NavInterview */}
         <Route element={<InterviewLayout />}>
           <Route path={PagesPath.INTERVIEW_READY} element={<InterviewReady />} />
-          <Route path={PagesPath.INTERVIEW_READY_USER} element={<UserInterview />} />
+          <Route path={PagesPath.INTERVIEW_USER} element={<UserInterview />} />
         </Route>
 
         {/* Pages Without Nav */}
@@ -71,14 +75,14 @@ function App() {
   );
 }
 
-const StyledWrapper = styled.section<{ noNav: boolean }>`
+const StyledWrapper = styled.section<{ noNav: boolean; isInterviewStart: boolean }>`
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
   max-width: 1440px;
   min-width: 1000px;
   margin: 0 auto;
-  padding-top: ${({ noNav }) => noNav ? 0 : "150px"};
+  padding-top: ${({ noNav, isInterviewStart }) => (noNav || isInterviewStart ? 0 : "150px")};
   padding-bottom: 68px;
   text-align: center;
 `;

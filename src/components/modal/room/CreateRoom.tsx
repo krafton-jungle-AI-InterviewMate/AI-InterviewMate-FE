@@ -12,7 +12,7 @@ type CreateRoomProps = ModalProps;
 
 const modalStyles: ModalProps["styles"] = {
   root: {
-    top: "0",
+    top: "60px",
   },
   modal: {
     position: "relative",

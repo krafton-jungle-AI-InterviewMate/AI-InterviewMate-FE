@@ -83,6 +83,11 @@ export const isInterviewStartAtom = atom<boolean>({
   default: false,
 });
 
+export const interviewComment = atom<string>({
+  key: "InterviewComment",
+  default: "",
+});
+
 /** 대체 면접관 */
 export const aiInterviewerAtom = atom<AiInterviewerTypes>({
   key: "AiInterviewer",

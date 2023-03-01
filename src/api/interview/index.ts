@@ -5,6 +5,7 @@ import {
   GetInterviewRooms,
   PostJoinRoom,
   PutInterviewRooms,
+  GetQuestionDetails,
 } from "api/interview/type";
 
 const getInterviewRooms: GetInterviewRooms = () =>
@@ -26,9 +27,15 @@ const putInterviewRooms: PutInterviewRooms = roomIdx =>
     endPoint: API_PATH.PUT_INTERVIEW_ROOMS(roomIdx),
   });
 
+const getQuestionDetails: GetQuestionDetails = questionBoxIdx =>
+  getAPI({
+    endPoint: API_PATH.POST_QUESTION_DETAILS(questionBoxIdx),
+  });
+
 export default {
   getInterviewRooms,
   postInterviewRooms,
   postJoinRoom,
   putInterviewRooms,
+  getQuestionDetails,
 };

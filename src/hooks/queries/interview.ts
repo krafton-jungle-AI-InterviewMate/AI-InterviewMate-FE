@@ -53,3 +53,16 @@ export const usePutInterviewRooms = () => {
     },
   });
 };
+
+export const useGetQuestionDetails = (questionBoxIdx: number) => {
+  const { data, isLoading, isSuccess, isError } = useQuery(["userInterviewQuestionDetails"], () => {
+    return interviewAPI.getQuestionDetails(questionBoxIdx);
+  });
+
+  return {
+    data,
+    isLoading,
+    isSuccess,
+    isError,
+  };
+};

@@ -1,15 +1,21 @@
 import { OpenVidu } from "openvidu-browser";
 import { useState, useEffect } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { interviewDataAtom, isInterviewStartAtom, roomPeopleNowAtom } from "store/interview/atom";
-import styled from "@emotion/styled";
-import { StyledBtn } from "styles/StyledBtn";
+import {
+  interviewDataAtom,
+  isInterviewerAtom,
+  isInterviewStartAtom,
+  roomPeopleNowAtom,
+} from "store/interview/atom";
 import { useNavigate } from "react-router";
 import UserInterviewReady from "components/interview/userInterview/UserInterviewReady";
-import { Dialog, DialogActions, DialogTitle } from "@mui/material";
+import { usePutInterviewRooms } from "hooks/queries/interview";
+import styled from "@emotion/styled";
 import UserVideoComponent from "components/interview/userInterview/UserVideoComponent";
 import Loading from "components/common/Loading";
-import { usePutInterviewRooms } from "hooks/queries/interview";
+import { StyledBtn } from "styles/StyledBtn";
+import { Dialog, DialogActions, DialogTitle } from "@mui/material";
+import InterviewQuestionTab from "components/interview/userInterview/InterviewerQuestionTap";
 
 const UserInterview = () => {
   const { mutate } = usePutInterviewRooms();
@@ -17,6 +23,7 @@ const UserInterview = () => {
   const userInterviewData = useRecoilValue(interviewDataAtom);
   const setRoomPeopleNow = useSetRecoilState(roomPeopleNowAtom);
   const [isInterviewStart, setIsInterviewStart] = useRecoilState(isInterviewStartAtom);
+  const isInterviewer = useRecoilValue(isInterviewerAtom);
   const navigate = useNavigate();
 
   const [OV, setOV] = useState<any>(null);
@@ -78,6 +85,9 @@ const UserInterview = () => {
     session.on("signal:start", event => {
       setIsInterviewStart(event.data);
     });
+    session.on("signal:end", event => {
+      setIsInterviewStart(event.data);
+    });
 
     session
       .connect(userInterviewData?.connectionToken, { clientData: myUserName })
@@ -127,7 +137,6 @@ const UserInterview = () => {
     setSubscribers([]);
     setMyUserName("");
     setPublisher(undefined);
-    navigate("/lobby");
   };
 
   useEffect(() => {
@@ -143,6 +152,32 @@ const UserInterview = () => {
     setIsOpen(true);
   };
 
+  const handleClickEnd = () => {
+    mutate(userInterviewData!.roomIdx, {
+      onSuccess: () => {
+        setIsInterviewStart(false);
+        console.log(isInterviewStart);
+      },
+      onError(error) {
+        alert(error);
+      },
+    });
+    session
+      .signal({
+        data: false,
+        to: subscribers,
+        type: "end",
+      })
+      .then(() => {
+        console.log("면접을 종료합니다.");
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    leaveSession();
+    navigate("/lobby");
+  };
+
   const handleClickStart = () => {
     if (ready) {
       mutate(userInterviewData!.roomIdx, {
@@ -153,7 +188,6 @@ const UserInterview = () => {
           alert(error);
         },
       });
-      setIsInterviewStart(true);
       session
         .signal({
           data: true,
@@ -182,29 +216,30 @@ const UserInterview = () => {
   return (
     <>
       {isInterviewStart ? (
-        <div>
+        <StyledUserInterviewStart>
           {session ? (
             <>
-              <div className="videoContents">
-                {publisher ? (
-                  <div>
-                    <UserVideoComponent streamManager={publisher} isInterviewer={false} />
-                  </div>
-                ) : (
-                  <Loading margin="0 0 0 30px" />
-                )}
-                <div>
+              <div className="subscribersContents">
+                <div className="subscribersVideo">
                   {subscribers.map((sub, i) => (
                     <div key={i}>
                       <UserVideoComponent streamManager={sub} isInterviewer={true} />
                     </div>
                   ))}
                 </div>
+                <div className="interviewActions">
+                  <StyledBtn onClick={handleClickLeave} width="200px" height="48px" color="red">
+                    면접 나가기
+                  </StyledBtn>
+                </div>
               </div>
-              <div className="interviewActions">
-                <StyledBtn onClick={handleClickLeave} width="200px" height="48px" color="red">
-                  나가기
-                </StyledBtn>
+              <div className="publisherContents">
+                {publisher && (
+                  <div className="publisherVideo">
+                    <UserVideoComponent streamManager={publisher} isInterviewer={false} />
+                    {isInterviewer && <InterviewQuestionTab />}
+                  </div>
+                )}
               </div>
               <Dialog
                 open={isOpen}
@@ -229,7 +264,7 @@ const UserInterview = () => {
                   로비로 이동하시겠습니까?
                 </DialogTitle>
                 <DialogActions>
-                  <StyledBtn onClick={leaveSession} width="200px" height="42px" color="orange">
+                  <StyledBtn onClick={handleClickEnd} width="200px" height="42px" color="orange">
                     네!
                   </StyledBtn>
                   <StyledBtn onClick={handleClickClose} width="200px" height="42px" color="red">
@@ -241,7 +276,7 @@ const UserInterview = () => {
           ) : (
             <Loading margin="250px" />
           )}
-        </div>
+        </StyledUserInterviewStart>
       ) : (
         <UserInterviewReady
           session={session}
@@ -252,11 +287,42 @@ const UserInterview = () => {
           handleClickLeave={handleClickLeave}
           handleClickStart={handleClickStart}
           handleClickClose={handleClickClose}
-          leaveSession={leaveSession}
+          handleClickEnd={handleClickEnd}
         />
       )}
     </>
   );
 };
+
+const StyledUserInterviewStart = styled.div`
+  overflow-x: hidden;
+  .subscribersContents {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 200px;
+    background-color: var(--main-gray);
+    .subscribersVideo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 798px;
+    }
+  }
+  .publisherContents {
+    margin-top: 70px;
+    .publisherVideo {
+      display: flex;
+      justify-content: center;
+    }
+  }
+  .interviewActions {
+    position: absolute;
+    top: 30px;
+    right: 150px;
+  }
+`;
 
 export default UserInterview;
