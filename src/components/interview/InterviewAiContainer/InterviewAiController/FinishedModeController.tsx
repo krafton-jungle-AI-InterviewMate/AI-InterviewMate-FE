@@ -6,8 +6,8 @@ import InterviewComment from "../InterviewComment";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   answerScriptAtom,
-  motionScoreAtom,
-  irisScoreAtom,
+  motionCountAtom,
+  irisCountAtom,
   aiInterviewNextProcessAtom,
   aiRoomResponseAtom,
 } from "store/interview/atom";
@@ -20,8 +20,8 @@ import styled from "@emotion/styled";
 const FinishedModeController = () => {
   const navigate = useNavigate();
 
-  const motionScore = useRecoilValue(motionScoreAtom);
-  const irisScore = useRecoilValue(irisScoreAtom);
+  const motionCount = useRecoilValue(motionCountAtom);
+  const irisCount = useRecoilValue(irisCountAtom);
   const aiRoomResponse = useRecoilValue(aiRoomResponseAtom);
   const answerScript = useRecoilValue(answerScriptAtom);
   const setAiInterviewNextProcess = useSetRecoilState(aiInterviewNextProcessAtom);
@@ -47,9 +47,9 @@ const FinishedModeController = () => {
     } = aiRoomResponse;
 
     const data: PostRatingVieweePayloadData = {
-      viewerIdx: AI_VIEWER_IDX, // TODO: user/ai 구분
-      eyesRating: irisScore,
-      attitudeRating: motionScore,
+      viewerIdx: AI_VIEWER_IDX,
+      eyesRating: irisCount,
+      attitudeRating: motionCount,
       scriptRequestsDtos: answerScript.map((script, idx) => ({
         questionIdx: idx + 1, // DB index 1부터 시작
         script,

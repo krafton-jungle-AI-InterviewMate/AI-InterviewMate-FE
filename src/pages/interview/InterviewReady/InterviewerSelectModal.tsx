@@ -6,7 +6,7 @@ import { Modal, ModalProps } from "react-responsive-modal";
 
 import { AiInterviewers } from "constants/interview";
 import { AiInterviewerTypes } from "types/interview";
-import { getAiInterviewerThumbnail } from "lib/interview";
+import { getAiInterviewerMiniThumbnail } from "lib/interview";
 
 import styled from "@emotion/styled";
 
@@ -53,7 +53,7 @@ const InterviewerSelectModal = (props: SelectModalProps) => {
           {AiInterviewers.map((ai) =>
             <StyledInterviewer key={ai}>
               <button type="button" onClick={() => handleClick(ai)}>
-                <StyledThumbnail bgImg={getAiInterviewerThumbnail(ai)} />
+                <StyledThumbnail bgImg={getAiInterviewerMiniThumbnail(ai)} />
                 <span>{ai}</span>
               </button>
             </StyledInterviewer>,
