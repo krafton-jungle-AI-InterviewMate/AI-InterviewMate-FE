@@ -186,7 +186,7 @@ const StyledNextButton = styled.button`
   &:hover {
     background-color: var(--light-orange);
   }
-  &:hover {
+  &:active {
     background-color: var(--push-orange);
   }
 `;
