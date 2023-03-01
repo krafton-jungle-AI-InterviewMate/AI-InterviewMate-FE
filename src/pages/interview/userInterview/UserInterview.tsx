@@ -248,7 +248,7 @@ const UserInterview = () => {
                 <div className="subscribersVideo">
                   {subscribers.map((sub, i) => (
                     <div key={i}>
-                      <UserVideoComponent streamManager={sub} isInterviewer={true} />
+                      <UserVideoComponent streamManager={sub} />
                     </div>
                   ))}
                 </div>
@@ -266,7 +266,7 @@ const UserInterview = () => {
               <div className="publisherContents">
                 {publisher && (
                   <div className="publisherVideo">
-                    <UserVideoComponent streamManager={publisher} isInterviewer={false} />
+                    <UserVideoComponent streamManager={publisher} />
                     {isInterviewer && <InterviewQuestionTab />}
                   </div>
                 )}

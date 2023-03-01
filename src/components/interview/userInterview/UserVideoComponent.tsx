@@ -7,11 +7,10 @@ import { hostAtom, isInterviewStartAtom } from "store/interview/atom";
 
 interface UserVideoComponentProps {
   streamManager: any;
-  isInterviewer: boolean;
 }
 
 const UserVideoComponent = (props: UserVideoComponentProps) => {
-  const { streamManager, isInterviewer } = props;
+  const { streamManager } = props;
   const [isLoading, setIsLoading] = useState(true);
   const host = useRecoilValue(hostAtom);
   const isInterviewStart = useRecoilValue(isInterviewStartAtom);
@@ -27,7 +26,7 @@ const UserVideoComponent = (props: UserVideoComponentProps) => {
     <StyledUserVideoComponent isHost={isHost} isInterviewStart={isInterviewStart}>
       {!isLoading ? (
         <div className="streamcomponent">
-          <OpenViduVideoComponent streamManager={streamManager} isInterviewer={isInterviewer} />
+          <OpenViduVideoComponent streamManager={streamManager} />
           {!isInterviewStart && (
             <p>
               <span className="interviewer">{isHost ? "면접자" : "면접관"}</span>
