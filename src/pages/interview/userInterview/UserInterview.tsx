@@ -49,8 +49,8 @@ const UserInterview = () => {
   };
 
   const deleteSubscriber = (streamManager: any) => {
-    const newSubscribers = [...subscribers];
-    setSubscribers(newSubscribers.filter(v => v !== streamManager));
+    // const newSubscribers = [...subscribers];
+    setSubscribers(curr => curr.filter(sub => sub !== streamManager));
   };
 
   const joinSession = async () => {
