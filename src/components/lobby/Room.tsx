@@ -117,9 +117,9 @@ const Room = ({
   setTargetRoomIdx,
 }: RoomProps) => {
   const setUserInterviewData = useSetRecoilState(interviewDataAtom);
-  const setIsInterviewer = useSetRecoilState(isInterviewerAtom);
   const navigate = useNavigate();
   const { mutate, isLoading } = usePostJoinRoom();
+  const setIsInterviewer = useSetRecoilState(isInterviewerAtom);
   const onClickJoin = () => {
     setTargetRoomIdx(idx);
 
@@ -138,7 +138,7 @@ const Room = ({
         onSuccess: ({ data }) => {
           setUserInterviewData(data.data);
           setIsInterviewer(true);
-          navigate("/interview/readyuser");
+          navigate("/interview/user");
         },
         onError(error) {
           alert(error);

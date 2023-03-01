@@ -2,6 +2,8 @@ import OpenViduVideoComponent from "./OvVideo";
 import styled from "@emotion/styled";
 import Loading from "components/common/Loading";
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { isInterviewStartAtom } from "store/interview/atom";
 
 interface UserVideoComponentProps {
   streamManager: any;
@@ -11,6 +13,7 @@ interface UserVideoComponentProps {
 const UserVideoComponent = (props: UserVideoComponentProps) => {
   const { streamManager, isInterviewer } = props;
   const [isLoading, setIsLoading] = useState(true);
+  const isInterviewStart = useRecoilValue(isInterviewStartAtom);
 
   useEffect(() => {
     if (streamManager) {
@@ -18,14 +21,16 @@ const UserVideoComponent = (props: UserVideoComponentProps) => {
     }
   }, [streamManager]);
   return (
-    <StyledUserVideoComponent isInterviewer={isInterviewer}>
+    <StyledUserVideoComponent isInterviewer={isInterviewer} isInterviewStart={isInterviewStart}>
       {!isLoading ? (
         <div className="streamcomponent">
-          <OpenViduVideoComponent streamManager={streamManager} />
-          <p>
-            <span className="interviewer">{isInterviewer ? "면접관" : "면접자"}</span>
-            <span className="nickname">{streamManager.stream.connection.data.split('"')[3]}</span>
-          </p>
+          <OpenViduVideoComponent streamManager={streamManager} isInterviewer={isInterviewer} />
+          {!isInterviewStart && (
+            <p>
+              <span className="interviewer">{isInterviewer ? "면접관" : "면접자"}</span>
+              <span className="nickname">{streamManager.stream.connection.data.split('"')[3]}</span>
+            </p>
+          )}
         </div>
       ) : (
         <Loading margin="0" />
@@ -36,10 +41,11 @@ const UserVideoComponent = (props: UserVideoComponentProps) => {
 
 interface StyledUserVideoComponentProps {
   isInterviewer: boolean;
+  isInterviewStart: boolean;
 }
 
 const StyledUserVideoComponent = styled.div<StyledUserVideoComponentProps>`
-  margin-bottom: 20px;
+  margin-bottom: ${props => (props.isInterviewStart ? 0 : "20px")};
   .streamcomponent {
     display: flex;
     flex-direction: ${props => (props.isInterviewer ? "row" : "column")};

@@ -4,38 +4,45 @@ import Breadcrumbs from "components/layout/common/Breadcrumbs";
 
 import styled from "@emotion/styled";
 import { useRecoilValue } from "recoil";
-import { interviewDataAtom, roomPeopleNowAtom } from "store/interview/atom";
+import { interviewDataAtom, isInterviewStartAtom, roomPeopleNowAtom } from "store/interview/atom";
 import { MdPublic } from "react-icons/md";
 import { useEffect, useState } from "react";
 
 const NavInterview = () => {
-  const roomInfo = useRecoilValue(interviewDataAtom);
+  const interviewData = useRecoilValue(interviewDataAtom);
   const roomPeopleNow = useRecoilValue(roomPeopleNowAtom);
+  const isInterviewStart = useRecoilValue(isInterviewStartAtom);
+
   const [interviewer, setInterviewer] = useState(1);
+
   useEffect(() => {
     setInterviewer(roomPeopleNow);
   }, [roomPeopleNow]);
 
   return (
-    <Nav>
-      <StyledLeftSection>
-        <Logo />
-        <Breadcrumbs />
-      </StyledLeftSection>
-      {/* TODO: AI 면접관/유저 면접관 구분 */}
-      <StyledInterviewType>
-        {roomInfo?.roomType === "AI" ? (
-          "AI 면접"
-        ) : (
-          <>
-            <span className="roomPeopleNum">
-              {interviewer + 1} / {roomInfo?.roomPeopleNum}
-              <MdPublic size={27} color="var(--push-gray)" />
-            </span>
-          </>
-        )}
-      </StyledInterviewType>
-    </Nav>
+    <>
+      {!isInterviewStart && (
+        <Nav>
+          <StyledLeftSection>
+            <Logo />
+            <Breadcrumbs />
+          </StyledLeftSection>
+          {/* TODO: AI 면접관/유저 면접관 구분 */}
+          <StyledInterviewType>
+            {interviewData?.roomType === "AI" ? (
+              "AI 면접"
+            ) : (
+              <>
+                <span className="roomPeopleNum">
+                  {interviewer + 1} / {interviewData?.roomPeopleNum}
+                  <MdPublic size={27} color="var(--push-gray)" />
+                </span>
+              </>
+            )}
+          </StyledInterviewType>
+        </Nav>
+      )}
+    </>
   );
 };
 

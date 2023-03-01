@@ -42,3 +42,27 @@ export const usePostJoinRoom = () => {
     },
   });
 };
+
+export const usePutInterviewRooms = () => {
+  return useMutation(interviewAPI.putInterviewRooms, {
+    onSuccess: () => {
+      console.log("면접방 상태 변경");
+    },
+    onError: e => {
+      console.log(e);
+    },
+  });
+};
+
+export const useGetQuestionDetails = (questionBoxIdx: number) => {
+  const { data, isLoading, isSuccess, isError } = useQuery(["userInterviewQuestionDetails"], () => {
+    return interviewAPI.getQuestionDetails(questionBoxIdx);
+  });
+
+  return {
+    data,
+    isLoading,
+    isSuccess,
+    isError,
+  };
+};

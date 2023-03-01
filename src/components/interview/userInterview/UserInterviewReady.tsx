@@ -14,7 +14,7 @@ interface UserInterviewReadyProps {
   subscribers: Array<any>;
   ready: boolean;
   isOpen: boolean;
-  leaveSession: () => void;
+  handleClickEnd: () => void;
   handleClickLeave: () => void;
   handleClickStart: () => void;
   handleClickClose: () => void;
@@ -27,7 +27,7 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
     subscribers,
     ready,
     isOpen,
-    leaveSession,
+    handleClickEnd,
     handleClickClose,
     handleClickLeave,
     handleClickStart,
@@ -102,7 +102,7 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
               로비로 이동하시겠습니까?
             </DialogTitle>
             <DialogActions>
-              <StyledBtn onClick={leaveSession} width="200px" height="42px" color="orange">
+              <StyledBtn onClick={handleClickEnd} width="200px" height="42px" color="orange">
                 네!
               </StyledBtn>
               <StyledBtn onClick={handleClickClose} width="200px" height="42px" color="red">

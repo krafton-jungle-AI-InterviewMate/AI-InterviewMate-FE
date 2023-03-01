@@ -24,6 +24,7 @@ export const API_PATH = {
   GET_MYINFO: "/mypage/myinfo",
   PUT_NICKNAME: "/mypage/nickname",
   POST_JOIN_ROOM: (roomIdx: number) => `/interview/rooms/${roomIdx}`,
+  PUT_INTERVIEW_ROOMS: (roomIdx: number) => `/interview/rooms/${roomIdx}`,
 };
 
 export const AI_VIEWER_IDX = 79797979;

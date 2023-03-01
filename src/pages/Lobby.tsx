@@ -7,8 +7,8 @@ import { useGetInterviewRooms } from "hooks/queries/interview";
 import { InterviewRooms } from "api/interview/type";
 import Loading from "components/common/Loading";
 import ServerError from "components/common/ServerError";
-import JoinError from "components/modal/lobby/JoinError";
 import RoomPasswordPopup from "components/modal/lobby/RoomPasswordPopup";
+import { Dialog, DialogTitle } from "@mui/material";
 
 const StyledLobbyInterface = styled.div`
   min-width: 1000px;
@@ -38,7 +38,7 @@ const Lobby = () => {
   const [ modalCreateRoom, setModalCreateRoom ] = useState(false);
   const [ interviewRooms, setInterviewRooms ] = useState<InterviewRooms[]>([]);
   const { data, isSuccess, isLoading, isError, refetch } = useGetInterviewRooms();
-
+  const [ isOpen, setIsOpen ] = useState(false);
   useEffect(() => {
     if (!isLoading && data) {
       setInterviewRooms(data.data.data);
@@ -48,7 +48,9 @@ const Lobby = () => {
   const onClickReload = () => {
     refetch();
   };
-  const [ isJoinError, setIsJoinError ] = useState(false);
+  const onClickCancel = () => {
+    setIsOpen(false);
+  };
   return (
     <>
       {isPasswordPopupOpen && (
@@ -58,8 +60,35 @@ const Lobby = () => {
           roomIdx={targetRoomIdx}
         />
       )}
-      {modalCreateRoom && <CreateRoom open={modalCreateRoom} onClose={() => setModalCreateRoom(false)} />}
-      {isJoinError ? <JoinError setIsJoinError={setIsJoinError} /> : null}
+      {modalCreateRoom && (
+        <CreateRoom open={modalCreateRoom} onClose={() => setModalCreateRoom(false)} />
+      )}
+      <Dialog
+        open={isOpen}
+        onClose={onClickCancel}
+        PaperProps={{
+          style: {
+            padding: "50px 35px",
+            borderRadius: "10px",
+          },
+        }}
+      >
+        <DialogTitle
+          fontSize={24}
+          fontWeight={400}
+          color={"var(--main-black)"}
+          marginBottom={3}
+          padding={0}
+          textAlign={"center"}
+        >
+          이 방에는 입장하실 수 없습니다.
+        </DialogTitle>
+        <StyledDialogActions>
+          <StyledBtn onClick={onClickCancel} width="200px" height="42px" color="orange">
+            네!
+          </StyledBtn>
+        </StyledDialogActions>
+      </Dialog>
       <StyledLobbyInterface>
         <StyledBtn
           width="200px"
@@ -92,7 +121,7 @@ const Lobby = () => {
               roomPeopleNow={room.roomPeopleNow}
               roomPeopleNum={room.roomPeopleNum}
               idx={room.idx}
-              setIsJoinError={setIsJoinError}
+              setIsJoinError={setIsOpen}
               setIsPasswordPopupOpen={setIsPasswordPopupOpen}
               setTargetRoomIdx={setTargetRoomIdx}
             />
@@ -102,5 +131,10 @@ const Lobby = () => {
     </>
   );
 };
+
+const StyledDialogActions = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 export default Lobby;
