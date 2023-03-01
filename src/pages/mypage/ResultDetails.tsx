@@ -11,7 +11,8 @@ import ResultTimeline, { TempResponseType } from "components/mypage/resultDetail
 import styled from "@emotion/styled";
 
 // FIXME: 실제 데이터로 교체
-const mock_video_url = "https://bucket1182644-staging.s3.ap-northeast-2.amazonaws.com/interviewer/Seungmin.mp4";
+const videoUrl = "https://bucket1182644-staging.s3.ap-northeast-2.amazonaws.com/interviewer/Seungmin.mp4";
+// const videoUrl = "";
 const mock_timeline: TempResponseType = {
   timeline: [
     {
@@ -48,8 +49,16 @@ const ResultDetails = () => {
   return isSuccess && data ? (
     <ResultDetailsLayout roomType={searchParams.get("type") as RoomTypes} data={data.data}>
       <StyledVideoSection>
-        <ResultVideo videoRef={videoRef} videoUrl={mock_video_url} />
-        <ResultTimeline data={mock_timeline} videoRef={videoRef} />
+        {videoUrl ? (
+          <>
+            <ResultVideo videoRef={videoRef} videoUrl={videoUrl} />
+            <ResultTimeline data={mock_timeline} videoRef={videoRef} />
+          </>
+        ) : (
+          <StyledNoVideo>
+            <p>녹화된 영상이 없습니다.</p>
+          </StyledNoVideo>
+        )}
       </StyledVideoSection>
     </ResultDetailsLayout>
   ) : (
@@ -68,4 +77,22 @@ const StyledVideoSection = styled.div`
   align-items: center;
   width: 100%;
   margin-bottom: 30px;
+`;
+
+const StyledNoVideo = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 140px;
+  background-color: var(--main-gray);
+  background: linear-gradient(13deg, var(--main-gray) 35%, rgba(238,238,238,0.4) 100%);
+  border-radius: 16px;
+  opacity: 0.6;
+
+  & p {
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    color: var(--font-gray);
+  }
 `;
