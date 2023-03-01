@@ -49,7 +49,6 @@ const UserInterview = () => {
   };
 
   const deleteSubscriber = (streamManager: any) => {
-    // const newSubscribers = [...subscribers];
     setSubscribers(curr => curr.filter(sub => sub !== streamManager));
   };
 
