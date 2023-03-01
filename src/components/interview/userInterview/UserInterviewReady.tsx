@@ -56,21 +56,18 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
               </>
             )}
             <div>
-              {publisher && host !== publisher.stream.connection.connectionId ? (
+              {publisher && host !== publisher.stream.connection.connectionId && (
                 <div>
                   <UserVideoComponent streamManager={publisher} isInterviewer={false} />
                 </div>
-              ) : (
-                <>
-                  {subscribers.map(
-                    (sub, i) =>
-                      host !== sub.stream.connection.connectionId && (
-                        <div key={i}>
-                          <UserVideoComponent streamManager={sub} isInterviewer={true} />
-                        </div>
-                      ),
-                  )}
-                </>
+              )}
+              {subscribers.map(
+                (sub, i) =>
+                  host !== sub.stream.connection.connectionId && (
+                    <div key={i}>
+                      <UserVideoComponent streamManager={sub} isInterviewer={true} />
+                    </div>
+                  ),
               )}
             </div>
           </div>
