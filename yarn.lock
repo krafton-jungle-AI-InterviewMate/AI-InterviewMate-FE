@@ -4969,7 +4969,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:18.2.0":
+"react@npm:^18.2.0":
   version: 18.2.0
   resolution: "react@npm:18.2.0"
   dependencies:
@@ -5786,7 +5786,7 @@ __metadata:
     openvidu-react: ^2.25.0
     prettier: 2.7.1
     qs: ^6.11.0
-    react: 18.2.0
+    react: ^18.2.0
     react-chartjs-2: ^5.2.0
     react-cookie: ^4.1.1
     react-dom: 18.2.0
