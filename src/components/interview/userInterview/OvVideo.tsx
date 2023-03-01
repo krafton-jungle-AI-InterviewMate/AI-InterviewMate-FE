@@ -12,12 +12,12 @@ interface OpenViduVideoComponentProps {
 const OpenViduVideoComponent = (props: OpenViduVideoComponentProps) => {
   const { streamManager, isInterviewer } = props;
   const isInterviewStart = useRecoilValue(isInterviewStartAtom);
-  const videoRef = useRef(null);
+  const videoRef = useRef<null | HTMLVideoElement>(null);
   useEffect(() => {
     if (streamManager && videoRef) {
       streamManager.addVideoElement(videoRef.current);
     }
-  }, [streamManager]);
+  }, [ streamManager ]);
 
   return (
     <StyledOpenViduVideoComponent isInterviewer={isInterviewer} isInterviewStart={isInterviewStart}>
@@ -34,15 +34,15 @@ interface StyledOpenViduVideoComponentProps {
 const StyledOpenViduVideoComponent = styled.div<StyledOpenViduVideoComponentProps>`
   video {
     width: ${props =>
-      props.isInterviewStart && !props.isInterviewer
-        ? "1000px"
-        : props.isInterviewer
+    props.isInterviewStart && !props.isInterviewer
+      ? "1000px"
+      : props.isInterviewer
         ? "250px"
         : "272px"};
     height: ${props =>
-      props.isInterviewStart && !props.isInterviewer
-        ? "667px"
-        : props.isInterviewer
+    props.isInterviewStart && !props.isInterviewer
+      ? "667px"
+      : props.isInterviewer
         ? "180px"
         : "204px"};
   }
