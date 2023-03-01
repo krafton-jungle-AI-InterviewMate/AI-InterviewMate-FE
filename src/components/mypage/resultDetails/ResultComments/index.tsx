@@ -50,7 +50,7 @@ const ResultComments = () => {
         </FormControl>
 
         <p>
-          자신감 있는 모습이 보기 좋았습니다.
+          황석님은 자신있는 목소리가 장점이라고 생각합니다. CS 지식과 시선처리에 집중한다면 좋은 성과를 기대할 수 있을 것 입니다. 면접 준비 화이팅 하세요!!
         </p>
       </StyledCommentsBox>
     </StyledCommentsWrap>
