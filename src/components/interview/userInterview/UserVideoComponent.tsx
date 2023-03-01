@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import Loading from "components/common/Loading";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { isInterviewStartAtom } from "store/interview/atom";
+import { hostAtom, isInterviewStartAtom } from "store/interview/atom";
 
 interface UserVideoComponentProps {
   streamManager: any;
@@ -13,6 +13,7 @@ interface UserVideoComponentProps {
 const UserVideoComponent = (props: UserVideoComponentProps) => {
   const { streamManager, isInterviewer } = props;
   const [isLoading, setIsLoading] = useState(true);
+  const host = useRecoilValue(hostAtom);
   const isInterviewStart = useRecoilValue(isInterviewStartAtom);
 
   useEffect(() => {

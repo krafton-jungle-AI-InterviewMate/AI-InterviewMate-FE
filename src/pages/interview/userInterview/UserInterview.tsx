@@ -81,14 +81,14 @@ const UserInterview = () => {
     });
 
     session.on("signal:interviewStart", event => {
+      console.log(event.type);
       setIsInterviewStart(true);
     });
 
-    session.on("signal:interviewEnd", event => {
-      setIsInterviewStart(event.data);
+    session.on("signal:setHost", event => {
+      console.log(event.type);
       if (isInterviewer) {
-        leaveSession();
-        navigate("/interview/end");
+        setHost(event.data);
       }
     });
 
@@ -192,7 +192,7 @@ const UserInterview = () => {
     }
   };
 
-  const handleClickInterviewEnd = () => {
+  const InterviewEnd = () => {
     // 면접 정상 종료
     mutate(userInterviewData!.roomIdx, {
       onSuccess: () => {
@@ -215,6 +215,20 @@ const UserInterview = () => {
       setReady(true);
     } else {
       setReady(false);
+    }
+    if (!isInterviewer && session) {
+      session
+        .signal({
+          data: publisher.stream.connection.connectionId,
+          to: subscribers,
+          type: "setHost",
+        })
+        .then(() => {
+          console.log(host);
+        })
+        .catch(error => {
+          console.error(error);
+        });
     }
   }, [subscribers]);
 
