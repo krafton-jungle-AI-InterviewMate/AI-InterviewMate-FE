@@ -44,7 +44,7 @@ const ResultDetailsLayout = (props: ResultDetailsLayoutProps) => {
 
       <StyledMemoSection>
         <StyledLabel htmlFor="result-detail-comment">메모장</StyledLabel>
-        <StyledTextarea id="result-detail-comment" />
+        <StyledTextarea id="result-detail-comment" placeholder="면접에 대한 메모를 남겨보세요." />
         <StyledSubmitButton type="button">저장</StyledSubmitButton>
       </StyledMemoSection>
     </StyledWrapper>
@@ -135,6 +135,11 @@ const StyledTextarea = styled.textarea`
   padding: 20px;
   resize: none;
   box-sizing: border-box;
+
+  &::placeholder {
+    font-family: "Archivo", "Spoqa Han Sans Neo", sans-serif;
+    font-size: 16px;
+  }
 `;
 
 const StyledSubmitButton = styled.button`

@@ -34,6 +34,10 @@ const ResultScript = () => {
             id="demo-select-small"
             value={currQuestion}
             label="문제"
+            sx={{
+              color: "var(--main-black)",
+              fontWeight: 500,
+            }}
             onChange={handleChange}
           >
             <MenuItem value="Q1">
