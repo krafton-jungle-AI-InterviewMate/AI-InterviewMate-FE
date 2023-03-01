@@ -101,12 +101,14 @@ const UserInterview = () => {
     });
 
     session.on("signal:interviewOut", event => {
+      console.log("interviewOut");
       setIsInterviewStart(false);
       leaveSession();
       navigate("/lobby");
     });
 
     session.on("signal:readyOut", event => {
+      console.log("readyOut");
       setIsInterviewStart(false);
       leaveSession();
       navigate("/lobby");
@@ -203,7 +205,7 @@ const UserInterview = () => {
       session
         .signal({
           data: false,
-          to: subscribers,
+          to: [],
           type: "readyOut",
         })
         .then(() => {
