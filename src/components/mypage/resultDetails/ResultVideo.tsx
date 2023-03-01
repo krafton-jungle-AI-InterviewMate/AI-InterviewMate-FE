@@ -2,11 +2,13 @@ import styled from "@emotion/styled";
 import { commonLabelStyle } from "styles/resultDetails";
 
 type ResultVideoProps = {
+  videoRef: React.MutableRefObject<HTMLVideoElement | null>;
   videoUrl: string;
 };
 
 const ResultVideo = (props: ResultVideoProps) => {
   const {
+    videoRef,
     videoUrl,
   } = props;
 
@@ -15,6 +17,7 @@ const ResultVideo = (props: ResultVideoProps) => {
       <StyledTitle>면접 장면 다시보기</StyledTitle>
       <StyledVideoWrapper>
         <video
+          ref={videoRef}
           width="640px"
           autoPlay={false}
           loop={false}

@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useGetRatingDetail } from "hooks/queries/mypage";
 import { RoomTypes } from "api/mypage/types";
@@ -5,13 +6,31 @@ import { RoomTypes } from "api/mypage/types";
 import Loading from "components/common/Loading";
 import ResultDetailsLayout from "components/layout/result/ResultDetailsLayout";
 import ResultVideo from "components/mypage/resultDetails/ResultVideo";
+import ResultTimeline, { TempResponseType } from "components/mypage/resultDetails/ResultTimeline";
 
 import styled from "@emotion/styled";
 
+// FIXME: 실제 데이터로 교체
 const mock_video_url = "https://bucket1182644-staging.s3.ap-northeast-2.amazonaws.com/interviewer/Seungmin.mp4";
+const mock_timeline: TempResponseType = {
+  timeline: [
+    {
+      "type": "question",
+      "timestamp": "00:14",
+    },
+    {"type": "eye",
+      "timestamp": "01:20",
+    },
+    {
+      "type": "attitude",
+      "timestamp": "02:01",
+    },
+  ],
+};
 
 const ResultDetails = () => {
   const [ searchParams ] = useSearchParams();
+  const videoRef = useRef<null | HTMLVideoElement>(null);
 
   const {
     data,
@@ -29,8 +48,8 @@ const ResultDetails = () => {
   return isSuccess && data ? (
     <ResultDetailsLayout roomType={searchParams.get("type") as RoomTypes} data={data.data}>
       <StyledVideoSection>
-        <ResultVideo videoUrl={mock_video_url} />
-        <div>타임라인 컴포넌트</div>
+        <ResultVideo videoRef={videoRef} videoUrl={mock_video_url} />
+        <ResultTimeline data={mock_timeline} videoRef={videoRef} />
       </StyledVideoSection>
     </ResultDetailsLayout>
   ) : (
