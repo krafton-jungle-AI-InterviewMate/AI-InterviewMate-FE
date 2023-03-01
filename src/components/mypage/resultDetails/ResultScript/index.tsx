@@ -21,8 +21,13 @@ const ResultScript = () => {
     <StyledScriptWrap>
       <StyledTitle>답변 스크립트</StyledTitle>
       <StyledScriptBox>
-        <FormControl sx={{ m: 1,
-          minWidth: 460 }} size="small">
+        <FormControl
+          sx={{
+            m: 1,
+            width: 460,
+          }}
+          size="small"
+        >
           <InputLabel id="demo-select-small">문제</InputLabel>
           <Select
             labelId="demo-select-small"
@@ -44,6 +49,14 @@ const ResultScript = () => {
         </FormControl>
 
         <p>
+          로렘 입숨은 출판이나 그래픽 디자인 분야에서 폰트, 타이포그래피, 레이아웃 같은
+          그래픽 요소나 시각적 연출을 보여줄 때 사용하는 표준 채우기 텍스트로,
+          최종 결과물에 들어가는 실제적인 문장 내용이 채워지기 전에
+          시각 디자인 프로젝트 모형의 채움 글로도 이용된다.
+          로렘 입숨은 출판이나 그래픽 디자인 분야에서 폰트, 타이포그래피, 레이아웃 같은
+          그래픽 요소나 시각적 연출을 보여줄 때 사용하는 표준 채우기 텍스트로,
+          최종 결과물에 들어가는 실제적인 문장 내용이 채워지기 전에
+          시각 디자인 프로젝트 모형의 채움 글로도 이용된다.
           로렘 입숨은 출판이나 그래픽 디자인 분야에서 폰트, 타이포그래피, 레이아웃 같은
           그래픽 요소나 시각적 연출을 보여줄 때 사용하는 표준 채우기 텍스트로,
           최종 결과물에 들어가는 실제적인 문장 내용이 채워지기 전에
@@ -82,9 +95,25 @@ const StyledScriptBox = styled.div`
   border: 1px solid var(--main-gray);
   box-shadow: var(--box-shadow);
   box-sizing: border-box;
-  overflow-y: auto;
 
   & p {
     text-align: left;
+    overflow-y: auto;
+    word-break: keep-all;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+    &::-webkit-scrollbar-track {
+      background: var(--main-gray);
+      border-radius: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: var(--push-gray);
+      border-radius: 6px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 0, 0, .2);
+    }
   }
 `;
