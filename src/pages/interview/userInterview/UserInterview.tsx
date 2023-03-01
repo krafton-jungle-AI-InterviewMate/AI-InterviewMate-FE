@@ -219,7 +219,7 @@ const UserInterview = () => {
   }, [subscribers]);
 
   useEffect(() => {
-    if (publisher) {
+    if (publisher && !isInterviewer) {
       setHost(publisher.stream.connection.connectionId);
     }
   }, [publisher]);
