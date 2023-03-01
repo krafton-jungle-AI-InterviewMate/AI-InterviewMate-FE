@@ -111,6 +111,11 @@ export const aiRoomResponseAtom = atom<null | PostInterviewRoomsResponse>({
   default: null,
 });
 
+export const recordModeAtom = atom<boolean>({
+  key: "RecordMode",
+  default: true,
+});
+
 export const timelineRecordAtom = atom<TimelineRecord>({
   key: "TimelineRecord",
   default: InitialTimelineRecord,

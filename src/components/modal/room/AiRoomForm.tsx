@@ -8,7 +8,7 @@ import FormLabel from "@mui/material/FormLabel";
 import styled from "@emotion/styled";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { useSetRecoilState } from "recoil";
-import { feedbackAtom, aiRoomResponseAtom } from "store/interview/atom";
+import { feedbackAtom, recordModeAtom, aiRoomResponseAtom } from "store/interview/atom";
 import { usePostInterviewRooms } from "hooks/queries/interview";
 import { useNavigate } from "react-router-dom";
 import { RoomTypes } from "api/mypage/types";
@@ -29,6 +29,7 @@ interface InputRoomFormProps {
 const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
   const navigate = useNavigate();
   const setFeedback = useSetRecoilState(feedbackAtom);
+  const setRecord = useSetRecoilState(recordModeAtom);
   const setAiRoomResponse = useSetRecoilState(aiRoomResponseAtom);
   const [ questionNum, setQuestionNum ] = useState(0);
 
@@ -37,6 +38,13 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
       target: { value },
     } = event;
     setFeedback(value);
+  };
+
+  const onChangeRecord = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const {
+      target: { value },
+    } = event;
+    setRecord(value === "ON");
   };
 
   const {
@@ -115,6 +123,22 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
                   key={`Feedback${idx}`}
                   value={data}
                   control={<Radio onChange={onChangeFeedback} required />}
+                  label={data}
+                />
+              ))}
+            </RadioGroup>
+          </FormControl>
+        </div>
+        <span className="guide">실시간 피드백 설정은 방 생성 이후에는 수정하실 수 없습니다.</span>
+        <div className="inputContent">
+          <FormControl className="radioForm">
+            <FormLabel>면접 영상 녹화</FormLabel>
+            <RadioGroup row>
+              {FeedbackArr.map((data, idx) => (
+                <FormControlLabel
+                  key={`Record${idx}`}
+                  value={data}
+                  control={<Radio onChange={onChangeRecord} required />}
                   label={data}
                 />
               ))}
