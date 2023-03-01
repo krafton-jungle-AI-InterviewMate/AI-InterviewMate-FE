@@ -10,3 +10,13 @@ export type AiInterviewerTypes =
   | "Hyunsoo"
   | "Seunghyun";
 export type AiInterviewProcessTypes = "ready" | "ongoing" | "end";
+export type Timeline = {
+  eyes: string[];
+  attitude: string[];
+  questionModeStart: string[];
+};
+export type TimelineRecord = {
+  startTime: number;
+  endTime: number;
+  timeline: Timeline;
+};

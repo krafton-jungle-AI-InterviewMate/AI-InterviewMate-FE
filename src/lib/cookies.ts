@@ -4,8 +4,7 @@ import { ONE_DAY } from "constants/common";
 const cookies = new Cookies();
 
 const getCookieExpireDate = (duration: number) => {
-  const todayInMilliseconds = new Date().getTime();
-  return new Date(todayInMilliseconds + (ONE_DAY * duration));
+  return new Date(Date.now() + (ONE_DAY * duration));
 };
 
 export const CookieName = {
