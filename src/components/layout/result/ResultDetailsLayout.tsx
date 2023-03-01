@@ -2,6 +2,7 @@ import { GetRatingDetailResponse, RoomTypes } from "api/mypage/types";
 import { formatDate } from "lib/format";
 
 import styled from "@emotion/styled";
+import { commonLabelStyle } from "styles/resultDetails";
 
 type ResultDetailsLayoutProps = {
   roomType: RoomTypes;
@@ -120,9 +121,7 @@ const StyledCommentSection = styled.div`
 `;
 
 const StyledLabel = styled.label`
-  font-size: 20px;
-  font-weight: 500;
-  margin-bottom: 16px;
+  ${commonLabelStyle}
 `;
 
 const StyledTextarea = styled.textarea`

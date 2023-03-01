@@ -2,8 +2,13 @@ import { useSearchParams } from "react-router-dom";
 import { useGetRatingDetail } from "hooks/queries/mypage";
 import { RoomTypes } from "api/mypage/types";
 
-import ResultDetailsLayout from "components/layout/result/ResultDetailsLayout";
 import Loading from "components/common/Loading";
+import ResultDetailsLayout from "components/layout/result/ResultDetailsLayout";
+import ResultVideo from "components/mypage/resultDetails/ResultVideo";
+
+import styled from "@emotion/styled";
+
+const mock_video_url = "https://bucket1182644-staging.s3.ap-northeast-2.amazonaws.com/interviewer/Seungmin.mp4";
 
 const ResultDetails = () => {
   const [ searchParams ] = useSearchParams();
@@ -23,7 +28,10 @@ const ResultDetails = () => {
 
   return isSuccess && data ? (
     <ResultDetailsLayout roomType={searchParams.get("type") as RoomTypes} data={data.data}>
-      <p>TODO:</p>
+      <StyledVideoSection>
+        <ResultVideo videoUrl={mock_video_url} />
+        <div>타임라인 컴포넌트</div>
+      </StyledVideoSection>
     </ResultDetailsLayout>
   ) : (
     <div>
@@ -33,3 +41,12 @@ const ResultDetails = () => {
 };
 
 export default ResultDetails;
+
+const StyledVideoSection = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 30px;
+`;
