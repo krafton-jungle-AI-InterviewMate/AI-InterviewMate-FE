@@ -32,7 +32,6 @@ import { css } from "@emotion/react";
 
 const InterviewAiContainer = () => {
   const interviewMode = useRecoilValue(interviewModeAtom);
-  const interviewQuestionNumber = useRecoilValue(interviewQuestionNumberAtom);
   const setInterviewQuestionTotal = useSetRecoilState(interviewQuestionTotalAtom);
   const setAnswerScript = useSetRecoilState(answerScriptAtom);
   const aiInterviewer = useRecoilValue(aiInterviewerAtom);
@@ -69,6 +68,10 @@ const InterviewAiContainer = () => {
       (async () => {
         const rec = await getPermissionInitializeRecorder();
         await rec.startRecording();
+        setTimelineRecord((curr) => ({
+          ...curr,
+          startTime: Date.now(),
+        }));
   
         setRecorder(rec);
       })();
@@ -83,6 +86,10 @@ const InterviewAiContainer = () => {
     if (interviewMode === "finished" && isRecordMode) {
       (async () => {
         await stopRecording();
+        setTimelineRecord((curr) => ({
+          ...curr,
+          endTime: Date.now(),
+        }));
       })();
     }
   }, [ interviewMode ]);
@@ -105,23 +112,6 @@ const InterviewAiContainer = () => {
       setAnswerScript(new Array(questionList.length).fill(""));
     }
   }, [ aiRoomResponse ]);
-
-  // TODO: 16(녹화 기능) merge 후, startTime - 녹화 시작 시점 & endTime - 녹화 종료 시점과 동일하게 맞추기
-  useEffect(() => {
-    setTimelineRecord((curr) => ({
-      ...curr,
-      startTime: Date.now(),
-    }));
-  }, []);
-
-  useEffect(() => {
-    if (interviewMode === "finished") {
-      setTimelineRecord((curr) => ({
-        ...curr,
-        endTime: Date.now(),
-      }));
-    }
-  }, [ interviewMode ]);
 
   return aiRoomResponse ? (
     <StyledWrap>
