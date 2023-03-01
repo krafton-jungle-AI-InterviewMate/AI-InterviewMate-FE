@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 import {
   Timeline,
   TimelineItem,
@@ -7,6 +9,9 @@ import {
   TimelineDot,
   TimelineOppositeContent,
 } from "@mui/lab";
+
+import throttle from "lodash.throttle";
+import { createTimestampFromSeconds } from "./utils";
 
 import styled from "@emotion/styled";
 import { commonLabelStyle } from "styles/resultDetails";
@@ -31,6 +36,33 @@ const ResultTimeline = (props: ResultTimelineProps) => {
     videoRef,
   } = props;
 
+  const [ duration, setDuration ] = useState<number | null>(0);
+  const [ currentTime, setCurrentTime ] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      const video = videoRef.current;
+
+      const setVideoDuration = () => {
+        const videoDuration = video?.duration;
+        setDuration(videoDuration || null);
+      };
+      const setVideoCurrentTime = () => {
+        const videoCurrentTime = video?.currentTime;
+        setCurrentTime(videoCurrentTime || null);
+      };
+      const throttledTimeSetter = throttle(setVideoCurrentTime, 500);
+
+      video.addEventListener("loadedmetadata", setVideoDuration);
+      video.addEventListener("timeupdate", throttledTimeSetter);
+
+      return () => {
+        video.removeEventListener("loadedmetadata", setVideoDuration);
+        video.removeEventListener("timeupdate", throttledTimeSetter);
+      };
+    }
+  }, [ videoRef ]);
+
   console.log(data);
   console.log(videoRef);
 
@@ -41,6 +73,7 @@ const ResultTimeline = (props: ResultTimelineProps) => {
       <StyledScrollBox>
         <Timeline>
 
+          {/* TODO: 면접 시작 & TimelineItem 컴포넌트 */}
           <TimelineItem>
             <TimelineOppositeContent color="text.secondary">
               09:30 am
@@ -55,12 +88,12 @@ const ResultTimeline = (props: ResultTimelineProps) => {
           {/* LAST ITEM */}
           <TimelineItem>
             <TimelineOppositeContent color="text.secondary">
-              {videoRef.current.duration}
+              {createTimestampFromSeconds(Math.floor(duration ?? 0))}
             </TimelineOppositeContent>
             <TimelineSeparator>
               <TimelineDot />
             </TimelineSeparator>
-            <TimelineContent>Repeat</TimelineContent>
+            <TimelineContent>면접 종료</TimelineContent>
           </TimelineItem>
 
         </Timeline>
