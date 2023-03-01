@@ -56,7 +56,7 @@ const InterviewAiContainer = () => {
     if (recorder) {
       await recorder.stopRecording();
       const blob = await recorder.getBlob();
-      RecordRTC.invokeSaveAsDialog(blob, `interview${interviewQuestionNumber}.webm`);
+      // RecordRTC.invokeSaveAsDialog(blob, `interview${interviewQuestionNumber}.webm`);
       console.log(blob); // TODO: POST /result req body에 포함
     }
   };
