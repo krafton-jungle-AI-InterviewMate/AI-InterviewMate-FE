@@ -15,20 +15,22 @@ const UserVideoComponent = (props: UserVideoComponentProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const host = useRecoilValue(hostAtom);
   const isInterviewStart = useRecoilValue(isInterviewStartAtom);
+  const [isHost, setIsHost] = useState(false);
 
   useEffect(() => {
     if (streamManager) {
       setIsLoading(false);
+      setIsHost(host === streamManager.stream.connection.connectionId);
     }
   }, [streamManager]);
   return (
-    <StyledUserVideoComponent isInterviewer={isInterviewer} isInterviewStart={isInterviewStart}>
+    <StyledUserVideoComponent isHost={isHost} isInterviewStart={isInterviewStart}>
       {!isLoading ? (
         <div className="streamcomponent">
           <OpenViduVideoComponent streamManager={streamManager} isInterviewer={isInterviewer} />
           {!isInterviewStart && (
             <p>
-              <span className="interviewer">{isInterviewer ? "면접관" : "면접자"}</span>
+              <span className="interviewer">{isHost ? "면접자" : "면접관"}</span>
               <span className="nickname">{streamManager.stream.connection.data.split('"')[3]}</span>
             </p>
           )}
@@ -41,7 +43,7 @@ const UserVideoComponent = (props: UserVideoComponentProps) => {
 };
 
 interface StyledUserVideoComponentProps {
-  isInterviewer: boolean;
+  isHost: boolean;
   isInterviewStart: boolean;
 }
 
@@ -49,13 +51,13 @@ const StyledUserVideoComponent = styled.div<StyledUserVideoComponentProps>`
   margin-bottom: ${props => (props.isInterviewStart ? 0 : "20px")};
   .streamcomponent {
     display: flex;
-    flex-direction: ${props => (props.isInterviewer ? "row" : "column")};
+    flex-direction: ${props => (props.isHost ? "column" : "row")};
   }
   p {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: ${props => (props.isInterviewer ? "0 0 0 50px" : "45px 0 0")};
+    margin: ${props => (props.isHost ? "45px 0 0" : "0 0 0 50px")};
     span {
       display: block;
     }
@@ -67,7 +69,7 @@ const StyledUserVideoComponent = styled.div<StyledUserVideoComponentProps>`
       font-weight: 400;
       margin-right: 12px;
       color: var(--main-white);
-      background-color: ${props => (props.isInterviewer ? "var(--push-gray)" : "var(--main-blue)")};
+      background-color: ${props => (props.isHost ? "var(--main-blue)" : "var(--push-gray)")};
     }
     .nickname {
       font-size: 16px;
