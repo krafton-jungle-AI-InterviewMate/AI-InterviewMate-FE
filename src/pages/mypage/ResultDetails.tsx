@@ -14,7 +14,7 @@ import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 
 // FIXME: 실제 데이터로 교체
-const videoUrl = "https://bucket1182644-staging.s3.ap-northeast-2.amazonaws.com/interviewer/Seungmin.mp4";
+const videoUrl = "https://bucket1182644-staging.s3.ap-northeast-2.amazonaws.com/interviewer/interview_temp.mp4";
 // const videoUrl = "";
 const mock_timeline: TempResponseType = {
   timeline: [

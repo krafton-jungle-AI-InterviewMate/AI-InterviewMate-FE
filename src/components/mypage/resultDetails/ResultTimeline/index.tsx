@@ -66,6 +66,7 @@ const ResultTimeline = (props: ResultTimelineProps) => {
 
   console.log(data);
   console.log(videoRef);
+  console.log(duration);
 
   return videoRef.current ? (
     <StyledTimelineWrap>
