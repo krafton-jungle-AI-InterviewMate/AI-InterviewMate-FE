@@ -1,8 +1,13 @@
 import { atom } from "recoil";
 import * as FaceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
-import { InterviewModeTypes, AiInterviewerTypes, AiInterviewProcessTypes } from "types/interview";
-import { IRIS_PERFECT_SCORE, MOTION_PERFECT_SCORE } from "constants/interview";
+import {
+  InterviewModeTypes,
+  AiInterviewerTypes,
+  AiInterviewProcessTypes,
+  TimelineRecord,
+} from "types/interview";
 import { PostInterviewRoomsResponse, PostJoinRoomResponseData } from "api/interview/type";
+import { InitialTimelineRecord } from "constants/interview";
 
 /** 인터뷰 프로세스 제어 */
 export const faceLandmarksDetectorAtom = atom<null | FaceLandmarksDetection.FaceLandmarksDetector>({
@@ -32,14 +37,14 @@ export const answerScriptAtom = atom<string[]>({
   default: [],
 });
 
-export const irisScoreAtom = atom<number>({
-  key: "IrisScore",
-  default: IRIS_PERFECT_SCORE,
+export const irisCountAtom = atom<number>({
+  key: "IrisCount",
+  default: 0,
 });
 
-export const motionScoreAtom = atom<number>({
-  key: "MotionScore",
-  default: MOTION_PERFECT_SCORE,
+export const motionCountAtom = atom<number>({
+  key: "MotionCount",
+  default: 0,
 });
 
 export const motionSnapshotAtom = atom<FaceLandmarksDetection.Face>({
@@ -109,4 +114,9 @@ export const aiRoomResponseAtom = atom<null | PostInterviewRoomsResponse>({
 export const recordModeAtom = atom<boolean>({
   key: "RecordMode",
   default: true,
+});
+
+export const timelineRecordAtom = atom<TimelineRecord>({
+  key: "TimelineRecord",
+  default: InitialTimelineRecord,
 });

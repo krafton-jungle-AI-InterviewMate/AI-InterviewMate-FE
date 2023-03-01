@@ -1,7 +1,8 @@
 import { useEffect, useState, useMemo } from "react";
-import { useRecoilState } from "recoil";
-import { irisScoreAtom } from "store/interview/atom";
+import { useSetRecoilState, useRecoilState } from "recoil";
+import { irisCountAtom, timelineRecordAtom } from "store/interview/atom";
 import { THRESHOLD_LEFT, THRESHOLD_RIGHT } from "constants/faceLandmarkDetection";
+import { createTimeline } from "lib/interview";
 
 type UseIrisAssessmentParams = {
   isRealtimeMode: boolean;
@@ -15,7 +16,8 @@ const useIrisAssessment = (params: UseIrisAssessmentParams) => {
   } = params;
 
   const [ showFeedback, setShowFeedback ] = useState(false);
-  const [ _, setIrisScore ] = useRecoilState(irisScoreAtom);
+  const setIrisCount = useSetRecoilState(irisCountAtom);
+  const [ timelineRecord, setTimelineRecord ] = useRecoilState(timelineRecordAtom);
   const [ increments, setIncrements ] = useState(0);
 
   const isIrisOutOfCenter = useMemo(() => {
@@ -28,7 +30,14 @@ const useIrisAssessment = (params: UseIrisAssessmentParams) => {
     }
 
     if (isIrisOutOfCenter) {
-      setIrisScore((curr) => curr - 1);
+      setIrisCount((curr) => curr + 1);
+      setTimelineRecord((curr) => ({
+        ...curr,
+        timeline: {
+          ...curr.timeline,
+          eyes: [ ...curr.timeline.eyes, createTimeline(timelineRecord.startTime) ],
+        },
+      }));
     }
   };
 
