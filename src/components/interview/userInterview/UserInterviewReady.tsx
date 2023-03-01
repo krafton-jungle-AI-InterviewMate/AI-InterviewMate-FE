@@ -14,10 +14,10 @@ interface UserInterviewReadyProps {
   subscribers: Array<any>;
   ready: boolean;
   isOpen: boolean;
-  handleClickEnd: () => void;
-  handleClickLeave: () => void;
+  handleClickReadyOut: () => void;
+  handleClickModalRoomLeave: () => void;
   handleClickStart: () => void;
-  handleClickClose: () => void;
+  handleClickModalClose: () => void;
 }
 
 const UserInterviewReady = (props: UserInterviewReadyProps) => {
@@ -27,9 +27,9 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
     subscribers,
     ready,
     isOpen,
-    handleClickEnd,
-    handleClickClose,
-    handleClickLeave,
+    handleClickReadyOut,
+    handleClickModalClose,
+    handleClickModalRoomLeave,
     handleClickStart,
   } = props;
   const isInterviewer = useRecoilValue(isInterviewerAtom);
@@ -54,7 +54,7 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
             </div>
           </div>
           <div className="interviewActions">
-            <StyledBtn onClick={handleClickLeave} width="200px" height="48px" color="red">
+            <StyledBtn onClick={handleClickModalRoomLeave} width="200px" height="48px" color="red">
               나가기
             </StyledBtn>
             {!isInterviewer && (
@@ -81,7 +81,7 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
           )}
           <Dialog
             open={isOpen}
-            onClose={handleClickClose}
+            onClose={handleClickModalClose}
             PaperProps={{
               style: {
                 padding: "50px 35px",
@@ -102,10 +102,10 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
               로비로 이동하시겠습니까?
             </DialogTitle>
             <DialogActions>
-              <StyledBtn onClick={handleClickEnd} width="200px" height="42px" color="orange">
+              <StyledBtn onClick={handleClickReadyOut} width="200px" height="42px" color="orange">
                 네!
               </StyledBtn>
-              <StyledBtn onClick={handleClickClose} width="200px" height="42px" color="red">
+              <StyledBtn onClick={handleClickModalClose} width="200px" height="42px" color="red">
                 취소
               </StyledBtn>
             </DialogActions>

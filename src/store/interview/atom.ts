@@ -93,6 +93,11 @@ export const interviewCommentAtom = atom<string>({
   default: "",
 });
 
+export const hostAtom = atom<any>({
+  key: "host",
+  default: null,
+});
+
 /** 대체 면접관 */
 export const aiInterviewerAtom = atom<AiInterviewerTypes>({
   key: "AiInterviewer",
