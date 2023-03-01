@@ -64,10 +64,6 @@ const ResultTimeline = (props: ResultTimelineProps) => {
     }
   }, [ videoRef ]);
 
-  console.log(data);
-  console.log(videoRef);
-  console.log(duration);
-
   return videoRef.current ? (
     <StyledTimelineWrap>
       <StyledTitle>타임라인</StyledTitle>
@@ -96,7 +92,8 @@ const ResultTimeline = (props: ResultTimelineProps) => {
           {/* LAST ITEM */}
           <TimelineItem>
             <TimelineOppositeContent color="var(--font-gray)">
-              {createTimestampFromSeconds(Math.floor(duration ?? 0))}
+              {/* {createTimestampFromSeconds(Math.floor(duration ?? 0))} */}
+              {createTimestampFromSeconds(Math.floor(33 ?? 0))}
             </TimelineOppositeContent>
             <TimelineSeparator>
               <TimelineDot />
