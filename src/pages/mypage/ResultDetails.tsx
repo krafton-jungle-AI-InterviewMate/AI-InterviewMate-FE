@@ -8,6 +8,7 @@ import ResultDetailsLayout from "components/layout/result/ResultDetailsLayout";
 import ResultVideo from "components/mypage/resultDetails/ResultVideo";
 import ResultTimeline, { TempResponseType } from "components/mypage/resultDetails/ResultTimeline";
 import ResultChartAi from "components/mypage/resultDetails/ResultChartAi";
+import ResultScript from "components/mypage/resultDetails/ResultScript";
 
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
@@ -67,7 +68,10 @@ const ResultDetails = () => {
           ? <ResultChartAi />
           : <p>TODO: ResultChartUser</p>
         }
-        <p>TODO: 스크립트</p>
+        {searchParams.get("type") === "AI"
+          ? <ResultScript />
+          : <p>TODO: 코멘트 영역</p>
+        }
       </StyledChartSection>
     </ResultDetailsLayout>
   ) : (

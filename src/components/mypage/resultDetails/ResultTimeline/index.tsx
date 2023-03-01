@@ -128,6 +128,11 @@ const StyledTitle = styled.h3`
 const StyledScrollBox = styled.div`
   height: calc(100% - 40px);
   overflow-y: auto;
+  border-radius: 16px;
+  padding: 10px;
+  border: 1px solid var(--main-gray);
+  box-shadow: var(--box-shadow);
+  box-sizing: border-box;
 
   & * {
     font-family: "Archivo", "Spoqa Han Sans Neo", sans-serif;

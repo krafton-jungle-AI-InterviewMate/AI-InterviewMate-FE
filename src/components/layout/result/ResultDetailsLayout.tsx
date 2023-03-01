@@ -42,11 +42,11 @@ const ResultDetailsLayout = (props: ResultDetailsLayoutProps) => {
 
       {children}
 
-      <StyledCommentSection>
-        <StyledLabel htmlFor="result-detail-comment">코멘트</StyledLabel>
+      <StyledMemoSection>
+        <StyledLabel htmlFor="result-detail-comment">메모장</StyledLabel>
         <StyledTextarea id="result-detail-comment" />
         <StyledSubmitButton type="button">저장</StyledSubmitButton>
-      </StyledCommentSection>
+      </StyledMemoSection>
     </StyledWrapper>
   );
 };
@@ -112,7 +112,7 @@ const StyledHeader = styled.header`
   }
 `;
 
-const StyledCommentSection = styled.div`
+const StyledMemoSection = styled.div`
   display: flex;
   flex-flow: column nowrap;
   align-items: flex-start;

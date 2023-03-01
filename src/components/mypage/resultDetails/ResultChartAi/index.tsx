@@ -25,25 +25,27 @@ const ResultChartAi = () => {
   return (
     <StyledChartWrap>
       <StyledTitle>문제당 이탈 횟수</StyledTitle>
-      <Line data={data} options={{
-        plugins: {
-          legend: {
-            labels: {
-              usePointStyle: true,
-              padding: 10,
+      <StyledChartBox>
+        <Line data={data} options={{
+          plugins: {
+            legend: {
+              labels: {
+                usePointStyle: true,
+                padding: 10,
+              },
             },
           },
-        },
-        scales: {
-          y: {
-            axis: "y",
-            afterDataLimits: (scale) => {
-              scale.max = scale.max * 1.2;
+          scales: {
+            y: {
+              axis: "y",
+              afterDataLimits: (scale) => {
+                scale.max = scale.max * 1.2;
+              },
             },
           },
-        },
-      }}
-      />
+        }}
+        />
+      </StyledChartBox>
     </StyledChartWrap>
   );
 };
@@ -56,7 +58,7 @@ const StyledChartWrap = styled.div`
   justify-content: center;
   align-items: flex-start;
   width: 640px;
-  height: 360px;
+  height: 380px;
 `;
 
 const StyledTitle = styled.h3`
@@ -64,4 +66,21 @@ const StyledTitle = styled.h3`
   ${commonLabelStyle}
   padding: 0;
   text-align: left;
+`;
+
+const StyledChartBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid var(--main-gray);
+  box-shadow: var(--box-shadow);
+  box-sizing: border-box;
+
+  & canvas {
+    margin: 0;
+  }
 `;
