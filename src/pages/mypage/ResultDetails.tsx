@@ -16,14 +16,14 @@ const mock_timeline: TempResponseType = {
   timeline: [
     {
       "type": "question",
-      "timestamp": "00:14",
+      "timestamp": "00:04",
     },
     {"type": "eye",
-      "timestamp": "01:20",
+      "timestamp": "00:07",
     },
     {
       "type": "attitude",
-      "timestamp": "02:01",
+      "timestamp": "00:11",
     },
   ],
 };

@@ -9,6 +9,7 @@ import {
   TimelineDot,
   TimelineOppositeContent,
 } from "@mui/lab";
+import ResultTimelineItem from "./ResultTimelineItem";
 
 import throttle from "lodash.throttle";
 import { createTimestampFromSeconds } from "./utils";
@@ -73,21 +74,27 @@ const ResultTimeline = (props: ResultTimelineProps) => {
       <StyledScrollBox>
         <Timeline>
 
-          {/* TODO: 면접 시작 & TimelineItem 컴포넌트 */}
           <TimelineItem>
-            <TimelineOppositeContent color="text.secondary">
-              09:30 am
+            <TimelineOppositeContent color="var(--font-gray)">
+              00:00
             </TimelineOppositeContent>
             <TimelineSeparator>
-              <TimelineDot variant="outlined" color="info" />
+              <TimelineDot />
               <TimelineConnector />
             </TimelineSeparator>
-            <TimelineContent>시선 이탈</TimelineContent>
+            <TimelineContent>면접 시작</TimelineContent>
           </TimelineItem>
+
+          {data.timeline.map((timestamp, idx) =>
+            <ResultTimelineItem
+              key={idx}
+              {...timestamp}
+            />,
+          )}
 
           {/* LAST ITEM */}
           <TimelineItem>
-            <TimelineOppositeContent color="text.secondary">
+            <TimelineOppositeContent color="var(--font-gray)">
               {createTimestampFromSeconds(Math.floor(duration ?? 0))}
             </TimelineOppositeContent>
             <TimelineSeparator>
@@ -106,7 +113,7 @@ export default ResultTimeline;
 
 const StyledTimelineWrap = styled.div`
   flex-grow: 1;
-  margin-left: 30px;
+  margin-left: 40px;
   align-self: flex-start;
   height: 542px;
 `;
