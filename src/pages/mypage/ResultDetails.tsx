@@ -10,6 +10,7 @@ import ResultTimeline, { TempResponseType } from "components/mypage/resultDetail
 import ResultChartAi from "components/mypage/resultDetails/ResultChartAi";
 import ResultChartUser from "components/mypage/resultDetails/ResultChartUser";
 import ResultScript from "components/mypage/resultDetails/ResultScript";
+import ResultComments from "components/mypage/resultDetails/ResultComments";
 
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
@@ -89,7 +90,7 @@ const ResultDetails = () => {
         }
         {searchParams.get("type") === "AI"
           ? <ResultScript />
-          : <p>TODO: 코멘트 영역</p>
+          : <ResultComments />
         }
       </StyledChartSection>
     </ResultDetailsLayout>
