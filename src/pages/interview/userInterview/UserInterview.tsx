@@ -209,7 +209,6 @@ const UserInterview = () => {
 
   useEffect(() => {
     console.log(subscribers);
-    console.log(publisher.stream.connection.connectionId);
     console.log(userInterviewData);
     setRoomPeopleNow(subscribers.length);
     if (subscribers.length) {
@@ -218,6 +217,12 @@ const UserInterview = () => {
       setReady(false);
     }
   }, [subscribers]);
+
+  useEffect(() => {
+    if (publisher) {
+      console.log(publisher.stream.connection.connectionId);
+    }
+  }, [publisher]);
 
   return (
     <>
