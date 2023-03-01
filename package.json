@@ -66,5 +66,8 @@
       "last 1 firefox version"
     ]
   },
-  "packageManager": "yarn@3.4.1"
+  "packageManager": "yarn@3.4.1",
+  "resolutions": {
+    "react": "18.2.0"
+  }
 }
