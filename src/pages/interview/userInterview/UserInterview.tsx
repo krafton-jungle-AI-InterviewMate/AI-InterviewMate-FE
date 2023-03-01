@@ -80,16 +80,8 @@ const UserInterview = () => {
       console.warn(exception);
     });
 
-    session.on("signal:start", event => {
+    session.on("signal:interviewStart", event => {
       setIsInterviewStart(true);
-    });
-
-    session.on("signal:leave", event => {
-      setIsInterviewStart(event.data);
-      if (isInterviewer) {
-        leaveSession();
-        navigate("/lobby");
-      }
     });
 
     session.on("signal:interviewEnd", event => {
@@ -98,20 +90,6 @@ const UserInterview = () => {
         leaveSession();
         navigate("/interview/end");
       }
-    });
-
-    session.on("signal:interviewOut", event => {
-      console.log("interviewOut");
-      setIsInterviewStart(false);
-      leaveSession();
-      navigate("/lobby");
-    });
-
-    session.on("signal:readyOut", event => {
-      console.log("readyOut");
-      setIsInterviewStart(false);
-      leaveSession();
-      navigate("/lobby");
     });
 
     session
@@ -162,7 +140,6 @@ const UserInterview = () => {
 
   useEffect(() => {
     setIsInterviewStart(false);
-    console.log(isInterviewer);
     joinSession();
   }, []);
 
@@ -178,22 +155,6 @@ const UserInterview = () => {
 
   const handleClickInterviewOut = () => {
     // 인터뷰 도중 나감
-    if (!isInterviewer) {
-      session
-        .signal({
-          data: false,
-          to: subscribers,
-          type: "interviewOut",
-        })
-        .then(() => {
-          console.log("면접자가 나갔습니다.");
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    } else {
-      console.log("면접관이 나갔습니다.");
-    }
     setIsInterviewStart(false);
     leaveSession();
     navigate("/lobby");
@@ -201,22 +162,6 @@ const UserInterview = () => {
 
   const handleClickReadyOut = () => {
     // 대기방에서 나감
-    if (!isInterviewer) {
-      session
-        .signal({
-          data: false,
-          to: [],
-          type: "readyOut",
-        })
-        .then(() => {
-          console.log("면접자가 나갔습니다.");
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    } else {
-      console.log("면접관이 나갔습니다.");
-    }
     leaveSession();
     navigate("/lobby");
   };
@@ -236,7 +181,7 @@ const UserInterview = () => {
         .signal({
           data: true,
           to: subscribers,
-          type: "start",
+          type: "interviewStart",
         })
         .then(() => {
           console.log("면접을 시작합니다.");
@@ -264,7 +209,7 @@ const UserInterview = () => {
 
   useEffect(() => {
     console.log(subscribers);
-    console.log(publisher);
+    console.log(publisher.stream.connection.connectionId);
     console.log(userInterviewData);
     setRoomPeopleNow(subscribers.length);
     if (subscribers.length) {
