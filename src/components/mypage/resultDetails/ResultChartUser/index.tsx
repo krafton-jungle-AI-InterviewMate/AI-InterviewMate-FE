@@ -2,6 +2,7 @@ import { Chart as ChartJS, registerables } from "chart.js";
 import { Line } from "react-chartjs-2";
 ChartJS.register(...registerables);
 
+import * as Config from "components/common/chartConfig";
 import { getRandomArbitrary } from "./utils";
 
 import styled from "@emotion/styled";
@@ -12,19 +13,21 @@ const data = {
   datasets: [
     {
       id: 1,
-      label: "시선 이탈",
+      label: Config.LABEL_EYE,
       data: new Array(31).fill(0).map((_) => getRandomArbitrary(0, 10)),
-      borderColor: "#ffa620",
-      backgroundColor: "#ed8e00",
-      borderWidth: 2,
+      borderColor: Config.BORDER_COLOR_EYE,
+      backgroundColor: Config.BACKGROUND_COLOR_EYE,
+      borderWidth: Config.BORDER_WIDTH,
+      tension: 0.3,
     },
     {
       id: 2,
-      label: "자세 이탈",
+      label: Config.LABEL_ATTITUDE,
       data: new Array(31).fill(0).map((_) => getRandomArbitrary(0, 10)),
-      borderColor: "#1785db",
-      backgroundColor: "#146eb4",
-      borderWidth: 2,
+      borderColor: Config.BORDER_COLOR_ATTITUDE,
+      backgroundColor: Config.BACKGROUND_COLOR_ATTITUDE,
+      borderWidth: Config.BORDER_WIDTH,
+      tension: 0.3,
     },
   ],
 };
@@ -34,53 +37,7 @@ const ResultChartUser = () => {
     <StyledChartWrap>
       <StyledTitle>1분당 이탈 횟수</StyledTitle>
       <StyledChartBox>
-        <Line data={data} options={{
-          plugins: {
-            legend: {
-              labels: {
-                usePointStyle: true,
-                padding: 10,
-              },
-            },
-            tooltip: {
-              usePointStyle: true,
-              padding: 10,
-              bodySpacing: 5,
-              backgroundColor: "#777777b4",
-              callbacks: {
-                title: (context) => {
-                  return context[0].label + "분";
-                },
-                label: (context) => {
-                  const { dataset, formattedValue } = context;
-                  return `${dataset.label} ${formattedValue}회`;
-                },
-              },
-            },
-          },
-          scales: {
-            x: {
-              axis: "x",
-              ticks: {
-                stepSize: 1,
-                autoSkip: false,
-              },
-              grid: {
-                color: "#eee",
-              },
-            },
-            y: {
-              axis: "y",
-              afterDataLimits: (scale) => {
-                scale.max = scale.max * 1.2;
-              },
-              grid: {
-                color: "#eee",
-              },
-            },
-          },
-        }}
-        />
+        <Line data={data} options={Config.chartUserOption} />
       </StyledChartBox>
     </StyledChartWrap>
   );

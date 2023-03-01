@@ -2,6 +2,8 @@ import { Chart as ChartJS, registerables } from "chart.js";
 import { Line } from "react-chartjs-2";
 ChartJS.register(...registerables);
 
+import * as Config from "components/common/chartConfig";
+
 import styled from "@emotion/styled";
 import { commonLabelStyle } from "styles/resultDetails";
 
@@ -10,13 +12,19 @@ const data = {
   datasets: [
     {
       id: 1,
-      label: "시선 이탈",
+      label: Config.LABEL_EYE,
       data: [ 5, 6, 2 ],
+      borderColor: Config.BORDER_COLOR_EYE,
+      backgroundColor: Config.BACKGROUND_COLOR_EYE,
+      borderWidth: Config.BORDER_WIDTH,
     },
     {
       id: 2,
-      label: "자세 이탈",
+      label: Config.LABEL_ATTITUDE,
       data: [ 3, 2, 1 ],
+      borderColor: Config.BORDER_COLOR_ATTITUDE,
+      backgroundColor: Config.BACKGROUND_COLOR_ATTITUDE,
+      borderWidth: Config.BORDER_WIDTH,
     },
   ],
 };
@@ -26,24 +34,7 @@ const ResultChartAi = () => {
     <StyledChartWrap>
       <StyledTitle>문제당 이탈 횟수</StyledTitle>
       <StyledChartBox>
-        <Line data={data} options={{
-          plugins: {
-            legend: {
-              labels: {
-                usePointStyle: true,
-                padding: 10,
-              },
-            },
-          },
-          scales: {
-            y: {
-              axis: "y",
-              afterDataLimits: (scale) => {
-                scale.max = scale.max * 1.2;
-              },
-            },
-          },
-        }}
+        <Line data={data} options={Config.chartAiOption}
         />
       </StyledChartBox>
     </StyledChartWrap>
