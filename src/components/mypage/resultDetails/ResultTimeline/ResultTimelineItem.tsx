@@ -27,8 +27,18 @@ const ResultTimelineItem = (props: TempTimelineType) => {
       </TimelineOppositeContent>
       <TimelineSeparator>
         <TimelineDot
-          variant="outlined"
-          color={type === "question" ? "info" : "error"}
+          variant={type === "question" ? "filled" : "outlined"}
+          sx={{
+            boxShadow: "none",
+            borderColor:
+              type === "question"
+                ? "var(--push-gray)"
+                : type === "attitude" ? "var(--main-blue)" : "var(--main-orange)",
+            backgroundColor:
+              type === "question"
+                ? "var(--push-gray)"
+                : "transparent",
+          }}
         />
         <TimelineConnector />
       </TimelineSeparator>

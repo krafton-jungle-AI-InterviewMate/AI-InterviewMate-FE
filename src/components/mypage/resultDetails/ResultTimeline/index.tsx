@@ -76,7 +76,13 @@ const ResultTimeline = (props: ResultTimelineProps) => {
               00:00
             </TimelineOppositeContent>
             <TimelineSeparator>
-              <TimelineDot />
+              <TimelineDot
+                sx={{
+                  boxShadow: "none",
+                  borderColor: "var(--push-gray)",
+                  backgroundColor: "var(--push-gray)",
+                }}
+              />
               <TimelineConnector />
             </TimelineSeparator>
             <TimelineContent>면접 시작</TimelineContent>
@@ -96,7 +102,13 @@ const ResultTimeline = (props: ResultTimelineProps) => {
               {createTimestampFromSeconds(Math.floor(33 ?? 0))}
             </TimelineOppositeContent>
             <TimelineSeparator>
-              <TimelineDot />
+              <TimelineDot
+                sx={{
+                  boxShadow: "none",
+                  borderColor: "var(--push-gray)",
+                  backgroundColor: "var(--push-gray)",
+                }}
+              />
             </TimelineSeparator>
             <TimelineContent>면접 종료</TimelineContent>
           </TimelineItem>
