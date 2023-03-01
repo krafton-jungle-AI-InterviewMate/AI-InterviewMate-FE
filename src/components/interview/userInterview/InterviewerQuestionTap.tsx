@@ -92,8 +92,8 @@ const InterviewQuestionTab = () => {
                 onChange={handleResizeHeight}
                 name="interviewComment"
                 id="interviewComment"
-                cols="30"
-                rows="10"
+                cols={30}
+                rows={10}
                 ref={textarea}
                 value={comment}
               ></textarea>
