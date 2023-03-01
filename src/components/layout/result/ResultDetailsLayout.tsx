@@ -15,7 +15,7 @@ const ResultDetailsLayout = (props: ResultDetailsLayoutProps) => {
 
   return (
     <StyledWrapper>
-      <StyledHeader>
+      <StyledHeader roomType={roomType}>
         <div className="left-section">
           <div className="left-section__role-tag">
             <span>
@@ -61,7 +61,7 @@ const StyledWrapper = styled.section`
   margin-top: 70px;
 `;
 
-const StyledHeader = styled.header`
+const StyledHeader = styled.header<{ roomType: "USER" | "AI" }>`
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
@@ -77,7 +77,11 @@ const StyledHeader = styled.header`
     &__role-tag {
       width: 100px;
       height: 24px;
-      background-color: var(--push-gray);
+      background-color:
+        ${({ roomType }) => roomType === "AI"
+    ? "var(--push-gray)"
+    : "var(--main-black)"
+};
       border-radius: 5px;
 
       & span {

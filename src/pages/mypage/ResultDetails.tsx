@@ -8,6 +8,7 @@ import ResultDetailsLayout from "components/layout/result/ResultDetailsLayout";
 import ResultVideo from "components/mypage/resultDetails/ResultVideo";
 import ResultTimeline, { TempResponseType } from "components/mypage/resultDetails/ResultTimeline";
 import ResultChartAi from "components/mypage/resultDetails/ResultChartAi";
+import ResultChartUser from "components/mypage/resultDetails/ResultChartUser";
 import ResultScript from "components/mypage/resultDetails/ResultScript";
 
 import styled from "@emotion/styled";
@@ -20,14 +21,32 @@ const mock_timeline: TempResponseType = {
   timeline: [
     {
       "type": "question",
+      "timestamp": "00:02",
+    },
+    {"type": "eye",
       "timestamp": "00:04",
     },
     {"type": "eye",
-      "timestamp": "00:07",
+      "timestamp": "00:05",
+    },
+    {"type": "eye",
+      "timestamp": "00:06",
     },
     {
       "type": "attitude",
       "timestamp": "00:11",
+    },
+    {
+      "type": "question",
+      "timestamp": "00:27",
+    },
+    {
+      "type": "attitude",
+      "timestamp": "00:28",
+    },
+    {
+      "type": "attitude",
+      "timestamp": "00:29",
     },
   ],
 };
@@ -66,7 +85,7 @@ const ResultDetails = () => {
       <StyledChartSection>
         {searchParams.get("type") === "AI"
           ? <ResultChartAi />
-          : <p>TODO: ResultChartUser</p>
+          : <ResultChartUser />
         }
         {searchParams.get("type") === "AI"
           ? <ResultScript />

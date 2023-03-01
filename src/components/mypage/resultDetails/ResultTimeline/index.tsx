@@ -140,12 +140,10 @@ const StyledScrollBox = styled.div`
     width: 8px;
   }
   &::-webkit-scrollbar-track {
-    background: var(--main-gray);
-    border-radius: 6px;
+    background-color: transparent;
   }
   &::-webkit-scrollbar-thumb {
-    background: var(--push-gray);
-    border-radius: 6px;
+    background: rgba(0, 0, 0, .06);
   }
   &::-webkit-scrollbar-thumb:hover {
     background: rgba(0, 0, 0, .2);
