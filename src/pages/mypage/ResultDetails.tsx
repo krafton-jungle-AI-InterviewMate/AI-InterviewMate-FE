@@ -7,8 +7,10 @@ import Loading from "components/common/Loading";
 import ResultDetailsLayout from "components/layout/result/ResultDetailsLayout";
 import ResultVideo from "components/mypage/resultDetails/ResultVideo";
 import ResultTimeline, { TempResponseType } from "components/mypage/resultDetails/ResultTimeline";
+import ResultChartAi from "components/mypage/resultDetails/ResultChartAi";
 
 import styled from "@emotion/styled";
+import { css } from "@emotion/react";
 
 // FIXME: 실제 데이터로 교체
 const videoUrl = "https://bucket1182644-staging.s3.ap-northeast-2.amazonaws.com/interviewer/Seungmin.mp4";
@@ -60,6 +62,13 @@ const ResultDetails = () => {
           </StyledNoVideo>
         )}
       </StyledVideoSection>
+      <StyledChartSection>
+        {searchParams.get("type") === "AI"
+          ? <ResultChartAi />
+          : <p>TODO: ResultChartUser</p>
+        }
+        <p>TODO: 스크립트</p>
+      </StyledChartSection>
     </ResultDetailsLayout>
   ) : (
     <div>
@@ -70,13 +79,17 @@ const ResultDetails = () => {
 
 export default ResultDetails;
 
-const StyledVideoSection = styled.div`
+const commonSectionStyle = css`
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 30px;
+  margin-bottom: 60px;
+`;
+
+const StyledVideoSection = styled.div`
+  ${commonSectionStyle}
 `;
 
 const StyledNoVideo = styled.div`
@@ -95,4 +108,8 @@ const StyledNoVideo = styled.div`
     font-size: 16px;
     color: var(--font-gray);
   }
+`;
+
+const StyledChartSection = styled.div`
+  ${commonSectionStyle}
 `;
