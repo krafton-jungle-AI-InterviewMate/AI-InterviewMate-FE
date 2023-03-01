@@ -10,9 +10,10 @@ type Tab = "question" | "comment";
 
 const InterviewQuestionTab = () => {
   const userInterviewData = useRecoilValue(interviewDataAtom);
+  const [comment, setComment] = useRecoilState(interviewCommentAtom);
+
   const [question, setQuestion] = useState<GetQuestionDetailsResponseData>();
   const [tabName, setTabName] = useState<Tab>("question");
-  const [comment, setComment] = useRecoilState(interviewCommentAtom);
 
   const { data, isLoading, isSuccess, isError } = useGetQuestionDetails(
     userInterviewData!.roomQuestionBoxIdx,
@@ -28,19 +29,10 @@ const InterviewQuestionTab = () => {
 
   const textarea = useRef<any>(0);
 
-  const handleResizeHeight = (event: any) => {
+  const handleResizeHeight = () => {
     setComment(textarea.current.value);
-    console.log(comment);
-    console.log(event);
     textarea.current.style.height = "auto";
     textarea.current.style.height = textarea.current.scrollHeight + "px";
-  };
-
-  const handleClickSave = () => {
-    setComment(textarea.current.value);
-    console.log(comment);
-    console.log(textarea.current.value);
-    console.log(textarea);
   };
 
   useEffect(() => {
@@ -103,10 +95,11 @@ const InterviewQuestionTab = () => {
                 cols="30"
                 rows="10"
                 ref={textarea}
+                value={comment}
               ></textarea>
-              <StyledBtn width="120px" height="32px" color="orange">
+              {/* <StyledBtn width="120px" height="32px" color="orange">
                 중간 저장
-              </StyledBtn>
+              </StyledBtn> */}
             </form>
           </div>
         )}

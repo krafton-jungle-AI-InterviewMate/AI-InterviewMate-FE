@@ -17,7 +17,7 @@ export type PostInterviewRoomsPayloadData = {
   roomType: RoomTypes;
   roomQuestionBoxIdx: number;
   roomQuestionNum?: number;
-  roomTime?: number;
+  roomTime: any;
 };
 
 export type PostInterviewRoomsPayload = {

@@ -33,6 +33,7 @@ const UserInterview = () => {
   const [subscribers, setSubscribers] = useState<Array<any>>([]);
   const [ready, setReady] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [interviewTime, setInterviewTime] = useState(0);
 
   useEffect(() => {
     window.addEventListener("beforeunload", onbeforeunload);
@@ -85,8 +86,21 @@ const UserInterview = () => {
     session.on("signal:start", event => {
       setIsInterviewStart(event.data);
     });
+
+    session.on("signal:forceEnd", event => {
+      setIsInterviewStart(event.data);
+      if (isInterviewer) {
+        leaveSession();
+        navigate("/lobby");
+      }
+    });
+
     session.on("signal:end", event => {
       setIsInterviewStart(event.data);
+      if (isInterviewer) {
+        leaveSession();
+        navigate("/interview/end");
+      }
     });
 
     session
@@ -166,7 +180,7 @@ const UserInterview = () => {
       .signal({
         data: false,
         to: subscribers,
-        type: "end",
+        type: "forceEnd",
       })
       .then(() => {
         console.log("면접을 종료합니다.");
@@ -183,6 +197,21 @@ const UserInterview = () => {
       mutate(userInterviewData!.roomIdx, {
         onSuccess: () => {
           setIsInterviewStart(true);
+          setInterviewTime(userInterviewData!.roomTime * 60 * 1000);
+          setTimeout(() => {
+            session
+              .signal({
+                data: false,
+                to: subscribers,
+                type: "end",
+              })
+              .then(() => {
+                console.log("면접이 끝났습니다.");
+              })
+              .catch(error => {
+                console.error(error);
+              });
+          }, userInterviewData!.roomTime * 60 * 1000);
         },
         onError(error) {
           alert(error);
@@ -205,6 +234,7 @@ const UserInterview = () => {
 
   useEffect(() => {
     console.log(subscribers);
+    console.log(userInterviewData);
     setRoomPeopleNow(subscribers.length);
     if (subscribers.length) {
       setReady(true);

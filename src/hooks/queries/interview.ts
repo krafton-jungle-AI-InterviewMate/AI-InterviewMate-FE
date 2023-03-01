@@ -45,8 +45,8 @@ export const usePostJoinRoom = () => {
 
 export const usePutInterviewRooms = () => {
   return useMutation(interviewAPI.putInterviewRooms, {
-    onSuccess: roomIdx => {
-      console.log(roomIdx);
+    onSuccess: () => {
+      console.log("면접방 상태 변경");
     },
     onError: e => {
       console.log(e);
