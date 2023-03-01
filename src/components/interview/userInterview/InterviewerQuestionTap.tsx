@@ -10,10 +10,10 @@ type Tab = "question" | "comment";
 
 const InterviewQuestionTab = () => {
   const userInterviewData = useRecoilValue(interviewDataAtom);
-  const [comment, setComment] = useRecoilState(interviewCommentAtom);
+  const [ comment, setComment ] = useRecoilState(interviewCommentAtom);
 
-  const [question, setQuestion] = useState<GetQuestionDetailsResponseData>();
-  const [tabName, setTabName] = useState<Tab>("question");
+  const [ question, setQuestion ] = useState<GetQuestionDetailsResponseData>();
+  const [ tabName, setTabName ] = useState<Tab>("question");
 
   const { data, isLoading, isSuccess, isError } = useGetQuestionDetails(
     userInterviewData!.roomQuestionBoxIdx,
@@ -40,7 +40,7 @@ const InterviewQuestionTab = () => {
       setQuestion(data.data.data);
       console.log(data.data.data);
     }
-  }, [isLoading]);
+  }, [ isLoading ]);
 
   return (
     <StyledInterviewQuestionTab>
@@ -92,8 +92,8 @@ const InterviewQuestionTab = () => {
                 onChange={handleResizeHeight}
                 name="interviewComment"
                 id="interviewComment"
-                cols="30"
-                rows="10"
+                cols={30}
+                rows={10}
                 ref={textarea}
                 value={comment}
               ></textarea>

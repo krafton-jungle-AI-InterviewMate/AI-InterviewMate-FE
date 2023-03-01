@@ -1,15 +1,40 @@
+import { useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useGetRatingDetail } from "hooks/queries/mypage";
 import { RoomTypes } from "api/mypage/types";
-import { formatDate } from "lib/format";
 
-import ResultTable from "components/mypage/ResultTable";
 import Loading from "components/common/Loading";
+import ResultDetailsLayout from "components/layout/result/ResultDetailsLayout";
+import ResultVideo from "components/mypage/resultDetails/ResultVideo";
+import ResultTimeline, { TempResponseType } from "components/mypage/resultDetails/ResultTimeline";
+import ResultChartAi from "components/mypage/resultDetails/ResultChartAi";
+import ResultScript from "components/mypage/resultDetails/ResultScript";
 
 import styled from "@emotion/styled";
+import { css } from "@emotion/react";
+
+// FIXME: 실제 데이터로 교체
+const videoUrl = "https://bucket1182644-staging.s3.ap-northeast-2.amazonaws.com/interviewer/Seungmin.mp4";
+// const videoUrl = "";
+const mock_timeline: TempResponseType = {
+  timeline: [
+    {
+      "type": "question",
+      "timestamp": "00:04",
+    },
+    {"type": "eye",
+      "timestamp": "00:07",
+    },
+    {
+      "type": "attitude",
+      "timestamp": "00:11",
+    },
+  ],
+};
 
 const ResultDetails = () => {
   const [ searchParams ] = useSearchParams();
+  const videoRef = useRef<null | HTMLVideoElement>(null);
 
   const {
     data,
@@ -21,101 +46,74 @@ const ResultDetails = () => {
   );
 
   if (isFetching) {
-    return (
-      <StyledWrapper>
-        <Loading margin="0" />
-      </StyledWrapper>
-    );
+    return <Loading margin="0" />;
   }
 
-  return (
-    <StyledWrapper>
-      {isSuccess && data ? (
-        <>
-          <StyledHeader>
-            <div className="left-section">
-              <div className="left-section__role-tag">
-                <span>
-                  {searchParams.get("type") as RoomTypes === "USER" ? "유저" : "AI"} 면접관
-                </span>
-              </div>
-              <h2>
-                {data.data.data.roomName}
-              </h2>
-            </div>
-            <div className="right-section">
-              <p className="right-section__time">
-                {formatDate(data.data.data.createdAt)} 면접
-              </p>
-              <p className="right-section__option">
-                질문 개수: {data.data.data.roomQuestionNum}개
-              </p>
-            </div>
-          </StyledHeader>
-          <ResultTable data={data.data} />
-        </>
-      ) : (
-        <div>
-          <p>데이터를 불러오는 중 에러가 발생했습니다.</p>
-        </div>
-      )}
-    </StyledWrapper>
+  return isSuccess && data ? (
+    <ResultDetailsLayout roomType={searchParams.get("type") as RoomTypes} data={data.data}>
+      <StyledVideoSection>
+        {videoUrl ? (
+          <>
+            <ResultVideo videoRef={videoRef} videoUrl={videoUrl} />
+            <ResultTimeline data={mock_timeline} videoRef={videoRef} />
+          </>
+        ) : (
+          <StyledNoVideo>
+            <p>녹화된 영상이 없습니다.</p>
+          </StyledNoVideo>
+        )}
+      </StyledVideoSection>
+      <StyledChartSection>
+        {searchParams.get("type") === "AI"
+          ? <ResultChartAi />
+          : <p>TODO: ResultChartUser</p>
+        }
+        {searchParams.get("type") === "AI"
+          ? <ResultScript />
+          : <p>TODO: 코멘트 영역</p>
+        }
+      </StyledChartSection>
+    </ResultDetailsLayout>
+  ) : (
+    <div>
+      <p>데이터를 불러오는 중 에러가 발생했습니다.</p>
+    </div>
   );
 };
 
 export default ResultDetails;
 
-const StyledWrapper = styled.section`
-  width: 900px;
-  margin-top: 70px;
-`;
-
-const StyledHeader = styled.header`
+const commonSectionStyle = css`
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 56px;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 60px;
+`;
 
-  .left-section {
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
+const StyledVideoSection = styled.div`
+  ${commonSectionStyle}
+`;
 
-    &__role-tag {
-      width: 100px;
-      height: 24px;
-      background-color: var(--push-gray);
-      border-radius: 5px;
+const StyledNoVideo = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 140px;
+  background-color: var(--main-gray);
+  background: linear-gradient(13deg, var(--main-gray) 35%, rgba(238,238,238,0.4) 100%);
+  border-radius: 16px;
+  opacity: 0.6;
 
-      & span {
-        font-size: 12px;
-        color: var(--main-white);
-      }
-    }
-
-    & h2 {
-      margin: 0;
-      margin-left: 13px;
-      font-weight: 500;
-      font-size: 24px;
-    }
+  & p {
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    color: var(--font-gray);
   }
+`;
 
-  .right-section {
-    font-size: 14px;
-    text-align: right;
-
-    & p {
-      margin: 0;
-      padding: 0;
-    }
-
-    &__time {
-      color: var(--main-black);
-    }
-    &__option {
-      color: var(--font-gray);
-    }
-  }
+const StyledChartSection = styled.div`
+  ${commonSectionStyle}
 `;

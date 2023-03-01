@@ -27,7 +27,6 @@ const InterviewReady = () => {
   } = useInitializeInterviewState();
 
   const webcamRef = useRef<null | Webcam>(null);
-  const canvasRef = useRef<null | HTMLCanvasElement>(null);
 
   const [ isWebcamReady, setIsWebcamReady ] = useState(false);
   const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
@@ -54,8 +53,6 @@ const InterviewReady = () => {
     detector,
   } = useFaceLandmarksDetection({
     video,
-    canvasRef,
-    isDebugging: false,
     isOneOff: true,
   });
 
@@ -149,7 +146,6 @@ const InterviewReady = () => {
               <Skeleton variant="rectangular" width={640} height={480} />
             )}
             <Webcam ref={webcamRef} mirrored={false} onCanPlay={() => setIsWebcamReady(true)} />
-            <Styled.Canvas ref={canvasRef} />
           </Styled.VideoWrap>
           <NameTag role="interviewee" profileName={nickname + "님"} />
         </Styled.Profile>

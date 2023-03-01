@@ -3,11 +3,15 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   interviewModeAtom,
   interviewQuestionTotalAtom,
+  interviewQuestionNumberAtom,
   answerScriptAtom,
   aiInterviewerAtom,
   aiRoomResponseAtom,
+  recordModeAtom,
+  timelineRecordAtom,
 } from "store/interview/atom";
 
+import InterviewVideo from "./InterviewVideo";
 import {
   BreakModeController,
   QuestionModeController,
@@ -16,10 +20,12 @@ import {
 } from "./InterviewAiController";
 import Webcam from "react-webcam";
 import Skeleton from "@mui/material/Skeleton";
-import { JungleManagersSet, AI_VIDEO_WIDTH } from "constants/interview";
+import { JungleManagersSet } from "constants/interview";
 import { getAiInterviewerVideo, getAiInterviewerListening } from "lib/interview";
 
 import useSTT from "hooks/useSTT";
+import { useRecorderPermission } from "hooks/useRecorderPermission";
+import RecordRTC from "recordrtc";
 
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
@@ -30,17 +36,63 @@ const InterviewAiContainer = () => {
   const setAnswerScript = useSetRecoilState(answerScriptAtom);
   const aiInterviewer = useRecoilValue(aiInterviewerAtom);
   const aiRoomResponse = useRecoilValue(aiRoomResponseAtom);
+  const isRecordMode = useRecoilValue(recordModeAtom);
+  const setTimelineRecord = useSetRecoilState(timelineRecordAtom);
 
-  const canvasRef = useRef<null | HTMLCanvasElement>(null);
   const webcamRef = useRef<null | Webcam>(null);
   const [ isWebcamReady, setIsWebcamReady ] = useState(false);
   const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
+  const [ recorder, setRecorder ] = useState<null | RecordRTC.RecordRTCPromisesHandler>();
 
   const aiInterviewerVideo = useMemo(() => getAiInterviewerVideo(aiInterviewer), [ aiInterviewer ]);
   const aiInterviewerListening = useMemo(() => getAiInterviewerListening(aiInterviewer), [ aiInterviewer ]);
   const videoClassName = useMemo(() => JungleManagersSet.has(aiInterviewer) ? "jungle" : "", [ aiInterviewer ]);
 
   useSTT();
+
+  const {
+    getPermissionInitializeRecorder,
+  } = useRecorderPermission("video");
+
+  const stopRecording = async () => {
+    if (recorder) {
+      await recorder.stopRecording();
+      const blob = await recorder.getBlob();
+      // RecordRTC.invokeSaveAsDialog(blob, `interview${interviewQuestionNumber}.webm`);
+      console.log(blob); // TODO: POST /result req body에 포함
+    }
+  };
+
+  useEffect(() => {
+    if (isRecordMode) {
+      (async () => {
+        const rec = await getPermissionInitializeRecorder();
+        await rec.startRecording();
+        setTimelineRecord((curr) => ({
+          ...curr,
+          startTime: Date.now(),
+        }));
+  
+        setRecorder(rec);
+      })();
+  
+      return (() => {
+        recorder?.destroy();
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (interviewMode === "finished" && isRecordMode) {
+      (async () => {
+        await stopRecording();
+        setTimelineRecord((curr) => ({
+          ...curr,
+          endTime: Date.now(),
+        }));
+      })();
+    }
+  }, [ interviewMode ]);
 
   useEffect(() => {
     if (isWebcamReady && webcamRef.current) {
@@ -69,41 +121,27 @@ const InterviewAiContainer = () => {
             <Skeleton variant="rectangular" width={640} height={480} />
           )}
           <Webcam ref={webcamRef} mirrored={false} onCanPlay={() => setIsWebcamReady(true)} />
-          <StyledCanvas ref={canvasRef} />
         </StyledVideoWrap>
         <StyledAiVideoWrap>
           {interviewMode === "question" ? (
-            <video
-              width={AI_VIDEO_WIDTH}
-              autoPlay
-              loop
-              muted
-              key={aiInterviewerVideo}
+            <InterviewVideo
+              videoKey={aiInterviewerVideo}
               className={videoClassName}
-            >
-              <source src={aiInterviewerVideo} type="video/mp4" />
-            </video>
+              src={aiInterviewerVideo}
+            />
           ) : (
-            <video
-              width={AI_VIDEO_WIDTH}
-              autoPlay
-              loop
-              muted
-              key={aiInterviewerListening}
+            <InterviewVideo
+              videoKey={aiInterviewerListening}
               className={videoClassName}
-            >
-              <source src={aiInterviewerListening} type="video/mp4" />
-            </video>
+              src={aiInterviewerListening}
+            />
           )}
-          <video
-            width={AI_VIDEO_WIDTH}
-            autoPlay={false}
-            muted
-            key={aiInterviewerListening + "_fallback"}
+          <InterviewVideo
+            videoKey={aiInterviewerListening + "_fallback"}
             className={`${videoClassName} fallback`}
-          >
-            <source src={aiInterviewerListening} type="video/mp4" />
-          </video>
+            isFallback={true}
+            src={aiInterviewerListening}
+          />
         </StyledAiVideoWrap>
       </StyledVideoSection>
 
@@ -118,7 +156,7 @@ const InterviewAiContainer = () => {
             />
           )}
           {interviewMode === "answer" && (
-            <AnswerModeController video={video} canvasRef={canvasRef} />
+            <AnswerModeController video={video} />
           )}
           {interviewMode === "finished" && (
             <FinishedModeController />
@@ -197,11 +235,4 @@ const StyledVideoWrap = styled.div`
   & video {
     ${commonStyle}
   }
-`;
-
-const StyledCanvas = styled.canvas`
-  ${commonStyle}
-  position: absolute;
-  left: 0;
-  right: 0;
 `;

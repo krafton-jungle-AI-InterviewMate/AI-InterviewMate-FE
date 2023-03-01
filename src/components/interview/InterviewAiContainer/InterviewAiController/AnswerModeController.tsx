@@ -21,13 +21,11 @@ import useMotionAssessment from "hooks/useMotionAssessment";
 
 type AnswerModeControllerProps = {
   video: HTMLVideoElement;
-  canvasRef: React.MutableRefObject<HTMLCanvasElement | null>;
 };
 
 const AnswerModeController = (props: AnswerModeControllerProps) => {
   const {
     video,
-    canvasRef,
   } = props;
 
   const setInterviewMode = useSetRecoilState(interviewModeAtom);
@@ -43,8 +41,6 @@ const AnswerModeController = (props: AnswerModeControllerProps) => {
     setIsDetectionOn,
   } = useFaceLandmarksDetection({
     video,
-    canvasRef,
-    isDebugging: false,
   });
 
   const {
@@ -190,7 +186,7 @@ const StyledNextButton = styled.button`
   &:hover {
     background-color: var(--light-orange);
   }
-  &:hover {
+  &:active {
     background-color: var(--push-orange);
   }
 `;

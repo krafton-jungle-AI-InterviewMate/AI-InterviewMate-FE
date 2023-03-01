@@ -2,6 +2,10 @@ import { AiInterviewerTypes } from "types/interview";
 
 const S3_URL = "https://bucket1182644-staging.s3.ap-northeast-2.amazonaws.com/interviewer/";
 
+export const getAiInterviewerMiniThumbnail = (interviewer: AiInterviewerTypes) => {
+  return `${S3_URL}${interviewer}_mini.png`;
+};
+
 export const getAiInterviewerThumbnail = (interviewer: AiInterviewerTypes) => {
   return `${S3_URL}${interviewer}.png`;
 };
@@ -30,4 +34,20 @@ export const getAiInterviewerVideo = (interviewer: AiInterviewerTypes) => {
 
 export const getAiInterviewerListening = (interviewer: AiInterviewerTypes) => {
   return `${S3_URL}${interviewer}_listening.mp4`;
+};
+
+/**
+ * 
+ * @param startTime 타임라인을 기록하기 시작한 시간(ms)
+ * 
+ * @returns "mm:ss" 포맷의 문자열을 반환
+ */
+export const createTimeline = (startTime: number) => {
+  const diff = Date.now() - startTime;
+  const sec = Math.round(diff / 1000);
+
+  const mm = Math.floor(sec / 60);
+  const ss = sec % 60;
+
+  return `${mm < 10 ? "0" + mm : mm}:${ss < 10 ? "0" + ss : ss}`;
 };
