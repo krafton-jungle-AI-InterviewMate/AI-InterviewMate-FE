@@ -220,7 +220,7 @@ const UserInterview = () => {
 
   useEffect(() => {
     if (publisher) {
-      console.log(publisher.stream.connection.connectionId);
+      setHost(publisher.stream.connection.connectionId);
     }
   }, [publisher]);
 

@@ -4,7 +4,7 @@ import Loading from "components/common/Loading";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import styled from "@emotion/styled";
 import { StyledBtn } from "styles/StyledBtn";
-import { isInterviewerAtom } from "store/interview/atom";
+import { hostAtom, isInterviewerAtom } from "store/interview/atom";
 import { useRecoilValue } from "recoil";
 import { css } from "@emotion/react";
 
@@ -33,14 +33,23 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
     handleClickStart,
   } = props;
   const isInterviewer = useRecoilValue(isInterviewerAtom);
+  const host = useRecoilValue(hostAtom);
   return (
     <StyledUserInterview>
       {session ? (
         <>
           <div className="videoContents">
-            {publisher ? (
+            {publisher && host === publisher.stream.connection.connectionId ? (
               <div>
                 <UserVideoComponent streamManager={publisher} isInterviewer={false} />
+                {subscribers.map(
+                  (sub, i) =>
+                    host === sub.stream.connection.connectionId && (
+                      <div key={i}>
+                        <UserVideoComponent streamManager={sub} isInterviewer={true} />
+                      </div>
+                    ),
+                )}
               </div>
             ) : (
               <Loading margin="0 0 0 30px" />
