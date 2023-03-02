@@ -1,7 +1,6 @@
 import { Dialog, DialogActions, DialogTitle } from "@mui/material";
 import UserVideoComponent from "./UserVideoComponent";
 import Loading from "components/common/Loading";
-import { AiOutlineInfoCircle } from "react-icons/ai";
 import styled from "@emotion/styled";
 import { StyledBtn } from "styles/StyledBtn";
 import { hostAtom, isInterviewerAtom } from "store/interview/atom";
@@ -51,41 +50,31 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
                 )}
               </>
             )}
-            <div className="interviewActionsContents">
-              <div className="interviewActions">
-                <StyledBtn
-                  onClick={handleClickModalRoomLeave}
-                  width="200px"
-                  height="48px"
-                  color="red"
-                >
-                  나가기
-                </StyledBtn>
-                {!isInterviewer && (
-                  <NewStyledBtn
-                    onClick={handleClickStart}
+            {publisher && (
+              <div className="interviewActionsContents">
+                <div className="interviewActions">
+                  <StyledBtn
+                    onClick={handleClickModalRoomLeave}
                     width="200px"
                     height="48px"
-                    color="orange"
-                    ready={ready}
+                    color="red"
                   >
-                    GO
-                  </NewStyledBtn>
-                )}
-              </div>
-              {!ready && (
-                <div className="readyError">
-                  <div className="readyText">
-                    <AiOutlineInfoCircle size={24} color="var(--font-gray)" />
-                    <span>
-                      참가 면접관이 한명이라도 있어야
-                      <br />
-                      면접을 시작할 수 있습니다.
-                    </span>
-                  </div>
+                    나가기
+                  </StyledBtn>
+                  {!isInterviewer && (
+                    <NewStyledBtn
+                      onClick={handleClickStart}
+                      width="200px"
+                      height="48px"
+                      color="orange"
+                      ready={ready}
+                    >
+                      GO
+                    </NewStyledBtn>
+                  )}
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
           <div className="subscribersContents">
             <div>
@@ -166,30 +155,11 @@ const StyledUserInterview = styled.div`
       align-items: center;
       width: 1000px;
       height: 757px;
+      margin-bottom: 50px;
       .interviewActions {
         display: flex;
         justify-content: space-between;
         width: 450px;
-      }
-      .readyError {
-        display: flex;
-        justify-content: flex-end;
-        width: 450px;
-      }
-      .readyText {
-        display: flex;
-        align-items: center;
-        padding: 10px;
-        border-radius: 10px;
-        background-color: var(--main-white);
-        margin: 15px 0 10px;
-        font-size: 12px;
-        line-height: 15px;
-        text-align: left;
-        color: var(--font-gray);
-        svg {
-          margin-right: 5px;
-        }
       }
     }
   }
