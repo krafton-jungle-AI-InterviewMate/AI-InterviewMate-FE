@@ -42,3 +42,7 @@ export const usePostRatingViewee = () => {
     },
   });
 };
+
+export const usePostResultMemo = () => {
+  return useMutation(mypageAPI.postResultMemo);
+};

@@ -90,3 +90,12 @@ export type PostRatingVieweeResponse = {
 }
 
 export type PostRatingViewee = (payload: PostRatingVieweePayload) => Promise<AxiosResponse<PostRatingVieweeResponse>>;
+
+export type PostResultMemoPayload = {
+  roomIdx: number;
+  memo: string;
+};
+
+export type PostResultMemoResponse = ResponseStatus;
+
+export type PostResultMemo = (payload: PostResultMemoPayload) => Promise<AxiosResponse<PostResultMemoResponse>>;
