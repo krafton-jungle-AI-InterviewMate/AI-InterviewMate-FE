@@ -45,7 +45,7 @@ const useMotionAssessment = (params: UseMotionAssessmentParams) => {
 
     const timerId = window.setTimeout(() => {
       setIncrements((curr) => curr + 1);
-    }, 1000 * 1);
+    }, 1000 * 0.5);
 
     return (() => {
       window.clearTimeout(timerId);
