@@ -32,7 +32,7 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
   const setIsInterviewer = useSetRecoilState(isInterviewerAtom);
 
   const navigate = useNavigate();
-  const [ isPrivate, setIsPrivate ] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(false);
   const onChangePublic = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
       currentTarget: { value },
@@ -74,10 +74,10 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
       },
     );
   };
-  const roomPeopleNumArr = [ 1, 2, 3 ];
-  const isPrivateArr = [ false, true ];
-  const FeedbackArr = [ "ON", "OFF" ];
-  const roomTimeArr = [ 15, 30, 45, 60 ];
+  const roomPeopleNumArr = [1, 2, 3];
+  const isPrivateArr = [false, true];
+  const FeedbackArr = ["ON", "OFF"];
+  const roomTimeArr = [15, 30, 45, 60];
   return (
     <StyledUserRoomForm
       roomNameError={errors.roomName?.message}
@@ -115,12 +115,13 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
           ) : null}
         </div>
         <span className="guide">
-          최소 2자 ~ 최대 10자까지 입력 가능합니다. 특수문자는 사용 불가능합니다. <br /> (띄어쓰기 제외)
+          최소 2자 ~ 최대 10자까지 입력 가능합니다. 특수문자는 사용 불가능합니다. <br /> (띄어쓰기
+          제외)
         </span>
         <div className="inputContent">
           <FormControl className="radioForm">
             <FormLabel>면접관 수</FormLabel>
-            <RadioGroup row>
+            <RadioGroup row defaultValue={2} defaultChecked={true}>
               {roomPeopleNumArr.map((data, idx) => (
                 <FormControlLabel
                   key={`roomPeopleNum${idx}`}
@@ -135,7 +136,7 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
         <div className="inputContent">
           <FormControl className="radioForm">
             <FormLabel>공개 여부</FormLabel>
-            <RadioGroup row>
+            <RadioGroup row defaultValue={false} defaultChecked={true}>
               {isPrivateArr.map((data, idx) => (
                 <FormControlLabel
                   key={`isPrivate${idx}`}
@@ -190,7 +191,7 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
         <div className="inputContent">
           <FormControl className="radioForm">
             <FormLabel>실시간 피드백</FormLabel>
-            <RadioGroup row>
+            <RadioGroup row defaultValue={"ON"} defaultChecked={true}>
               {FeedbackArr.map((data, idx) => (
                 <FormControlLabel
                   key={`Feedback${idx}`}
@@ -217,7 +218,7 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
         <div className="inputContent">
           <FormControl className="radioForm">
             <FormLabel>시간 제한</FormLabel>
-            <RadioGroup row>
+            <RadioGroup row defaultValue={15} defaultChecked={true}>
               {roomTimeArr.map((data, idx) => (
                 <FormControlLabel
                   key={`roomTime${idx}`}
