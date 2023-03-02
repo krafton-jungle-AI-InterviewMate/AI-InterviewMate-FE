@@ -32,7 +32,7 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
   const setIsInterviewer = useSetRecoilState(isInterviewerAtom);
 
   const navigate = useNavigate();
-  const [isPrivate, setIsPrivate] = useState(false);
+  const [ isPrivate, setIsPrivate ] = useState(false);
   const onChangePublic = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
       currentTarget: { value },
@@ -74,10 +74,10 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
       },
     );
   };
-  const roomPeopleNumArr = [1, 2, 3];
-  const isPrivateArr = [false, true];
-  const FeedbackArr = ["ON", "OFF"];
-  const roomTimeArr = [15, 30, 45, 60];
+  const roomPeopleNumArr = [ 1, 2, 3 ];
+  const isPrivateArr = [ false, true ];
+  const FeedbackArr = [ "ON", "OFF" ];
+  const roomTimeArr = [ 15, 30, 45, 60 ];
   return (
     <StyledUserRoomForm
       roomNameError={errors.roomName?.message}
@@ -115,7 +115,7 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
           ) : null}
         </div>
         <span className="guide">
-          최소 2자 ~ 최대 10자까지 입력 가능합니다. 특수문자는 사용 불가능합니다. (띄어쓰기 제외)
+          최소 2자 ~ 최대 10자까지 입력 가능합니다. 특수문자는 사용 불가능합니다. <br /> (띄어쓰기 제외)
         </span>
         <div className="inputContent">
           <FormControl className="radioForm">
@@ -259,8 +259,8 @@ const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`
         display: inline-block;
         text-align: left;
         width: 140px;
-        font-size: 16px;
-        font-weight: 400;
+        font-size: 20px;
+        font-weight: 500;
         font-family: "Archivo", "Spoqa Han Sans Neo", sans-serif;
         color: var(--main-black);
       }
@@ -281,6 +281,9 @@ const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`
       #password {
         border-color: ${props => (props.passwordError ? "var(--main-alert)" : "var(--main-black)")};
       }
+      #question {
+        font-size: 16px;
+      }
       select {
         width: 370px;
         height: 34px;
@@ -297,18 +300,19 @@ const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`
         display: flex;
         align-items: center;
         color: var(--main-alert);
-        margin-left: 20px;
-        font-size: 12px;
+        margin-left: 16px;
+        font-size: 20px;
         .errorIcon {
           margin-right: 5px;
         }
       }
     }
     span.guide {
-      font-size: 12px;
+      font-size: 16px;
       font-weight: 400;
       text-align: left;
       margin-left: 140px;
+      margin-top: 16px;
       color: var(--font-gray);
     }
     .submitAndCancel {

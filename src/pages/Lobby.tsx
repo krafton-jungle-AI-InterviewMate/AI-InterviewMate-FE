@@ -11,7 +11,7 @@ import RoomPasswordPopup from "components/modal/lobby/RoomPasswordPopup";
 import { Dialog, DialogTitle } from "@mui/material";
 
 const StyledLobbyInterface = styled.div`
-  min-width: 1000px;
+  min-width: 1200px;
   display: flex;
   margin: 75px 0 50px;
   button {
@@ -25,8 +25,7 @@ interface StyledRoomContentsProps {
 }
 
 const StyledRoomContents = styled.div<StyledRoomContentsProps>`
-  min-width: 1000px;
-  width: 1000px;
+  width: 1200px;
   display: flex;
   flex-wrap: wrap;
   justify-content: ${props => (props.isError || props.isLoading ? "center" : "space-between")};

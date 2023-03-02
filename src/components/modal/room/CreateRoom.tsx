@@ -23,6 +23,7 @@ const modalStyles: ModalProps["styles"] = {
     boxSizing: "border-box",
     boxShadow: "var(--box-shadow)",
     borderRadius: "15px",
+    overflowX: "hidden",
   },
 };
 
