@@ -67,6 +67,11 @@ export type GetInterviewRoomsResponse = ResponseStatus & {
 
 export type GetInterviewRooms = () => Promise<AxiosResponse<GetInterviewRoomsResponse>>;
 
+export type PostJoinRoomPayload = {
+  roomIdx: number;
+  password: string | null;
+};
+
 export type PostJoinRoomResponseData = PostInterviewRoomsPayloadData & {
   roomIdx: number;
   nickname: string;
@@ -83,7 +88,8 @@ export type PostJoinRoomResponse = ResponseStatus & {
   data: PostJoinRoomResponseData;
 };
 
-export type PostJoinRoom = (roomIdx: number) => Promise<AxiosResponse<PostJoinRoomResponse>>;
+export type PostJoinRoom = (payload: PostJoinRoomPayload) =>
+  Promise<AxiosResponse<PostJoinRoomResponse>>;
 
 export type PutInterviewRooms = (roomIdx: number) => Promise<AxiosResponse<ResponseStatus>>;
 

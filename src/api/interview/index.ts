@@ -17,9 +17,10 @@ const postInterviewRooms: PostInterviewRooms = ({ data }) =>
     data,
   });
 
-const postJoinRoom: PostJoinRoom = roomIdx =>
+const postJoinRoom: PostJoinRoom = ({ roomIdx, password }) =>
   postAPI({
     endPoint: API_PATH.POST_JOIN_ROOM(roomIdx),
+    data: { password },
   });
 
 const putInterviewRooms: PutInterviewRooms = roomIdx =>
