@@ -9,6 +9,11 @@ export type RoomTypes = "USER" | "AI";
 
 export type RoomStatus = "CREATE" | "PROCEED" | "EXIT";
 
+export type DeleteInterviewRoomsResponse = ResponseStatus;
+
+export type DeleteInterviewRooms = (roomIdx: number) =>
+  Promise<AxiosResponse<DeleteInterviewRoomsResponse>>;
+
 export type PostInterviewRoomsPayloadData = {
   roomName: string;
   roomPeopleNum?: number;

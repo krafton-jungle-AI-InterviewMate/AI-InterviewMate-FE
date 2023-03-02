@@ -1,9 +1,13 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import interviewAPI from "api/interview";
 
+export const useDeleteInterviewRooms = () => {
+  return useMutation(interviewAPI.deleteInterviewRooms);
+};
+
 export const useGetInterviewRooms = () => {
   const { data, isSuccess, isLoading, isError, refetch } = useQuery(
-    ["fetchInterviewRooms"],
+    [ "fetchInterviewRooms" ],
     () => {
       return interviewAPI.getInterviewRooms();
     },
@@ -55,7 +59,7 @@ export const usePutInterviewRooms = () => {
 };
 
 export const useGetQuestionDetails = (questionBoxIdx: number) => {
-  const { data, isLoading, isSuccess, isError } = useQuery(["userInterviewQuestionDetails"], () => {
+  const { data, isLoading, isSuccess, isError } = useQuery([ "userInterviewQuestionDetails" ], () => {
     return interviewAPI.getQuestionDetails(questionBoxIdx);
   });
 
