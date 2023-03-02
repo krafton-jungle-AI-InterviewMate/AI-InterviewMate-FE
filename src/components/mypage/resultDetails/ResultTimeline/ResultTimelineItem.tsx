@@ -8,21 +8,27 @@ import {
 } from "@mui/lab";
 
 import { getTimestampText } from "./utils";
+import { timestampToSeconds } from "lib/interview";
 
 type TempTimelineType = {
   type: "eye" | "attitude" | "question";
   timestamp: string;
+  handleVideoProgress: (time: number) => void;
 };
 
 const ResultTimelineItem = (props: TempTimelineType) => {
   const {
     type,
     timestamp,
+    handleVideoProgress,
   } = props;
 
   return (
     <TimelineItem>
-      <TimelineOppositeContent color="var(--font-gray)">
+      <TimelineOppositeContent
+        color="var(--font-gray)"
+        onClick={() => handleVideoProgress(timestampToSeconds(timestamp))}
+      >
         {timestamp}
       </TimelineOppositeContent>
       <TimelineSeparator>

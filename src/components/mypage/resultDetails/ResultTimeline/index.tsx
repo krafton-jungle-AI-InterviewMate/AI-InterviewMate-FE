@@ -64,6 +64,12 @@ const ResultTimeline = (props: ResultTimelineProps) => {
     }
   }, [ videoRef ]);
 
+  const handleVideoProgress = (time: number) => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = time;
+    }
+  };
+
   return videoRef.current ? (
     <StyledTimelineWrap>
       <StyledTitle>타임라인</StyledTitle>
@@ -91,6 +97,7 @@ const ResultTimeline = (props: ResultTimelineProps) => {
           {data.timeline.map((timestamp, idx) =>
             <ResultTimelineItem
               key={idx}
+              handleVideoProgress={handleVideoProgress}
               {...timestamp}
             />,
           )}
@@ -98,8 +105,7 @@ const ResultTimeline = (props: ResultTimelineProps) => {
           {/* LAST ITEM */}
           <TimelineItem>
             <TimelineOppositeContent color="var(--font-gray)">
-              {/* {createTimestampFromSeconds(Math.floor(duration ?? 0))} */}
-              {createTimestampFromSeconds(Math.floor(33 ?? 0))}
+              {createTimestampFromSeconds(Math.floor(duration ?? 0))}
             </TimelineOppositeContent>
             <TimelineSeparator>
               <TimelineDot

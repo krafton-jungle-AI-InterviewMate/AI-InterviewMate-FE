@@ -51,3 +51,13 @@ export const createTimeline = (startTime: number) => {
 
   return `${mm < 10 ? "0" + mm : mm}:${ss < 10 ? "0" + ss : ss}`;
 };
+
+/**
+ * 
+ * @param videoTime "mm:ss" 포맷의 문자열
+ * @returns "mm:ss" 포맷의 문자열을 초 단위로 변환한 숫자를 반환
+ */
+export const timestampToSeconds = (videoTime: string) => {
+  const [ minutes, seconds ] = videoTime.split(":");
+  return 60 * Number(minutes) + Number(seconds);
+};
