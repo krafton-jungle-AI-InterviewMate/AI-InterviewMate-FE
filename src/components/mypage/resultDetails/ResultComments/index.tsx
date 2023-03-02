@@ -10,17 +10,17 @@ import {
 import styled from "@emotion/styled";
 import { commonLabelStyle } from "styles/resultDetails";
 
-const ResultScript = () => {
-  const [ currQuestion, setCurrQuestion ] = useState("Q1");
+const ResultComments = () => {
+  const [ currInterviewer, setCurrInterviewer ] = useState("면접관1");
 
   const handleChange = (event: SelectChangeEvent) => {
-    setCurrQuestion(event.target.value);
+    setCurrInterviewer(event.target.value);
   };
 
   return (
-    <StyledScriptWrap>
-      <StyledTitle>답변 스크립트</StyledTitle>
-      <StyledScriptBox>
+    <StyledCommentsWrap>
+      <StyledTitle>면접관 코멘트</StyledTitle>
+      <StyledCommentsBox>
         <FormControl
           sx={{
             m: 1,
@@ -28,38 +28,38 @@ const ResultScript = () => {
           }}
           size="small"
         >
-          <InputLabel id="demo-select-small">문제</InputLabel>
+          <InputLabel id="demo-select-small">면접관</InputLabel>
           <Select
             labelId="demo-select-small"
             id="demo-select-small"
-            value={currQuestion}
-            label="문제"
+            value={currInterviewer}
+            label="면접관"
             sx={{
               color: "var(--main-black)",
               fontWeight: 500,
             }}
             onChange={handleChange}
           >
-            <MenuItem value="Q1">
-              Q1. 우리 회사에 지원한 이유는?
+            <MenuItem value="면접관1">
+              면접관1
             </MenuItem>
-            <MenuItem value="Q2">
-              Q2. 동료와의 갈등을 어떻게 해결하실건가요?
+            <MenuItem value="면접관2">
+              면접관2
             </MenuItem>
           </Select>
         </FormControl>
 
         <p>
-          저는 이 회사서 열정적으로 일 해서 한 손에는 돈을 다른 한 손에는 명예를 움켜지기위해 지원 했습니다.
+          황석님은 자신있는 목소리가 장점이라고 생각합니다. CS 지식과 시선처리에 집중한다면 좋은 성과를 기대할 수 있을 것 입니다. 면접 준비 화이팅 하세요!!
         </p>
-      </StyledScriptBox>
-    </StyledScriptWrap>
+      </StyledCommentsBox>
+    </StyledCommentsWrap>
   );
 };
 
-export default ResultScript;
+export default ResultComments;
 
-const StyledScriptWrap = styled.div`
+const StyledCommentsWrap = styled.div`
   flex-grow: 1;
   margin-left: 40px;
   align-self: flex-start;
@@ -74,7 +74,7 @@ const StyledTitle = styled.h3`
   text-align: left;
 `;
 
-const StyledScriptBox = styled.div`
+const StyledCommentsBox = styled.div`
   display: flex;
   flex-flow: column nowrap;
   align-items: flex-start;

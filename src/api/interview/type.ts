@@ -9,6 +9,12 @@ export type RoomTypes = "USER" | "AI";
 
 export type RoomStatus = "CREATE" | "PROCEED" | "EXIT";
 
+export type DeleteInterviewRoomsResponse = ResponseStatus;
+
+export type DeleteInterviewRooms = (
+  roomIdx: number,
+) => Promise<AxiosResponse<DeleteInterviewRoomsResponse>>;
+
 export type PostInterviewRoomsPayloadData = {
   roomName: string;
   roomPeopleNum?: number;
@@ -25,6 +31,7 @@ export type PostInterviewRoomsPayload = {
 };
 
 export type QuestionListItem = {
+  questionIdx: number;
   keyword1: string;
   keyword2: string | null;
   keyword3: string | null;
@@ -33,15 +40,17 @@ export type QuestionListItem = {
   questionTitle: string;
 };
 
+export type PostInterviewRoomsResponseData = PostInterviewRoomsPayloadData & {
+  roomIdx: number;
+  nickname: string;
+  createdAt: string;
+  roomStatus: RoomStatus;
+  connectionToken: string;
+  questionList: Array<QuestionListItem>;
+};
+
 export type PostInterviewRoomsResponse = ResponseStatus & {
-  data: PostInterviewRoomsPayloadData & {
-    roomIdx: number;
-    nickname: string;
-    createdAt: string;
-    roomStatus: RoomStatus;
-    connectionToken: string;
-    questionList: Array<QuestionListItem>;
-  };
+  data: PostInterviewRoomsResponseData;
 };
 
 export type PostInterviewRooms = (
@@ -67,6 +76,11 @@ export type GetInterviewRoomsResponse = ResponseStatus & {
 
 export type GetInterviewRooms = () => Promise<AxiosResponse<GetInterviewRoomsResponse>>;
 
+export type PostJoinRoomPayload = {
+  roomIdx: number;
+  password: string | null;
+};
+
 export type PostJoinRoomResponseData = PostInterviewRoomsPayloadData & {
   roomIdx: number;
   nickname: string;
@@ -77,13 +91,16 @@ export type PostJoinRoomResponseData = PostInterviewRoomsPayloadData & {
   roomViewer1Idx?: number;
   roomViewer2Idx?: number;
   roomViewer3Idx?: number;
+  interviewerIdxes: Array<string>;
 };
 
 export type PostJoinRoomResponse = ResponseStatus & {
   data: PostJoinRoomResponseData;
 };
 
-export type PostJoinRoom = (roomIdx: number) => Promise<AxiosResponse<PostJoinRoomResponse>>;
+export type PostJoinRoom = (
+  payload: PostJoinRoomPayload,
+) => Promise<AxiosResponse<PostJoinRoomResponse>>;
 
 export type PutInterviewRooms = (roomIdx: number) => Promise<AxiosResponse<ResponseStatus>>;
 

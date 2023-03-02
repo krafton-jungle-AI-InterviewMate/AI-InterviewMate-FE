@@ -17,11 +17,13 @@ const modalStyles: ModalProps["styles"] = {
   modal: {
     position: "relative",
     width: "815px",
+    maxHeight: "calc(100vh - 100px)",
+    minHeight: "732px",
     padding: "50px 35px",
     boxSizing: "border-box",
     boxShadow: "var(--box-shadow)",
     borderRadius: "15px",
-    overflow: "hidden",
+    overflowX: "hidden",
   },
 };
 
@@ -63,14 +65,14 @@ const StyledTabBtn = styled.button`
 const CreateRoom = (props: CreateRoomProps) => {
   const { open, onClose } = props;
 
-  const [roomType, setRoomType] = useState<RoomTypes>("USER");
-  const [questionBoxes, SetQuestionBoxes] = useState<QuestionBoxes[]>([]);
+  const [ roomType, setRoomType ] = useState<RoomTypes>("USER");
+  const [ questionBoxes, SetQuestionBoxes ] = useState<QuestionBoxes[]>([]);
   const { data, isLoading, isError, isSuccess } = useGetQuestionBoxes();
   useEffect(() => {
     if (!isLoading && data) {
       SetQuestionBoxes(data.data.data);
     }
-  }, [isLoading]);
+  }, [ isLoading ]);
 
   const onClickTabBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
     const {

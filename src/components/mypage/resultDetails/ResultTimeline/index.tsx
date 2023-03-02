@@ -64,9 +64,6 @@ const ResultTimeline = (props: ResultTimelineProps) => {
     }
   }, [ videoRef ]);
 
-  console.log(data);
-  console.log(videoRef);
-
   return videoRef.current ? (
     <StyledTimelineWrap>
       <StyledTitle>타임라인</StyledTitle>
@@ -79,7 +76,13 @@ const ResultTimeline = (props: ResultTimelineProps) => {
               00:00
             </TimelineOppositeContent>
             <TimelineSeparator>
-              <TimelineDot />
+              <TimelineDot
+                sx={{
+                  boxShadow: "none",
+                  borderColor: "var(--push-gray)",
+                  backgroundColor: "var(--push-gray)",
+                }}
+              />
               <TimelineConnector />
             </TimelineSeparator>
             <TimelineContent>면접 시작</TimelineContent>
@@ -95,10 +98,17 @@ const ResultTimeline = (props: ResultTimelineProps) => {
           {/* LAST ITEM */}
           <TimelineItem>
             <TimelineOppositeContent color="var(--font-gray)">
-              {createTimestampFromSeconds(Math.floor(duration ?? 0))}
+              {/* {createTimestampFromSeconds(Math.floor(duration ?? 0))} */}
+              {createTimestampFromSeconds(Math.floor(33 ?? 0))}
             </TimelineOppositeContent>
             <TimelineSeparator>
-              <TimelineDot />
+              <TimelineDot
+                sx={{
+                  boxShadow: "none",
+                  borderColor: "var(--push-gray)",
+                  backgroundColor: "var(--push-gray)",
+                }}
+              />
             </TimelineSeparator>
             <TimelineContent>면접 종료</TimelineContent>
           </TimelineItem>
@@ -142,12 +152,10 @@ const StyledScrollBox = styled.div`
     width: 8px;
   }
   &::-webkit-scrollbar-track {
-    background: var(--main-gray);
-    border-radius: 6px;
+    background-color: transparent;
   }
   &::-webkit-scrollbar-thumb {
-    background: var(--push-gray);
-    border-radius: 6px;
+    background: rgba(0, 0, 0, .06);
   }
   &::-webkit-scrollbar-thumb:hover {
     background: rgba(0, 0, 0, .2);

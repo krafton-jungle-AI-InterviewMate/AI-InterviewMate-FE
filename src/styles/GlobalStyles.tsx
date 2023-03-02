@@ -8,14 +8,14 @@ const globalStyles = css`
     --main-orange: #ff9900;
     --main-blue: #146eb4;
     --main-black: #181818;
-    --main-gray: #eeeeee;
+    --main-gray: #cccccc;
     --main-white: #ffffff;
     --font-gray: #777777;
     --push-blue: #0065b4;
     --push-orange: #ed8e00;
     --light-orange: #ffa620;
     --light-blue: #1785db;
-    --push-gray: #d9d9d9;
+    --push-gray: #cccccc;
     --main-alert: #dc3545;
     --push-alert: #c20013;
     --light-alert: #ff3c4e;

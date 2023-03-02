@@ -8,26 +8,46 @@ import ResultDetailsLayout from "components/layout/result/ResultDetailsLayout";
 import ResultVideo from "components/mypage/resultDetails/ResultVideo";
 import ResultTimeline, { TempResponseType } from "components/mypage/resultDetails/ResultTimeline";
 import ResultChartAi from "components/mypage/resultDetails/ResultChartAi";
+import ResultChartUser from "components/mypage/resultDetails/ResultChartUser";
 import ResultScript from "components/mypage/resultDetails/ResultScript";
+import ResultComments from "components/mypage/resultDetails/ResultComments";
 
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 
 // FIXME: 실제 데이터로 교체
-const videoUrl = "https://bucket1182644-staging.s3.ap-northeast-2.amazonaws.com/interviewer/Seungmin.mp4";
+const videoUrl = "https://bucket1182644-staging.s3.ap-northeast-2.amazonaws.com/interviewer/interview_temp.mp4";
 // const videoUrl = "";
 const mock_timeline: TempResponseType = {
   timeline: [
     {
       "type": "question",
+      "timestamp": "00:02",
+    },
+    {"type": "eye",
       "timestamp": "00:04",
     },
     {"type": "eye",
-      "timestamp": "00:07",
+      "timestamp": "00:05",
+    },
+    {"type": "eye",
+      "timestamp": "00:06",
     },
     {
       "type": "attitude",
       "timestamp": "00:11",
+    },
+    {
+      "type": "question",
+      "timestamp": "00:27",
+    },
+    {
+      "type": "attitude",
+      "timestamp": "00:28",
+    },
+    {
+      "type": "attitude",
+      "timestamp": "00:29",
     },
   ],
 };
@@ -66,11 +86,11 @@ const ResultDetails = () => {
       <StyledChartSection>
         {searchParams.get("type") === "AI"
           ? <ResultChartAi />
-          : <p>TODO: ResultChartUser</p>
+          : <ResultChartUser />
         }
         {searchParams.get("type") === "AI"
           ? <ResultScript />
-          : <p>TODO: 코멘트 영역</p>
+          : <ResultComments />
         }
       </StyledChartSection>
     </ResultDetailsLayout>

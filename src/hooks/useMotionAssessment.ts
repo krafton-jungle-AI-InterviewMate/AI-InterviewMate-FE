@@ -14,17 +14,46 @@ const useMotionAssessment = (params: UseMotionAssessmentParams) => {
     isBadMotion,
   } = params;
 
+  const [ isShowingFeedback, setIsShowingFeedback ] = useState(false);
   const [ showFeedback, setShowFeedback ] = useState(false);
   const setMotionCount = useSetRecoilState(motionCountAtom);
   const [ timelineRecord, setTimelineRecord ] = useRecoilState(timelineRecordAtom);
   const [ increments, setIncrements ] = useState(0);
+  const [ feedbackIncrements, setFeedbackIncrements ] = useState(0);
   const isRecordMode = useRecoilValue(recordModeAtom);
 
-  const assess = () => {
-    if (isRealtimeMode) {
-      setShowFeedback(isBadMotion);
+  useEffect(() => {
+    if (!isRealtimeMode) {
+      return;
     }
 
+    const timerId1 = window.setTimeout(() => {
+      setFeedbackIncrements((curr) => curr + 1);
+    }, 1000 * 1);
+    const timerId2 = window.setTimeout(() => {
+      setShowFeedback(false);
+      setIsShowingFeedback(false);
+    }, 1000 * 3);
+
+    if (isShowingFeedback) {
+      return;
+    }
+
+    if (isBadMotion) {
+      setShowFeedback(true);
+      setIsShowingFeedback(true);
+    }
+    else {
+      setShowFeedback(false);
+    }
+
+    return (() => {
+      window.clearTimeout(timerId1);
+      window.clearTimeout(timerId2);
+    });
+  }, [ isBadMotion, isShowingFeedback, feedbackIncrements ]);
+
+  const assess = () => {
     if (isBadMotion) {
       setMotionCount((curr) => curr + 1);
 
@@ -45,7 +74,7 @@ const useMotionAssessment = (params: UseMotionAssessmentParams) => {
 
     const timerId = window.setTimeout(() => {
       setIncrements((curr) => curr + 1);
-    }, 1000 * 1);
+    }, 1000 * 0.5);
 
     return (() => {
       window.clearTimeout(timerId);

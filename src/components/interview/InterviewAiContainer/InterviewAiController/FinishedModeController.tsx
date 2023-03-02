@@ -10,16 +10,23 @@ import {
   irisCountAtom,
   aiInterviewNextProcessAtom,
   aiRoomResponseAtom,
+  timelineRecordAtom,
 } from "store/interview/atom";
 import { usePostRatingViewee } from "hooks/queries/mypage";
 import { PostRatingVieweePayloadData } from "api/mypage/types";
-import { AI_VIEWER_IDX } from "constants/api";
 
 import styled from "@emotion/styled";
 
 const FinishedModeController = () => {
   const navigate = useNavigate();
 
+  const {
+    timeline: {
+      eyes,
+      attitude,
+      questionModeStart,
+    },
+  } = useRecoilValue(timelineRecordAtom);
   const motionCount = useRecoilValue(motionCountAtom);
   const irisCount = useRecoilValue(irisCountAtom);
   const aiRoomResponse = useRecoilValue(aiRoomResponseAtom);
@@ -47,10 +54,12 @@ const FinishedModeController = () => {
     } = aiRoomResponse;
 
     const data: PostRatingVieweePayloadData = {
-      viewerIdx: AI_VIEWER_IDX,
-      eyesRating: irisCount,
-      attitudeRating: motionCount,
-      scriptRequestsDtos: answerScript.map((script, idx) => ({
+      videoUrl: null, // TODO: 녹화 모드 ON일 땐 video API 연동 후 받아온 url 값 넣기
+      eyeTimelines: eyes,
+      attitudeTimelines: attitude,
+      questionTimelines: questionModeStart,
+      comments: [],
+      scripts: answerScript.map((script, idx) => ({
         questionIdx: idx + 1, // DB index 1부터 시작
         script,
       })),

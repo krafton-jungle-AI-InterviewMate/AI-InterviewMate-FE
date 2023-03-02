@@ -22,18 +22,23 @@ export type GetRatingHistoryResponse = ResponseStatus & {
 
 export type GetRatingHistory = () => Promise<AxiosResponse<GetRatingHistoryResponse>>;
 
-export type Script = {
+export type Timestamp = {
+  type: string;
+  timestamp: string
+};
+
+export type ScriptWithQuestionTitle = {
   questionTitle: string;
-  script: string;
-  rating: number;
-}
+  script: string
+};
 
 export type RatingDetail = {
-  eyesRating: number;
-  attitudeRating: number;
-  scriptList: Array<Script>;
-  roomName: string;
+  videoUrl: string;
+  timelines: Timestamp[];
+  memo: string;
+  scripts: ScriptWithQuestionTitle[];
   createdAt: string;
+  roomName: string;
   roomQuestionNum: number;
 };
 
@@ -54,13 +59,23 @@ export type ScriptRequestsDtos = {
   script: string;
 };
 
+export type Comment = {
+  viewerIdx: number;
+  comment: string;
+};
+
+export type ScriptWithQuestionIdx = {
+  questionIdx: number;
+  script: string;
+};
+
 export type PostRatingVieweePayloadData = {
-  viewerIdx: number; // 79797979로 지정할 경우 AI로 인식된다고 함.
-  eyesRating: number;
-  attitudeRating: number;
-  answerRating?: number;
-  commentsRequestDtos?: Array<CommentsRequestDtos>;
-  scriptRequestsDtos: Array<ScriptRequestsDtos>;
+  videoUrl: string | null;
+  eyeTimelines: string[];
+  attitudeTimelines: string[];
+  questionTimelines: string[];
+  comments: Comment[];
+  scripts: ScriptWithQuestionIdx[];
 };
 
 export type PostRatingVieweePayload = {
@@ -75,3 +90,17 @@ export type PostRatingVieweeResponse = {
 }
 
 export type PostRatingViewee = (payload: PostRatingVieweePayload) => Promise<AxiosResponse<PostRatingVieweeResponse>>;
+
+export type PostResultMemoPayload = {
+  roomIdx: number;
+  memo: string;
+};
+
+export type PostResultMemo = (payload: PostResultMemoPayload) => Promise<AxiosResponse<ResponseStatus>>;
+
+export type PostResultCommentPayload = {
+  roomIdx: number;
+  comment: string;
+};
+
+export type PostResultComment = (payload: PostResultCommentPayload) => Promise<AxiosResponse<ResponseStatus>>;

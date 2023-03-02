@@ -16,7 +16,7 @@ const OpenViduVideoComponent = (props: OpenViduVideoComponentProps) => {
 
   const [isHost, setIsHost] = useState(false);
 
-  const videoRef = useRef(null);
+  const videoRef = useRef<null | HTMLVideoElement>(null);
 
   useEffect(() => {
     if (streamManager && videoRef) {

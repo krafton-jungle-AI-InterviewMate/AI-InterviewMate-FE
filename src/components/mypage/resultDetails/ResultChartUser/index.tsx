@@ -3,45 +3,47 @@ import { Line } from "react-chartjs-2";
 ChartJS.register(...registerables);
 
 import * as Config from "components/common/chartConfig";
+import { getRandomArbitrary } from "./utils";
 
 import styled from "@emotion/styled";
 import { commonLabelStyle } from "styles/resultDetails";
 
 const data = {
-  labels: [ "Q1", "Q2", "Q3" ],
+  labels: new Array(31).fill(0).map((_, idx) => idx),
   datasets: [
     {
       id: 1,
       label: Config.LABEL_EYE,
-      data: [ 5, 6, 2 ],
+      data: new Array(31).fill(0).map((_) => getRandomArbitrary(0, 10)),
       borderColor: Config.BORDER_COLOR_EYE,
       backgroundColor: Config.BACKGROUND_COLOR_EYE,
       borderWidth: Config.BORDER_WIDTH,
+      tension: 0.3,
     },
     {
       id: 2,
       label: Config.LABEL_ATTITUDE,
-      data: [ 3, 2, 1 ],
+      data: new Array(31).fill(0).map((_) => getRandomArbitrary(0, 10)),
       borderColor: Config.BORDER_COLOR_ATTITUDE,
       backgroundColor: Config.BACKGROUND_COLOR_ATTITUDE,
       borderWidth: Config.BORDER_WIDTH,
+      tension: 0.3,
     },
   ],
 };
 
-const ResultChartAi = () => {
+const ResultChartUser = () => {
   return (
     <StyledChartWrap>
-      <StyledTitle>문제당 이탈 횟수</StyledTitle>
+      <StyledTitle>1분당 이탈 횟수</StyledTitle>
       <StyledChartBox>
-        <Line data={data} options={Config.chartAiOption}
-        />
+        <Line data={data} options={Config.chartUserOption} />
       </StyledChartBox>
     </StyledChartWrap>
   );
 };
 
-export default ResultChartAi;
+export default ResultChartUser;
 
 const StyledChartWrap = styled.div`
   display: flex;

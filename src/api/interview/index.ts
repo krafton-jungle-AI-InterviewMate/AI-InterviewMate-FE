@@ -1,4 +1,4 @@
-import { getAPI, postAPI, putAPI } from "api/axios";
+import { getAPI, postAPI, putAPI, deleteAPI } from "api/axios";
 import { API_PATH } from "constants/api";
 import {
   PostInterviewRooms,
@@ -6,7 +6,12 @@ import {
   PostJoinRoom,
   PutInterviewRooms,
   GetQuestionDetails,
+  DeleteInterviewRooms,
 } from "api/interview/type";
+
+const deleteInterviewRooms: DeleteInterviewRooms = (roomIdx) => deleteAPI({
+  endPoint: API_PATH.DELETE_INTERVIEW_ROOMS(roomIdx),
+});
 
 const getInterviewRooms: GetInterviewRooms = () =>
   getAPI({ endPoint: API_PATH.GET_INTERVIEW_ROOMS });
@@ -17,9 +22,10 @@ const postInterviewRooms: PostInterviewRooms = ({ data }) =>
     data,
   });
 
-const postJoinRoom: PostJoinRoom = roomIdx =>
+const postJoinRoom: PostJoinRoom = ({ roomIdx, password }) =>
   postAPI({
     endPoint: API_PATH.POST_JOIN_ROOM(roomIdx),
+    data: { password },
   });
 
 const putInterviewRooms: PutInterviewRooms = roomIdx =>
@@ -33,6 +39,7 @@ const getQuestionDetails: GetQuestionDetails = questionBoxIdx =>
   });
 
 export default {
+  deleteInterviewRooms,
   getInterviewRooms,
   postInterviewRooms,
   postJoinRoom,

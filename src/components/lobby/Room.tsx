@@ -20,10 +20,10 @@ const StyledRoom = styled.div<IRoomProps>`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 388px;
-    height: 105px;
-    border-radius: 5px;
-    border: 1px solid var(--main-gray);
+    width: 488px;
+    height: 165px;
+    border-radius: 16px;
+    border: 1px solid var(--main-black);
     background-color: var(--main-white);
     padding: 28px 42px;
     filter: drop-shadow(0px 6px 24px rgba(0, 0, 0, 0.03));
@@ -38,19 +38,19 @@ const StyledRoom = styled.div<IRoomProps>`
         text-align: left;
         p {
           margin: 0;
-          font-size: 16px;
+          font-size: 24px;
           font-weight: 500;
         }
         span {
-          font-size: 12px;
+          font-size: 16px;
         }
       }
       .interviewer {
         width: 100px;
         height: 24px;
-        font-size: 12px;
+        font-size: 16px;
         background-color: ${props =>
-          props.roomType === "AI" ? "var(--push-gray)" : "var(--main-black)"};
+    props.roomType === "AI" ? "var(--push-gray)" : "var(--main-black)"};
         border-radius: 5px;
         color: var(--main-white);
       }
@@ -61,19 +61,20 @@ const StyledRoom = styled.div<IRoomProps>`
       justify-content: space-between;
       align-items: center;
       color: var(--font-gray);
+      font-size: 20px;
       p {
         margin: 0;
       }
       .roomStatus {
         color: ${props =>
-          props.roomStatus === "CREATE" ? "var(--main-orange)" : "var(--main-black)"};
+    props.roomStatus === "CREATE" ? "var(--main-orange)" : "var(--main-black)"};
       }
       .warningComment {
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 12px;
-        line-height: 15px;
+        font-size: 16px;
+        line-height: 1.5;
         p {
           margin-left: 6px;
         }
@@ -123,7 +124,7 @@ const Room = ({
   const onClickJoin = () => {
     setTargetRoomIdx(idx);
 
-    if (roomIsPrivate) {
+    if (roomType === "USER" && roomIsPrivate) {
       // ! TODO: 비밀번호 검증
       // ! src/components/modal/lobby/RoomPasswordPopup/index.tsx에서도 추가 작업 필요
       setIsPasswordPopupOpen(true);
@@ -134,7 +135,10 @@ const Room = ({
       return;
     }
     if (!isLoading) {
-      mutate(idx, {
+      mutate({
+        roomIdx: idx,
+        password: null, // TODO: 비밀번호 검증
+      }, {
         onSuccess: ({ data }) => {
           setUserInterviewData(data.data);
           setIsInterviewer(true);

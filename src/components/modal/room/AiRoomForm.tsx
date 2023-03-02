@@ -114,7 +114,7 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
           ) : null}
         </div>
         <span className="guide">
-          최소 2자 ~ 최대 10자까지 입력 가능합니다. 특수문자는 사용 불가능합니다. (띄어쓰기 제외)
+          최소 2자 ~ 최대 10자까지 입력 가능합니다. 특수문자는 사용 불가능합니다. <br /> (띄어쓰기 제외)
         </span>
         <div className="inputContent">
           <FormControl className="radioForm">
@@ -230,8 +230,8 @@ const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`
         display: inline-block;
         text-align: left;
         width: 140px;
-        font-size: 16px;
-        font-weight: 400;
+        font-size: 20px;
+        font-weight: 500;
         font-family: "Archivo", "Spoqa Han Sans Neo", sans-serif;
         color: var(--main-black);
       }
@@ -248,6 +248,9 @@ const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`
       }
       #roomName {
         border-color: ${props => (props.roomNameError ? "var(--main-alert)" : "var(--main-black)")};
+      }
+      #question {
+        font-size: 16px;
       }
       select {
         width: 370px;
@@ -266,17 +269,18 @@ const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`
         align-items: center;
         color: var(--main-alert);
         margin-left: 20px;
-        font-size: 12px;
+        font-size: 16px;
         .errorIcon {
           margin-right: 5px;
         }
       }
     }
     span.guide {
-      font-size: 12px;
+      font-size: 16px;
       font-weight: 400;
       text-align: left;
       margin-left: 140px;
+      margin-top: 16px;
       color: var(--font-gray);
     }
     .submitAndCancel {
