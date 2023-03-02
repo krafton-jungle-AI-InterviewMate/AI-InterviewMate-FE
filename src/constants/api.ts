@@ -6,9 +6,9 @@ export const BASE_URL = "https://jungle-weat.shop";
 
 export const API_PATH = {
   GET_IMAGE: (queryParams?: ImageQueryParams) => `/images/search?${queryParams || ""}`,
-  GET_RATING_HISTORY: "/rating/history",
-  GET_RATING_DETAIL: (roomIdx: number, type: RoomTypes) => `/rating/${roomIdx}?type=${type}`,
-  POST_RATING_VIEWEE: (roomIdx: number) => `/rating/${roomIdx}/viewee`,
+  GET_RESULT_HISTORY: "/result/history",
+  GET_RESULT_DETAIL: (roomIdx: number, type: RoomTypes) => `/result/${roomIdx}?type=${type}`,
+  POST_RESULT_VIEWEE: (roomIdx: number) => `/result/${roomIdx}`,
   POST_INTERVIEW_ROOMS: "/interview/rooms",
   GET_INTERVIEW_ROOMS: "/interview/rooms",
   GET_QUESTIONBOXES: "/questionBoxes",
