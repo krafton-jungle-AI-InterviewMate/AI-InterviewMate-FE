@@ -22,18 +22,23 @@ export type GetRatingHistoryResponse = ResponseStatus & {
 
 export type GetRatingHistory = () => Promise<AxiosResponse<GetRatingHistoryResponse>>;
 
-export type Script = {
+export type Timestamp = {
+  type: string;
+  timestamp: string
+};
+
+export type ScriptWithQuestionTitle = {
   questionTitle: string;
-  script: string;
-  rating: number;
-}
+  script: string
+};
 
 export type RatingDetail = {
-  eyesRating: number;
-  attitudeRating: number;
-  scriptList: Array<Script>;
-  roomName: string;
+  videoUrl: string;
+  timelines: Timestamp[];
+  memo: string;
+  scripts: ScriptWithQuestionTitle[];
   createdAt: string;
+  roomName: string;
   roomQuestionNum: number;
 };
 
