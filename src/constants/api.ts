@@ -10,6 +10,7 @@ export const API_PATH = {
   GET_RESULT_DETAIL: (roomIdx: number, type: RoomTypes) => `/result/${roomIdx}?type=${type}`,
   POST_RESULT: (roomIdx: number) => `/result/${roomIdx}`,
   POST_RESULT_MEMO: (roomIdx: number) => `/result/${roomIdx}/memo`,
+  POST_RESULT_COMMENT: (roomIdx: number) => `/result/${roomIdx}/comment`,
   POST_INTERVIEW_ROOMS: "/interview/rooms",
   GET_INTERVIEW_ROOMS: "/interview/rooms",
   DELETE_INTERVIEW_ROOMS: (roomIdx: number) => `/interview/rooms/${roomIdx}`,

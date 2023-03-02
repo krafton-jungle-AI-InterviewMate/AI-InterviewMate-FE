@@ -46,3 +46,7 @@ export const usePostRatingViewee = () => {
 export const usePostResultMemo = () => {
   return useMutation(mypageAPI.postResultMemo);
 };
+
+export const usePostResultComment = () => {
+  return useMutation(mypageAPI.postResultComment);
+};

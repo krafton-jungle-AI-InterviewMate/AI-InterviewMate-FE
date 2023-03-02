@@ -5,6 +5,7 @@ import {
   GetRatingDetail,
   PostRatingViewee,
   PostResultMemo,
+  PostResultComment,
 } from "./types";
 
 const getRatingHistory: GetRatingHistory = () => getAPI({ endPoint: API_PATH.GET_RESULT_HISTORY });
@@ -29,9 +30,18 @@ const postResultMemo: PostResultMemo = ({
   data: { memo },
 });
 
+const postResultComment: PostResultComment = ({
+  roomIdx,
+  comment,
+}) => postAPI({
+  endPoint: API_PATH.POST_RESULT_COMMENT(roomIdx),
+  data: { comment },
+});
+
 export default {
   getRatingHistory,
   getRatingDetail,
   postRatingViewee,
   postResultMemo,
+  postResultComment,
 };

@@ -96,6 +96,11 @@ export type PostResultMemoPayload = {
   memo: string;
 };
 
-export type PostResultMemoResponse = ResponseStatus;
+export type PostResultMemo = (payload: PostResultMemoPayload) => Promise<AxiosResponse<ResponseStatus>>;
 
-export type PostResultMemo = (payload: PostResultMemoPayload) => Promise<AxiosResponse<PostResultMemoResponse>>;
+export type PostResultCommentPayload = {
+  roomIdx: number;
+  comment: string;
+};
+
+export type PostResultComment = (payload: PostResultCommentPayload) => Promise<AxiosResponse<ResponseStatus>>;
