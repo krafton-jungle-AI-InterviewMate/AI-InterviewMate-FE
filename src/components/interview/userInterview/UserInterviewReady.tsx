@@ -6,6 +6,7 @@ import { StyledBtn } from "styles/StyledBtn";
 import { hostAtom, isInterviewerAtom } from "store/interview/atom";
 import { useRecoilValue } from "recoil";
 import { css } from "@emotion/react";
+import { useEffect, useState } from "react";
 
 interface UserInterviewReadyProps {
   session: any;
@@ -33,8 +34,34 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
   } = props;
   const isInterviewer = useRecoilValue(isInterviewerAtom);
   const host = useRecoilValue(hostAtom);
+
+  const [isHost, setIsHost] = useState(false);
+
+  useEffect(() => {
+    if (publisher) {
+      setIsHost(host === publisher.stream.connection.connectionId);
+    }
+  }, [publisher]);
   return (
-    <StyledUserInterview>
+    <StyledUserInterview isHost={isHost}>
+      <div className="interviewActionsContents">
+        <div className="interviewActions">
+          <StyledBtn onClick={handleClickModalRoomLeave} width="200px" height="48px" color="red">
+            나가기
+          </StyledBtn>
+          {!isInterviewer && (
+            <NewStyledBtn
+              onClick={handleClickStart}
+              width="200px"
+              height="48px"
+              color="orange"
+              ready={ready}
+            >
+              GO
+            </NewStyledBtn>
+          )}
+        </div>
+      </div>
       {session ? (
         <>
           <div className="publisherContents">
@@ -50,48 +77,21 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
                 )}
               </>
             )}
-            {publisher && (
-              <div className="interviewActionsContents">
-                <div className="interviewActions">
-                  <StyledBtn
-                    onClick={handleClickModalRoomLeave}
-                    width="200px"
-                    height="48px"
-                    color="red"
-                  >
-                    나가기
-                  </StyledBtn>
-                  {!isInterviewer && (
-                    <NewStyledBtn
-                      onClick={handleClickStart}
-                      width="200px"
-                      height="48px"
-                      color="orange"
-                      ready={ready}
-                    >
-                      GO
-                    </NewStyledBtn>
-                  )}
-                </div>
-              </div>
-            )}
           </div>
           <div className="subscribersContents">
-            <div>
-              {publisher && host !== publisher.stream.connection.connectionId && (
-                <div>
-                  <UserVideoComponent streamManager={publisher} />
-                </div>
-              )}
-              {subscribers.map(
-                (sub, i) =>
-                  host !== sub.stream.connection.connectionId && (
-                    <div key={i}>
-                      <UserVideoComponent streamManager={sub} />
-                    </div>
-                  ),
-              )}
-            </div>
+            {publisher && host !== publisher.stream.connection.connectionId && (
+              <div className="subscribers">
+                <UserVideoComponent streamManager={publisher} />
+              </div>
+            )}
+            {subscribers.map(
+              (sub, i) =>
+                host !== sub.stream.connection.connectionId && (
+                  <div key={i} className="subscribers">
+                    <UserVideoComponent streamManager={sub} />
+                  </div>
+                ),
+            )}
           </div>
 
           <Dialog
@@ -133,36 +133,44 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
   );
 };
 
-const StyledUserInterview = styled.div`
-  
-  width: 80vw;
-  overflow-x: hidden;
+interface StyledUserInterviewProps {
+  isHost: boolean;
+}
 
+const StyledUserInterview = styled.div<StyledUserInterviewProps>`
+  position: relative;
+  width: 80vw;
+  overflow-y: hidden;
+  display: flex;
+  justify-content: space-around;
+  .interviewActionsContents {
+    position: absolute;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    width: 80vw;
+    height: 750px;
+    .interviewActions {
+      display: flex;
+      justify-content: space-between;
+      width: ${props => props.isHost && "450px"};
+      margin-bottom: 50px;
+    }
+  }
   .subscribersContents {
     position: relative;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
+    .subscribers {
+    }
   }
   .publisherContents {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    .interviewActionsContents {
-      position: absolute;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      align-items: center;
-      width: 1000px;
-      height: 757px;
-      margin-bottom: 50px;
-      .interviewActions {
-        display: flex;
-        justify-content: space-between;
-        width: 450px;
-      }
-    }
   }
 `;
 

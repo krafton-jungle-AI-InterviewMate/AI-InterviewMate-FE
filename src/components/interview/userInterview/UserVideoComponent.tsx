@@ -34,9 +34,7 @@ const UserVideoComponent = (props: UserVideoComponentProps) => {
             </p>
           )}
         </div>
-      ) : (
-        <Loading margin="0" />
-      )}
+      ) : null}
     </StyledUserVideoComponent>
   );
 };
