@@ -17,11 +17,13 @@ import Loading from "components/common/Loading";
 import { StyledBtn } from "styles/StyledBtn";
 import { Dialog, DialogActions, DialogTitle } from "@mui/material";
 import InterviewQuestionTab from "components/interview/userInterview/InterviewerQuestionTap";
+import { memberAtom } from "store/auth/atom";
 
 const UserInterview = () => {
   const { mutate } = usePutInterviewRooms();
 
   const userInterviewData = useRecoilValue(interviewDataAtom);
+  const { nickname } = useRecoilValue(memberAtom);
   const setRoomPeopleNow = useSetRecoilState(roomPeopleNowAtom);
   const [isInterviewStart, setIsInterviewStart] = useRecoilState(isInterviewStartAtom);
   const isInterviewer = useRecoilValue(isInterviewerAtom);
@@ -29,7 +31,7 @@ const UserInterview = () => {
   const navigate = useNavigate();
 
   const [OV, setOV] = useState<any>(null);
-  const [myUserName, setMyUserName] = useState<string | undefined>(userInterviewData?.nickname);
+  const [myUserName, setMyUserName] = useState<string | undefined>(nickname);
   const [session, setSession] = useState<any>(undefined);
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState<Array<any>>([]);

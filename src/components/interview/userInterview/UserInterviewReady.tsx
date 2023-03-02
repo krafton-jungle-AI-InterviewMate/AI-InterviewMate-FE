@@ -134,6 +134,7 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
 };
 
 const StyledUserInterview = styled.div`
+  
   width: 80vw;
   overflow-x: hidden;
 
