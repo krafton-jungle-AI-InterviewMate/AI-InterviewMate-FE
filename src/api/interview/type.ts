@@ -11,8 +11,9 @@ export type RoomStatus = "CREATE" | "PROCEED" | "EXIT";
 
 export type DeleteInterviewRoomsResponse = ResponseStatus;
 
-export type DeleteInterviewRooms = (roomIdx: number) =>
-  Promise<AxiosResponse<DeleteInterviewRoomsResponse>>;
+export type DeleteInterviewRooms = (
+  roomIdx: number,
+) => Promise<AxiosResponse<DeleteInterviewRoomsResponse>>;
 
 export type PostInterviewRoomsPayloadData = {
   roomName: string;
@@ -39,15 +40,17 @@ export type QuestionListItem = {
   questionTitle: string;
 };
 
+export type PostInterviewRoomsResponseData = PostInterviewRoomsPayloadData & {
+  roomIdx: number;
+  nickname: string;
+  createdAt: string;
+  roomStatus: RoomStatus;
+  connectionToken: string;
+  questionList: Array<QuestionListItem>;
+};
+
 export type PostInterviewRoomsResponse = ResponseStatus & {
-  data: PostInterviewRoomsPayloadData & {
-    roomIdx: number;
-    nickname: string;
-    createdAt: string;
-    roomStatus: RoomStatus;
-    connectionToken: string;
-    questionList: Array<QuestionListItem>;
-  };
+  data: PostInterviewRoomsResponseData;
 };
 
 export type PostInterviewRooms = (
@@ -95,8 +98,9 @@ export type PostJoinRoomResponse = ResponseStatus & {
   data: PostJoinRoomResponseData;
 };
 
-export type PostJoinRoom = (payload: PostJoinRoomPayload) =>
-  Promise<AxiosResponse<PostJoinRoomResponse>>;
+export type PostJoinRoom = (
+  payload: PostJoinRoomPayload,
+) => Promise<AxiosResponse<PostJoinRoomResponse>>;
 
 export type PutInterviewRooms = (roomIdx: number) => Promise<AxiosResponse<ResponseStatus>>;
 
