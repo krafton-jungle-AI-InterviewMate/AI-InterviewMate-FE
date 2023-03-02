@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { memberAtom } from "store/auth/atom";
 import { usePutNickname } from "hooks/queries/auth";
 
 import Popup from "components/common/Popup";
@@ -25,7 +23,6 @@ const ProfileUpdatePopup = (props: ProfileUpdatePopupProps) => {
     error,
   } = usePutNickname();
 
-  const { email } = useRecoilValue(memberAtom);
   const [ newNickname, setNewNickname ] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,7 +37,6 @@ const ProfileUpdatePopup = (props: ProfileUpdatePopupProps) => {
 
     mutate({
       nickname: newNickname,
-      email,
     });
   };
 
