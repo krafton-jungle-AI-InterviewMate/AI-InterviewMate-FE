@@ -45,33 +45,39 @@ interface StyledUserVideoComponentProps {
 }
 
 const StyledUserVideoComponent = styled.div<StyledUserVideoComponentProps>`
-  position: relative;
   .streamcomponent {
+    position: relative;
     display: flex;
     flex-direction: ${props => (props.isHost ? "column" : "row")};
-  }
-  p {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: ${props => (props.isHost ? "30px 0 0" : "0 0 0 50px")};
-    span {
-      display: block;
-    }
-    .interviewer {
-      padding: 5px 20px;
-      border-radius: 5px;
-      font-size: 14px;
-      font-weight: 400;
-      margin-right: 12px;
-      color: var(--main-white);
-      background-color: ${props => (props.isHost ? "var(--main-blue)" : "var(--push-gray)")};
-    }
-    .nickname {
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--main-black);
+    p {
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 10px 0 0;
+      width: ${props => (props.isHost ? "1000px" : "333px")};
+      span {
+        display: block;
+      }
+      .interviewer {
+        padding: 5px 20px;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: 400;
+        margin-right: 12px;
+        color: var(--main-white);
+        background-color: ${props => (props.isHost ? "var(--main-blue)" : "var(--push-gray)")};
+        color: ${props => (props.isHost ? "var(--main-white)" : "var(--push-black)")};
+      }
+      .nickname {
+        padding: 5px 20px;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: 400;
+        margin-right: 12px;
+        background-color: var(--main-white);
+        color: var(--main-black);
+      }
     }
   }
 `;
