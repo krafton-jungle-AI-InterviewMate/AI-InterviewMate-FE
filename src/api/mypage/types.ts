@@ -54,13 +54,23 @@ export type ScriptRequestsDtos = {
   script: string;
 };
 
+export type Comment = {
+  viewerIdx: number;
+  comment: string;
+};
+
+export type ScriptWithQuestionIdx = {
+  questionIdx: number;
+  script: string;
+};
+
 export type PostRatingVieweePayloadData = {
-  viewerIdx: number; // 79797979로 지정할 경우 AI로 인식된다고 함.
-  eyesRating: number;
-  attitudeRating: number;
-  answerRating?: number;
-  commentsRequestDtos?: Array<CommentsRequestDtos>;
-  scriptRequestsDtos: Array<ScriptRequestsDtos>;
+  videoUrl: string | null;
+  eyeTimelines: string[];
+  attitudeTimelines: string[];
+  questionTimelines: string[];
+  comments: Comment[];
+  scripts: ScriptWithQuestionIdx[];
 };
 
 export type PostRatingVieweePayload = {

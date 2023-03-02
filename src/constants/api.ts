@@ -28,7 +28,6 @@ export const API_PATH = {
 };
 
 export const AI_VIEWER_IDX = 79797979;
-
 export const AWS_API_GATEWAY_URL = "https://jqyikrv9ta.execute-api.ap-northeast-2.amazonaws.com";
 
 export const AWS_API_PATH = {
