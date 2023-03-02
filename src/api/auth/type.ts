@@ -50,7 +50,6 @@ export type GetAzureToken = () => Promise<AxiosResponse<GetAzureTokenResponse>>;
 
 export type PutNicknameParams = {
   nickname: string;
-  email: string;
 };
 
 export type PutNicknameResponse = ResponseStatus;

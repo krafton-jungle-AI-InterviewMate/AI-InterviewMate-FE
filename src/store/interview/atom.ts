@@ -6,7 +6,7 @@ import {
   AiInterviewProcessTypes,
   TimelineRecord,
 } from "types/interview";
-import { PostInterviewRoomsResponse, PostJoinRoomResponseData } from "api/interview/type";
+import { PostInterviewRoomsResponse, PostInterviewRoomsResponseData } from "api/interview/type";
 import { InitialTimelineRecord } from "constants/interview";
 
 /** 인터뷰 프로세스 제어 */
@@ -68,7 +68,7 @@ export const feedbackAtom = atom<string>({
 });
 
 /** 인터뷰 정보 */
-export const interviewDataAtom = atom<null | PostJoinRoomResponseData>({
+export const interviewDataAtom = atom<null | PostInterviewRoomsResponseData>({
   key: "UserInterviewData",
   default: null,
 });

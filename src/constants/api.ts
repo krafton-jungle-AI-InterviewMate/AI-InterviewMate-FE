@@ -6,14 +6,17 @@ export const BASE_URL = "https://jungle-weat.shop";
 
 export const API_PATH = {
   GET_IMAGE: (queryParams?: ImageQueryParams) => `/images/search?${queryParams || ""}`,
-  GET_RATING_HISTORY: "/rating/history",
-  GET_RATING_DETAIL: (roomIdx: number, type: RoomTypes) => `/rating/${roomIdx}?type=${type}`,
-  POST_RATING_VIEWEE: (roomIdx: number) => `/rating/${roomIdx}/viewee`,
+  GET_RESULT_HISTORY: "/result/history",
+  GET_RESULT_DETAIL: (roomIdx: number, type: RoomTypes) => `/result/${roomIdx}?type=${type}`,
+  POST_RESULT: (roomIdx: number) => `/result/${roomIdx}`,
+  POST_RESULT_MEMO: (roomIdx: number) => `/result/${roomIdx}/memo`,
+  POST_RESULT_COMMENT: (roomIdx: number) => `/result/${roomIdx}/comment`,
   POST_INTERVIEW_ROOMS: "/interview/rooms",
   GET_INTERVIEW_ROOMS: "/interview/rooms",
+  DELETE_INTERVIEW_ROOMS: (roomIdx: number) => `/interview/rooms/${roomIdx}`,
   GET_QUESTIONBOXES: "/questionBoxes",
   DELETE_QUESTIONBOXES: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`,
-  PUT_QUESTIONBOX_NAME: questionBoxIdx => `/questionBoxes/${questionBoxIdx}`,
+  PUT_QUESTIONBOX_NAME: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`,
   GET_QUESTION_DETAILS: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`,
   PUT_QUESTION_DETAILS: (questionIdx: number) => `/questionBoxes/question/${questionIdx}`,
   POST_QUESTION_DETAILS: (questionBoxIdx: number) => `/questionBoxes/${questionBoxIdx}`,
@@ -28,7 +31,6 @@ export const API_PATH = {
 };
 
 export const AI_VIEWER_IDX = 79797979;
-
 export const AWS_API_GATEWAY_URL = "https://jqyikrv9ta.execute-api.ap-northeast-2.amazonaws.com";
 
 export const AWS_API_PATH = {

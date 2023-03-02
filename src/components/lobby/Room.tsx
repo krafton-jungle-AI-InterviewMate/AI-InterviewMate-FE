@@ -135,7 +135,10 @@ const Room = ({
       return;
     }
     if (!isLoading) {
-      mutate(idx, {
+      mutate({
+        roomIdx: idx,
+        password: null, // TODO: 비밀번호 검증
+      }, {
         onSuccess: ({ data }) => {
           setUserInterviewData(data.data);
           setIsInterviewer(true);
