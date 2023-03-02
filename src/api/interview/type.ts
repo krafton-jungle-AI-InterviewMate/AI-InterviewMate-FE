@@ -30,6 +30,7 @@ export type PostInterviewRoomsPayload = {
 };
 
 export type QuestionListItem = {
+  questionIdx: number;
   keyword1: string;
   keyword2: string | null;
   keyword3: string | null;
@@ -87,6 +88,7 @@ export type PostJoinRoomResponseData = PostInterviewRoomsPayloadData & {
   roomViewer1Idx?: number;
   roomViewer2Idx?: number;
   roomViewer3Idx?: number;
+  interviewerIdxes: Array<string>;
 };
 
 export type PostJoinRoomResponse = ResponseStatus & {
