@@ -15,21 +15,50 @@ const useIrisAssessment = (params: UseIrisAssessmentParams) => {
     horizontalRatio,
   } = params;
 
+  const [ isShowingFeedback, setIsShowingFeedback ] = useState(false);
   const [ showFeedback, setShowFeedback ] = useState(false);
   const setIrisCount = useSetRecoilState(irisCountAtom);
   const [ timelineRecord, setTimelineRecord ] = useRecoilState(timelineRecordAtom);
   const [ increments, setIncrements ] = useState(0);
+  const [ feedbackIncrements, setFeedbackIncrements ] = useState(0);
   const isRecordMode = useRecoilValue(recordModeAtom);
 
   const isIrisOutOfCenter = useMemo(() => {
     return (horizontalRatio < THRESHOLD_RIGHT || horizontalRatio > THRESHOLD_LEFT);
   }, [ horizontalRatio ]);
 
-  const assess = () => {
-    if (isRealtimeMode) {
-      setShowFeedback(isIrisOutOfCenter);
+  useEffect(() => {
+    if (!isRealtimeMode) {
+      return;
     }
 
+    const timerId1 = window.setTimeout(() => {
+      setFeedbackIncrements((curr) => curr + 1);
+    }, 1000 * 1);
+    const timerId2 = window.setTimeout(() => {
+      setShowFeedback(false);
+      setIsShowingFeedback(false);
+    }, 1000 * 3);
+
+    if (isShowingFeedback) {
+      return;
+    }
+
+    if (isIrisOutOfCenter) {
+      setShowFeedback(true);
+      setIsShowingFeedback(true);
+    }
+    else {
+      setShowFeedback(false);
+    }
+
+    return (() => {
+      window.clearTimeout(timerId1);
+      window.clearTimeout(timerId2);
+    });
+  }, [ isIrisOutOfCenter, isShowingFeedback, feedbackIncrements ]);
+
+  const assess = () => {
     if (isIrisOutOfCenter) {
       setIrisCount((curr) => curr + 1);
 
