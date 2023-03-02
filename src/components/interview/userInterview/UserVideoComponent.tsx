@@ -47,24 +47,24 @@ interface StyledUserVideoComponentProps {
 }
 
 const StyledUserVideoComponent = styled.div<StyledUserVideoComponentProps>`
-  margin-bottom: ${props => (props.isInterviewStart ? 0 : "20px")};
+  position: relative;
   .streamcomponent {
     display: flex;
     flex-direction: ${props => (props.isHost ? "column" : "row")};
   }
   p {
+    position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: ${props => (props.isHost ? "45px 0 0" : "0 0 0 50px")};
+    margin: ${props => (props.isHost ? "30px 0 0" : "0 0 0 50px")};
     span {
       display: block;
     }
     .interviewer {
-      width: 70px;
-      height: 24px;
+      padding: 5px 20px;
       border-radius: 5px;
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 400;
       margin-right: 12px;
       color: var(--main-white);
