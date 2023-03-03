@@ -37,7 +37,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
   useEffect(() => {
     const timerId = window.setTimeout(() => {
       InterviewEnd();
-    }, userInterviewData?.roomTime * 1000); // ! TODO 수정
+    }, userInterviewData?.roomTime * 1000 * 60);
 
     return () => {
       window.clearTimeout(timerId);
