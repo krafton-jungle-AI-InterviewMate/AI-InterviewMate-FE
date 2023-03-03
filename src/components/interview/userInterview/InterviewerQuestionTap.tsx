@@ -1,9 +1,7 @@
-import { useGetQuestionDetails } from "hooks/queries/interview";
 import { StyledBtn } from "styles/StyledBtn";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { interviewCommentAtom, interviewDataAtom } from "store/interview/atom";
-import { GetQuestionDetailsResponseData } from "api/interview/type";
 import styled from "@emotion/styled";
 
 type Tab = "question" | "comment";
@@ -12,12 +10,7 @@ const InterviewQuestionTab = () => {
   const userInterviewData = useRecoilValue(interviewDataAtom);
   const [comment, setComment] = useRecoilState(interviewCommentAtom);
 
-  const [question, setQuestion] = useState<GetQuestionDetailsResponseData>();
   const [tabName, setTabName] = useState<Tab>("question");
-
-  const { data, isLoading, isSuccess, isError } = useGetQuestionDetails(
-    userInterviewData!.roomQuestionBoxIdx,
-  );
 
   const handleClickTab = (event: React.MouseEvent<HTMLButtonElement>) => {
     setTabName(event.currentTarget.name as Tab);
@@ -34,13 +27,6 @@ const InterviewQuestionTab = () => {
     textarea.current.style.height = "auto";
     textarea.current.style.height = textarea.current.scrollHeight + "px";
   };
-
-  useEffect(() => {
-    if (!isLoading && data) {
-      setQuestion(data.data.data);
-      console.log(data.data.data);
-    }
-  }, [isLoading]);
 
   return (
     <StyledInterviewQuestionTab>
@@ -68,7 +54,7 @@ const InterviewQuestionTab = () => {
       </div>
       <div className="contents">
         {tabName === "question" ? (
-          question?.questions.map(q => (
+          userInterviewData?.questionList.map(q => (
             <div key={q.questionIdx} className="questions">
               <h2 className="questionTitle">
                 <span>Q.</span>
@@ -97,9 +83,6 @@ const InterviewQuestionTab = () => {
                 ref={textarea}
                 value={comment}
               ></textarea>
-              {/* <StyledBtn width="120px" height="32px" color="orange">
-                중간 저장
-              </StyledBtn> */}
             </form>
           </div>
         )}
