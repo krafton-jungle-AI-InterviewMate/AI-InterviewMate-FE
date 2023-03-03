@@ -33,15 +33,16 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
   const setIsInterviewStart = useSetRecoilState(isInterviewStartAtom);
 
   useEffect(() => {
+    let isInHost = false;
+    subscribers.map(sub => {
+      if (host === sub.stream.connection.connectionId) {
+        isInHost = true;
+      }
+    });
     if (host === publisher.stream.connection.connectionId && subscribers.length === 0) {
       setIsInterviewStart(false);
       navigete("/lobby");
-    } else if (host !== publisher.stream.connection.connectionId) {
-      subscribers.map(sub => {
-        if (host === sub.stream.connection.connectionId) {
-          return;
-        }
-      });
+    } else if (host !== publisher.stream.connection.connectionId && !isInHost) {
       setIsInterviewStart(false);
       navigete("/lobby");
     }
