@@ -42,7 +42,8 @@ const InterviewAiContainer = () => {
   const webcamRef = useRef<null | Webcam>(null);
   const [ isWebcamReady, setIsWebcamReady ] = useState(false);
   const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
-  const [ recorder, setRecorder ] = useState<null | RecordRTC.RecordRTCPromisesHandler>();
+  // const [ recorder, setRecorder ] = useState<null | RecordRTC.RecordRTCPromisesHandler>();
+  const [ recorder, setRecorder ] = useState<null | RecordRTC.MultiStreamRecorder>();
 
   const aiInterviewerVideo = useMemo(() => getAiInterviewerVideo(aiInterviewer), [ aiInterviewer ]);
   const aiInterviewerListening = useMemo(() => getAiInterviewerListening(aiInterviewer), [ aiInterviewer ]);
@@ -56,10 +57,13 @@ const InterviewAiContainer = () => {
 
   const stopRecording = async () => {
     if (recorder) {
-      await recorder.stopRecording();
-      const blob = await recorder.getBlob();
-      // RecordRTC.invokeSaveAsDialog(blob, `interview${interviewQuestionNumber}.webm`);
-      console.log(blob); // TODO: POST /result req body에 포함
+      // await recorder.stopRecording();
+      // const blob = await recorder.getBlob();
+      // RecordRTC.invokeSaveAsDialog(blob, `interview.webm`);
+      // console.log(blob); // TODO: POST /result req body에 포함
+      await recorder.stop(function(blob) {
+        RecordRTC.invokeSaveAsDialog(blob, `interview1.webm`);
+      });
     }
   };
 
@@ -67,7 +71,8 @@ const InterviewAiContainer = () => {
     if (isRecordMode) {
       (async () => {
         const rec = await getPermissionInitializeRecorder();
-        await rec.startRecording();
+        // await rec.startRecording();
+        await rec.record();
         setTimelineRecord((curr) => ({
           ...curr,
           startTime: Date.now(),
@@ -77,7 +82,9 @@ const InterviewAiContainer = () => {
       })();
   
       return (() => {
-        recorder?.destroy();
+        // recorder?.destroy();
+        recorder?.clearRecordedData;
+        recorder?.resetVideoStreams;
       });
     }
   }, []);
