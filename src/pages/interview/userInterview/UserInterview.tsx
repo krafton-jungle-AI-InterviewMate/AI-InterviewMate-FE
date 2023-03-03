@@ -188,7 +188,7 @@ const UserInterview = () => {
     // 대기방에서 나감
     deleteInterviewRoomsMutate(userInterviewData!.roomIdx, {
       onSuccess: () => {
-        if (host === publisher.stream.connection.connectionId || subscribers.length === 0) {
+        if (host === publisher.stream.connection.connectionId || subscribers.length === 1) {
           session
             .signal({
               to: subscribers,
