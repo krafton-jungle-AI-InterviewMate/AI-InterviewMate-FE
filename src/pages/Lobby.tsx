@@ -41,7 +41,6 @@ const Lobby = () => {
   useEffect(() => {
     if (!isLoading && data) {
       setInterviewRooms(data.data.data);
-      console.log(data.data.data);
     }
   }, [data]);
 

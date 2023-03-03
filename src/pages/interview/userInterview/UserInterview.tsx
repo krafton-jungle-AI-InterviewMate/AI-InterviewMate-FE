@@ -87,11 +87,12 @@ const UserInterview = () => {
 
     session.on("signal:interviewOut", event => {
       console.log(event.type);
+      console.log(event.data);
       if (event.data) {
         setIsInterviewStart(false);
         leaveSession();
         navigate("/lobby");
-      } else if (!event.data && subscribers.length === 0) {
+      } else if (!event.data) {
         setIsInterviewStart(false);
         leaveSession();
         navigate("/lobby");
