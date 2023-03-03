@@ -3,12 +3,12 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   interviewModeAtom,
   interviewQuestionTotalAtom,
-  interviewQuestionNumberAtom,
   answerScriptAtom,
   aiInterviewerAtom,
   aiRoomResponseAtom,
   recordModeAtom,
   timelineRecordAtom,
+  videoBlobAtom,
 } from "store/interview/atom";
 
 import InterviewVideo from "./InterviewVideo";
@@ -38,6 +38,7 @@ const InterviewAiContainer = () => {
   const aiRoomResponse = useRecoilValue(aiRoomResponseAtom);
   const isRecordMode = useRecoilValue(recordModeAtom);
   const setTimelineRecord = useSetRecoilState(timelineRecordAtom);
+  const setVideoBlob = useSetRecoilState(videoBlobAtom);
 
   const webcamRef = useRef<null | Webcam>(null);
   const [ isWebcamReady, setIsWebcamReady ] = useState(false);
@@ -58,8 +59,7 @@ const InterviewAiContainer = () => {
     if (recorder) {
       await recorder.stopRecording();
       const blob = await recorder.getBlob();
-      // RecordRTC.invokeSaveAsDialog(blob, `interview${interviewQuestionNumber}.webm`);
-      console.log(blob); // TODO: POST /result req body에 포함
+      setVideoBlob(blob);
     }
   };
 

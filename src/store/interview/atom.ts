@@ -130,3 +130,13 @@ export const timelineRecordAtom = atom<TimelineRecord>({
   key: "TimelineRecord",
   default: InitialTimelineRecord,
 });
+
+export const videoBlobAtom = atom<null | Blob>({
+  key: "VideoBlob",
+  default: null,
+});
+
+export const videoUrlAtom = atom<string>({
+  key: "VideoUrl",
+  default: "",
+});

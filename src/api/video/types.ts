@@ -6,6 +6,10 @@ type ResponseStatus = {
 }
 
 export type PostInitiateVideoUploadPayload = {
+  /**
+   * ${roomIdx}+‘_’+${오늘날짜} 형식
+   * 예) 72_230303.webm
+   */
   fileName: string;
 };
 
