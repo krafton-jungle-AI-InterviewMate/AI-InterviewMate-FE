@@ -1,12 +1,11 @@
 import styled from "@emotion/styled";
 import { Dialog, DialogActions, DialogTitle } from "@mui/material";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { hostAtom, interviewDataAtom, isInterviewStartAtom } from "store/interview/atom";
+import { useRecoilValue } from "recoil";
+import { hostAtom, interviewDataAtom } from "store/interview/atom";
 import { StyledBtn } from "styles/StyledBtn";
 import InterviewQuestionTab from "./InterviewerQuestionTap";
 import UserVideoComponent from "./UserVideoComponent";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import UserInterviewTimer from "./UserInterviewTimer";
 
 interface UserInterviewStartProps {
@@ -31,28 +30,9 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
     handleClickInterviewOut,
     InterviewEnd,
   } = props;
-  const navigate = useNavigate();
 
   const userInterviewData = useRecoilValue(interviewDataAtom);
   const host = useRecoilValue(hostAtom);
-  const setIsInterviewStart = useSetRecoilState(isInterviewStartAtom);
-
-  useEffect(() => {
-    let isInHost = false;
-    subscribers.map(sub => {
-      if (host === sub.stream.connection.connectionId) {
-        isInHost = true;
-      }
-    });
-    if (host === publisher.stream.connection.connectionId && subscribers.length === 0) {
-      handleClickInterviewOut();
-      setIsInterviewStart(false);
-      navigate("/lobby");
-    } else if (host !== publisher.stream.connection.connectionId && !isInHost) {
-      setIsInterviewStart(false);
-      navigate("/lobby");
-    }
-  }, [subscribers]);
 
   useEffect(() => {
     const timerId = window.setTimeout(() => {

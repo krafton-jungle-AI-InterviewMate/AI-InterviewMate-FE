@@ -77,6 +77,37 @@ const UserInterview = () => {
       console.warn(exception);
     });
 
+    session.on("signal:readyOut", event => {
+      console.log(event.type);
+      let isInHost = false;
+      subscribers.map(sub => {
+        if (host === sub.stream.connection.connectionId) {
+          isInHost = true;
+        }
+      });
+      if (host !== publisher.stream.connection.connectionId && !isInHost) {
+        leaveSession();
+        navigate("/lobby");
+      }
+    });
+
+    session.on("signal:interviewOut", event => {
+      console.log(event.type);
+      let isInHost = false;
+      subscribers.map(sub => {
+        if (host === sub.stream.connection.connectionId) {
+          isInHost = true;
+        }
+      });
+      if (host === publisher.stream.connection.connectionId && subscribers.length === 0) {
+        setIsInterviewStart(false);
+        navigate("/lobby");
+      } else if (host !== publisher.stream.connection.connectionId && !isInHost) {
+        setIsInterviewStart(false);
+        navigate("/lobby");
+      }
+    });
+
     session.on("signal:interviewStart", event => {
       console.log(event.type);
       setIsInterviewStart(true);
@@ -160,6 +191,14 @@ const UserInterview = () => {
         alert(error);
       },
     });
+    session
+      .signal({
+        to: subscribers,
+        type: "interviewOut",
+      })
+      .catch(error => {
+        console.error(error);
+      });
     setIsInterviewStart(false);
     leaveSession();
     navigate("/lobby");
@@ -175,6 +214,14 @@ const UserInterview = () => {
         alert(error);
       },
     });
+    session
+      .signal({
+        to: subscribers,
+        type: "readyOut",
+      })
+      .catch(error => {
+        console.error(error);
+      });
     leaveSession();
     navigate("/lobby");
   };

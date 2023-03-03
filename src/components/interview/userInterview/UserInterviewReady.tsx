@@ -3,11 +3,10 @@ import UserVideoComponent from "./UserVideoComponent";
 import Loading from "components/common/Loading";
 import styled from "@emotion/styled";
 import { StyledBtn } from "styles/StyledBtn";
-import { hostAtom, isInterviewerAtom, isInterviewStartAtom } from "store/interview/atom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { hostAtom, isInterviewerAtom } from "store/interview/atom";
+import { useRecoilValue } from "recoil";
 import { css } from "@emotion/react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 interface UserInterviewReadyProps {
   session: any;
@@ -33,10 +32,8 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
     handleClickModalRoomLeave,
     handleClickStart,
   } = props;
-  const navigate = useNavigate();
   const isInterviewer = useRecoilValue(isInterviewerAtom);
   const host = useRecoilValue(hostAtom);
-  const setIsInterviewStart = useSetRecoilState(isInterviewStartAtom);
 
   const [isHost, setIsHost] = useState(false);
 
@@ -46,18 +43,6 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
     }
   }, [host]);
 
-  useEffect(() => {
-    let isInHost = false;
-    subscribers.map(sub => {
-      if (host === sub.stream.connection.connectionId) {
-        isInHost = true;
-      }
-    });
-    if (publisher && host !== publisher.stream.connection.connectionId && !isInHost) {
-      setIsInterviewStart(false);
-      navigate("/lobby");
-    }
-  }, [subscribers]);
   return (
     <StyledUserInterview isHost={isHost}>
       <div className="interviewActionsContents">
