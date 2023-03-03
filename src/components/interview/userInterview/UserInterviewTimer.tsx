@@ -1,3 +1,4 @@
+import styled from "@emotion/styled";
 import { useEffect, useRef, useState } from "react";
 
 interface UserInterviewTimerProps {
@@ -10,17 +11,17 @@ const UserInterviewTimer = (props: UserInterviewTimerProps) => {
     return String(num).padStart(length, "0");
   };
 
-  const initialTime = useRef(roomTime * 60);
-  const interval = useRef<any>();
+  const initialTime = useRef<number>(roomTime * 60);
+  const interval = useRef<any>(null);
 
-  const [min, setMin] = useState(padNumber(initialTime, 2));
-  const [sec, setSec] = useState(padNumber(initialTime, 2));
+  const [min, setMin] = useState<string>(roomTime + "");
+  const [sec, setSec] = useState<string>("00");
 
   useEffect(() => {
     interval.current = setInterval(() => {
       initialTime.current -= 1;
       setSec(padNumber(initialTime.current % 60, 2));
-      setMin(padNumber(initialTime.current / 60, 2));
+      setMin(padNumber(Math.floor(initialTime.current / 60), 2));
     }, 1000);
 
     return () => {
@@ -35,10 +36,15 @@ const UserInterviewTimer = (props: UserInterviewTimerProps) => {
   }, [sec]);
 
   return (
-    <div>
+    <StyledUserInterviewTimer>
       {min} : {sec}
-    </div>
+    </StyledUserInterviewTimer>
   );
 };
+
+const StyledUserInterviewTimer = styled.div`
+  padding: 15px 0;
+  font-size: 20px;
+`;
 
 export default UserInterviewTimer;

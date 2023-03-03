@@ -83,7 +83,6 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
                   ),
               )}
             </div>
-            <UserInterviewTimer roomTime={userInterviewData?.roomTime} />
             <div className="interviewActions">
               <StyledBtn
                 onClick={handleClickModalRoomLeave}
@@ -95,6 +94,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
               </StyledBtn>
             </div>
           </div>
+          <UserInterviewTimer roomTime={userInterviewData?.roomTime} />
           <div className="publisherContents">
             {publisher && (
               <div className="publisherVideo">
@@ -172,7 +172,6 @@ const StyledUserInterviewStart = styled.div`
     }
   }
   .publisherContents {
-    margin-top: 30px;
     .publisherVideo {
       display: flex;
       justify-content: center;
