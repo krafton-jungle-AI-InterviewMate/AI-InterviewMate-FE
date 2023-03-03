@@ -19,18 +19,16 @@ const QuestionModeController = (props: QuestionModeControllerProps) => {
   const isRecordMode = useRecoilValue(recordModeAtom);
 
   useEffect(() => {
-    if (isRecordMode) {
-      setTimelineRecord((curr) => ({
-        ...curr,
-        timeline: {
-          ...curr.timeline,
-          questionModeStart: [
-            ...curr.timeline.questionModeStart,
-            createTimeline(timelineRecord.startTime),
-          ],
-        },
-      }));
-    }
+    setTimelineRecord((curr) => ({
+      ...curr,
+      timeline: {
+        ...curr.timeline,
+        questionModeStart: [
+          ...curr.timeline.questionModeStart,
+          createTimeline(timelineRecord.startTime),
+        ],
+      },
+    }));
   }, []);
 
   useAzureTTS(props);

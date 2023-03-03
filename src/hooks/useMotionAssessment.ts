@@ -57,15 +57,13 @@ const useMotionAssessment = (params: UseMotionAssessmentParams) => {
     if (isBadMotion) {
       setMotionCount((curr) => curr + 1);
 
-      if (isRecordMode) {
-        setTimelineRecord((curr) => ({
-          ...curr,
-          timeline: {
-            ...curr.timeline,
-            attitude: [ ...curr.timeline.attitude, createTimeline(timelineRecord.startTime) ],
-          },
-        }));
-      }
+      setTimelineRecord((curr) => ({
+        ...curr,
+        timeline: {
+          ...curr.timeline,
+          attitude: [ ...curr.timeline.attitude, createTimeline(timelineRecord.startTime) ],
+        },
+      }));
     }
   };
 
