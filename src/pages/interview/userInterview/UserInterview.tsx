@@ -79,13 +79,7 @@ const UserInterview = () => {
 
     session.on("signal:readyOut", event => {
       console.log(event.type);
-      let isInHost = false;
-      subscribers.map(sub => {
-        if (host === sub.stream.connection.connectionId) {
-          isInHost = true;
-        }
-      });
-      if (host !== publisher.stream.connection.connectionId && !isInHost) {
+      if (event.data) {
         leaveSession();
         navigate("/lobby");
       }
@@ -193,6 +187,7 @@ const UserInterview = () => {
     });
     session
       .signal({
+        data: host === publisher.stream.connection.connectionId,
         to: subscribers,
         type: "interviewOut",
       })
@@ -216,6 +211,7 @@ const UserInterview = () => {
     });
     session
       .signal({
+        data: host === publisher.stream.connection.connectionId,
         to: subscribers,
         type: "readyOut",
       })
