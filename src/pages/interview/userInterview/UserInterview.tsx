@@ -198,18 +198,18 @@ const UserInterview = () => {
 
   const handleClickReadyOut = () => {
     // 대기방에서 나감
+    session
+      .signal({
+        data: host === publisher.stream.connection.connectionId ? "면접자" : "면접관",
+        to: subscribers,
+        type: "readyOut",
+      })
+      .catch(error => {
+        console.error(error);
+      });
     deleteInterviewRoomsMutate(userInterviewData!.roomIdx, {
       onSuccess: () => {
         console.log("면접방을 나갔습니다.");
-        session
-          .signal({
-            data: host === publisher.stream.connection.connectionId ? "면접자" : "면접관",
-            to: subscribers,
-            type: "readyOut",
-          })
-          .catch(error => {
-            console.error(error);
-          });
         leaveSession();
         navigate("/lobby");
       },
