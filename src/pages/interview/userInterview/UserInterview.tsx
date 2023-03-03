@@ -87,17 +87,13 @@ const UserInterview = () => {
 
     session.on("signal:interviewOut", event => {
       console.log(event.type);
-      let isInHost = false;
-      subscribers.map(sub => {
-        if (host === sub.stream.connection.connectionId) {
-          isInHost = true;
-        }
-      });
-      if (host === publisher.stream.connection.connectionId && subscribers.length === 0) {
+      if (event.data) {
         setIsInterviewStart(false);
+        leaveSession();
         navigate("/lobby");
-      } else if (host !== publisher.stream.connection.connectionId && !isInHost) {
+      } else if (!event.data && subscribers.length === 0) {
         setIsInterviewStart(false);
+        leaveSession();
         navigate("/lobby");
       }
     });
