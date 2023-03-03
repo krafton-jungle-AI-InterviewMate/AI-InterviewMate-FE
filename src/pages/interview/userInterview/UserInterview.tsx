@@ -78,7 +78,15 @@ const UserInterview = () => {
       console.warn(exception);
     });
 
-    session.on("signal:exit", event => {
+    session.on("signal:subscriberExit", event => {
+      console.log(event.type);
+      if (host === publisher.stream.connection.connectionId && subscribers.length === 0) {
+        leaveSession();
+        navigate("/lobby");
+      }
+    });
+
+    session.on("signal:publisherExit", event => {
       console.log(event.type);
       leaveSession();
       navigate("/lobby");
@@ -161,14 +169,26 @@ const UserInterview = () => {
     // 인터뷰 도중 나감
     deleteInterviewRoomsMutate(userInterviewData!.roomIdx, {
       onSuccess: () => {
-        if (host === publisher.stream.connection.connectionId || subscribers.length === 0) {
+        if (host === publisher.stream.connection.connectionId) {
           session
             .signal({
               to: subscribers,
-              type: "exit",
+              type: "publisherExit",
             })
             .then(() => {
               console.log("면접자가 면접방을 나갔습니다.");
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        } else {
+          session
+            .signal({
+              to: subscribers,
+              type: "subscriberExit",
+            })
+            .then(() => {
+              console.log("면접관이 면접방을 나갔습니다.");
             })
             .catch(error => {
               console.error(error);
@@ -188,14 +208,26 @@ const UserInterview = () => {
     // 대기방에서 나감
     deleteInterviewRoomsMutate(userInterviewData!.roomIdx, {
       onSuccess: () => {
-        if (host === publisher.stream.connection.connectionId || subscribers.length === 1) {
+        if (host === publisher.stream.connection.connectionId) {
           session
             .signal({
               to: subscribers,
-              type: "exit",
+              type: "publisherExit",
             })
             .then(() => {
               console.log("면접자가 면접방을 나갔습니다.");
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        } else {
+          session
+            .signal({
+              to: subscribers,
+              type: "subscriberExit",
+            })
+            .then(() => {
+              console.log("면접관이 면접방을 나갔습니다.");
             })
             .catch(error => {
               console.error(error);
