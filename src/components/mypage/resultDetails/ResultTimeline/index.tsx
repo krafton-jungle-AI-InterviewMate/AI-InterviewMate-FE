@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import Player from "video.js/dist/types/player";
-
 import {
   Timeline,
   TimelineItem,
@@ -11,6 +9,7 @@ import {
   TimelineOppositeContent,
 } from "@mui/lab";
 import ResultTimelineItem from "./ResultTimelineItem";
+import { VideoJsPlayer as Player } from "video.js";
 
 import throttle from "lodash.throttle";
 import { createTimestampFromSeconds } from "./utils";
@@ -38,28 +37,23 @@ const ResultTimeline = (props: ResultTimelineProps) => {
       const video = videoRef.current;
 
       const setVideoDuration = () => {
-        const videoDuration = video.cache_.duration;
+        const videoDuration = video.duration();
         setDuration(videoDuration || null);
       };
       const setVideoCurrentTime = () => {
-        const videoCurrentTime = video.cache_.currentTime;
+        const videoCurrentTime = video?.currentTime();
         setCurrentTime(videoCurrentTime || null);
       };
       const throttledTimeSetter = throttle(setVideoCurrentTime, 500);
 
-      video.ready(setVideoDuration);
-      video.ready(throttledTimeSetter);
-
-      // return () => {
-      //   video.removeEventListener("loadedmetadata", setVideoDuration);
-      //   video.removeEventListener("timeupdate", throttledTimeSetter);
-      // };
+      video.on("loadedmetadata", setVideoDuration);
+      video.on("timeupdate", throttledTimeSetter);
     }
   }, [ videoRef ]);
 
   const handleVideoProgress = (time: number) => {
     if (videoRef.current) {
-      videoRef.current.cache_.currentTime = time;
+      videoRef.current.currentTime(time);
     }
   };
 

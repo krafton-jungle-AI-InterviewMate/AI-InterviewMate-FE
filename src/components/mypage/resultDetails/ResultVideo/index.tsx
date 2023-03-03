@@ -1,5 +1,4 @@
-import videojs from "video.js";
-import Player from "video.js/dist/types/player";
+import { VideoJsPlayer as Player } from "video.js";
 import Video from "./Video";
 
 import styled from "@emotion/styled";
@@ -27,6 +26,7 @@ const ResultVideo = (props: ResultVideoProps) => {
     } ],
     width: 640,
     height: 480,
+    preload: "auto",
   };
 
   const handlePlayerReady = (player: Player) => {
@@ -66,10 +66,7 @@ const StyledVideoWrapper = styled.div`
   box-sizing: content-box;
   background-color: var(--main-white);
 
-  & video {
-    box-sizing: border-box;
-    width: 640px;
-    height: 480px;
-    border-radius: 10px;
+  & > div {
+    transform: translateY(15%);
   }
 `;

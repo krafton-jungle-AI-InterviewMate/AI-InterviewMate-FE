@@ -21,7 +21,7 @@ const ResultScript = (props: ResultScriptProps) => {
   const { resultDetail: { scripts } } = props;
 
   const [ currQuestion, setCurrQuestion ] = useState("Q1");
-  const [ currScript, setCurrScript ] = useState(scripts[0].script);
+  const [ currScript, setCurrScript ] = useState(scripts[0]?.script ?? "");
 
   const handleChange = (event: SelectChangeEvent) => {
     setCurrQuestion(event.target.value);

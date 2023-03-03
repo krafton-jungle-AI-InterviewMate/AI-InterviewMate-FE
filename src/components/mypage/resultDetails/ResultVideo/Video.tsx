@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
-import videojs from "video.js";
-import Player from "video.js/dist/types/player";
+import videojs, { VideoJsPlayer as Player } from "video.js";
 import "video.js/dist/video-js.css";
 
 type VideoProps = {
@@ -19,9 +18,7 @@ const Video = (props: VideoProps) => {
   const parentRef = useRef<null | HTMLDivElement>(null);
 
   useEffect(() => {
-    console.log("Hi2");
     if (parentRef.current) {
-      console.log("Hi");
       // Make sure Video.js player is only initialized once
       if (!videoRef.current) {
         const videoElement = document.createElement("video-js");

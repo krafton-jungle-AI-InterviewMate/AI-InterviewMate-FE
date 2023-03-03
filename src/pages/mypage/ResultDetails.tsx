@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useGetRatingDetail } from "hooks/queries/mypage";
 import { RoomTypes } from "api/mypage/types";
-import Player from "video.js/dist/types/player";
+import { VideoJsPlayer as Player } from "video.js";
 
 import Loading from "components/common/Loading";
 import ResultDetailsLayout from "components/layout/result/ResultDetailsLayout";
@@ -32,8 +32,6 @@ const ResultDetails = () => {
   if (isFetching) {
     return <Loading margin="0" />;
   }
-
-  console.log(videoRef.current);
 
   return isSuccess && data ? (
     <ResultDetailsLayout roomType={searchParams.get("type") as RoomTypes} data={data.data}>
