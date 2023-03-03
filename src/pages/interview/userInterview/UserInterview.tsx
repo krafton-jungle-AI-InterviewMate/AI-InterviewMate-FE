@@ -81,14 +81,12 @@ const UserInterview = () => {
     session.on("signal:subscriberExit", event => {
       console.log(event.type);
       if (host === publisher.stream.connection.connectionId && subscribers.length === 0) {
-        leaveSession();
         navigate("/lobby");
       }
     });
 
     session.on("signal:publisherExit", event => {
       console.log(event.type);
-      leaveSession();
       navigate("/lobby");
     });
 
