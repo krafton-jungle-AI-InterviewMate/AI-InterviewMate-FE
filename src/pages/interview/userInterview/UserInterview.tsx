@@ -80,10 +80,8 @@ const UserInterview = () => {
 
     session.on("signal:exit", event => {
       console.log(event.type);
-      if (host !== publisher.stream.connection.connectionId) {
-        leaveSession();
-        navigate("/lobby");
-      }
+      leaveSession();
+      navigate("/lobby");
     });
 
     session.on("signal:interviewStart", event => {
@@ -163,7 +161,7 @@ const UserInterview = () => {
     // 인터뷰 도중 나감
     deleteInterviewRoomsMutate(userInterviewData!.roomIdx, {
       onSuccess: () => {
-        if (host === publisher.stream.connection.connectionId) {
+        if (host === publisher.stream.connection.connectionId || subscribers.length === 0) {
           session
             .signal({
               to: subscribers,
@@ -190,7 +188,7 @@ const UserInterview = () => {
     // 대기방에서 나감
     deleteInterviewRoomsMutate(userInterviewData!.roomIdx, {
       onSuccess: () => {
-        if (host === publisher.stream.connection.connectionId) {
+        if (host === publisher.stream.connection.connectionId || subscribers.length === 0) {
           session
             .signal({
               to: subscribers,

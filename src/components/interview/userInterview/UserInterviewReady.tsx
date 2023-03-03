@@ -151,7 +151,7 @@ const StyledUserInterview = styled.div<StyledUserInterviewProps>`
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    width: 80vw;
+    width: 75vw;
     height: 750px;
     .interviewActions {
       display: flex;
