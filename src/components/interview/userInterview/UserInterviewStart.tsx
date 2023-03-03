@@ -5,6 +5,8 @@ import { hostAtom } from "store/interview/atom";
 import { StyledBtn } from "styles/StyledBtn";
 import InterviewQuestionTab from "./InterviewerQuestionTap";
 import UserVideoComponent from "./UserVideoComponent";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface UserInterviewStartProps {
   session: any;
@@ -26,7 +28,14 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
     handleClickModalRoomLeave,
     handleClickInterviewOut,
   } = props;
+  const navigete = useNavigate();
   const host = useRecoilValue(hostAtom);
+
+  useEffect(() => {
+    if (host === publisher.stream.connection.connectionId && subscribers.length === 0) {
+      navigete("/lobby");
+    }
+  }, [subscribers]);
 
   return (
     <StyledUserInterviewStart>

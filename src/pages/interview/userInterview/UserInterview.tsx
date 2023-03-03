@@ -78,13 +78,6 @@ const UserInterview = () => {
       console.warn(exception);
     });
 
-    session.on("signal:subscriberExit", event => {
-      console.log(event.type);
-      if (host === publisher.stream.connection.connectionId && subscribers.length === 0) {
-        navigate("/lobby");
-      }
-    });
-
     session.on("signal:publisherExit", event => {
       console.log(event.type);
       navigate("/lobby");
@@ -165,33 +158,22 @@ const UserInterview = () => {
 
   const handleClickInterviewOut = () => {
     // 인터뷰 도중 나감
-    if (host === publisher.stream.connection.connectionId) {
-      session
-        .signal({
-          to: subscribers,
-          type: "publisherExit",
-        })
-        .then(() => {
-          console.log("면접자가 면접방을 나갔습니다.");
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    } else {
-      session
-        .signal({
-          to: subscribers,
-          type: "subscriberExit",
-        })
-        .then(() => {
-          console.log("면접관이 면접방을 나갔습니다.");
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    }
     deleteInterviewRoomsMutate(userInterviewData!.roomIdx, {
-      onSuccess: () => {},
+      onSuccess: () => {
+        if (host === publisher.stream.connection.connectionId) {
+          session
+            .signal({
+              to: subscribers,
+              type: "publisherExit",
+            })
+            .then(() => {
+              console.log("면접자가 면접방을 나갔습니다.");
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        }
+      },
       onError(error) {
         alert(error);
       },
@@ -203,33 +185,23 @@ const UserInterview = () => {
 
   const handleClickReadyOut = () => {
     // 대기방에서 나감
-    if (host === publisher.stream.connection.connectionId) {
-      session
-        .signal({
-          to: subscribers,
-          type: "publisherExit",
-        })
-        .then(() => {
-          console.log("면접자가 면접방을 나갔습니다.");
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    } else {
-      session
-        .signal({
-          to: subscribers,
-          type: "subscriberExit",
-        })
-        .then(() => {
-          console.log("면접관이 면접방을 나갔습니다.");
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    }
+
     deleteInterviewRoomsMutate(userInterviewData!.roomIdx, {
-      onSuccess: () => {},
+      onSuccess: () => {
+        if (host === publisher.stream.connection.connectionId) {
+          session
+            .signal({
+              to: subscribers,
+              type: "publisherExit",
+            })
+            .then(() => {
+              console.log("면접자가 면접방을 나갔습니다.");
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        }
+      },
       onError(error) {
         alert(error);
       },
