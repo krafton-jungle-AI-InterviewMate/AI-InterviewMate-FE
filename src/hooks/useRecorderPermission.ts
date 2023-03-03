@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-// import RecordRTC, { RecordRTCPromisesHandler } from "recordrtc";
 import RecordRTC, { MultiStreamRecorder } from "recordrtc";
 
 export const useRecorderPermission = (
@@ -11,14 +10,16 @@ export const useRecorderPermission = (
       audio: true,
     });
     let stream_test = await (navigator as any).mediaDevices.getDisplayMedia({
-      video: false,
+      preferCurrentTab: true,
       audio: true,
     });
-    // let recorder = new RecordRTCPromisesHandler(stream, {
-    //   type: recordingType,
-    // });
-    let recorder = new MultiStreamRecorder([stream, stream_test], {
-      // type: recordingType,
+
+    stream_test = stream_test.getAudioTracks();
+    let stream2 = new MediaStream();
+    stream2.addTrack(stream_test[0]);
+
+    console.log(stream);
+    let recorder = new MultiStreamRecorder([stream, stream2], {
       mimeType: 'video/webm'
     });
 
