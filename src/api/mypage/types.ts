@@ -23,7 +23,7 @@ export type GetRatingHistoryResponse = ResponseStatus & {
 export type GetRatingHistory = () => Promise<AxiosResponse<GetRatingHistoryResponse>>;
 
 export type Timestamp = {
-  type: string;
+  type: "eye" | "attitude" | "question";
   timestamp: string
 };
 

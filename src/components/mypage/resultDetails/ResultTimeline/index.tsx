@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Player from "video.js/dist/types/player";
 
 import {
   Timeline,
@@ -13,22 +14,14 @@ import ResultTimelineItem from "./ResultTimelineItem";
 
 import throttle from "lodash.throttle";
 import { createTimestampFromSeconds } from "./utils";
+import { Timestamp } from "api/mypage/types";
 
 import styled from "@emotion/styled";
 import { commonLabelStyle } from "styles/resultDetails";
 
-type TempTimelineType = {
-  type: "eye" | "attitude" | "question";
-  timestamp: string;
-};
-
-export type TempResponseType = {
-  timeline: TempTimelineType[];
-}
-
-type ResultTimelineProps = { // TODO: 실제 response type으로 교체
-  data: TempResponseType;
-  videoRef: React.MutableRefObject<HTMLVideoElement | null>;
+type ResultTimelineProps = {
+  data: Timestamp[];
+  videoRef: React.MutableRefObject<Player | null>;
 };
 
 const ResultTimeline = (props: ResultTimelineProps) => {
@@ -45,28 +38,28 @@ const ResultTimeline = (props: ResultTimelineProps) => {
       const video = videoRef.current;
 
       const setVideoDuration = () => {
-        const videoDuration = video?.duration;
+        const videoDuration = video.cache_.duration;
         setDuration(videoDuration || null);
       };
       const setVideoCurrentTime = () => {
-        const videoCurrentTime = video?.currentTime;
+        const videoCurrentTime = video.cache_.currentTime;
         setCurrentTime(videoCurrentTime || null);
       };
       const throttledTimeSetter = throttle(setVideoCurrentTime, 500);
 
-      video.addEventListener("loadedmetadata", setVideoDuration);
-      video.addEventListener("timeupdate", throttledTimeSetter);
+      video.ready(setVideoDuration);
+      video.ready(throttledTimeSetter);
 
-      return () => {
-        video.removeEventListener("loadedmetadata", setVideoDuration);
-        video.removeEventListener("timeupdate", throttledTimeSetter);
-      };
+      // return () => {
+      //   video.removeEventListener("loadedmetadata", setVideoDuration);
+      //   video.removeEventListener("timeupdate", throttledTimeSetter);
+      // };
     }
   }, [ videoRef ]);
 
   const handleVideoProgress = (time: number) => {
     if (videoRef.current) {
-      videoRef.current.currentTime = time;
+      videoRef.current.cache_.currentTime = time;
     }
   };
 
@@ -94,7 +87,7 @@ const ResultTimeline = (props: ResultTimelineProps) => {
             <TimelineContent>면접 시작</TimelineContent>
           </TimelineItem>
 
-          {data.timeline.map((timestamp, idx) =>
+          {data.map((timestamp, idx) =>
             <ResultTimelineItem
               key={idx}
               handleVideoProgress={handleVideoProgress}

@@ -1,8 +1,12 @@
+import videojs from "video.js";
+import Player from "video.js/dist/types/player";
+import Video from "./Video";
+
 import styled from "@emotion/styled";
 import { commonLabelStyle } from "styles/resultDetails";
 
 type ResultVideoProps = {
-  videoRef: React.MutableRefObject<HTMLVideoElement | null>;
+  videoRef: React.MutableRefObject<Player | null>;
   videoUrl: string;
 };
 
@@ -12,19 +16,32 @@ const ResultVideo = (props: ResultVideoProps) => {
     videoUrl,
   } = props;
 
+  const videoJsOptions = {
+    autoplay: false,
+    controls: true,
+    responsive: false,
+    fluid: true,
+    sources: [ {
+      src: videoUrl,
+      type: "application/x-mpegURL",
+    } ],
+    width: 640,
+    height: 480,
+  };
+
+  const handlePlayerReady = (player: Player) => {
+    videoRef.current = player;
+  };
+
   return (
     <div>
       <StyledTitle>면접 장면 다시보기</StyledTitle>
       <StyledVideoWrapper>
-        <video
-          ref={videoRef}
-          width="640px"
-          autoPlay={false}
-          loop={false}
-          controls
-        >
-          <source src={videoUrl} type="video/mp4" />
-        </video>
+        <Video
+          videoRef={videoRef}
+          options={videoJsOptions}
+          onReady={handlePlayerReady}
+        />
       </StyledVideoWrapper>
     </div>
   );
