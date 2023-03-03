@@ -1,12 +1,13 @@
 import styled from "@emotion/styled";
 import { Dialog, DialogActions, DialogTitle } from "@mui/material";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { hostAtom, isInterviewStartAtom } from "store/interview/atom";
+import { hostAtom, interviewDataAtom, isInterviewStartAtom } from "store/interview/atom";
 import { StyledBtn } from "styles/StyledBtn";
 import InterviewQuestionTab from "./InterviewerQuestionTap";
 import UserVideoComponent from "./UserVideoComponent";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import UserInterviewTimer from "./UserInterviewTimer";
 
 interface UserInterviewStartProps {
   session: any;
@@ -16,6 +17,7 @@ interface UserInterviewStartProps {
   handleClickModalClose: () => void;
   handleClickModalRoomLeave: () => void;
   handleClickInterviewOut: () => void;
+  InterviewEnd: () => void;
 }
 
 const UserInterviewStart = (props: UserInterviewStartProps) => {
@@ -27,8 +29,11 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
     handleClickModalClose,
     handleClickModalRoomLeave,
     handleClickInterviewOut,
+    InterviewEnd,
   } = props;
   const navigate = useNavigate();
+
+  const userInterviewData = useRecoilValue(interviewDataAtom);
   const host = useRecoilValue(hostAtom);
   const setIsInterviewStart = useSetRecoilState(isInterviewStartAtom);
 
@@ -47,6 +52,16 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
       navigate("/lobby");
     }
   }, [subscribers]);
+
+  useEffect(() => {
+    const timerId = window.setTimeout(() => {
+      InterviewEnd();
+    }, userInterviewData?.roomTime * 1000 * 60); // ! TODO: 시간 수정 해야함
+
+    return () => {
+      window.clearTimeout(timerId);
+    };
+  }, []);
 
   return (
     <StyledUserInterviewStart>
@@ -68,6 +83,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
                   ),
               )}
             </div>
+            <UserInterviewTimer roomTime={userInterviewData?.roomTime} />
             <div className="interviewActions">
               <StyledBtn
                 onClick={handleClickModalRoomLeave}

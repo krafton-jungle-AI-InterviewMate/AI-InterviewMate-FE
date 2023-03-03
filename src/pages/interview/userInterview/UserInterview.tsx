@@ -32,7 +32,6 @@ const UserInterview = () => {
   const [subscribers, setSubscribers] = useState<Array<any>>([]);
   const [ready, setReady] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [interviewTime, setInterviewTime] = useState(0);
 
   const { mutate: deleteInterviewRoomsMutate } = useDeleteInterviewRooms();
 
@@ -264,6 +263,7 @@ const UserInterview = () => {
           handleClickModalClose={handleClickModalClose}
           handleClickModalRoomLeave={handleClickModalRoomLeave}
           handleClickInterviewOut={handleClickInterviewOut}
+          InterviewEnd={InterviewEnd}
         />
       ) : (
         <UserInterviewReady
