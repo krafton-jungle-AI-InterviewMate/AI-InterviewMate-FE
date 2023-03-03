@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Dialog, DialogActions, DialogTitle } from "@mui/material";
-import { useRecoilValue } from "recoil";
-import { hostAtom } from "store/interview/atom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { hostAtom, isInterviewStartAtom } from "store/interview/atom";
 import { StyledBtn } from "styles/StyledBtn";
 import InterviewQuestionTab from "./InterviewerQuestionTap";
 import UserVideoComponent from "./UserVideoComponent";
@@ -30,9 +30,11 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
   } = props;
   const navigete = useNavigate();
   const host = useRecoilValue(hostAtom);
+  const setIsInterviewStart = useSetRecoilState(isInterviewStartAtom);
 
   useEffect(() => {
     if (host === publisher.stream.connection.connectionId && subscribers.length === 0) {
+      setIsInterviewStart(false);
       navigete("/lobby");
     }
   }, [subscribers]);
