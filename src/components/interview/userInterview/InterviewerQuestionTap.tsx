@@ -136,7 +136,6 @@ const StyledInterviewQuestionTab = styled.div`
           font-weight: 400;
           color: var(--font-gray);
           margin-right: 10px;
-          margin-bottom: 30px;
         }
       }
     }
@@ -146,6 +145,9 @@ const StyledInterviewQuestionTab = styled.div`
       font-size: 16px;
       font-weight: 400;
       color: var(--main-black);
+      span {
+        margin-bottom: 30px;
+      }
       textarea {
         width: 314px;
         height: auto;
