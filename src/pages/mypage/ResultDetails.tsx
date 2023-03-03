@@ -15,9 +15,6 @@ import ResultComments from "components/mypage/resultDetails/ResultComments";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 
-// FIXME: 실제 데이터로 교체
-const videoUrl = "https://bucket1182644-staging.s3.ap-northeast-2.amazonaws.com/interviewer/interview_temp.mp4";
-// const videoUrl = "";
 const mock_timeline: TempResponseType = {
   timeline: [
     {
@@ -72,9 +69,9 @@ const ResultDetails = () => {
   return isSuccess && data ? (
     <ResultDetailsLayout roomType={searchParams.get("type") as RoomTypes} data={data.data}>
       <StyledVideoSection>
-        {videoUrl ? (
+        {data.data.data.videoUrl ? (
           <>
-            <ResultVideo videoRef={videoRef} videoUrl={videoUrl} />
+            <ResultVideo videoRef={videoRef} videoUrl={data.data.data.videoUrl} />
             <ResultTimeline data={mock_timeline} videoRef={videoRef} />
           </>
         ) : (
@@ -89,7 +86,7 @@ const ResultDetails = () => {
           : <ResultChartUser />
         }
         {searchParams.get("type") === "AI"
-          ? <ResultScript />
+          ? <ResultScript resultDetail={data.data.data} />
           : <ResultComments />
         }
       </StyledChartSection>
@@ -122,7 +119,6 @@ const StyledNoVideo = styled.div`
   width: 100%;
   height: 140px;
   background-color: var(--main-gray);
-  background: linear-gradient(13deg, var(--main-gray) 35%, rgba(238,238,238,0.4) 100%);
   border-radius: 16px;
   opacity: 0.6;
 

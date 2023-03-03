@@ -7,14 +7,27 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 
+import { RatingDetail } from "api/mypage/types";
+import { replaceKeywordTags } from "./util";
+
 import styled from "@emotion/styled";
 import { commonLabelStyle } from "styles/resultDetails";
 
-const ResultScript = () => {
+type ResultScriptProps = {
+  resultDetail: RatingDetail;
+};
+
+const ResultScript = (props: ResultScriptProps) => {
+  const { resultDetail: { scripts } } = props;
+
   const [ currQuestion, setCurrQuestion ] = useState("Q1");
+  const [ currScript, setCurrScript ] = useState(scripts[0].script);
 
   const handleChange = (event: SelectChangeEvent) => {
     setCurrQuestion(event.target.value);
+
+    const questionNumber = event.target.value.match(/\d+/g)?.[0] ?? 0;
+    setCurrScript(scripts[Number(questionNumber) - 1].script);
   };
 
   return (
@@ -28,10 +41,10 @@ const ResultScript = () => {
           }}
           size="small"
         >
-          <InputLabel id="demo-select-small">문제</InputLabel>
+          <InputLabel id="result-detail-questions">문제</InputLabel>
           <Select
-            labelId="demo-select-small"
-            id="demo-select-small"
+            labelId="result-detail-questions"
+            id="result-detail-questions"
             value={currQuestion}
             label="문제"
             sx={{
@@ -40,18 +53,23 @@ const ResultScript = () => {
             }}
             onChange={handleChange}
           >
-            <MenuItem value="Q1">
-              Q1. 우리 회사에 지원한 이유는?
-            </MenuItem>
-            <MenuItem value="Q2">
-              Q2. 동료와의 갈등을 어떻게 해결하실건가요?
-            </MenuItem>
+            {scripts.map(({ questionTitle }, idx) =>
+              <MenuItem key={idx} value={`Q${idx + 1}`}>
+                Q{idx + 1}. {questionTitle}
+              </MenuItem>,
+            )}
           </Select>
         </FormControl>
 
-        <p>
-          저는 이 회사서 열정적으로 일 해서 한 손에는 돈을 다른 한 손에는 명예를 움켜지기위해 지원 했습니다.
-        </p>
+        <StyledScriptContent
+          dangerouslySetInnerHTML={{
+            __html: replaceKeywordTags({
+              script: currScript,
+              tag: "strong",
+            })
+          || "<span>작성된 내용이 없습니다.</span>",
+          }}
+        />
       </StyledScriptBox>
     </StyledScriptWrap>
   );
@@ -85,25 +103,36 @@ const StyledScriptBox = styled.div`
   border: 1px solid var(--main-gray);
   box-shadow: var(--box-shadow);
   box-sizing: border-box;
+`;
 
-  & p {
-    text-align: left;
-    overflow-y: auto;
-    word-break: keep-all;
+const StyledScriptContent = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  height: calc(100% - 60px);
+  margin: 0 auto;
+  text-align: left;
+  overflow-y: auto;
+  word-break: keep-all;
 
-    &::-webkit-scrollbar {
-      width: 8px;
-    }
-    &::-webkit-scrollbar-track {
-      background: var(--main-gray);
-      border-radius: 6px;
-    }
-    &::-webkit-scrollbar-thumb {
-      background: var(--push-gray);
-      border-radius: 6px;
-    }
-    &::-webkit-scrollbar-thumb:hover {
-      background: rgba(0, 0, 0, .2);
-    }
+  & strong {
+    display: inline;
+    box-shadow: inset 0 -10px 0 #a0ec2e90;
+  }
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: var(--main-gray);
+    border-radius: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--push-gray);
+    border-radius: 6px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, .2);
   }
 `;
