@@ -36,6 +36,7 @@ const InterviewEnd = () => {
       {
         onSuccess: () => {
           console.log("저장하고 나가기");
+          setComment("");
         },
         onError(error) {
           alert(error);
@@ -74,6 +75,7 @@ const InterviewEnd = () => {
                 id="comment"
                 cols={30}
                 rows={10}
+                spellCheck={false}
               ></textarea>
             </div>
             <Link to="/lobby">

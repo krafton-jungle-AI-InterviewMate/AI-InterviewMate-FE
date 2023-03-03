@@ -207,11 +207,14 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
         <div className="inputContent">
           <label htmlFor="question">질문 꾸러미</label>
           <select id="question" {...register("roomQuestionBoxIdx", { required: true })}>
-            {questionBoxes.map((data: QuestionBoxes, idx: number) => (
-              <option key={idx} value={data.questionBoxIdx}>
-                {data.questionBoxName}
-              </option>
-            ))}
+            {questionBoxes.map(
+              (data: QuestionBoxes, idx: number) =>
+                data.questionNum > 0 && (
+                  <option key={idx} value={data.questionBoxIdx}>
+                    {data.questionBoxName}
+                  </option>
+                ),
+            )}
           </select>
         </div>
         <span className="guide">면접관에게 보여질 질문 꾸러미를 선택해주세요.</span>

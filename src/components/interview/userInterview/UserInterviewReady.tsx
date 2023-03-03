@@ -167,12 +167,18 @@ const StyledUserInterview = styled.div<StyledUserInterviewProps>`
     flex-direction: column;
     align-items: center;
     .subscribers {
+      width: 333px;
+      height: 250px;
+      background-color: var(--font-gray);
     }
   }
   .publisherContents {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    width: 1000px;
+    height: 750px;
+    background-color: var(--font-gray);
   }
 `;
 

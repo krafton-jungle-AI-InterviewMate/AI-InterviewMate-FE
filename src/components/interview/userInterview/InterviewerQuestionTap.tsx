@@ -82,6 +82,7 @@ const InterviewQuestionTab = () => {
                 rows={10}
                 ref={textarea}
                 value={comment}
+                spellCheck={false}
               ></textarea>
             </form>
           </div>

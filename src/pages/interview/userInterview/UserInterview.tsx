@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   hostAtom,
+  interviewCommentAtom,
   interviewDataAtom,
   isInterviewerAtom,
   isInterviewStartAtom,
@@ -21,6 +22,8 @@ const UserInterview = () => {
   const [isInterviewStart, setIsInterviewStart] = useRecoilState(isInterviewStartAtom);
   const isInterviewer = useRecoilValue(isInterviewerAtom);
   const [host, setHost] = useRecoilState(hostAtom);
+  const setComment = useSetRecoilState(interviewCommentAtom);
+
   const navigate = useNavigate();
 
   const [OV, setOV] = useState<any>(null);
@@ -214,6 +217,7 @@ const UserInterview = () => {
     deleteInterviewRoomsMutate(userInterviewData!.roomIdx, {
       onSuccess: () => {
         console.log("면접방을 나갔습니다.");
+        setComment("");
         leaveSession();
         navigate("/lobby");
       },
