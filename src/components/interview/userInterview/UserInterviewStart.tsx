@@ -45,6 +45,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
       }
     });
     if (host === publisher.stream.connection.connectionId && subscribers.length === 0) {
+      handleClickInterviewOut();
       setIsInterviewStart(false);
       navigate("/lobby");
     } else if (host !== publisher.stream.connection.connectionId && !isInHost) {
@@ -56,7 +57,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
   useEffect(() => {
     const timerId = window.setTimeout(() => {
       InterviewEnd();
-    }, userInterviewData?.roomTime * 1000 * 60); // ! TODO: 시간 수정 해야함
+    }, userInterviewData?.roomTime * 1000); // ! TODO 수정
 
     return () => {
       window.clearTimeout(timerId);

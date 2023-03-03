@@ -210,9 +210,9 @@ const UserInterview = () => {
     putInterviewRoomsMutate(userInterviewData!.roomIdx, {
       onSuccess: () => {
         setIsInterviewStart(false);
-        console.log("면접을 정상적으로 종료합니다.");
         leaveSession();
-        navigate("/lobby"); // ! TODO: 수정 필요
+        console.log("면접을 정상적으로 종료합니다.");
+        navigate("/interview/end");
       },
       onError(error) {
         alert(error);
