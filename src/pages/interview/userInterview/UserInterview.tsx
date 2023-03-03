@@ -174,14 +174,6 @@ const UserInterview = () => {
 
   const handleClickInterviewOut = () => {
     // 인터뷰 도중 나감
-    deleteInterviewRoomsMutate(userInterviewData!.roomIdx, {
-      onSuccess: () => {
-        console.log("면접방을 나갔습니다.");
-      },
-      onError(error) {
-        alert(error);
-      },
-    });
     session
       .signal({
         data: host === publisher.stream.connection.connectionId ? "면접자" : "면접관",
@@ -191,9 +183,17 @@ const UserInterview = () => {
       .catch(error => {
         console.error(error);
       });
-    setIsInterviewStart(false);
-    leaveSession();
-    navigate("/lobby");
+    deleteInterviewRoomsMutate(userInterviewData!.roomIdx, {
+      onSuccess: () => {
+        console.log("면접방을 나갔습니다.");
+        setIsInterviewStart(false);
+        leaveSession();
+        navigate("/lobby");
+      },
+      onError(error) {
+        alert(error);
+      },
+    });
   };
 
   const handleClickReadyOut = () => {
