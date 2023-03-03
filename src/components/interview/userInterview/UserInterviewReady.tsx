@@ -41,7 +41,7 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
     if (publisher) {
       setIsHost(host === publisher.stream.connection.connectionId);
     }
-  }, [publisher]);
+  }, [host]);
   return (
     <StyledUserInterview isHost={isHost}>
       <div className="interviewActionsContents">
@@ -139,10 +139,11 @@ interface StyledUserInterviewProps {
 
 const StyledUserInterview = styled.div<StyledUserInterviewProps>`
   position: relative;
-  width: 80vw;
+  width: 75vw;
   overflow-y: hidden;
+  overflow-x: hidden;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   .interviewActionsContents {
     position: absolute;
     z-index: 10;

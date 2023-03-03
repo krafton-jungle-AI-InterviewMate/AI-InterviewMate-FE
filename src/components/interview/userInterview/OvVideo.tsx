@@ -41,9 +41,8 @@ const StyledOpenViduVideoComponent = styled.div<StyledOpenViduVideoComponentProp
   ${({ isInterviewStart, isHost }) =>
     isInterviewStart && isHost
       ? css`
-          height: 750px;
           video {
-            width: 1000px;
+            width: 900px;
           }
         `
       : isHost
@@ -54,9 +53,9 @@ const StyledOpenViduVideoComponent = styled.div<StyledOpenViduVideoComponentProp
           }
         `
       : css`
-          height: 250px;
+          height: ${isInterviewStart ? "180px" : "250px"};
           video {
-            height: 250px;
+            height: ${isInterviewStart ? "180px" : "250px"};
           }
         `}
 `;

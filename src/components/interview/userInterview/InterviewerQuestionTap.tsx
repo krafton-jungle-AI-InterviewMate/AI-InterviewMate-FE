@@ -10,10 +10,10 @@ type Tab = "question" | "comment";
 
 const InterviewQuestionTab = () => {
   const userInterviewData = useRecoilValue(interviewDataAtom);
-  const [ comment, setComment ] = useRecoilState(interviewCommentAtom);
+  const [comment, setComment] = useRecoilState(interviewCommentAtom);
 
-  const [ question, setQuestion ] = useState<GetQuestionDetailsResponseData>();
-  const [ tabName, setTabName ] = useState<Tab>("question");
+  const [question, setQuestion] = useState<GetQuestionDetailsResponseData>();
+  const [tabName, setTabName] = useState<Tab>("question");
 
   const { data, isLoading, isSuccess, isError } = useGetQuestionDetails(
     userInterviewData!.roomQuestionBoxIdx,
@@ -40,7 +40,7 @@ const InterviewQuestionTab = () => {
       setQuestion(data.data.data);
       console.log(data.data.data);
     }
-  }, [ isLoading ]);
+  }, [isLoading]);
 
   return (
     <StyledInterviewQuestionTab>
@@ -76,11 +76,11 @@ const InterviewQuestionTab = () => {
               </h2>
               <p className="questionKeyword">
                 <span>키워드</span>
-                {q.keyword1 && `${q.keyword1},`}
-                {q.keyword2 && `${q.keyword2},`}
-                {q.keyword3 && `${q.keyword3},`}
-                {q.keyword4 && `${q.keyword4},`}
-                {q.keyword5 && `${q.keyword5}`}
+                {q.keyword1 && `${q.keyword1}`}
+                {q.keyword2 && `, ${q.keyword2}`}
+                {q.keyword3 && `, ${q.keyword3}`}
+                {q.keyword4 && `, ${q.keyword4}`}
+                {q.keyword5 && `, ${q.keyword5}`}
               </p>
             </div>
           ))

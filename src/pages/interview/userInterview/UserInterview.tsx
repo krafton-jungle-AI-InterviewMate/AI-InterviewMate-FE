@@ -11,13 +11,8 @@ import {
 import { useNavigate } from "react-router";
 import UserInterviewReady from "components/interview/userInterview/UserInterviewReady";
 import { usePutInterviewRooms } from "hooks/queries/interview";
-import styled from "@emotion/styled";
-import UserVideoComponent from "components/interview/userInterview/UserVideoComponent";
-import Loading from "components/common/Loading";
-import { StyledBtn } from "styles/StyledBtn";
-import { Dialog, DialogActions, DialogTitle } from "@mui/material";
-import InterviewQuestionTab from "components/interview/userInterview/InterviewerQuestionTap";
 import { memberAtom } from "store/auth/atom";
+import UserInterviewStart from "./../../../components/interview/userInterview/UserInterviewStart";
 
 const UserInterview = () => {
   const { mutate } = usePutInterviewRooms();
@@ -33,7 +28,7 @@ const UserInterview = () => {
   const [OV, setOV] = useState<any>(null);
   const [myUserName, setMyUserName] = useState<string | undefined>(nickname);
   const [session, setSession] = useState<any>(undefined);
-  const [publisher, setPublisher] = useState(undefined);
+  const [publisher, setPublisher] = useState<any>(undefined);
   const [subscribers, setSubscribers] = useState<Array<any>>([]);
   const [ready, setReady] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -217,7 +212,7 @@ const UserInterview = () => {
     } else {
       setReady(false);
     }
-    if (!isInterviewer && session) {
+    if (!isInterviewer && session && publisher) {
       session
         .signal({
           data: publisher.stream.connection.connectionId,
@@ -235,6 +230,7 @@ const UserInterview = () => {
 
   useEffect(() => {
     if (publisher && !isInterviewer) {
+      console.log(publisher);
       setHost(publisher.stream.connection.connectionId);
     }
   }, [publisher]);
@@ -242,82 +238,15 @@ const UserInterview = () => {
   return (
     <>
       {isInterviewStart ? (
-        <StyledUserInterviewStart>
-          {session ? (
-            <>
-              <div className="subscribersContents">
-                <div className="subscribersVideo">
-                  {subscribers.map((sub, i) => (
-                    <div key={i}>
-                      <UserVideoComponent streamManager={sub} />
-                    </div>
-                  ))}
-                </div>
-                <div className="interviewActions">
-                  <StyledBtn
-                    onClick={handleClickModalRoomLeave}
-                    width="200px"
-                    height="48px"
-                    color="red"
-                  >
-                    면접 나가기
-                  </StyledBtn>
-                </div>
-              </div>
-              <div className="publisherContents">
-                {publisher && (
-                  <div className="publisherVideo">
-                    <UserVideoComponent streamManager={publisher} />
-                    {isInterviewer && <InterviewQuestionTab />}
-                  </div>
-                )}
-              </div>
-              <Dialog
-                open={isOpen}
-                onClose={handleClickModalClose}
-                PaperProps={{
-                  style: {
-                    padding: "50px 35px",
-                    borderRadius: "10px",
-                  },
-                }}
-              >
-                <DialogTitle
-                  fontSize={16}
-                  fontWeight={400}
-                  color={"var(--main-black)"}
-                  marginBottom={3}
-                  padding={0}
-                  textAlign={"center"}
-                >
-                  현재 면접 방을 나가고
-                  <br />
-                  로비로 이동하시겠습니까?
-                </DialogTitle>
-                <DialogActions>
-                  <StyledBtn
-                    onClick={handleClickInterviewOut}
-                    width="200px"
-                    height="42px"
-                    color="orange"
-                  >
-                    네!
-                  </StyledBtn>
-                  <StyledBtn
-                    onClick={handleClickModalClose}
-                    width="200px"
-                    height="42px"
-                    color="red"
-                  >
-                    취소
-                  </StyledBtn>
-                </DialogActions>
-              </Dialog>
-            </>
-          ) : (
-            <Loading margin="250px" />
-          )}
-        </StyledUserInterviewStart>
+        <UserInterviewStart
+          session={session}
+          publisher={publisher}
+          subscribers={subscribers}
+          isOpen={isOpen}
+          handleClickModalClose={handleClickModalClose}
+          handleClickModalRoomLeave={handleClickModalRoomLeave}
+          handleClickInterviewOut={handleClickInterviewOut}
+        />
       ) : (
         <UserInterviewReady
           session={session}
@@ -334,36 +263,5 @@ const UserInterview = () => {
     </>
   );
 };
-
-const StyledUserInterviewStart = styled.div`
-  overflow-x: hidden;
-  .subscribersContents {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: 200px;
-    background-color: var(--main-gray);
-    .subscribersVideo {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 798px;
-    }
-  }
-  .publisherContents {
-    margin-top: 70px;
-    .publisherVideo {
-      display: flex;
-      justify-content: center;
-    }
-  }
-  .interviewActions {
-    position: absolute;
-    top: 30px;
-    right: 150px;
-  }
-`;
 
 export default UserInterview;
