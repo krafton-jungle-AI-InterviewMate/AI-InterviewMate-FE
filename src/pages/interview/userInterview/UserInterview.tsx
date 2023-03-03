@@ -15,8 +15,6 @@ import { memberAtom } from "store/auth/atom";
 import UserInterviewStart from "./../../../components/interview/userInterview/UserInterviewStart";
 
 const UserInterview = () => {
-  const { mutate: putInterviewRoomsMutate } = usePutInterviewRooms();
-
   const userInterviewData = useRecoilValue(interviewDataAtom);
   const { nickname } = useRecoilValue(memberAtom);
   const setRoomPeopleNow = useSetRecoilState(roomPeopleNowAtom);
@@ -33,6 +31,7 @@ const UserInterview = () => {
   const [ready, setReady] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
+  const { mutate: putInterviewRoomsMutate } = usePutInterviewRooms();
   const { mutate: deleteInterviewRoomsMutate } = useDeleteInterviewRooms();
 
   useEffect(() => {
@@ -79,7 +78,6 @@ const UserInterview = () => {
 
     session.on("signal:readyOut", event => {
       console.log(event.type);
-      console.log(event.data);
       if (event.data === "면접자") {
         leaveSession();
         navigate("/lobby");
@@ -89,6 +87,7 @@ const UserInterview = () => {
     session.on("signal:interviewOut", event => {
       console.log(event.type);
       console.log(event.data);
+      console.log(subscribers);
       if (event.data === "면접자") {
         setIsInterviewStart(false);
         leaveSession();
@@ -202,22 +201,22 @@ const UserInterview = () => {
     deleteInterviewRoomsMutate(userInterviewData!.roomIdx, {
       onSuccess: () => {
         console.log("면접방을 나갔습니다.");
+        session
+          .signal({
+            data: host === publisher.stream.connection.connectionId ? "면접자" : "면접관",
+            to: subscribers,
+            type: "readyOut",
+          })
+          .catch(error => {
+            console.error(error);
+          });
+        leaveSession();
+        navigate("/lobby");
       },
       onError(error) {
         alert(error);
       },
     });
-    session
-      .signal({
-        data: host === publisher.stream.connection.connectionId ? "면접자" : "면접관",
-        to: subscribers,
-        type: "readyOut",
-      })
-      .catch(error => {
-        console.error(error);
-      });
-    leaveSession();
-    navigate("/lobby");
   };
 
   const handleClickStart = () => {
