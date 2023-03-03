@@ -28,7 +28,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
     handleClickModalRoomLeave,
     handleClickInterviewOut,
   } = props;
-  const navigete = useNavigate();
+  const navigate = useNavigate();
   const host = useRecoilValue(hostAtom);
   const setIsInterviewStart = useSetRecoilState(isInterviewStartAtom);
 
@@ -41,10 +41,10 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
     });
     if (host === publisher.stream.connection.connectionId && subscribers.length === 0) {
       setIsInterviewStart(false);
-      navigete("/lobby");
+      navigate("/lobby");
     } else if (host !== publisher.stream.connection.connectionId && !isInHost) {
       setIsInterviewStart(false);
-      navigete("/lobby");
+      navigate("/lobby");
     }
   }, [subscribers]);
 
