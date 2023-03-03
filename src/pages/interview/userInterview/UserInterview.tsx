@@ -87,12 +87,16 @@ const UserInterview = () => {
     session.on("signal:interviewOut", event => {
       console.log(event.type);
       console.log(event.data);
-      console.log(subscribers);
+      console.log(subscribers.length);
       if (event.data === "면접자") {
         setIsInterviewStart(false);
         leaveSession();
         navigate("/lobby");
-      } else if (event.data === "면접관" && subscribers.length === 0) {
+      } else if (
+        event.data === "면접관" &&
+        subscribers.length === 0 &&
+        host === publisher.stream.connection.connectionId
+      ) {
         setIsInterviewStart(false);
         leaveSession();
         navigate("/lobby");
