@@ -136,6 +136,7 @@ const StyledInterviewQuestionTab = styled.div`
           font-weight: 400;
           color: var(--font-gray);
           margin-right: 10px;
+          margin-bottom: 30px;
         }
       }
     }
