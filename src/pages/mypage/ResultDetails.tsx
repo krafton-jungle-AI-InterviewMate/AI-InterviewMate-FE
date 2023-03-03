@@ -49,8 +49,8 @@ const ResultDetails = () => {
       </StyledVideoSection>
       <StyledChartSection>
         {searchParams.get("type") === "AI"
-          ? <ResultChartAi />
-          : <ResultChartUser />
+          ? <ResultChartAi resultDetail={data.data.data} />
+          : <ResultChartUser resultDetail={data.data.data} />
         }
         {searchParams.get("type") === "AI"
           ? <ResultScript resultDetail={data.data.data} />
