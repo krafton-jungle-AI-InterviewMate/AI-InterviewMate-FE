@@ -31,7 +31,7 @@ const globalStyles = css`
     font-family: "Archivo", "Spoqa Han Sans Neo", sans-serif;
     font-size: 16px;
     line-height: 24px;
-    font-weight: 400;
+    font-weight: 500;
 
     /* color-scheme: light dark; */
     color: var(--main-black);

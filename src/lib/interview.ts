@@ -61,3 +61,8 @@ export const timestampToSeconds = (videoTime: string) => {
   const [ minutes, seconds ] = videoTime.split(":");
   return 60 * Number(minutes) + Number(seconds);
 };
+
+export const deduplicate = (list: string[]) => {
+  const tempSet = new Set(list);
+  return Array.from(tempSet);
+};

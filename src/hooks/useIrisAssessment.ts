@@ -62,15 +62,13 @@ const useIrisAssessment = (params: UseIrisAssessmentParams) => {
     if (isIrisOutOfCenter) {
       setIrisCount((curr) => curr + 1);
 
-      if (isRecordMode) {
-        setTimelineRecord((curr) => ({
-          ...curr,
-          timeline: {
-            ...curr.timeline,
-            eyes: [ ...curr.timeline.eyes, createTimeline(timelineRecord.startTime) ],
-          },
-        }));
-      }
+      setTimelineRecord((curr) => ({
+        ...curr,
+        timeline: {
+          ...curr.timeline,
+          eyes: [ ...curr.timeline.eyes, createTimeline(timelineRecord.startTime) ],
+        },
+      }));
     }
   };
 

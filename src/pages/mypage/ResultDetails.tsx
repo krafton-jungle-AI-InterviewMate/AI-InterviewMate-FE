@@ -2,11 +2,12 @@ import { useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useGetRatingDetail } from "hooks/queries/mypage";
 import { RoomTypes } from "api/mypage/types";
+import { VideoJsPlayer as Player } from "video.js";
 
 import Loading from "components/common/Loading";
 import ResultDetailsLayout from "components/layout/result/ResultDetailsLayout";
 import ResultVideo from "components/mypage/resultDetails/ResultVideo";
-import ResultTimeline, { TempResponseType } from "components/mypage/resultDetails/ResultTimeline";
+import ResultTimeline from "components/mypage/resultDetails/ResultTimeline";
 import ResultChartAi from "components/mypage/resultDetails/ResultChartAi";
 import ResultChartUser from "components/mypage/resultDetails/ResultChartUser";
 import ResultScript from "components/mypage/resultDetails/ResultScript";
@@ -15,46 +16,9 @@ import ResultComments from "components/mypage/resultDetails/ResultComments";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 
-// FIXME: 실제 데이터로 교체
-const videoUrl = "https://bucket1182644-staging.s3.ap-northeast-2.amazonaws.com/interviewer/interview_temp.mp4";
-// const videoUrl = "";
-const mock_timeline: TempResponseType = {
-  timeline: [
-    {
-      "type": "question",
-      "timestamp": "00:02",
-    },
-    {"type": "eye",
-      "timestamp": "00:04",
-    },
-    {"type": "eye",
-      "timestamp": "00:05",
-    },
-    {"type": "eye",
-      "timestamp": "00:06",
-    },
-    {
-      "type": "attitude",
-      "timestamp": "00:11",
-    },
-    {
-      "type": "question",
-      "timestamp": "00:27",
-    },
-    {
-      "type": "attitude",
-      "timestamp": "00:28",
-    },
-    {
-      "type": "attitude",
-      "timestamp": "00:29",
-    },
-  ],
-};
-
 const ResultDetails = () => {
   const [ searchParams ] = useSearchParams();
-  const videoRef = useRef<null | HTMLVideoElement>(null);
+  const videoRef = useRef<null | Player>(null);
 
   const {
     data,
@@ -72,10 +36,10 @@ const ResultDetails = () => {
   return isSuccess && data ? (
     <ResultDetailsLayout roomType={searchParams.get("type") as RoomTypes} data={data.data}>
       <StyledVideoSection>
-        {videoUrl ? (
+        {data.data.data.videoUrl ? (
           <>
-            <ResultVideo videoRef={videoRef} videoUrl={videoUrl} />
-            <ResultTimeline data={mock_timeline} videoRef={videoRef} />
+            <ResultVideo videoRef={videoRef} videoUrl={data.data.data.videoUrl} />
+            <ResultTimeline data={data.data.data.timelines} videoRef={videoRef} />
           </>
         ) : (
           <StyledNoVideo>
@@ -89,7 +53,7 @@ const ResultDetails = () => {
           : <ResultChartUser />
         }
         {searchParams.get("type") === "AI"
-          ? <ResultScript />
+          ? <ResultScript resultDetail={data.data.data} />
           : <ResultComments />
         }
       </StyledChartSection>
@@ -122,7 +86,6 @@ const StyledNoVideo = styled.div`
   width: 100%;
   height: 140px;
   background-color: var(--main-gray);
-  background: linear-gradient(13deg, var(--main-gray) 35%, rgba(238,238,238,0.4) 100%);
   border-radius: 16px;
   opacity: 0.6;
 

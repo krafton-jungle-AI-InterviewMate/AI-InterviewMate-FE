@@ -28,6 +28,10 @@ export const API_PATH = {
   PUT_NICKNAME: "/mypage/nickname",
   POST_JOIN_ROOM: (roomIdx: number) => `/interview/rooms/${roomIdx}`,
   PUT_INTERVIEW_ROOMS: (roomIdx: number) => `/interview/rooms/${roomIdx}`,
+  POST_INITIATE_VIDEO_UPLOAD: "/video/initiate-upload",
+  POST_SIGNED_VIDEO_URL: "/video/upload-signed-url",
+  POST_COMPLETE_VIDEO_UPLOAD: "/video/complete-upload",
+  POST_ABORT_VIDEO_UPLOAD: "/video/abort-upload",
 };
 
 export const AI_VIEWER_IDX = 79797979;

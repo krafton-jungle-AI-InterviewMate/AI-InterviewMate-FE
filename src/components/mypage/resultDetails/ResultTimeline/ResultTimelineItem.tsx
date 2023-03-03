@@ -27,6 +27,7 @@ const ResultTimelineItem = (props: TempTimelineType) => {
     <TimelineItem>
       <TimelineOppositeContent
         color="var(--font-gray)"
+        sx={{ cursor: "pointer" }}
         onClick={() => handleVideoProgress(timestampToSeconds(timestamp))}
       >
         {timestamp}

@@ -23,13 +23,13 @@ export type GetRatingHistoryResponse = ResponseStatus & {
 export type GetRatingHistory = () => Promise<AxiosResponse<GetRatingHistoryResponse>>;
 
 export type Timestamp = {
-  type: string;
+  type: "eye" | "attitude" | "question";
   timestamp: string
 };
 
 export type ScriptWithQuestionTitle = {
   questionTitle: string;
-  script: string
+  script: string;
 };
 
 export type RatingDetail = {
@@ -64,18 +64,12 @@ export type Comment = {
   comment: string;
 };
 
-export type ScriptWithQuestionIdx = {
-  questionIdx: number;
-  script: string;
-};
-
 export type PostRatingVieweePayloadData = {
-  videoUrl: string | null;
   eyeTimelines: string[];
   attitudeTimelines: string[];
   questionTimelines: string[];
   comments: Comment[];
-  scripts: ScriptWithQuestionIdx[];
+  scripts: ScriptRequestsDtos[];
 };
 
 export type PostRatingVieweePayload = {
