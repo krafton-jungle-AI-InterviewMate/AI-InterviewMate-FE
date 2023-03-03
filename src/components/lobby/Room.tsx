@@ -97,7 +97,7 @@ interface RoomProps {
   roomIsPrivate: boolean; // 잠금 여부
   roomStatus: RoomStatus; // 방 상태
   roomTime?: number; // 인터뷰 시간
-  interviewerIdxes: Array<string>; // 현재 인원 수 (배열)
+  interviewerIdxes: number; // 현재 인원 수
   roomPeopleNum: number; // 총 인원 수
   idx: number;
   setIsJoinError: (text: boolean) => void;
@@ -130,7 +130,7 @@ const Room = ({
       setIsPasswordPopupOpen(true);
       return;
     }
-    if (roomType === "AI" || roomPeopleNow === roomPeopleNum || roomStatus === "PROCEED") {
+    if (roomType === "AI" || interviewerIdxes === roomPeopleNum || roomStatus === "PROCEED") {
       setIsJoinError(true);
       return;
     }
@@ -176,14 +176,14 @@ const Room = ({
           ) : roomIsPrivate ? (
             <div className="roomInfo">
               <span>
-                {interviewerIdxes.length} / {roomPeopleNum}
+                {interviewerIdxes} / {roomPeopleNum}
               </span>
               <RiGitRepositoryPrivateFill size={32} color="var(--push-gray)" />
             </div>
           ) : (
             <div className="roomInfo">
               <span>
-                {interviewerIdxes.length} / {roomPeopleNum}
+                {interviewerIdxes} / {roomPeopleNum}
               </span>
               <MdPublic size={32} color="var(--push-gray)" />
             </div>

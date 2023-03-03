@@ -41,6 +41,7 @@ const Lobby = () => {
   useEffect(() => {
     if (!isLoading && data) {
       setInterviewRooms(data.data.data);
+      console.log(data.data.data);
     }
   }, [data]);
 
@@ -119,7 +120,7 @@ const Lobby = () => {
               roomIsPrivate={room.roomIsPrivate}
               roomType={room.roomType}
               roomStatus={room.roomStatus}
-              interviewerIdxes={room.interviewerIdxes}
+              interviewerIdxes={room.interviewerIdxes ? room.interviewerIdxes.length + 1 : 1}
               setIsJoinError={setIsOpen}
               setIsPasswordPopupOpen={setIsPasswordPopupOpen}
               setTargetRoomIdx={setTargetRoomIdx}

@@ -1,10 +1,14 @@
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import InterviewRadio from "components/interview/InterviewRadio";
 import { StyledBtn } from "styles/StyledBtn";
-import { useSetRecoilState } from "recoil";
-import { aiInterviewNextProcessAtom } from "store/interview/atom";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  aiInterviewNextProcessAtom,
+  interviewCommentAtom,
+  interviewDataAtom,
+  isInterviewerAtom,
+} from "store/interview/atom";
 
 const StyledInterviewEnd = styled.div`
   color: var(--main-black);
@@ -43,36 +47,11 @@ const StyledInterviewEnd = styled.div`
   }
 `;
 
-interface InterviewEndProps {
-  isAiInterview: boolean; // AI 인터뷰 true, 유저 인터뷰 false
-  isInterviewer: boolean; // 면접자 true, 면접관 false
-}
-
-const InterviewEnd = ({ isAiInterview, isInterviewer }: InterviewEndProps) => {
+const InterviewEnd = () => {
   const setAiInterviewNextProcess = useSetRecoilState(aiInterviewNextProcessAtom);
-
-  const [ eyeScore, setEyeScore ] = useState(3);
-  const [ poseScore, setPoseScore ] = useState(3);
-  const [ answerScore, setAnswerScore ] = useState(3);
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = event.target;
-    if (name === "면접 시선") {
-      setEyeScore(Number(value));
-    }
-    else if (name === "면접 자세") {
-      setPoseScore(Number(value));
-    }
-    else if (name === "면접 답변") {
-      setAnswerScore(Number(value));
-    }
-  };
-
-  useEffect(() => {
-    console.log(eyeScore);
-    console.log(poseScore);
-    console.log(answerScore);
-  }, [ eyeScore, poseScore, answerScore ]);
+  const [comment, setComment] = useRecoilState(interviewCommentAtom);
+  const isInterviewer = useRecoilValue(isInterviewerAtom);
+  const interviewData = useRecoilValue(interviewDataAtom);
 
   useEffect(() => {
     setAiInterviewNextProcess("ready");
@@ -82,7 +61,7 @@ const InterviewEnd = ({ isAiInterview, isInterviewer }: InterviewEndProps) => {
     <StyledInterviewEnd>
       <>
         <h2>면접 종료!</h2>
-        {isAiInterview ? (
+        {interviewData?.roomType === "AI" ? (
           <div className="aiEndContents">
             <p>수고하셨습니다.</p>
             <span>면접 결과는 마이페이지에서 확인하실 수 있습니다.</span>
@@ -94,9 +73,7 @@ const InterviewEnd = ({ isAiInterview, isInterviewer }: InterviewEndProps) => {
           </div>
         ) : isInterviewer ? (
           <div className="userEndContents">
-            <InterviewRadio handleChange={handleChange} labelName="면접 시선" />
-            <InterviewRadio handleChange={handleChange} labelName="면접 자세" />
-            <InterviewRadio handleChange={handleChange} labelName="면접 답변" />
+            <div></div>
             <Link to="/lobby">
               <StyledBtn width="100px" height="32px" color="red">
                 나가기
@@ -104,9 +81,9 @@ const InterviewEnd = ({ isAiInterview, isInterviewer }: InterviewEndProps) => {
             </Link>
           </div>
         ) : (
-          <div className="userEndContents">
-            <InterviewRadio handleChange={handleChange} labelName="면접관 1" />
-            <InterviewRadio handleChange={handleChange} labelName="면접관 2" />
+          <div className="aiEndContents">
+            <p>수고하셨습니다.</p>
+            <span>면접 결과는 마이페이지에서 확인하실 수 있습니다.</span>
             <Link to="/lobby">
               <StyledBtn width="100px" height="32px" color="red">
                 나가기

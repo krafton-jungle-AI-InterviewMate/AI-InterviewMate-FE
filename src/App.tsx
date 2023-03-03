@@ -48,10 +48,7 @@ function App() {
           <Route path={PagesPath.RESULT} element={<Result />} />
           <Route path={PagesPath.RESULT_DETAILS} element={<ResultDetails />} />
           <Route path={PagesPath.QUESTIONS} element={<QuestionList />} />
-          <Route
-            path={PagesPath.INTERVIEW_END}
-            element={<InterviewEnd isAiInterview={true} isInterviewer={true} />}
-          />
+          <Route path={PagesPath.INTERVIEW_END} element={<InterviewEnd />} />
           <Route path={PagesPath.QUESTIONS_DETAILS} element={<QuestionDetails />} />
           {/* 면접 진행 페이지 외에 새로 추가하시는 페이지는 모두 이 부분에 추가해주세요. */}
         </Route>
