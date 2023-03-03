@@ -93,7 +93,7 @@ const FinishedModeController = () => {
   useEffect(() => {
     if (videoUrl) {
       setIsProcessing(false);
-      handleSubmit();
+      navigate("/interview/end", { replace: true });
     }
   }, [ videoUrl ]);
 
