@@ -79,6 +79,7 @@ const UserInterview = () => {
 
     session.on("signal:readyOut", event => {
       console.log(event.type);
+      console.log(event.data);
       if (event.data) {
         leaveSession();
         navigate("/lobby");
