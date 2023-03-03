@@ -10,12 +10,12 @@ import {
 } from "store/interview/atom";
 import { useNavigate } from "react-router";
 import UserInterviewReady from "components/interview/userInterview/UserInterviewReady";
-import { usePutInterviewRooms } from "hooks/queries/interview";
+import { useDeleteInterviewRooms, usePutInterviewRooms } from "hooks/queries/interview";
 import { memberAtom } from "store/auth/atom";
 import UserInterviewStart from "./../../../components/interview/userInterview/UserInterviewStart";
 
 const UserInterview = () => {
-  const { mutate } = usePutInterviewRooms();
+  const { mutate: putInterviewRoomsMutate } = usePutInterviewRooms();
 
   const userInterviewData = useRecoilValue(interviewDataAtom);
   const { nickname } = useRecoilValue(memberAtom);
@@ -33,6 +33,8 @@ const UserInterview = () => {
   const [ready, setReady] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [interviewTime, setInterviewTime] = useState(0);
+
+  const { mutate: deleteInterviewRoomsMutate } = useDeleteInterviewRooms();
 
   useEffect(() => {
     window.addEventListener("beforeunload", onbeforeunload);
@@ -151,6 +153,14 @@ const UserInterview = () => {
 
   const handleClickInterviewOut = () => {
     // 인터뷰 도중 나감
+    deleteInterviewRoomsMutate(userInterviewData!.roomIdx, {
+      onSuccess: () => {
+        console.log("면접방을 나갔습니다.");
+      },
+      onError(error) {
+        alert(error);
+      },
+    });
     setIsInterviewStart(false);
     leaveSession();
     navigate("/lobby");
@@ -158,6 +168,14 @@ const UserInterview = () => {
 
   const handleClickReadyOut = () => {
     // 대기방에서 나감
+    deleteInterviewRoomsMutate(userInterviewData!.roomIdx, {
+      onSuccess: () => {
+        console.log("면접방을 나갔습니다.");
+      },
+      onError(error) {
+        alert(error);
+      },
+    });
     leaveSession();
     navigate("/lobby");
   };
@@ -165,7 +183,7 @@ const UserInterview = () => {
   const handleClickStart = () => {
     // 면접 시작
     if (ready) {
-      mutate(userInterviewData!.roomIdx, {
+      putInterviewRoomsMutate(userInterviewData!.roomIdx, {
         onSuccess: () => {
           setIsInterviewStart(true);
         },
@@ -190,7 +208,7 @@ const UserInterview = () => {
 
   const InterviewEnd = () => {
     // 면접 정상 종료
-    mutate(userInterviewData!.roomIdx, {
+    putInterviewRoomsMutate(userInterviewData!.roomIdx, {
       onSuccess: () => {
         setIsInterviewStart(false);
         console.log("면접을 정상적으로 종료합니다.");
