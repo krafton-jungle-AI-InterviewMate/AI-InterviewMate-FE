@@ -14,6 +14,7 @@ import {
   videoUrlAtom,
   recordModeAtom,
 } from "store/interview/atom";
+import { usePutInterviewRooms } from "hooks/queries/interview";
 import { usePostRatingViewee } from "hooks/queries/mypage";
 import { usePostAbortVideoUpload } from "hooks/queries/video";
 import { PostRatingVieweePayloadData } from "api/mypage/types";
@@ -46,6 +47,7 @@ const FinishedModeController = () => {
   const {
     mutate: abortVideoUpload,
   } = usePostAbortVideoUpload();
+  const { mutate: changeRoomState } = usePutInterviewRooms();
 
   const handleSubmit = () => {
     if (isLoading) {
@@ -77,6 +79,7 @@ const FinishedModeController = () => {
     }, {
       onSuccess: () => {
         setAiInterviewNextProcess("end");
+        changeRoomState(roomIdx);
 
         if (!isRecordMode) {
           navigate("/interview/end", { replace: true });
@@ -105,6 +108,7 @@ const FinishedModeController = () => {
 
   const handleProcessingPopupClose = () => {
     setIsProcessing(false);
+    changeRoomState(aiRoomResponse!.data.roomIdx);
     navigate("/interview/end", { replace: true });
   };
 

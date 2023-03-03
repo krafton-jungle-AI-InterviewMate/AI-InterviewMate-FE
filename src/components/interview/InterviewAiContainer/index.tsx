@@ -22,6 +22,7 @@ import Skeleton from "@mui/material/Skeleton";
 import { JungleManagersSet } from "constants/interview";
 import { getAiInterviewerVideo, getAiInterviewerListening } from "lib/interview";
 
+import { usePutInterviewRooms } from "hooks/queries/interview";
 import useSTT from "hooks/useSTT";
 import { useRecorderPermission } from "hooks/useRecorderPermission";
 import RecordRTC from "recordrtc";
@@ -46,6 +47,8 @@ const InterviewAiContainer = () => {
   const aiInterviewerVideo = useMemo(() => getAiInterviewerVideo(aiInterviewer), [ aiInterviewer ]);
   const aiInterviewerListening = useMemo(() => getAiInterviewerListening(aiInterviewer), [ aiInterviewer ]);
   const videoClassName = useMemo(() => JungleManagersSet.has(aiInterviewer) ? "jungle" : "", [ aiInterviewer ]);
+
+  const { mutate: changeRoomState } = usePutInterviewRooms();
 
   useSTT();
 
@@ -106,9 +109,11 @@ const InterviewAiContainer = () => {
       const {
         data: {
           questionList,
+          roomIdx,
         },
       } = aiRoomResponse;
 
+      changeRoomState(roomIdx);
       setInterviewQuestionTotal(questionList.length);
     }
   }, [ aiRoomResponse ]);
