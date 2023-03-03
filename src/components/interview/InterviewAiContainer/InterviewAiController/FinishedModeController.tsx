@@ -65,7 +65,6 @@ const FinishedModeController = () => {
     } = aiRoomResponse;
 
     const data: PostRatingVieweePayloadData = {
-      videoUrl: null, // TODO: api 수정되면 아예 제거
       eyeTimelines: deduplicate(eyes),
       attitudeTimelines: deduplicate(attitude),
       questionTimelines: questionModeStart,

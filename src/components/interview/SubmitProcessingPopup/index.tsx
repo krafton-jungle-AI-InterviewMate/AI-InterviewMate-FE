@@ -83,11 +83,15 @@ const SubmitProcessingPopup = (props: SubmitProcessingPopupProps) => {
   } = usePostInitiateVideoUpload();
   const {
     mutate: fetchSignedVideoUrl,
+    isLoading: fetchSignedVideoUrlLoading,
     isSuccess: fetchSignedVideoUrlComplete,
     data: fetchSignedVideoUrlResponse,
   } = usePostSignedVideoUrl();
   const {
     mutate: postComplete,
+    isLoading: postCompleteLoading,
+    isSuccess: postCompleteSuccess,
+    data: postCompleteResponse,
   } = usePostCompleteVideoUpload();
 
   useEffect(() => {
@@ -142,26 +146,24 @@ const SubmitProcessingPopup = (props: SubmitProcessingPopupProps) => {
           fileName,
           uploadId,
           partNumber: count + 1,
-        },
-        {
-          onSuccess: () => {
-            if (!currBlobPart) {
-              return;
-            }
-
-            if (fetchSignedVideoUrlComplete && fetchSignedVideoUrlResponse) {
-              uploadChunkToAWS({
-                preSignedUrl: fetchSignedVideoUrlResponse.data.preSignedUrl,
-                blobPart: currBlobPart,
-                partNumber: currPartNumber,
-              });
-            }
-          },
-        },
-        );
+        });
       }
     }
   }, [ initiateLoading ]);
+
+  useEffect(() => {
+    if (fetchSignedVideoUrlLoading || !currBlobPart) {
+      return;
+    }
+
+    if (fetchSignedVideoUrlComplete && fetchSignedVideoUrlResponse) {
+      uploadChunkToAWS({
+        preSignedUrl: fetchSignedVideoUrlResponse.data.preSignedUrl,
+        blobPart: currBlobPart,
+        partNumber: currPartNumber,
+      });
+    }
+  }, [ fetchSignedVideoUrlLoading ]);
 
   useEffect(() => {
     if (!interviewData) {
@@ -176,15 +178,19 @@ const SubmitProcessingPopup = (props: SubmitProcessingPopupProps) => {
         fileName: serverFileName,
         uploadId,
         roomIdx,
-      },
-      {
-        onSuccess: (data) => {
-          setVideoUrl(data.data.url);
-          handleClose();
-        },
       });
     }
   }, [ multiUploadList ]);
+
+  useEffect(() => {
+    if (postCompleteLoading) {
+      return;
+    }
+
+    if (postCompleteSuccess && postCompleteResponse) {
+      setVideoUrl(postCompleteResponse.data.url);
+    }
+  }, [ postCompleteLoading ]);
 
   return (
     <Modal
