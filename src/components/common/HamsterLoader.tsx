@@ -139,13 +139,12 @@ const spoke = keyframes`
 
 // * 출처: https://uiverse.io/Nawsome/wet-mayfly-23
 const StyledLoaderWrap = styled.div`
-  .wheel-and-hamster {
-    --dur: 1s;
-    position: relative;
-    width: 12em;
-    height: 12em;
-    font-size: 14px;
-  }
+  --dur: 1s;
+  position: relative;
+  width: 12em;
+  height: 12em;
+  font-size: 14px;
+  margin: 12px auto;
 
   .wheel,
   .hamster,
