@@ -80,7 +80,7 @@ const UserInterview = () => {
     session.on("signal:readyOut", event => {
       console.log(event.type);
       console.log(event.data);
-      if (event.data) {
+      if (event.data === "면접자") {
         leaveSession();
         navigate("/lobby");
       }
@@ -89,11 +89,11 @@ const UserInterview = () => {
     session.on("signal:interviewOut", event => {
       console.log(event.type);
       console.log(event.data);
-      if (event.data) {
+      if (event.data === "면접자") {
         setIsInterviewStart(false);
         leaveSession();
         navigate("/lobby");
-      } else if (!event.data) {
+      } else if (event.data === "면접관") {
         setIsInterviewStart(false);
         leaveSession();
         navigate("/lobby");
@@ -185,7 +185,7 @@ const UserInterview = () => {
     });
     session
       .signal({
-        data: host === publisher.stream.connection.connectionId,
+        data: host === publisher.stream.connection.connectionId ? "면접자" : "면접관",
         to: subscribers,
         type: "interviewOut",
       })
@@ -209,7 +209,7 @@ const UserInterview = () => {
     });
     session
       .signal({
-        data: host === publisher.stream.connection.connectionId,
+        data: host === publisher.stream.connection.connectionId ? "면접자" : "면접관",
         to: subscribers,
         type: "readyOut",
       })
