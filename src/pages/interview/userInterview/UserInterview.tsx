@@ -79,8 +79,8 @@ const UserInterview = () => {
     session.on("signal:readyOut", event => {
       console.log(event.type);
       if (event.data === "면접자") {
-        leaveSession();
         navigate("/lobby");
+        leaveSession();
       }
     });
 
