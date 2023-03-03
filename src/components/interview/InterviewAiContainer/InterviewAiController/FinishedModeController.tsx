@@ -15,6 +15,7 @@ import {
   recordModeAtom,
 } from "store/interview/atom";
 import { usePostRatingViewee } from "hooks/queries/mypage";
+import { usePostAbortVideoUpload } from "hooks/queries/video";
 import { PostRatingVieweePayloadData } from "api/mypage/types";
 
 import styled from "@emotion/styled";
@@ -41,6 +42,9 @@ const FinishedModeController = () => {
     mutate,
     isLoading,
   } = usePostRatingViewee();
+  const {
+    mutate: abortVideoUpload,
+  } = usePostAbortVideoUpload();
 
   const handleSubmit = () => {
     if (isLoading) {
@@ -58,7 +62,6 @@ const FinishedModeController = () => {
     } = aiRoomResponse;
 
     const data: PostRatingVieweePayloadData = {
-      videoUrl: videoUrl || null,
       eyeTimelines: eyes,
       attitudeTimelines: attitude,
       questionTimelines: questionModeStart,
@@ -75,7 +78,10 @@ const FinishedModeController = () => {
     }, {
       onSuccess: () => {
         setAiInterviewNextProcess("end");
-        navigate("/interview/end", { replace: true });
+
+        if (!isRecordMode) {
+          navigate("/interview/end", { replace: true });
+        }
       },
       onError ( error ) {
         alert(error);
@@ -91,12 +97,27 @@ const FinishedModeController = () => {
   }, [ videoUrl ]);
 
   const handleSubmitButtonClick = () => {
+    handleSubmit();
+
     if (isRecordMode) {
       setIsProcessing(true);
     }
-    else {
-      handleSubmit();
-    }
+  };
+
+  const handleProcessingPopupClose = () => {
+    setIsProcessing(false);
+    navigate("/interview/end", { replace: true });
+  };
+
+  const handleCancelProcessing = (fileName: string, uploadId: string) => {
+    abortVideoUpload({
+      fileName,
+      uploadId,
+    },
+    {
+      onSettled: handleProcessingPopupClose,
+    },
+    );
   };
 
   return (
@@ -104,8 +125,8 @@ const FinishedModeController = () => {
       {isProcessing &&
         <SubmitProcessingPopup
           isOpen={isProcessing}
-          handleClose={() => setIsProcessing(false)}
-          handleCancel={() => {}}
+          handleClose={handleProcessingPopupClose}
+          handleCancel={handleCancelProcessing}
         />
       }
       <InterviewComment>

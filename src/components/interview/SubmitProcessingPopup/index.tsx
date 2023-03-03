@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import {
   interviewDataAtom,
   videoBlobAtom,
@@ -10,7 +10,6 @@ import {
   usePostInitiateVideoUpload,
   usePostSignedVideoUrl,
   usePostCompleteVideoUpload,
-  usePostAbortVideoUpload,
 } from "hooks/queries/video";
 import { formatVideoFileName } from "lib/format";
 import { MB } from "constants/common";
@@ -25,7 +24,7 @@ import * as Styled from "./styles";
 type SubmitProcessingPopupProps = {
   isOpen: boolean;
   handleClose: () => void;
-  handleCancel: () => void;
+  handleCancel: (fileName: string, uploadId: string) => void;
 }
 
 type UploadChunkToAWSParams = {
@@ -43,7 +42,7 @@ const SubmitProcessingPopup = (props: SubmitProcessingPopupProps) => {
 
   const blob = useRecoilValue(videoBlobAtom);
   const interviewData = useRecoilValue(interviewDataAtom);
-  const setVideoUrl = useSetRecoilState(videoUrlAtom);
+  const [ videoUrl, setVideoUrl ] = useRecoilState(videoUrlAtom);
 
   const [ chunkNumber, setChunkNumber ] = useState(0);
   const [ uploadId, setUploadId ] = useState("");
@@ -54,7 +53,7 @@ const SubmitProcessingPopup = (props: SubmitProcessingPopupProps) => {
 
   const handleClickCancelButton = () => {
     if (window.confirm("정말 제출을 취소하시겠습니까?")) {
-      handleCancel();
+      handleCancel(serverFileName, uploadId);
     }
   };
 
@@ -84,16 +83,20 @@ const SubmitProcessingPopup = (props: SubmitProcessingPopupProps) => {
   } = usePostInitiateVideoUpload();
   const {
     mutate: fetchSignedVideoUrl,
-    isLoading: fetchSignedVideoUrlLoading,
     isSuccess: fetchSignedVideoUrlComplete,
     data: fetchSignedVideoUrlResponse,
   } = usePostSignedVideoUrl();
   const {
     mutate: postComplete,
-    isLoading: postCompleteLoading,
-    isSuccess: postCompleteSuccess,
-    data: postCompleteResponse,
   } = usePostCompleteVideoUpload();
+
+  useEffect(() => {
+    return () => {
+      if (serverFileName && uploadId && !videoUrl) {
+        handleCancel(serverFileName, uploadId);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (!interviewData) {
@@ -105,8 +108,6 @@ const SubmitProcessingPopup = (props: SubmitProcessingPopupProps) => {
 
     if (blob) {
       const fileName = formatVideoFileName(roomIdx);
-
-      console.log(1);
 
       initiateVideoUpload({
         fileName,
@@ -141,24 +142,26 @@ const SubmitProcessingPopup = (props: SubmitProcessingPopupProps) => {
           fileName,
           uploadId,
           partNumber: count + 1,
-        });
+        },
+        {
+          onSuccess: () => {
+            if (!currBlobPart) {
+              return;
+            }
+
+            if (fetchSignedVideoUrlComplete && fetchSignedVideoUrlResponse) {
+              uploadChunkToAWS({
+                preSignedUrl: fetchSignedVideoUrlResponse.data.preSignedUrl,
+                blobPart: currBlobPart,
+                partNumber: currPartNumber,
+              });
+            }
+          },
+        },
+        );
       }
     }
   }, [ initiateLoading ]);
-
-  useEffect(() => {
-    if (fetchSignedVideoUrlLoading || !currBlobPart) {
-      return;
-    }
-
-    if (fetchSignedVideoUrlComplete && fetchSignedVideoUrlResponse) {
-      uploadChunkToAWS({
-        preSignedUrl: fetchSignedVideoUrlResponse.data.preSignedUrl,
-        blobPart: currBlobPart,
-        partNumber: currPartNumber,
-      });
-    }
-  }, [ fetchSignedVideoUrlLoading ]);
 
   useEffect(() => {
     if (!interviewData) {
@@ -168,25 +171,20 @@ const SubmitProcessingPopup = (props: SubmitProcessingPopupProps) => {
 
     const { roomIdx } = interviewData;
     if (multiUploadList.length && multiUploadList.length === chunkNumber) {
-      console.log(3);
       postComplete({
         parts: multiUploadList,
         fileName: serverFileName,
         uploadId,
         roomIdx,
+      },
+      {
+        onSuccess: (data) => {
+          setVideoUrl(data.data.url);
+          handleClose();
+        },
       });
     }
   }, [ multiUploadList ]);
-
-  useEffect(() => {
-    if (postCompleteLoading) {
-      return;
-    }
-
-    if (postCompleteSuccess && postCompleteResponse) {
-      setVideoUrl(postCompleteResponse.data.url);
-    }
-  }, [ postCompleteLoading ]);
 
   return (
     <Modal
@@ -203,7 +201,11 @@ const SubmitProcessingPopup = (props: SubmitProcessingPopupProps) => {
           <br />
           잠시만 기다려 주세요.
         </Styled.Message>
-        <Styled.CancelButton type="button" onClick={handleClickCancelButton}>
+        <Styled.CancelButton
+          type="button"
+          onClick={handleClickCancelButton}
+          disabled={!serverFileName && !uploadId}
+        >
           제출 취소하기
         </Styled.CancelButton>
       </Styled.Container>

@@ -70,7 +70,6 @@ export type ScriptWithQuestionIdx = {
 };
 
 export type PostRatingVieweePayloadData = {
-  videoUrl: string | null;
   eyeTimelines: string[];
   attitudeTimelines: string[];
   questionTimelines: string[];
