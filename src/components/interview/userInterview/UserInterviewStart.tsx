@@ -36,6 +36,14 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
     if (host === publisher.stream.connection.connectionId && subscribers.length === 0) {
       setIsInterviewStart(false);
       navigete("/lobby");
+    } else if (host !== publisher.stream.connection.connectionId) {
+      subscribers.map(sub => {
+        if (host === sub.stream.connection.connectionId) {
+          return;
+        }
+      });
+      setIsInterviewStart(false);
+      navigete("/lobby");
     }
   }, [subscribers]);
 

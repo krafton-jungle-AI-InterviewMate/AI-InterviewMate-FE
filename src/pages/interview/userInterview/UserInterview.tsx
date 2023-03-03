@@ -78,11 +78,6 @@ const UserInterview = () => {
       console.warn(exception);
     });
 
-    session.on("signal:publisherExit", event => {
-      console.log(event.type);
-      navigate("/lobby");
-    });
-
     session.on("signal:interviewStart", event => {
       console.log(event.type);
       setIsInterviewStart(true);
@@ -160,19 +155,7 @@ const UserInterview = () => {
     // 인터뷰 도중 나감
     deleteInterviewRoomsMutate(userInterviewData!.roomIdx, {
       onSuccess: () => {
-        if (host === publisher.stream.connection.connectionId) {
-          session
-            .signal({
-              to: subscribers,
-              type: "publisherExit",
-            })
-            .then(() => {
-              console.log("면접자가 면접방을 나갔습니다.");
-            })
-            .catch(error => {
-              console.error(error);
-            });
-        }
+        console.log("면접방을 나갔습니다.");
       },
       onError(error) {
         alert(error);
@@ -185,22 +168,9 @@ const UserInterview = () => {
 
   const handleClickReadyOut = () => {
     // 대기방에서 나감
-
     deleteInterviewRoomsMutate(userInterviewData!.roomIdx, {
       onSuccess: () => {
-        if (host === publisher.stream.connection.connectionId) {
-          session
-            .signal({
-              to: subscribers,
-              type: "publisherExit",
-            })
-            .then(() => {
-              console.log("면접자가 면접방을 나갔습니다.");
-            })
-            .catch(error => {
-              console.error(error);
-            });
-        }
+        console.log("면접방을 나갔습니다.");
       },
       onError(error) {
         alert(error);
