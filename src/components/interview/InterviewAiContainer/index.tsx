@@ -3,7 +3,6 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   interviewModeAtom,
   interviewQuestionTotalAtom,
-  answerScriptAtom,
   aiInterviewerAtom,
   aiRoomResponseAtom,
   recordModeAtom,
@@ -33,7 +32,6 @@ import { css } from "@emotion/react";
 const InterviewAiContainer = () => {
   const interviewMode = useRecoilValue(interviewModeAtom);
   const setInterviewQuestionTotal = useSetRecoilState(interviewQuestionTotalAtom);
-  const setAnswerScript = useSetRecoilState(answerScriptAtom);
   const aiInterviewer = useRecoilValue(aiInterviewerAtom);
   const aiRoomResponse = useRecoilValue(aiRoomResponseAtom);
   const isRecordMode = useRecoilValue(recordModeAtom);
@@ -64,15 +62,15 @@ const InterviewAiContainer = () => {
   };
 
   useEffect(() => {
+    setTimelineRecord((curr) => ({
+      ...curr,
+      startTime: Date.now(),
+    }));
+
     if (isRecordMode) {
       (async () => {
         const rec = await getPermissionInitializeRecorder();
         await rec.startRecording();
-        setTimelineRecord((curr) => ({
-          ...curr,
-          startTime: Date.now(),
-        }));
-  
         setRecorder(rec);
       })();
   
@@ -83,14 +81,17 @@ const InterviewAiContainer = () => {
   }, []);
 
   useEffect(() => {
-    if (interviewMode === "finished" && isRecordMode) {
-      (async () => {
-        await stopRecording();
-        setTimelineRecord((curr) => ({
-          ...curr,
-          endTime: Date.now(),
-        }));
-      })();
+    if (interviewMode === "finished") {
+      setTimelineRecord((curr) => ({
+        ...curr,
+        endTime: Date.now(),
+      }));
+
+      if (isRecordMode) {
+        (async () => {
+          await stopRecording();
+        })();
+      }
     }
   }, [ interviewMode ]);
 
@@ -109,7 +110,6 @@ const InterviewAiContainer = () => {
       } = aiRoomResponse;
 
       setInterviewQuestionTotal(questionList.length);
-      setAnswerScript(new Array(questionList.length).fill(""));
     }
   }, [ aiRoomResponse ]);
 

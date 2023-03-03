@@ -4,6 +4,7 @@ import {
   interviewModeAtom,
   answerScriptAtom,
   interviewQuestionNumberAtom,
+  aiRoomResponseAtom,
 } from "store/interview/atom";
 
 import { joinScripts } from "lib/stt";
@@ -12,6 +13,7 @@ const useSTT = () => {
   const [ answerScript, setAnswerScript ] = useRecoilState(answerScriptAtom);
   const interviewMode = useRecoilValue(interviewModeAtom);
   const interviewQuestionNumber = useRecoilValue(interviewQuestionNumberAtom);
+  const aiRoomResponse = useRecoilValue(aiRoomResponseAtom);
 
   const [ isListening, setIsListening ] = useState(false);
   const [ isRecognitionEnd, setIsRecognitionEnd ] = useState(true);
@@ -96,19 +98,39 @@ const useSTT = () => {
 
   // * 음성 인식 결과로서 전달받는 transcript 가공하여 전역 상태 업데이트
   useEffect(() => {
-    if (!recognitionResult) {
+    if (!recognitionResult || !aiRoomResponse) {
       return;
     }
 
     const currQuestionIdx = interviewQuestionNumber - 1;
+    const {
+      data: {
+        questionList,
+      },
+    } = aiRoomResponse;
 
-    setAnswerScript((curr) => curr.map((script, idx) => {
-      if (idx === currQuestionIdx) {
-        return joinScripts(script, recognitionResult).trim();
-      }
+    if (answerScript.length < interviewQuestionNumber) {
+      setAnswerScript((curr) => ([
+        ...curr,
+        {
+          questionIdx: questionList[currQuestionIdx].questionIdx,
+          script: joinScripts("", recognitionResult).trim(),
+        },
+      ]));
+    }
+    else {
+      setAnswerScript((curr) => curr.map((scriptDto, idx) => {
+        if (idx === currQuestionIdx) {
+          return {
+            questionIdx: questionList[currQuestionIdx].questionIdx,
+            script: joinScripts(scriptDto.script, recognitionResult).trim(),
+          };
+        }
+  
+        return scriptDto;
+      }));
+    }
 
-      return script;
-    }));
   }, [ recognitionResult ]);
 
   return {

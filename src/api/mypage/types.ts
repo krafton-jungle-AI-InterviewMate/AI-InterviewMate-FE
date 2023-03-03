@@ -29,7 +29,7 @@ export type Timestamp = {
 
 export type ScriptWithQuestionTitle = {
   questionTitle: string;
-  script: string
+  script: string;
 };
 
 export type RatingDetail = {
@@ -64,17 +64,13 @@ export type Comment = {
   comment: string;
 };
 
-export type ScriptWithQuestionIdx = {
-  questionIdx: number;
-  script: string;
-};
-
 export type PostRatingVieweePayloadData = {
+  videoUrl: string | null;
   eyeTimelines: string[];
   attitudeTimelines: string[];
   questionTimelines: string[];
   comments: Comment[];
-  scripts: ScriptWithQuestionIdx[];
+  scripts: ScriptRequestsDtos[];
 };
 
 export type PostRatingVieweePayload = {

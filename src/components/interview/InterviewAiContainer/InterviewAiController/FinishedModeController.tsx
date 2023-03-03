@@ -17,6 +17,7 @@ import {
 import { usePostRatingViewee } from "hooks/queries/mypage";
 import { usePostAbortVideoUpload } from "hooks/queries/video";
 import { PostRatingVieweePayloadData } from "api/mypage/types";
+import { deduplicate } from "lib/interview";
 
 import styled from "@emotion/styled";
 
@@ -62,14 +63,12 @@ const FinishedModeController = () => {
     } = aiRoomResponse;
 
     const data: PostRatingVieweePayloadData = {
-      eyeTimelines: eyes,
-      attitudeTimelines: attitude,
+      videoUrl: null, // TODO: api 수정되면 아예 제거
+      eyeTimelines: deduplicate(eyes),
+      attitudeTimelines: deduplicate(attitude),
       questionTimelines: questionModeStart,
       comments: [],
-      scripts: answerScript.map((script, idx) => ({
-        questionIdx: idx + 1, // DB index 1부터 시작
-        script,
-      })),
+      scripts: answerScript,
     };
 
     mutate({
