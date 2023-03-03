@@ -53,7 +53,7 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
         isInHost = true;
       }
     });
-    if (host !== publisher.stream.connection.connectionId && !isInHost) {
+    if (publisher && host !== publisher.stream.connection.connectionId && !isInHost) {
       setIsInterviewStart(false);
       navigate("/lobby");
     }
