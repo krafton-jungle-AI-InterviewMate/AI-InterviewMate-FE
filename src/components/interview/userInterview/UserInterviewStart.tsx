@@ -71,7 +71,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
                 {host === publisher.stream.connection.connectionId && (
                   <UserVideoComponent streamManager={publisher} />
                 )}
-                {host === publisher.stream.connection.connectionId && <InterviewQuestionTab />}
+                {host !== publisher.stream.connection.connectionId && <InterviewQuestionTab />}
               </div>
             )}
           </div>

@@ -109,6 +109,7 @@ const InterviewQuestionTab = () => {
 };
 
 const StyledInterviewQuestionTab = styled.div`
+  margin-left: 100px;
   text-align: left;
   .contentsTab {
     display: flex;
@@ -161,8 +162,7 @@ const StyledInterviewQuestionTab = styled.div`
       font-weight: 400;
       color: var(--main-black);
       textarea {
-        width: 316px;
-        max-width: 316px;
+        width: 314px;
         height: auto;
         font-size: 20px;
         font-weight: 400;
