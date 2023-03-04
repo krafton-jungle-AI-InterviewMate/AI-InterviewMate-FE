@@ -42,6 +42,11 @@ const InterviewAi = () => {
     else {
       setAiInterviewNextProcess("end");
     }
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }, []);
 
   return (
