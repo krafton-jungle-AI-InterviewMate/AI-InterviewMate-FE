@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { aiInterviewNextProcessAtom } from "store/interview/atom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { aiInterviewNextProcessAtom, aiRoomResponseAtom } from "store/interview/atom";
+
+import { useDeleteInterviewRooms } from "hooks/queries/interview";
 
 import Popup from "components/common/Popup";
 import InterviewAiContainer from "components/interview/InterviewAiContainer";
@@ -10,13 +12,27 @@ import { commonButtonStyle } from "styles/common";
 
 const InterviewAi = () => {
   const navigate = useNavigate();
+  const aiRoomResponse = useRecoilValue(aiRoomResponseAtom);
   const [ aiInterviewNextProcess, setAiInterviewNextProcess ] = useRecoilState(aiInterviewNextProcessAtom);
 
   const [ isConfirmPopupOpen, setIsConfirmPopupOpen ] = useState(false);
 
+  const { mutate: deleteRoom } = useDeleteInterviewRooms();
+
   const handleLeave = () => {
-    setAiInterviewNextProcess("ready");
-    navigate("/lobby", { replace: true });
+    if (!aiRoomResponse) {
+      return;
+    }
+
+    deleteRoom(
+      aiRoomResponse.data.roomIdx,
+      {
+        onSuccess: () => {
+          setAiInterviewNextProcess("ready");
+          navigate("/lobby", { replace: true });
+        },
+      },
+    );
   };
 
   useEffect(() => {

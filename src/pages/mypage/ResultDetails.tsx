@@ -24,6 +24,7 @@ const ResultDetails = () => {
     data,
     isFetching,
     isSuccess,
+    refetch,
   } = useGetRatingDetail(
     Number(searchParams.get("room")),
     searchParams.get("type") as RoomTypes,
@@ -34,12 +35,17 @@ const ResultDetails = () => {
   }
 
   return isSuccess && data ? (
-    <ResultDetailsLayout roomType={searchParams.get("type") as RoomTypes} data={data.data}>
+    <ResultDetailsLayout
+      roomType={searchParams.get("type") as RoomTypes}
+      roomIdx={Number(searchParams.get("room"))}
+      data={data.data}
+      refetch={refetch}
+    >
       <StyledVideoSection>
         {data.data.data.videoUrl ? (
           <>
             <ResultVideo videoRef={videoRef} videoUrl={data.data.data.videoUrl} />
-            <ResultTimeline data={data.data.data.timelines} videoRef={videoRef} />
+            <ResultTimeline data={data.data.data} videoRef={videoRef} />
           </>
         ) : (
           <StyledNoVideo>
