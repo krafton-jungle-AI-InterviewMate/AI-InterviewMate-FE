@@ -14,3 +14,8 @@ export const formatDate = (dateStr: string) => {
   return `${date.toLocaleDateString("ko-KR", dateOptions)} ${time}`;
 };
 
+export const formatVideoFileName = (roomIdx: number) => {
+  const date = new Date().toISOString().split("T")[0].replace(/-/g, "").slice(2,8);
+
+  return `${roomIdx}_${date}.webm`;
+};

@@ -3,12 +3,11 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   interviewModeAtom,
   interviewQuestionTotalAtom,
-  interviewQuestionNumberAtom,
-  answerScriptAtom,
   aiInterviewerAtom,
   aiRoomResponseAtom,
   recordModeAtom,
   timelineRecordAtom,
+  videoBlobAtom,
 } from "store/interview/atom";
 
 import InterviewVideo from "./InterviewVideo";
@@ -23,6 +22,7 @@ import Skeleton from "@mui/material/Skeleton";
 import { JungleManagersSet } from "constants/interview";
 import { getAiInterviewerVideo, getAiInterviewerListening } from "lib/interview";
 
+import { usePutInterviewRooms } from "hooks/queries/interview";
 import useSTT from "hooks/useSTT";
 import { useRecorderPermission } from "hooks/useRecorderPermission";
 import RecordRTC from "recordrtc";
@@ -33,11 +33,11 @@ import { css } from "@emotion/react";
 const InterviewAiContainer = () => {
   const interviewMode = useRecoilValue(interviewModeAtom);
   const setInterviewQuestionTotal = useSetRecoilState(interviewQuestionTotalAtom);
-  const setAnswerScript = useSetRecoilState(answerScriptAtom);
   const aiInterviewer = useRecoilValue(aiInterviewerAtom);
   const aiRoomResponse = useRecoilValue(aiRoomResponseAtom);
   const isRecordMode = useRecoilValue(recordModeAtom);
   const setTimelineRecord = useSetRecoilState(timelineRecordAtom);
+  const setVideoBlob = useSetRecoilState(videoBlobAtom);
 
   const webcamRef = useRef<null | Webcam>(null);
   const [ isWebcamReady, setIsWebcamReady ] = useState(false);
@@ -47,6 +47,8 @@ const InterviewAiContainer = () => {
   const aiInterviewerVideo = useMemo(() => getAiInterviewerVideo(aiInterviewer), [ aiInterviewer ]);
   const aiInterviewerListening = useMemo(() => getAiInterviewerListening(aiInterviewer), [ aiInterviewer ]);
   const videoClassName = useMemo(() => JungleManagersSet.has(aiInterviewer) ? "jungle" : "", [ aiInterviewer ]);
+
+  const { mutate: changeRoomState } = usePutInterviewRooms();
 
   useSTT();
 
@@ -58,21 +60,20 @@ const InterviewAiContainer = () => {
     if (recorder) {
       await recorder.stopRecording();
       const blob = await recorder.getBlob();
-      // RecordRTC.invokeSaveAsDialog(blob, `interview${interviewQuestionNumber}.webm`);
-      console.log(blob); // TODO: POST /result req body에 포함
+      setVideoBlob(blob);
     }
   };
 
   useEffect(() => {
+    setTimelineRecord((curr) => ({
+      ...curr,
+      startTime: Date.now(),
+    }));
+
     if (isRecordMode) {
       (async () => {
         const rec = await getPermissionInitializeRecorder();
         await rec.startRecording();
-        setTimelineRecord((curr) => ({
-          ...curr,
-          startTime: Date.now(),
-        }));
-  
         setRecorder(rec);
       })();
   
@@ -83,14 +84,17 @@ const InterviewAiContainer = () => {
   }, []);
 
   useEffect(() => {
-    if (interviewMode === "finished" && isRecordMode) {
-      (async () => {
-        await stopRecording();
-        setTimelineRecord((curr) => ({
-          ...curr,
-          endTime: Date.now(),
-        }));
-      })();
+    if (interviewMode === "finished") {
+      setTimelineRecord((curr) => ({
+        ...curr,
+        endTime: Date.now(),
+      }));
+
+      if (isRecordMode) {
+        (async () => {
+          await stopRecording();
+        })();
+      }
     }
   }, [ interviewMode ]);
 
@@ -105,11 +109,12 @@ const InterviewAiContainer = () => {
       const {
         data: {
           questionList,
+          roomIdx,
         },
       } = aiRoomResponse;
 
+      changeRoomState(roomIdx);
       setInterviewQuestionTotal(questionList.length);
-      setAnswerScript(new Array(questionList.length).fill(""));
     }
   }, [ aiRoomResponse ]);
 

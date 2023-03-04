@@ -87,6 +87,7 @@ export default defineConfig(({ mode }) => {
     ],
     optimizeDeps: {
       disabled: false,
+      exclude: [ "react-hook-form" ],
     },
 
     base: "/",

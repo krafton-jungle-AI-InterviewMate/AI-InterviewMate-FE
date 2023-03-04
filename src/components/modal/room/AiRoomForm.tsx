@@ -1,5 +1,5 @@
 import { StyledBtn } from "styles/StyledBtn";
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import FormControl from "@mui/material/FormControl";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -37,7 +37,7 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
   const setRecord = useSetRecoilState(recordModeAtom);
   const setAiRoomResponse = useSetRecoilState(aiRoomResponseAtom);
   const setInterviewData = useSetRecoilState(interviewDataAtom);
-  const [questionNum, setQuestionNum] = useState(0);
+  const [ questionNum, setQuestionNum ] = useState(0);
 
   const onChangeFeedback = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -53,11 +53,12 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
     setRecord(value === "ON");
   };
 
+  const methods = useForm<InputRoomFormProps>();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<InputRoomFormProps>();
+  } = methods;
 
   const { mutate, isLoading } = usePostInterviewRooms();
 
@@ -86,136 +87,138 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
 
   return (
     <StyledUserRoomForm roomNameError={errors?.roomName?.message}>
-      <form onSubmit={handleSubmit(onValid)}>
-        <input {...register("email")} readOnly hidden value="user4@test.com" />
-        <div className="inputContent">
-          <label htmlFor="roomName">방 제목</label>
-          <input
-            {...register("roomName", {
-              required: "방 제목을 입력해주세요.",
-              minLength: {
-                value: 2,
-                message: "최소 2자 ~ 최대 10자까지 입력 가능합니다.",
-              },
-              maxLength: {
-                value: 10,
-                message: "최소 2자 ~ 최대 10자까지 입력 가능합니다.",
-              },
-              pattern: {
-                value: /[A-Z|a-z|0-9|ㄱ-ㅎ|가-힣|]+$/gi,
-                message: "특수문자는 사용 불가능합니다.",
-              },
-            })}
-            required
-            type="text"
-            id="roomName"
-            autoComplete="off"
-          />
-          {errors.roomName?.message ? (
-            <span className="error">
-              <AiOutlineInfoCircle className="errorIcon" size={24} />
-              {errors.roomName.message}
-            </span>
-          ) : null}
-        </div>
-        <span className="guide">
-          최소 2자 ~ 최대 10자까지 입력 가능합니다. 특수문자는 사용 불가능합니다. <br /> (띄어쓰기
-          제외)
-        </span>
-        <div className="inputContent">
-          <FormControl className="radioForm">
-            <FormLabel>실시간 피드백</FormLabel>
-            <RadioGroup row defaultValue={"ON"} defaultChecked={true}>
-              {FeedbackArr.map((data, idx) => (
-                <FormControlLabel
-                  key={`Feedback${idx}`}
-                  value={data}
-                  control={<Radio onChange={onChangeFeedback} required />}
-                  label={data}
-                />
-              ))}
-            </RadioGroup>
-          </FormControl>
-        </div>
-        <span className="guide">실시간 피드백 설정은 방 생성 이후에는 수정하실 수 없습니다.</span>
-        <div className="inputContent">
-          <FormControl className="radioForm">
-            <FormLabel>면접 영상 녹화</FormLabel>
-            <RadioGroup row defaultValue={"ON"} defaultChecked={true}>
-              {FeedbackArr.map((data, idx) => (
-                <FormControlLabel
-                  key={`Record${idx}`}
-                  value={data}
-                  control={<Radio onChange={onChangeRecord} required />}
-                  label={data}
-                />
-              ))}
-            </RadioGroup>
-          </FormControl>
-        </div>
-        <span className="guide">실시간 피드백 설정은 방 생성 이후에는 수정하실 수 없습니다.</span>
-        <div className="inputContent">
-          <label htmlFor="questionNum">질문 개수</label>
-          <input
-            {...register("roomQuestionNum", {
-              required: "질문 개수를 입력해주세요.",
-              pattern: {
-                value: /^[0-9|]+$/gi,
-                message: "숫자만 입력해주세요.",
-              },
-              min: {
-                value: 1,
-                message: "1개 이상 입력해주세요.",
-              },
-              max: {
-                value: 10,
-                message: "10개를 넘을 수 없습니다.",
-              },
-            })}
-            id="questionNum"
-            type="text"
-            required
-            autoComplete="off"
-            onChange={event => {
-              const {
-                target: { value },
-              } = event;
-              setQuestionNum(parseInt(value));
-            }}
-          />
-          {errors.roomQuestionNum?.message ? (
-            <span className="error">
-              <AiOutlineInfoCircle className="errorIcon" size={24} />
-              {errors.roomQuestionNum.message}
-            </span>
-          ) : null}
-        </div>
-        <div className="inputContent">
-          <label htmlFor="question">질문 꾸러미</label>
-          <select id="question" {...register("roomQuestionBoxIdx", { required: true })}>
-            {questionNum ? (
-              questionBoxes.map((data: QuestionBoxes, idx: number) =>
-                data.questionNum >= questionNum ? (
-                  <option key={idx} value={data.questionBoxIdx}>
-                    {data.questionBoxName}
-                  </option>
-                ) : null,
-              )
-            ) : (
-              <option value="">질문 꾸러미를 선택해주세요.</option>
-            )}
-          </select>
-        </div>
-        <span className="guide">면접관에게 보여질 질문 꾸러미를 선택해주세요.</span>
-        <div className="submitAndCancel">
-          <StyledBtn width="300px" height="58px" color="orange">
-            확인
-          </StyledBtn>
-          <StyledBtn onClick={onClickModalClose} width="300px" height="58px" color="red">
-            취소
-          </StyledBtn>
-        </div>
-      </form>
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(onValid)}>
+          <input {...register("email")} readOnly hidden value="user4@test.com" />
+          <div className="inputContent">
+            <label htmlFor="roomName">방 제목</label>
+            <input
+              {...register("roomName", {
+                required: "방 제목을 입력해주세요.",
+                minLength: {
+                  value: 2,
+                  message: "최소 2자 ~ 최대 10자까지 입력 가능합니다.",
+                },
+                maxLength: {
+                  value: 10,
+                  message: "최소 2자 ~ 최대 10자까지 입력 가능합니다.",
+                },
+                pattern: {
+                  value: /[A-Z|a-z|0-9|ㄱ-ㅎ|가-힣|]+$/gi,
+                  message: "특수문자는 사용 불가능합니다.",
+                },
+              })}
+              required
+              type="text"
+              id="roomName"
+              autoComplete="off"
+            />
+            {errors.roomName?.message ? (
+              <span className="error">
+                <AiOutlineInfoCircle className="errorIcon" size={24} />
+                {errors.roomName.message}
+              </span>
+            ) : null}
+          </div>
+          <span className="guide">
+            최소 2자 ~ 최대 10자까지 입력 가능합니다. 특수문자는 사용 불가능합니다. <br /> (띄어쓰기
+            제외)
+          </span>
+          <div className="inputContent">
+            <FormControl className="radioForm">
+              <FormLabel>실시간 피드백</FormLabel>
+              <RadioGroup row defaultValue={"ON"} defaultChecked={true}>
+                {FeedbackArr.map((data, idx) => (
+                  <FormControlLabel
+                    key={`Feedback${idx}`}
+                    value={data}
+                    control={<Radio onChange={onChangeFeedback} required />}
+                    label={data}
+                  />
+                ))}
+              </RadioGroup>
+            </FormControl>
+          </div>
+          <span className="guide">실시간 피드백 설정은 방 생성 이후에는 수정하실 수 없습니다.</span>
+          <div className="inputContent">
+            <FormControl className="radioForm">
+              <FormLabel>면접 영상 녹화</FormLabel>
+              <RadioGroup row defaultValue={"ON"} defaultChecked={true}>
+                {FeedbackArr.map((data, idx) => (
+                  <FormControlLabel
+                    key={`Record${idx}`}
+                    value={data}
+                    control={<Radio onChange={onChangeRecord} required />}
+                    label={data}
+                  />
+                ))}
+              </RadioGroup>
+            </FormControl>
+          </div>
+          <span className="guide">실시간 피드백 설정은 방 생성 이후에는 수정하실 수 없습니다.</span>
+          <div className="inputContent">
+            <label htmlFor="questionNum">질문 개수</label>
+            <input
+              {...register("roomQuestionNum", {
+                required: "질문 개수를 입력해주세요.",
+                pattern: {
+                  value: /^[0-9|]+$/gi,
+                  message: "숫자만 입력해주세요.",
+                },
+                min: {
+                  value: 1,
+                  message: "1개 이상 입력해주세요.",
+                },
+                max: {
+                  value: 10,
+                  message: "10개를 넘을 수 없습니다.",
+                },
+              })}
+              id="questionNum"
+              type="text"
+              required
+              autoComplete="off"
+              onChange={event => {
+                const {
+                  target: { value },
+                } = event;
+                setQuestionNum(parseInt(value));
+              }}
+            />
+            {errors.roomQuestionNum?.message ? (
+              <span className="error">
+                <AiOutlineInfoCircle className="errorIcon" size={24} />
+                {errors.roomQuestionNum.message}
+              </span>
+            ) : null}
+          </div>
+          <div className="inputContent">
+            <label htmlFor="question">질문 꾸러미</label>
+            <select id="question" {...register("roomQuestionBoxIdx", { required: true })}>
+              {questionNum ? (
+                questionBoxes.map((data: QuestionBoxes, idx: number) =>
+                  data.questionNum >= questionNum ? (
+                    <option key={idx} value={data.questionBoxIdx}>
+                      {data.questionBoxName}
+                    </option>
+                  ) : null,
+                )
+              ) : (
+                <option value="">질문 꾸러미를 선택해주세요.</option>
+              )}
+            </select>
+          </div>
+          <span className="guide">면접관에게 보여질 질문 꾸러미를 선택해주세요.</span>
+          <div className="submitAndCancel">
+            <StyledBtn width="300px" height="58px" color="orange">
+              확인
+            </StyledBtn>
+            <StyledBtn onClick={onClickModalClose} width="300px" height="58px" color="red">
+              취소
+            </StyledBtn>
+          </div>
+        </form>
+      </FormProvider>
     </StyledUserRoomForm>
   );
 };

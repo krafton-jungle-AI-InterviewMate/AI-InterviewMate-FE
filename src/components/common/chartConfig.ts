@@ -1,4 +1,4 @@
-import { _DeepPartialObject } from "chart.js/dist/types/utils";
+import { _DeepPartialObject } from "chart.js/types/utils";
 import { CoreChartOptions, ElementChartOptions, PluginChartOptions, DatasetChartOptions, ScaleChartOptions, LineControllerChartOptions } from "chart.js";
 
 export const LABEL_EYE = "시선 이탈";
@@ -57,6 +57,10 @@ export const chartUserOption: ChartOptionType = {
     },
     y: {
       axis: "y",
+      beginAtZero: true,
+      ticks: {
+        stepSize: 1,
+      },
       afterDataLimits: (scale) => {
         scale.max = scale.max * 1.2;
       },
@@ -101,6 +105,10 @@ export const chartAiOption: ChartOptionType = {
     },
     y: {
       axis: "y",
+      beginAtZero: true,
+      ticks: {
+        stepSize: 1,
+      },
       afterDataLimits: (scale) => {
         scale.max = scale.max * 1.2;
       },
