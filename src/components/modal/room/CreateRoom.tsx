@@ -16,7 +16,7 @@ const modalStyles: ModalProps["styles"] = {
   },
   modal: {
     position: "relative",
-    width: "815px",
+    width: "900px",
     maxHeight: "calc(100vh - 100px)",
     minHeight: "732px",
     padding: "50px 35px",
@@ -35,9 +35,13 @@ const StyledWrap = styled.div`
     margin-bottom: 45px;
     h2 {
       color: var(--main-black);
-      font-size: 24px;
+      font-size: 2rem;
     }
     .tabBtn {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: space-between;
+      align-items: center;
       button {
         margin-left: 20px;
       }
@@ -46,11 +50,16 @@ const StyledWrap = styled.div`
 `;
 
 const StyledTabBtn = styled.button`
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
   width: 200px;
   height: 48px;
   transition: 0.2s;
   border-radius: 5px 15px;
   background-color: var(--main-white);
+  font-size: 1.4rem;
   filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.5));
   &.active {
     background-color: var(--main-black);

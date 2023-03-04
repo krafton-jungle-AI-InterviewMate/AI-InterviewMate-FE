@@ -98,7 +98,7 @@ const StyledNoVideo = styled.div`
   & p {
     width: 100%;
     text-align: center;
-    font-size: 16px;
+    font-size: 1.6rem;
     color: var(--font-gray);
   }
 `;

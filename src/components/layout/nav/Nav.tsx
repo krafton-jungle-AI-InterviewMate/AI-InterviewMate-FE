@@ -30,7 +30,7 @@ const StyledNav = styled.nav`
   z-index: 11;
 
   button.profile {
-    font-size: 20px;
+    font-size: 1.8rem;
     background-color: transparent;
     border: none;
     outline: none;

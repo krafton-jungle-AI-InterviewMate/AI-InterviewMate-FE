@@ -10,8 +10,8 @@
     "clean": "npx rimraf dist"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
     "@mediapipe/face_mesh": "^0.4.1633559619",
     "@mui/lab": "^5.0.0-alpha.121",
     "@mui/material": "^5.11.10",
@@ -27,7 +27,7 @@
     "react-chartjs-2": "^4.3.1",
     "react-cookie": "^4.1.1",
     "react-dom": "18.2.0",
-    "react-hook-form": "^7.43.1",
+    "react-hook-form": "^7.43.4",
     "react-icons": "^4.7.1",
     "react-is": "^18.2.0",
     "react-responsive-modal": "^6.4.1",

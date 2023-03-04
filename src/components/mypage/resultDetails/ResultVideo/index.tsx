@@ -61,7 +61,7 @@ const StyledVideoWrapper = styled.div`
   height: 480px;
   border-radius: 16px;
   padding: 10px;
-  border: 1px solid var(--main-gray);
+  border: 2px solid var(--main-black);
   box-shadow: var(--box-shadow);
   box-sizing: content-box;
   background-color: var(--main-white);

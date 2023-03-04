@@ -164,19 +164,19 @@ const StyledTimer = styled.div`
 
   & span {
     margin-right: 10px;
-    color: var(--font-gray);
+    color: var(--main-black);
     font-weight: 400;
-    font-size: 14px;
+    font-size: 1.4rem;
   }
 `;
 
 const StyledNextButton = styled.button`
   position: absolute;
-  top: -100px;
+  top: -60px;
   right: 60px;
-  width: 100px;
-  height: 100px;
-  font-size: 14px;
+  width: 160px;
+  height: 160px;
+  font-size: 1.4rem;
   text-align: center;
   background-color: var(--main-orange);
   color: var(--main-white);
@@ -193,11 +193,10 @@ const StyledNextButton = styled.button`
 
 const StyledSmall = styled.small`
   position: absolute;
-  top: -20px;
+  top: -40px;
   left: 50%;
   transform: translate(-50%, 0);
-  width: 120px;
+  width: 300px;
   color: var(--font-gray);
-  opacity: 0.5;
-  font-size: 12px;
+  font-size: 1.4rem;
 `;

@@ -97,8 +97,8 @@ const StyledWrap = styled.div`
 
   & h2 {
     margin: 0;
-    font-size: 24px;
-    font-weight: 400;
+    font-size: 2rem;
+    font-weight: 500;
   }
 `;
 
@@ -108,10 +108,12 @@ const StyledInputWrap = styled.div`
 `;
 
 const StyledInput = styled.input`
-  width: 200px;
-  height: 30px;
+  width: 300px;
+  height: 40px;
   border: 1px solid var(--main-black);
   border-radius: 10px;
+  padding: 0 20px;
+  font-size: 1.6rem;
 `;
 
 const StyledHiddenLabel = styled.label`
@@ -119,7 +121,7 @@ const StyledHiddenLabel = styled.label`
 `;
 
 const StyledSmall = styled.small`
-  font-size: 12px;
+  font-size: 1.2rem;
   color: var(--font-gray);
   line-height: 1.2;
   width: 100%;

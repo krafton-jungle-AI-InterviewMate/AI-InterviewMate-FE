@@ -16,6 +16,8 @@ const StyledLobbyInterface = styled.div`
   margin: 75px 0 50px;
   button {
     margin-right: 30px;
+    font-size: 1.4rem;
+    font-weight: 500;
   }
 `;
 
@@ -32,17 +34,17 @@ const StyledRoomContents = styled.div<StyledRoomContentsProps>`
 `;
 
 const Lobby = () => {
-  const [targetRoomIdx, setTargetRoomIdx] = useState(0);
-  const [isPasswordPopupOpen, setIsPasswordPopupOpen] = useState(false); // TODO: 방 입장할 때 비밀번호 체크
-  const [modalCreateRoom, setModalCreateRoom] = useState(false);
-  const [interviewRooms, setInterviewRooms] = useState<InterviewRooms[]>([]);
+  const [ targetRoomIdx, setTargetRoomIdx ] = useState(0);
+  const [ isPasswordPopupOpen, setIsPasswordPopupOpen ] = useState(false); // TODO: 방 입장할 때 비밀번호 체크
+  const [ modalCreateRoom, setModalCreateRoom ] = useState(false);
+  const [ interviewRooms, setInterviewRooms ] = useState<InterviewRooms[]>([]);
   const { data, isSuccess, isLoading, isError, refetch } = useGetInterviewRooms();
-  const [isOpen, setIsOpen] = useState(false);
+  const [ isOpen, setIsOpen ] = useState(false);
   useEffect(() => {
     if (!isLoading && data) {
       setInterviewRooms(data.data.data);
     }
-  }, [data]);
+  }, [ data ]);
 
   const onClickReload = () => {
     refetch();

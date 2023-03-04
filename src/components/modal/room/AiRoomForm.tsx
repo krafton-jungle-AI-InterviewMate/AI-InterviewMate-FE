@@ -253,32 +253,37 @@ const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`
       label {
         display: inline-block;
         text-align: left;
-        width: 140px;
-        font-size: 20px;
+        width: 200px;
+        font-size: 1.6rem;
         font-weight: 500;
         font-family: "Archivo", "Spoqa Han Sans Neo", sans-serif;
         color: var(--main-black);
       }
       input {
         width: 360px;
-        height: 24px;
+        height: 40px;
         border-color: var(--main-black);
         border-radius: 10px;
         border: 0.5px solid;
         padding: 5px 0 5px 10px;
+        font-size: 1.6rem;
         &:focus {
           outline: none;
         }
       }
+      p {
+        font-size: 1.6rem;
+      }
       #roomName {
         border-color: ${props => (props.roomNameError ? "var(--main-alert)" : "var(--main-black)")};
+        font-size: 1.6rem;
       }
       #question {
-        font-size: 16px;
+        font-size: 1.6rem;
       }
       select {
         width: 370px;
-        height: 34px;
+        height: 40px;
         border-color: var(--main-black);
         border-radius: 10px;
         padding-left: 8px;
@@ -293,17 +298,17 @@ const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`
         align-items: center;
         color: var(--main-alert);
         margin-left: 20px;
-        font-size: 16px;
+        font-size: 1rem;
         .errorIcon {
           margin-right: 5px;
         }
       }
     }
     span.guide {
-      font-size: 16px;
+      font-size: 1rem;
       font-weight: 400;
       text-align: left;
-      margin-left: 140px;
+      margin-left: 200px;
       margin-top: 16px;
       color: var(--font-gray);
     }
@@ -311,6 +316,10 @@ const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`
       display: flex;
       justify-content: space-evenly;
       margin-top: 80px;
+      & button {
+        font-size: 1.6rem;
+        font-weight: 500;
+      }
     }
   }
 `;
@@ -328,6 +337,10 @@ const StyledRadioWrap = styled.div`
   & input,
   & label {
     width: 100px !important;
+  }
+
+  & input {
+    height: 20px !important;
   }
 `;
 

@@ -1,10 +1,5 @@
 import { StyledBtn } from "styles/StyledBtn";
 import { useForm } from "react-hook-form";
-// import FormControl from "@mui/material/FormControl";
-// import Radio from "@mui/material/Radio";
-// import RadioGroup from "@mui/material/RadioGroup";
-// import FormControlLabel from "@mui/material/FormControlLabel";
-// import FormLabel from "@mui/material/FormLabel";
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
@@ -53,7 +48,6 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm<InputRoomFormProps>({
     defaultValues: {
       roomName: "면접 화이팅",
@@ -142,7 +136,6 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
                 value={data + 1}
                 id={`roomPeopleNum${idx}`}
                 required
-                checked={String(data + 1) === watch().roomPeopleNum}
               />
             </StyledRadioWrap>
           ))}
@@ -248,7 +241,6 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
                 value={String(data)}
                 id={`roomTime${idx}`}
                 required
-                checked={data === Number(watch().roomTime)}
               />
             </StyledRadioWrap>
           ))}
@@ -280,42 +272,42 @@ const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`
       align-items: center;
       margin-top: 20px;
       p {
-        font-size: 20px;
-        font-weight: 500;
-        width: 140px;
+        width: 200px;
       }
       label {
         display: inline-block;
         text-align: left;
-        width: 140px;
-        font-size: 20px;
+        width: 200px;
+        font-size: 1.6rem;
         font-weight: 500;
         font-family: "Archivo", "Spoqa Han Sans Neo", sans-serif;
         color: var(--main-black);
       }
       input {
         width: 360px;
-        height: 24px;
+        height: 40px;
         border-color: var(--main-black);
         border-radius: 10px;
         border: 0.5px solid;
         padding: 5px 0 5px 10px;
+        font-size: 1.6rem;
         &:focus {
           outline: none;
         }
       }
+      p {
+        font-size: 1.6rem;
+      }
       #roomName {
         border-color: ${props => (props.roomNameError ? "var(--main-alert)" : "var(--main-black)")};
-      }
-      #password {
-        border-color: ${props => (props.passwordError ? "var(--main-alert)" : "var(--main-black)")};
+        font-size: 1.6rem;
       }
       #question {
-        font-size: 16px;
+        font-size: 1.6rem;
       }
       select {
         width: 370px;
-        height: 34px;
+        height: 40px;
         border-color: var(--main-black);
         border-radius: 10px;
         padding-left: 8px;
@@ -329,18 +321,18 @@ const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`
         display: flex;
         align-items: center;
         color: var(--main-alert);
-        margin-left: 16px;
-        font-size: 20px;
+        margin-left: 20px;
+        font-size: 1rem;
         .errorIcon {
           margin-right: 5px;
         }
       }
     }
     span.guide {
-      font-size: 16px;
+      font-size: 1rem;
       font-weight: 400;
       text-align: left;
-      margin-left: 140px;
+      margin-left: 200px;
       margin-top: 16px;
       color: var(--font-gray);
     }
@@ -348,6 +340,10 @@ const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`
       display: flex;
       justify-content: space-evenly;
       margin-top: 80px;
+      & button {
+        font-size: 1.6rem;
+        font-weight: 500;
+      }
     }
   }
 `;
@@ -364,11 +360,13 @@ const StyledRadioWrap = styled.div`
 
   & label {
     text-align: left !important;
-    width: 80px !important;
+    width: 100px !important;
   }
 
   & input {
-    width: 50px !important;
+    width: 20px !important;
+    height: 30px !important;
+    margin-right: 10px;
   }
 `;
 

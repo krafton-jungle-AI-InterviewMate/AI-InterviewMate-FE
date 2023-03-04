@@ -447,7 +447,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/react@npm:^11.10.5":
+"@emotion/react@npm:^11.10.6":
   version: 11.10.6
   resolution: "@emotion/react@npm:11.10.6"
   dependencies:
@@ -488,7 +488,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/styled@npm:^11.10.5":
+"@emotion/styled@npm:^11.10.6":
   version: 11.10.6
   resolution: "@emotion/styled@npm:11.10.6"
   dependencies:
@@ -4893,7 +4893,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:^7.43.1":
+"react-hook-form@npm:^7.43.4":
   version: 7.43.4
   resolution: "react-hook-form@npm:7.43.4"
   peerDependencies:
@@ -5837,8 +5837,8 @@ __metadata:
   dependencies:
     "@babel/plugin-transform-runtime": ^7.21.0
     "@emotion/babel-plugin": ^11.10.5
-    "@emotion/react": ^11.10.5
-    "@emotion/styled": ^11.10.5
+    "@emotion/react": ^11.10.6
+    "@emotion/styled": ^11.10.6
     "@mediapipe/face_mesh": ^0.4.1633559619
     "@mui/lab": ^5.0.0-alpha.121
     "@mui/material": ^5.11.10
@@ -5871,7 +5871,7 @@ __metadata:
     react-chartjs-2: ^4.3.1
     react-cookie: ^4.1.1
     react-dom: 18.2.0
-    react-hook-form: ^7.43.1
+    react-hook-form: ^7.43.4
     react-icons: ^4.7.1
     react-is: ^18.2.0
     react-responsive-modal: ^6.4.1
