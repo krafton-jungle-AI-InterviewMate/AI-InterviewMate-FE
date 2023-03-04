@@ -11,7 +11,7 @@ import { AiOutlineInfoCircle } from "react-icons/ai";
 import { useSetRecoilState } from "recoil";
 import { feedbackAtom, interviewDataAtom, isInterviewerAtom } from "store/interview/atom";
 import { usePostInterviewRooms } from "hooks/queries/interview";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { RoomTypes } from "api/mypage/types";
 import { QuestionBoxes } from "api/questionBoxes/type";
 
