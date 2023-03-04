@@ -1,12 +1,18 @@
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState, useRecoilValue } from "recoil";
-import { motionSnapshotAtom, aiInterviewerAtom, aiInterviewNextProcessAtom } from "store/interview/atom";
+import {
+  motionSnapshotAtom,
+  aiInterviewerAtom,
+  aiInterviewNextProcessAtom,
+  aiRoomResponseAtom,
+} from "store/interview/atom";
 import { memberAtom } from "store/auth/atom";
 
 import useInitializeInterviewState from "hooks/useInitializeInterviewState";
 import useFaceLandmarksDetection from "hooks/useFaceLandmarksDetection";
 import useSetAzureToken from "hooks/useSetAzureToken";
+import { useDeleteInterviewRooms } from "hooks/queries/interview";
 
 import InterviewerSelectModal from "./InterviewerSelectModal";
 import Webcam from "react-webcam";
@@ -38,6 +44,7 @@ const InterviewReady = () => {
   const setMotionSnapshot = useSetRecoilState(motionSnapshotAtom);
   const aiInterviewer = useRecoilValue(aiInterviewerAtom);
   const { nickname } = useRecoilValue(memberAtom);
+  const aiRoomResponse = useRecoilValue(aiRoomResponseAtom);
 
   useEffect(() => {
     if (isWebcamReady && webcamRef.current) {
@@ -62,6 +69,8 @@ const InterviewReady = () => {
     isAzureTokenError,
   } = useSetAzureToken();
 
+  const { mutate: deleteRoom } = useDeleteInterviewRooms();
+
   useEffect(() => {
     if (isWebcamReady && isVideoReady && isAzureTokenSuccess) {
       setDisableGoButton(false);
@@ -80,7 +89,18 @@ const InterviewReady = () => {
   }, [ isVideoReady ]);
 
   const handleLeave = () => {
-    navigate("/lobby", { replace: true });
+    if (!aiRoomResponse) {
+      return;
+    }
+
+    deleteRoom(
+      aiRoomResponse.data.roomIdx,
+      {
+        onSuccess: () => {
+          navigate("/lobby", { replace: true });
+        },
+      },
+    );
   };
 
   const handleGoButton = async () => {
