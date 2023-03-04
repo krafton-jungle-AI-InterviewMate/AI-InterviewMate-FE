@@ -49,12 +49,21 @@ const ResultScript = (props: ResultScriptProps) => {
             label="문제"
             sx={{
               color: "var(--main-black)",
+              fontSize: "1.4rem",
               fontWeight: 500,
             }}
             onChange={handleChange}
           >
             {scripts.map(({ questionTitle }, idx) =>
-              <MenuItem key={idx} value={`Q${idx + 1}`}>
+              <MenuItem
+                key={idx}
+                value={`Q${idx + 1}`}
+                sx={{
+                  color: "var(--main-black)",
+                  fontSize: "1.4rem",
+                  fontWeight: 500,
+                }}
+              >
                 Q{idx + 1}. {questionTitle}
               </MenuItem>,
             )}
@@ -100,7 +109,7 @@ const StyledScriptBox = styled.div`
   height: 100%;
   border-radius: 16px;
   padding: 20px;
-  border: 1px solid var(--main-gray);
+  border: 2px solid var(--main-black);
   box-shadow: var(--box-shadow);
   box-sizing: border-box;
 `;
@@ -115,6 +124,7 @@ const StyledScriptContent = styled.div`
   text-align: left;
   overflow-y: auto;
   word-break: keep-all;
+  font-size: 1.4rem;
 
   & strong {
     display: inline;

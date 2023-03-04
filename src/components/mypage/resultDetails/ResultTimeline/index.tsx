@@ -130,8 +130,8 @@ const StyledTimelineWrap = styled.div`
   align-self: flex-start;
   height: 542px;
 
-  & * {
-    font-size: 20px;
+  & *:not(h3) {
+    font-size: 1.4rem !important;
     font-weight: 500;
   }
 `;
@@ -148,7 +148,7 @@ const StyledScrollBox = styled.div`
   overflow-y: auto;
   border-radius: 16px;
   padding: 10px;
-  border: 1px solid var(--main-gray);
+  border: 2px solid var(--main-black);
   box-shadow: var(--box-shadow);
   box-sizing: border-box;
 

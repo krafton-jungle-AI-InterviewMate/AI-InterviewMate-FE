@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import { StyledBtn } from "styles/StyledBtn";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
@@ -13,11 +13,12 @@ import { usePostResultComment } from "hooks/queries/mypage";
 
 const InterviewEnd = () => {
   const setAiInterviewNextProcess = useSetRecoilState(aiInterviewNextProcessAtom);
-  const [comment, setComment] = useRecoilState(interviewCommentAtom);
+  const [ comment, setComment ] = useRecoilState(interviewCommentAtom);
   const isInterviewer = useRecoilValue(isInterviewerAtom);
   const interviewData = useRecoilValue(interviewDataAtom);
 
   const { mutate } = usePostResultComment();
+  const navigate = useNavigate();
 
   const textarea = useRef<any>(0);
 
@@ -37,6 +38,7 @@ const InterviewEnd = () => {
         onSuccess: () => {
           console.log("저장하고 나가기");
           setComment("");
+          navigate("/lobby");
         },
         onError(error) {
           alert(error);
@@ -57,11 +59,9 @@ const InterviewEnd = () => {
           <div className="aiEndContents">
             <p>수고하셨습니다.</p>
             <span>면접 결과는 마이페이지에서 확인하실 수 있습니다.</span>
-            <Link to="/lobby">
-              <StyledBtn width="100px" height="32px" color="red">
-                나가기
-              </StyledBtn>
-            </Link>
+            <StyledBtn width="100px" height="32px" color="red" onClick={() => navigate("/lobby")}>
+              나가기
+            </StyledBtn>
           </div>
         ) : isInterviewer ? (
           <div className="userEndContents">
@@ -78,21 +78,17 @@ const InterviewEnd = () => {
                 spellCheck={false}
               ></textarea>
             </div>
-            <Link to="/lobby">
-              <StyledBtn onClick={handleClickCommentSave} width="150px" height="32px" color="red">
-                저장하고 나가기
-              </StyledBtn>
-            </Link>
+            <StyledBtn onClick={handleClickCommentSave} width="150px" height="32px" color="red">
+              저장하고 나가기
+            </StyledBtn>
           </div>
         ) : (
           <div className="aiEndContents">
             <p>수고하셨습니다.</p>
             <span>면접 결과는 마이페이지에서 확인하실 수 있습니다.</span>
-            <Link to="/lobby">
-              <StyledBtn width="100px" height="32px" color="red">
-                나가기
-              </StyledBtn>
-            </Link>
+            <StyledBtn width="100px" height="32px" color="red" onClick={() => navigate("/lobby")}>
+              나가기
+            </StyledBtn>
           </div>
         )}
       </>
@@ -104,7 +100,14 @@ const StyledInterviewEnd = styled.div`
   color: var(--main-black);
   h2 {
     margin: 50px 0;
-    font-size: 36px;
+    font-size: 2.4rem;
+    font-weight: 500;
+  }
+  button {
+    width: 300px;
+    height: 60px;
+    font-size: 1.6rem;
+    margin-top: 20px;
   }
   .aiEndContents {
     display: flex;
@@ -112,15 +115,16 @@ const StyledInterviewEnd = styled.div`
     align-items: center;
     padding: 40px 78px;
     border-radius: 15px;
-    border: 1px solid var(--main-gray);
+    border: 2px solid var(--main-black);
     background-color: var(--main-white);
     filter: drop-shadow(0px 4px 24px rgba(0, 0, 0, 0.04));
     p {
       margin: 0px 0px 80px;
-      font-size: 20px;
+      font-size: 2rem;
     }
     span {
-      font-size: 12px;
+      font-size: 1.6rem;
+      font-weight: 400;
       color: var(--font-gray);
       margin-bottom: 15px;
     }
