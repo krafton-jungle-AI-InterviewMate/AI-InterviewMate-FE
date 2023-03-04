@@ -19,3 +19,5 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     </RecoilProvider>
   </QueryProvider>,
 );
+
+document.getElementById("root")!.style.overflowX = "hidden";

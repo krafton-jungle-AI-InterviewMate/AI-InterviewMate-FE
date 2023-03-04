@@ -5,6 +5,10 @@ import { roomPasswordRegex } from "./regex";
 
 import { a11yHidden } from "styles/common";
 import styled from "@emotion/styled";
+import { usePostJoinRoom } from "hooks/queries/interview";
+import { useSetRecoilState } from "recoil";
+import { interviewDataAtom, isInterviewerAtom } from "store/interview/atom";
+import { useNavigate } from "react-router-dom";
 
 type RoomPasswordPopupProps = {
   open: boolean;
@@ -14,11 +18,17 @@ type RoomPasswordPopupProps = {
 
 const RoomPasswordPopup = (props: RoomPasswordPopupProps) => {
   const { open, onClose, roomIdx } = props;
+  const navigate = useNavigate();
+  const setUserInterviewData = useSetRecoilState(interviewDataAtom);
+  const setIsInterviewer = useSetRecoilState(isInterviewerAtom);
 
-  const [ roomPassword, setRoomPassword ] = useState(""); // TODO: 변수명 수정
+  const [roomPassword, setRoomPassword] = useState(""); // TODO: 변수명 수정
+
+  const { mutate, isLoading } = usePostJoinRoom();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRoomPassword(e.target.value);
+    console.log(e.target.value);
   };
 
   const handleSubmit = () => {
@@ -27,10 +37,25 @@ const RoomPasswordPopup = (props: RoomPasswordPopupProps) => {
       return;
     }
 
-    // TODO: roomIdx 이용하여 비밀번호가 일치하는지 체크
-    // TODO: navigate(면접 대기방)
-
-    onClose();
+    if (!isLoading) {
+      mutate(
+        {
+          roomIdx: roomIdx,
+          password: roomPassword,
+        },
+        {
+          onSuccess: ({ data }) => {
+            setUserInterviewData(data.data);
+            setIsInterviewer(true);
+            navigate("/interview/user");
+            onClose();
+          },
+          onError(error) {
+            alert(error);
+          },
+        },
+      );
+    }
   };
 
   return (
@@ -45,9 +70,7 @@ const RoomPasswordPopup = (props: RoomPasswordPopupProps) => {
       <StyledWrap>
         <h2>면접방 비밀번호 입력</h2>
         <StyledInputWrap>
-          <StyledHiddenLabel htmlFor="lobby-room-password">
-            비밀번호
-          </StyledHiddenLabel>
+          <StyledHiddenLabel htmlFor="lobby-room-password">비밀번호</StyledHiddenLabel>
           <StyledInput
             id="lobby-room-password"
             type="password"
@@ -57,8 +80,7 @@ const RoomPasswordPopup = (props: RoomPasswordPopupProps) => {
         </StyledInputWrap>
         <StyledSmall>
           비공개 면접방에 입장하기 위해
-          <br />
-          6자리 숫자를 입력해주세요.
+          <br />3 ~ 10자리의 숫자를 입력해주세요.
         </StyledSmall>
       </StyledWrap>
     </Popup>
