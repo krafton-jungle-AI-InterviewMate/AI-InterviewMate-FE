@@ -7,13 +7,19 @@ import {
   interviewDataAtom,
   isInterviewerAtom,
   isInterviewStartAtom,
+  motionSnapshotAtom,
   roomPeopleNowAtom,
+  userInterviewHostVideoAtom,
 } from "store/interview/atom";
 import { useNavigate } from "react-router";
 import UserInterviewReady from "components/interview/userInterview/UserInterviewReady";
 import { useDeleteInterviewRooms, usePutInterviewRooms } from "hooks/queries/interview";
 import { memberAtom } from "store/auth/atom";
 import UserInterviewStart from "./../../../components/interview/userInterview/UserInterviewStart";
+import useInitializeInterviewState from "hooks/useInitializeInterviewState";
+import useFaceLandmarksDetection from "hooks/useFaceLandmarksDetection";
+import { toast } from "react-toastify";
+import * as Styled from "pages/interview/InterviewReady/style";
 
 const UserInterview = () => {
   const userInterviewData = useRecoilValue(interviewDataAtom);
@@ -23,6 +29,8 @@ const UserInterview = () => {
   const isInterviewer = useRecoilValue(isInterviewerAtom);
   const [host, setHost] = useRecoilState(hostAtom);
   const setComment = useSetRecoilState(interviewCommentAtom);
+  const video = useRecoilValue(userInterviewHostVideoAtom);
+  const setMotionSnapshot = useSetRecoilState(motionSnapshotAtom);
 
   const navigate = useNavigate();
 
@@ -36,6 +44,20 @@ const UserInterview = () => {
 
   const { mutate: putInterviewRoomsMutate } = usePutInterviewRooms();
   const { mutate: deleteInterviewRoomsMutate } = useDeleteInterviewRooms();
+  const { initializeInterviewState } = useInitializeInterviewState();
+  const { isVideoReady, setNewDetector, setIsDetectionOn, updateFace, detector } =
+    useFaceLandmarksDetection({
+      video,
+      isOneOff: true,
+    });
+
+  useEffect(() => {
+    if (isVideoReady) {
+      (async () => {
+        await setNewDetector();
+      })();
+    }
+  }, [isVideoReady]);
 
   useEffect(() => {
     window.addEventListener("beforeunload", onbeforeunload);
@@ -108,7 +130,7 @@ const UserInterview = () => {
 
     session.on("signal:interviewStart", event => {
       console.log(event.type);
-      setIsInterviewStart(true);
+      setIsInterviewStart(event.data);
     });
 
     session.on("signal:setHost", event => {
@@ -227,29 +249,50 @@ const UserInterview = () => {
     });
   };
 
-  const handleClickStart = () => {
+  const handleClickStart = async () => {
     // 면접 시작
     if (ready) {
-      putInterviewRoomsMutate(userInterviewData!.roomIdx, {
-        onSuccess: () => {
-          setIsInterviewStart(true);
-        },
-        onError(error) {
-          alert(error);
-        },
-      });
-      session
-        .signal({
-          data: true,
-          to: subscribers,
-          type: "interviewStart",
-        })
-        .then(() => {
-          console.log("면접을 시작합니다.");
-        })
-        .catch(error => {
-          console.error(error);
+      try {
+        if (!detector) {
+          throw new Error("detector is not ready");
+        }
+        initializeInterviewState();
+        setIsDetectionOn(true);
+
+        const newFace = await updateFace(detector);
+
+        if (newFace) {
+          setIsDetectionOn(false);
+          toast.clearWaitingQueue();
+          setMotionSnapshot(newFace);
+        } else {
+          toast("화면에서 얼굴이 인식되지 않습니다", Styled.toastOptions);
+          return;
+        }
+
+        session
+          .signal({
+            data: true,
+            to: subscribers,
+            type: "interviewStart",
+          })
+          .then(() => {
+            console.log("면접을 시작합니다.");
+          })
+          .catch(error => {
+            console.error(error);
+          });
+        putInterviewRoomsMutate(userInterviewData!.roomIdx, {
+          onSuccess: () => {
+            setIsInterviewStart(true);
+          },
+          onError(error) {
+            alert(error);
+          },
         });
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 

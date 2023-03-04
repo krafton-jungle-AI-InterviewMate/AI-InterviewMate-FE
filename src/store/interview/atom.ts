@@ -99,6 +99,11 @@ export const hostAtom = atom<any>({
   default: null,
 });
 
+export const userInterviewHostVideoAtom = atom<null | HTMLVideoElement>({
+  key: "userInterviewHostVideo",
+  default: null,
+});
+
 /** 대체 면접관 */
 export const aiInterviewerAtom = atom<AiInterviewerTypes>({
   key: "AiInterviewer",
