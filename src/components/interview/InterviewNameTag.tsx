@@ -61,6 +61,6 @@ const StyledRoleTag = styled.dt<{ role: RoleType }>`
 
 const StyledProfileName = styled.dd`
   color: var(--main-black);
-  font-size: 24px;
+  font-size: 2rem;
   font-weight: 500;
 `;

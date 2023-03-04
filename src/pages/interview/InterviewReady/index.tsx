@@ -23,7 +23,6 @@ import { getAiInterviewerThumbnail } from "lib/interview";
 import Popup from "components/common/Popup";
 
 import { BsThreeDots } from "react-icons/bs";
-import { AiOutlineInfoCircle } from "react-icons/ai";
 import * as Styled from "./style";
 
 const InterviewReady = () => {

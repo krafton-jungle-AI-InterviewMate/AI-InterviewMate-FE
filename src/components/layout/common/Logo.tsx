@@ -15,7 +15,7 @@ export default Logo;
 
 const StyledH1 = styled.h1`
   & a {
-    font-size: 32px;
+    font-size: 2.5rem;
     vertical-align: 30%;
     color: var(--main-black);
 

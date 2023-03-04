@@ -15,8 +15,8 @@ const modalStyles: ModalProps["styles"] = {
     top: "80px",
   },
   modal: {
-    width: "600px",
-    height: "400px",
+    width: "800px",
+    height: "600px",
     boxShadow: "var(--box-shadow)",
     borderRadius: "15px",
   },
@@ -78,7 +78,7 @@ const StyledWrap = styled.div`
 
 const StyledTitle = styled.p`
   font-weight: 500;
-  font-size: 20px;
+  font-size: 1.8rem;
   padding-top: 20px;
   margin: 0;
 `;
@@ -107,6 +107,11 @@ const StyledInterviewer = styled.li`
     border-radius: 6px;
     transition: background-color 300ms;
 
+    & span {
+      font-size: 1.4rem;
+      font-weight: 500;
+    }
+
     &:hover {
       background-color: var(--main-gray);
     }
@@ -115,8 +120,8 @@ const StyledInterviewer = styled.li`
 
 const StyledThumbnail = styled.span<{ bgImg: string }>`
   display: block;
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   border-radius: 999px;
   background-image: ${({ bgImg }) => `url(${bgImg})`};
   background-size: cover;

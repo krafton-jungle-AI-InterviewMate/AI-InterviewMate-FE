@@ -85,7 +85,7 @@ const StyledWrap = styled.div`
 `;
 
 const StyledConfirmText = styled.p`
-  font-size: 16px;
+  font-size: 2rem;
   text-align: center;
 `;
 
@@ -112,6 +112,8 @@ const StyledExitButton = styled.button`
   ${commonButtonStyle}
   margin-right: 28px;
   align-self: flex-end;
+  font-size: 1.4rem;
+  font-weight: 500;
 
   background-color: var(--main-white);
   border: 1px solid var(--main-gray);
