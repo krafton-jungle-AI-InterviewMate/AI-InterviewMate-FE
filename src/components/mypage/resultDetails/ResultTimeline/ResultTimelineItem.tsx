@@ -7,13 +7,16 @@ import {
   TimelineOppositeContent,
 } from "@mui/lab";
 
-import { getTimestampText } from "./utils";
+import { getTimestampText, getQuestionText } from "./utils";
 import { timestampToSeconds } from "lib/interview";
+import { ScriptWithQuestionTitle } from "api/mypage/types";
 
 type TempTimelineType = {
   type: "eye" | "attitude" | "question";
   timestamp: string;
   handleVideoProgress: (time: number) => void;
+  questionCount: number;
+  scripts: ScriptWithQuestionTitle[];
 };
 
 const ResultTimelineItem = (props: TempTimelineType) => {
@@ -21,13 +24,17 @@ const ResultTimelineItem = (props: TempTimelineType) => {
     type,
     timestamp,
     handleVideoProgress,
+    questionCount,
+    scripts,
   } = props;
 
   return (
     <TimelineItem>
       <TimelineOppositeContent
         color="var(--font-gray)"
-        sx={{ cursor: "pointer" }}
+        sx={{
+          cursor: "pointer",
+        }}
         onClick={() => handleVideoProgress(timestampToSeconds(timestamp))}
       >
         {timestamp}
@@ -50,7 +57,11 @@ const ResultTimelineItem = (props: TempTimelineType) => {
         <TimelineConnector />
       </TimelineSeparator>
       <TimelineContent>
-        {getTimestampText(type)}
+        {
+          type === "question"
+            ? getQuestionText(questionCount, scripts)
+            : getTimestampText(type)
+        }
       </TimelineContent>
     </TimelineItem>
   );
