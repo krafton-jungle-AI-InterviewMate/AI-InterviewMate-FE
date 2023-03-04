@@ -190,14 +190,6 @@ const InterviewReady = () => {
             <Styled.GoButton type="button" onClick={handleGoButton} disabled={disableGoButton}>
               GO
             </Styled.GoButton>
-            <Styled.Information>
-              <AiOutlineInfoCircle size={24} />
-              <small>
-                참가 면접관이 모두 READY 상태여야
-                <br />
-                면접을 시작할 수 있습니다.
-              </small>
-            </Styled.Information>
           </Styled.GoButtonWrap>
         </Styled.ButtonBox>
       </Styled.FlexContainer>
