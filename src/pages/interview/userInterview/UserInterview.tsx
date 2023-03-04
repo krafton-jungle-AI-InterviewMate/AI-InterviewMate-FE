@@ -2,6 +2,7 @@ import { OpenVidu } from "openvidu-browser";
 import { useState, useEffect } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
+  answerScriptAtom,
   hostAtom,
   interviewCommentAtom,
   interviewDataAtom,
@@ -21,6 +22,8 @@ import useFaceLandmarksDetection from "hooks/useFaceLandmarksDetection";
 import { toast } from "react-toastify";
 import * as Styled from "pages/interview/InterviewReady/style";
 import { usePostRatingViewee } from "hooks/queries/mypage";
+import { PostRatingVieweePayloadData } from "api/mypage/types";
+import { deduplicate } from "lib/interview";
 
 const UserInterview = () => {
   const userInterviewData = useRecoilValue(interviewDataAtom);
@@ -31,6 +34,7 @@ const UserInterview = () => {
   const [host, setHost] = useRecoilState(hostAtom);
   const setComment = useSetRecoilState(interviewCommentAtom);
   const setMotionSnapshot = useSetRecoilState(motionSnapshotAtom);
+  const answerScript = useRecoilValue(answerScriptAtom);
   const {
     timeline: { eyes, attitude, questionModeStart },
   } = useRecoilValue(timelineRecordAtom);
@@ -305,8 +309,30 @@ const UserInterview = () => {
 
   const InterviewEnd = () => {
     // 면접 정상 종료
+    if (!userInterviewData) {
+      return;
+    }
     if (host === publisher.stream.connection.connectionId) {
-      putInterviewRoomsMutate(userInterviewData!.roomIdx, {
+      const data: PostRatingVieweePayloadData = {
+        eyeTimelines: deduplicate(eyes),
+        attitudeTimelines: deduplicate(attitude),
+        questionTimelines: questionModeStart,
+        comments: [],
+        scripts: answerScript,
+      };
+      const { roomIdx } = userInterviewData;
+      postRatingVieweeMutate(
+        {
+          roomIdx,
+          data,
+        },
+        {
+          onError(error) {
+            alert(error);
+          },
+        },
+      );
+      putInterviewRoomsMutate(userInterviewData.roomIdx, {
         onSuccess: () => {
           setIsInterviewStart(false);
           leaveSession();

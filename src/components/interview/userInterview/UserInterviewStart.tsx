@@ -105,7 +105,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
           </div>
           <UserInterviewTimer roomTime={userInterviewData?.roomTime} />
           {showIrisFeedback && <InterviewFeedback feedbackType="iris" />}
-          {showIrisFeedback && <InterviewFeedback feedbackType="motion" />}
+          {showMotionFeedback && <InterviewFeedback feedbackType="motion" />}
           <div className="publisherContents">
             {publisher && (
               <div className="publisherVideo">
