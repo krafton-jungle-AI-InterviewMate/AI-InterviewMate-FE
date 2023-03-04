@@ -1,4 +1,4 @@
-import { _DeepPartialObject } from "chart.js/dist/types/utils";
+import { _DeepPartialObject } from "chart.js/types/utils";
 import { CoreChartOptions, ElementChartOptions, PluginChartOptions, DatasetChartOptions, ScaleChartOptions, LineControllerChartOptions } from "chart.js";
 
 export const LABEL_EYE = "시선 이탈";
