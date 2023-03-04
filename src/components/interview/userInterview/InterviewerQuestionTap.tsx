@@ -27,12 +27,14 @@ const InterviewQuestionTab = () => {
     event.preventDefault();
   };
 
-  const textarea = useRef<any>(0);
+  const textarea = useRef<null | HTMLTextAreaElement>(null);
 
   const handleResizeHeight = () => {
-    setComment(textarea.current.value);
-    textarea.current.style.height = "auto";
-    textarea.current.style.height = textarea.current.scrollHeight + "px";
+    if (textarea.current) {
+      setComment(textarea.current.value);
+      textarea.current.style.height = "auto";
+      textarea.current.style.height = textarea.current.scrollHeight + "px";
+    }
   };
 
   useEffect(() => {
