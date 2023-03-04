@@ -3,75 +3,81 @@ import styled from "@emotion/styled";
 import Loading from "components/common/Loading";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { isInterviewStartAtom } from "store/interview/atom";
+import { hostAtom, isInterviewStartAtom } from "store/interview/atom";
 
 interface UserVideoComponentProps {
   streamManager: any;
-  isInterviewer: boolean;
 }
 
 const UserVideoComponent = (props: UserVideoComponentProps) => {
-  const { streamManager, isInterviewer } = props;
+  const { streamManager } = props;
   const [isLoading, setIsLoading] = useState(true);
+  const host = useRecoilValue(hostAtom);
   const isInterviewStart = useRecoilValue(isInterviewStartAtom);
+  const [isHost, setIsHost] = useState(false);
 
   useEffect(() => {
     if (streamManager) {
       setIsLoading(false);
+      setIsHost(host === streamManager.stream.connection.connectionId);
     }
   }, [streamManager]);
   return (
-    <StyledUserVideoComponent isInterviewer={isInterviewer} isInterviewStart={isInterviewStart}>
+    <StyledUserVideoComponent isHost={isHost} isInterviewStart={isInterviewStart}>
       {!isLoading ? (
         <div className="streamcomponent">
-          <OpenViduVideoComponent streamManager={streamManager} isInterviewer={isInterviewer} />
+          <OpenViduVideoComponent streamManager={streamManager} />
           {!isInterviewStart && (
             <p>
-              <span className="interviewer">{isInterviewer ? "면접관" : "면접자"}</span>
+              <span className="interviewer">{isHost ? "면접자" : "면접관"}</span>
               <span className="nickname">{streamManager.stream.connection.data.split('"')[3]}</span>
             </p>
           )}
         </div>
-      ) : (
-        <Loading margin="0" />
-      )}
+      ) : null}
     </StyledUserVideoComponent>
   );
 };
 
 interface StyledUserVideoComponentProps {
-  isInterviewer: boolean;
+  isHost: boolean;
   isInterviewStart: boolean;
 }
 
 const StyledUserVideoComponent = styled.div<StyledUserVideoComponentProps>`
-  margin-bottom: ${props => (props.isInterviewStart ? 0 : "20px")};
   .streamcomponent {
+    position: relative;
     display: flex;
-    flex-direction: ${props => (props.isInterviewer ? "row" : "column")};
-  }
-  p {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: ${props => (props.isInterviewer ? "0 0 0 50px" : "45px 0 0")};
-    span {
-      display: block;
-    }
-    .interviewer {
-      width: 70px;
-      height: 24px;
-      border-radius: 5px;
-      font-size: 12px;
-      font-weight: 400;
-      margin-right: 12px;
-      color: var(--main-white);
-      background-color: ${props => (props.isInterviewer ? "var(--push-gray)" : "var(--main-blue)")};
-    }
-    .nickname {
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--main-black);
+    flex-direction: ${props => (props.isHost ? "column" : "row")};
+    p {
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 10px 0 0;
+      width: ${props => (props.isHost ? "1000px" : "333px")};
+      span {
+        display: block;
+      }
+      .interviewer {
+        padding: 5px 20px;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: 400;
+        margin-right: 12px;
+        color: var(--main-white);
+        background-color: ${props => (props.isHost ? "var(--main-blue)" : "var(--push-gray)")};
+        color: ${props => (props.isHost ? "var(--main-white)" : "var(--push-black)")};
+      }
+      .nickname {
+        padding: 5px 20px;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: 400;
+        margin-right: 12px;
+        background-color: var(--main-white);
+        color: var(--main-black);
+      }
     }
   }
 `;

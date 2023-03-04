@@ -1,12 +1,12 @@
 import { Dialog, DialogActions, DialogTitle } from "@mui/material";
 import UserVideoComponent from "./UserVideoComponent";
 import Loading from "components/common/Loading";
-import { AiOutlineInfoCircle } from "react-icons/ai";
 import styled from "@emotion/styled";
 import { StyledBtn } from "styles/StyledBtn";
-import { isInterviewerAtom } from "store/interview/atom";
+import { hostAtom, isInterviewerAtom } from "store/interview/atom";
 import { useRecoilValue } from "recoil";
 import { css } from "@emotion/react";
+import { useEffect, useState } from "react";
 
 interface UserInterviewReadyProps {
   session: any;
@@ -14,10 +14,10 @@ interface UserInterviewReadyProps {
   subscribers: Array<any>;
   ready: boolean;
   isOpen: boolean;
-  handleClickEnd: () => void;
-  handleClickLeave: () => void;
+  handleClickReadyOut: () => void;
+  handleClickModalRoomLeave: () => void;
   handleClickStart: () => void;
-  handleClickClose: () => void;
+  handleClickModalClose: () => void;
 }
 
 const UserInterviewReady = (props: UserInterviewReadyProps) => {
@@ -27,61 +27,77 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
     subscribers,
     ready,
     isOpen,
-    handleClickEnd,
-    handleClickClose,
-    handleClickLeave,
+    handleClickReadyOut,
+    handleClickModalClose,
+    handleClickModalRoomLeave,
     handleClickStart,
   } = props;
   const isInterviewer = useRecoilValue(isInterviewerAtom);
+  const host = useRecoilValue(hostAtom);
+
+  const [isHost, setIsHost] = useState(false);
+
+  useEffect(() => {
+    if (publisher) {
+      setIsHost(host === publisher.stream.connection.connectionId);
+    }
+  }, [host]);
+
   return (
-    <StyledUserInterview>
+    <StyledUserInterview isHost={isHost}>
+      <div className="interviewActionsContents">
+        <div className="interviewActions">
+          <StyledBtn onClick={handleClickModalRoomLeave} width="200px" height="48px" color="red">
+            나가기
+          </StyledBtn>
+          {!isInterviewer && (
+            <NewStyledBtn
+              onClick={handleClickStart}
+              width="200px"
+              height="48px"
+              color="orange"
+              ready={ready}
+            >
+              GO
+            </NewStyledBtn>
+          )}
+        </div>
+      </div>
       {session ? (
         <>
-          <div className="videoContents">
-            {publisher ? (
-              <div>
-                <UserVideoComponent streamManager={publisher} isInterviewer={false} />
-              </div>
+          <div className="publisherContents">
+            {publisher && host === publisher.stream.connection.connectionId ? (
+              <UserVideoComponent streamManager={publisher} />
             ) : (
-              <Loading margin="0 0 0 30px" />
-            )}
-            <div>
-              {subscribers.map((sub, i) => (
-                <div key={i}>
-                  <UserVideoComponent streamManager={sub} isInterviewer={true} />
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="interviewActions">
-            <StyledBtn onClick={handleClickLeave} width="200px" height="48px" color="red">
-              나가기
-            </StyledBtn>
-            {!isInterviewer && (
-              <NewStyledBtn
-                onClick={handleClickStart}
-                width="200px"
-                height="48px"
-                color="orange"
-                ready={ready}
-              >
-                GO
-              </NewStyledBtn>
+              <>
+                {subscribers.map(
+                  (sub, i) =>
+                    host === sub.stream.connection.connectionId && (
+                      <UserVideoComponent key={i} streamManager={sub} />
+                    ),
+                )}
+              </>
             )}
           </div>
-          {!ready && (
-            <div className="readyText">
-              <AiOutlineInfoCircle size={24} color="var(--font-gray)" />
-              <span>
-                참가 면접관이 한명이라도 있어야
-                <br />
-                면접을 시작할 수 있습니다.
-              </span>
-            </div>
-          )}
+          <div className="subscribersContents">
+            {publisher && host !== publisher.stream.connection.connectionId && (
+              <div className="subscribers">
+                <UserVideoComponent streamManager={publisher} />
+              </div>
+            )}
+            {subscribers.map(
+              (sub, i) =>
+                host !== sub.stream.connection.connectionId && (
+                  <div key={i} className="subscribers">
+                    <UserVideoComponent streamManager={sub} />
+                  </div>
+                ),
+            )}
+          </div>
+
           <Dialog
             open={isOpen}
-            onClose={handleClickClose}
+            onClose={handleClickModalClose}
             PaperProps={{
               style: {
                 padding: "50px 35px",
@@ -102,10 +118,10 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
               로비로 이동하시겠습니까?
             </DialogTitle>
             <DialogActions>
-              <StyledBtn onClick={handleClickEnd} width="200px" height="42px" color="orange">
+              <StyledBtn onClick={handleClickReadyOut} width="200px" height="42px" color="orange">
                 네!
               </StyledBtn>
-              <StyledBtn onClick={handleClickClose} width="200px" height="42px" color="red">
+              <StyledBtn onClick={handleClickModalClose} width="200px" height="42px" color="red">
                 취소
               </StyledBtn>
             </DialogActions>
@@ -118,33 +134,51 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
   );
 };
 
-const StyledUserInterview = styled.div`
-  width: 1000px;
-  .readyText {
+interface StyledUserInterviewProps {
+  isHost: boolean;
+}
+
+const StyledUserInterview = styled.div<StyledUserInterviewProps>`
+  position: relative;
+  width: 75vw;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: space-between;
+  .interviewActionsContents {
+    position: absolute;
+    z-index: 10;
     display: flex;
+    flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    margin-top: 10px;
-    font-size: 12px;
-    line-height: 15px;
-    text-align: left;
-    color: var(--font-gray);
-    svg {
-      margin-right: 5px;
+    width: 75vw;
+    height: 750px;
+    .interviewActions {
+      display: flex;
+      justify-content: space-between;
+      width: ${props => props.isHost && "450px"};
+      margin-bottom: 50px;
     }
   }
-  .videoContents {
+  .subscribersContents {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .subscribers {
+      width: 333px;
+      height: 250px;
+      background-color: var(--font-gray);
+    }
+  }
+  .publisherContents {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    height: 654px;
-  }
-  .interviewActions {
-    display: flex;
-    justify-content: flex-end;
-    button {
-      margin-left: 28px;
-    }
+    align-items: flex-end;
+    width: 1000px;
+    height: 750px;
+    background-color: var(--font-gray);
   }
 `;
 

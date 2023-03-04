@@ -8,7 +8,12 @@ import FormLabel from "@mui/material/FormLabel";
 import styled from "@emotion/styled";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { useSetRecoilState } from "recoil";
-import { feedbackAtom, aiRoomResponseAtom, interviewDataAtom, recordModeAtom } from "store/interview/atom";
+import {
+  feedbackAtom,
+  aiRoomResponseAtom,
+  interviewDataAtom,
+  recordModeAtom,
+} from "store/interview/atom";
 import { usePostInterviewRooms } from "hooks/queries/interview";
 import { useNavigate } from "react-router-dom";
 import { RoomTypes } from "api/mypage/types";
@@ -114,12 +119,13 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
           ) : null}
         </div>
         <span className="guide">
-          최소 2자 ~ 최대 10자까지 입력 가능합니다. 특수문자는 사용 불가능합니다. <br /> (띄어쓰기 제외)
+          최소 2자 ~ 최대 10자까지 입력 가능합니다. 특수문자는 사용 불가능합니다. <br /> (띄어쓰기
+          제외)
         </span>
         <div className="inputContent">
           <FormControl className="radioForm">
             <FormLabel>실시간 피드백</FormLabel>
-            <RadioGroup row>
+            <RadioGroup row defaultValue={"ON"} defaultChecked={true}>
               {FeedbackArr.map((data, idx) => (
                 <FormControlLabel
                   key={`Feedback${idx}`}
@@ -135,7 +141,7 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
         <div className="inputContent">
           <FormControl className="radioForm">
             <FormLabel>면접 영상 녹화</FormLabel>
-            <RadioGroup row>
+            <RadioGroup row defaultValue={"ON"} defaultChecked={true}>
               {FeedbackArr.map((data, idx) => (
                 <FormControlLabel
                   key={`Record${idx}`}

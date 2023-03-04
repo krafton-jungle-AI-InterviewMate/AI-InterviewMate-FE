@@ -1,23 +1,16 @@
-import { useGetQuestionDetails } from "hooks/queries/interview";
 import { StyledBtn } from "styles/StyledBtn";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { interviewCommentAtom, interviewDataAtom } from "store/interview/atom";
-import { GetQuestionDetailsResponseData } from "api/interview/type";
 import styled from "@emotion/styled";
 
 type Tab = "question" | "comment";
 
 const InterviewQuestionTab = () => {
   const userInterviewData = useRecoilValue(interviewDataAtom);
-  const [ comment, setComment ] = useRecoilState(interviewCommentAtom);
+  const [comment, setComment] = useRecoilState(interviewCommentAtom);
 
-  const [ question, setQuestion ] = useState<GetQuestionDetailsResponseData>();
-  const [ tabName, setTabName ] = useState<Tab>("question");
-
-  const { data, isLoading, isSuccess, isError } = useGetQuestionDetails(
-    userInterviewData!.roomQuestionBoxIdx,
-  );
+  const [tabName, setTabName] = useState<Tab>("question");
 
   const handleClickTab = (event: React.MouseEvent<HTMLButtonElement>) => {
     setTabName(event.currentTarget.name as Tab);
@@ -36,13 +29,6 @@ const InterviewQuestionTab = () => {
       textarea.current.style.height = textarea.current.scrollHeight + "px";
     }
   };
-
-  useEffect(() => {
-    if (!isLoading && data) {
-      setQuestion(data.data.data);
-      console.log(data.data.data);
-    }
-  }, [ isLoading ]);
 
   return (
     <StyledInterviewQuestionTab>
@@ -70,7 +56,7 @@ const InterviewQuestionTab = () => {
       </div>
       <div className="contents">
         {tabName === "question" ? (
-          question?.questions.map(q => (
+          userInterviewData?.questionList.map(q => (
             <div key={q.questionIdx} className="questions">
               <h2 className="questionTitle">
                 <span>Q.</span>
@@ -78,11 +64,11 @@ const InterviewQuestionTab = () => {
               </h2>
               <p className="questionKeyword">
                 <span>키워드</span>
-                {q.keyword1 && `${q.keyword1},`}
-                {q.keyword2 && `${q.keyword2},`}
-                {q.keyword3 && `${q.keyword3},`}
-                {q.keyword4 && `${q.keyword4},`}
-                {q.keyword5 && `${q.keyword5}`}
+                {q.keyword1 && `${q.keyword1}`}
+                {q.keyword2 && `, ${q.keyword2}`}
+                {q.keyword3 && `, ${q.keyword3}`}
+                {q.keyword4 && `, ${q.keyword4}`}
+                {q.keyword5 && `, ${q.keyword5}`}
               </p>
             </div>
           ))
@@ -98,10 +84,8 @@ const InterviewQuestionTab = () => {
                 rows={10}
                 ref={textarea}
                 value={comment}
+                spellCheck={false}
               ></textarea>
-              {/* <StyledBtn width="120px" height="32px" color="orange">
-                중간 저장
-              </StyledBtn> */}
             </form>
           </div>
         )}
@@ -111,6 +95,7 @@ const InterviewQuestionTab = () => {
 };
 
 const StyledInterviewQuestionTab = styled.div`
+  margin-left: 100px;
   text-align: left;
   .contentsTab {
     display: flex;
@@ -162,9 +147,11 @@ const StyledInterviewQuestionTab = styled.div`
       font-size: 16px;
       font-weight: 400;
       color: var(--main-black);
+      span {
+        margin-bottom: 30px;
+      }
       textarea {
-        width: 316px;
-        max-width: 316px;
+        width: 314px;
         height: auto;
         font-size: 20px;
         font-weight: 400;

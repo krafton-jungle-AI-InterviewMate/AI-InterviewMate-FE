@@ -2,6 +2,8 @@ import { OpenVidu } from "openvidu-browser";
 import { useState, useEffect } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
+  hostAtom,
+  interviewCommentAtom,
   interviewDataAtom,
   isInterviewerAtom,
   isInterviewStartAtom,
@@ -9,31 +11,31 @@ import {
 } from "store/interview/atom";
 import { useNavigate } from "react-router";
 import UserInterviewReady from "components/interview/userInterview/UserInterviewReady";
-import { usePutInterviewRooms } from "hooks/queries/interview";
-import styled from "@emotion/styled";
-import UserVideoComponent from "components/interview/userInterview/UserVideoComponent";
-import Loading from "components/common/Loading";
-import { StyledBtn } from "styles/StyledBtn";
-import { Dialog, DialogActions, DialogTitle } from "@mui/material";
-import InterviewQuestionTab from "components/interview/userInterview/InterviewerQuestionTap";
+import { useDeleteInterviewRooms, usePutInterviewRooms } from "hooks/queries/interview";
+import { memberAtom } from "store/auth/atom";
+import UserInterviewStart from "./../../../components/interview/userInterview/UserInterviewStart";
 
 const UserInterview = () => {
-  const { mutate } = usePutInterviewRooms();
-
   const userInterviewData = useRecoilValue(interviewDataAtom);
+  const { nickname } = useRecoilValue(memberAtom);
   const setRoomPeopleNow = useSetRecoilState(roomPeopleNowAtom);
   const [isInterviewStart, setIsInterviewStart] = useRecoilState(isInterviewStartAtom);
   const isInterviewer = useRecoilValue(isInterviewerAtom);
+  const [host, setHost] = useRecoilState(hostAtom);
+  const setComment = useSetRecoilState(interviewCommentAtom);
+
   const navigate = useNavigate();
 
   const [OV, setOV] = useState<any>(null);
-  const [myUserName, setMyUserName] = useState<string | undefined>(userInterviewData?.nickname);
+  const [myUserName, setMyUserName] = useState<string | undefined>(nickname);
   const [session, setSession] = useState<any>(undefined);
-  const [publisher, setPublisher] = useState(undefined);
+  const [publisher, setPublisher] = useState<any>(undefined);
   const [subscribers, setSubscribers] = useState<Array<any>>([]);
   const [ready, setReady] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [interviewTime, setInterviewTime] = useState(0);
+
+  const { mutate: putInterviewRoomsMutate } = usePutInterviewRooms();
+  const { mutate: deleteInterviewRoomsMutate } = useDeleteInterviewRooms();
 
   useEffect(() => {
     window.addEventListener("beforeunload", onbeforeunload);
@@ -47,59 +49,72 @@ const UserInterview = () => {
   };
 
   const deleteSubscriber = (streamManager: any) => {
-    const newSubscribers = [...subscribers];
-    setSubscribers(newSubscribers.filter(v => v !== streamManager));
+    setSubscribers(curr => curr.filter(sub => sub !== streamManager));
   };
 
   const joinSession = async () => {
-    // --- 1) OpenVidu 객체 가져오기 ---
     const newOV = new OpenVidu();
     newOV.enableProdMode();
 
-    // --- 2) 세션 초기화 ---
     setOV(newOV);
     const newSession = newOV.initSession();
     setSession(newSession);
   };
 
   useEffect(() => {
-    // --- 3) 세션에서 이벤트가 발생할 때 수행할 작업 ---
     if (!session) {
       return;
     }
-    // 스트림이 새로 수신될 때마다
+
     session.on("streamCreated", event => {
       const newSubscriber = session.subscribe(event.stream, undefined);
       setSubscribers(curr => [...curr, newSubscriber]);
     });
 
-    // On every Stream destroyed...
     session.on("streamDestroyed", event => {
       deleteSubscriber(event.stream.streamManager);
     });
 
-    // On every asynchronous exception...
     session.on("exception", exception => {
       console.warn(exception);
     });
 
-    session.on("signal:start", event => {
-      setIsInterviewStart(event.data);
+    session.on("signal:readyOut", event => {
+      console.log(event.type);
+      if (event.data === "면접자") {
+        navigate("/lobby");
+        leaveSession();
+      }
     });
 
-    session.on("signal:forceEnd", event => {
-      setIsInterviewStart(event.data);
-      if (isInterviewer) {
+    session.on("signal:interviewOut", event => {
+      console.log(event.type);
+      console.log(event.data);
+      console.log(subscribers.length);
+      if (event.data === "면접자") {
+        setIsInterviewStart(false);
+        leaveSession();
+        navigate("/lobby");
+      } else if (
+        event.data === "면접관" &&
+        subscribers.length === 0 &&
+        host === publisher.stream.connection.connectionId
+      ) {
+        setIsInterviewStart(false);
         leaveSession();
         navigate("/lobby");
       }
     });
 
-    session.on("signal:end", event => {
-      setIsInterviewStart(event.data);
+    session.on("signal:interviewStart", event => {
+      console.log(event.type);
+      setIsInterviewStart(true);
+    });
+
+    session.on("signal:setHost", event => {
+      console.log(event.type);
       if (isInterviewer) {
-        leaveSession();
-        navigate("/interview/end");
+        setHost(event.data);
       }
     });
 
@@ -117,7 +132,6 @@ const UserInterview = () => {
           mirror: false, // Whether to mirror your local video or not
         });
 
-        // --- 6) Publish your stream ---
         session.publish(publisher);
 
         // Obtain the current video device in use
@@ -131,7 +145,6 @@ const UserInterview = () => {
           device => device.deviceId === currentVideoDeviceId,
         );
 
-        // Set the main video in the page to display our webcam and store our Publisher
         setPublisher(publisher);
       })
       .catch(error => {
@@ -140,12 +153,10 @@ const UserInterview = () => {
   }, [session]);
 
   const leaveSession = () => {
-    // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
     if (session) {
       session.disconnect();
     }
 
-    // Empty all properties...
     setOV(null);
     setSession(undefined);
     setSubscribers([]);
@@ -158,60 +169,70 @@ const UserInterview = () => {
     joinSession();
   }, []);
 
-  const handleClickClose = () => {
+  const handleClickModalClose = () => {
+    // 모달창 닫기
     setIsOpen(false);
   };
 
-  const handleClickLeave = () => {
+  const handleClickModalRoomLeave = () => {
+    // 모달창 열기
     setIsOpen(true);
   };
 
-  const handleClickEnd = () => {
-    mutate(userInterviewData!.roomIdx, {
+  const handleClickInterviewOut = () => {
+    // 인터뷰 도중 나감
+    session
+      .signal({
+        data: host === publisher.stream.connection.connectionId ? "면접자" : "면접관",
+        to: subscribers,
+        type: "interviewOut",
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    deleteInterviewRoomsMutate(userInterviewData!.roomIdx, {
       onSuccess: () => {
+        console.log("면접방을 나갔습니다.");
         setIsInterviewStart(false);
-        console.log(isInterviewStart);
+        leaveSession();
+        navigate("/lobby");
       },
       onError(error) {
         alert(error);
       },
     });
+  };
+
+  const handleClickReadyOut = () => {
+    // 대기방에서 나감
     session
       .signal({
-        data: false,
+        data: host === publisher.stream.connection.connectionId ? "면접자" : "면접관",
         to: subscribers,
-        type: "forceEnd",
-      })
-      .then(() => {
-        console.log("면접을 종료합니다.");
+        type: "readyOut",
       })
       .catch(error => {
         console.error(error);
       });
-    leaveSession();
-    navigate("/lobby");
+    deleteInterviewRoomsMutate(userInterviewData!.roomIdx, {
+      onSuccess: () => {
+        console.log("면접방을 나갔습니다.");
+        setComment("");
+        leaveSession();
+        navigate("/lobby");
+      },
+      onError(error) {
+        alert(error);
+      },
+    });
   };
 
   const handleClickStart = () => {
+    // 면접 시작
     if (ready) {
-      mutate(userInterviewData!.roomIdx, {
+      putInterviewRoomsMutate(userInterviewData!.roomIdx, {
         onSuccess: () => {
           setIsInterviewStart(true);
-          setInterviewTime(userInterviewData!.roomTime * 60 * 1000);
-          setTimeout(() => {
-            session
-              .signal({
-                data: false,
-                to: subscribers,
-                type: "end",
-              })
-              .then(() => {
-                console.log("면접이 끝났습니다.");
-              })
-              .catch(error => {
-                console.error(error);
-              });
-          }, userInterviewData!.roomTime * 60 * 1000);
         },
         onError(error) {
           alert(error);
@@ -221,7 +242,7 @@ const UserInterview = () => {
         .signal({
           data: true,
           to: subscribers,
-          type: "start",
+          type: "interviewStart",
         })
         .then(() => {
           console.log("면접을 시작합니다.");
@@ -229,6 +250,28 @@ const UserInterview = () => {
         .catch(error => {
           console.error(error);
         });
+    }
+  };
+
+  const InterviewEnd = () => {
+    // 면접 정상 종료
+    if (host === publisher.stream.connection.connectionId) {
+      putInterviewRoomsMutate(userInterviewData!.roomIdx, {
+        onSuccess: () => {
+          setIsInterviewStart(false);
+          leaveSession();
+          console.log("면접을 정상적으로 종료합니다.");
+          navigate("/interview/end");
+        },
+        onError(error) {
+          alert(error);
+        },
+      });
+    } else {
+      setIsInterviewStart(false);
+      leaveSession();
+      console.log("면접을 정상적으로 종료합니다.");
+      navigate("/interview/end");
     }
   };
 
@@ -241,72 +284,42 @@ const UserInterview = () => {
     } else {
       setReady(false);
     }
+    if (!isInterviewer && session && publisher) {
+      session
+        .signal({
+          data: publisher.stream.connection.connectionId,
+          to: subscribers,
+          type: "setHost",
+        })
+        .then(() => {
+          console.log(host);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
   }, [subscribers]);
+
+  useEffect(() => {
+    if (publisher && !isInterviewer) {
+      console.log(publisher);
+      setHost(publisher.stream.connection.connectionId);
+    }
+  }, [publisher]);
 
   return (
     <>
       {isInterviewStart ? (
-        <StyledUserInterviewStart>
-          {session ? (
-            <>
-              <div className="subscribersContents">
-                <div className="subscribersVideo">
-                  {subscribers.map((sub, i) => (
-                    <div key={i}>
-                      <UserVideoComponent streamManager={sub} isInterviewer={true} />
-                    </div>
-                  ))}
-                </div>
-                <div className="interviewActions">
-                  <StyledBtn onClick={handleClickLeave} width="200px" height="48px" color="red">
-                    면접 나가기
-                  </StyledBtn>
-                </div>
-              </div>
-              <div className="publisherContents">
-                {publisher && (
-                  <div className="publisherVideo">
-                    <UserVideoComponent streamManager={publisher} isInterviewer={false} />
-                    {isInterviewer && <InterviewQuestionTab />}
-                  </div>
-                )}
-              </div>
-              <Dialog
-                open={isOpen}
-                onClose={handleClickClose}
-                PaperProps={{
-                  style: {
-                    padding: "50px 35px",
-                    borderRadius: "10px",
-                  },
-                }}
-              >
-                <DialogTitle
-                  fontSize={16}
-                  fontWeight={400}
-                  color={"var(--main-black)"}
-                  marginBottom={3}
-                  padding={0}
-                  textAlign={"center"}
-                >
-                  현재 면접 방을 나가고
-                  <br />
-                  로비로 이동하시겠습니까?
-                </DialogTitle>
-                <DialogActions>
-                  <StyledBtn onClick={handleClickEnd} width="200px" height="42px" color="orange">
-                    네!
-                  </StyledBtn>
-                  <StyledBtn onClick={handleClickClose} width="200px" height="42px" color="red">
-                    취소
-                  </StyledBtn>
-                </DialogActions>
-              </Dialog>
-            </>
-          ) : (
-            <Loading margin="250px" />
-          )}
-        </StyledUserInterviewStart>
+        <UserInterviewStart
+          session={session}
+          publisher={publisher}
+          subscribers={subscribers}
+          isOpen={isOpen}
+          handleClickModalClose={handleClickModalClose}
+          handleClickModalRoomLeave={handleClickModalRoomLeave}
+          handleClickInterviewOut={handleClickInterviewOut}
+          InterviewEnd={InterviewEnd}
+        />
       ) : (
         <UserInterviewReady
           session={session}
@@ -314,45 +327,14 @@ const UserInterview = () => {
           subscribers={subscribers}
           ready={ready}
           isOpen={isOpen}
-          handleClickLeave={handleClickLeave}
+          handleClickModalRoomLeave={handleClickModalRoomLeave}
           handleClickStart={handleClickStart}
-          handleClickClose={handleClickClose}
-          handleClickEnd={handleClickEnd}
+          handleClickModalClose={handleClickModalClose}
+          handleClickReadyOut={handleClickReadyOut}
         />
       )}
     </>
   );
 };
-
-const StyledUserInterviewStart = styled.div`
-  overflow-x: hidden;
-  .subscribersContents {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: 200px;
-    background-color: var(--main-gray);
-    .subscribersVideo {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 798px;
-    }
-  }
-  .publisherContents {
-    margin-top: 70px;
-    .publisherVideo {
-      display: flex;
-      justify-content: center;
-    }
-  }
-  .interviewActions {
-    position: absolute;
-    top: 30px;
-    right: 150px;
-  }
-`;
 
 export default UserInterview;
