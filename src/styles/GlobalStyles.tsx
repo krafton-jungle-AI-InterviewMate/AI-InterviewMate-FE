@@ -35,7 +35,7 @@ const globalStyles = css`
 
     /* color-scheme: light dark; */
     color: var(--main-black);
-      background-color: var(--main-white);
+    background-color: var(--main-white);
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -58,6 +58,10 @@ const globalStyles = css`
     .progress-bar {
       background: linear-gradient(-90deg, var(--main-alert) 0%, var(--main-alert) 35%, #fafafa 100%);
     }
+  }
+
+  div.root {
+    overflow-x: hidden;
   }
 
   a {
