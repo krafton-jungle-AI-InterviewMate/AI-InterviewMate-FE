@@ -13,13 +13,13 @@ import { VideoJsPlayer as Player } from "video.js";
 
 import throttle from "lodash.throttle";
 import { createTimestampFromSeconds } from "./utils";
-import { Timestamp } from "api/mypage/types";
+import { RatingDetail } from "api/mypage/types";
 
 import styled from "@emotion/styled";
 import { commonLabelStyle } from "styles/resultDetails";
 
 type ResultTimelineProps = {
-  data: Timestamp[];
+  data: RatingDetail;
   videoRef: React.MutableRefObject<Player | null>;
 };
 
@@ -81,7 +81,7 @@ const ResultTimeline = (props: ResultTimelineProps) => {
             <TimelineContent>면접 시작</TimelineContent>
           </TimelineItem>
 
-          {data.map((timestamp, idx) =>
+          {data.timelines.map((timestamp, idx) =>
             <ResultTimelineItem
               key={idx}
               handleVideoProgress={handleVideoProgress}
