@@ -46,22 +46,24 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
   return (
     <StyledUserInterview isHost={isHost}>
       <div className="interviewActionsContents">
-        <div className="interviewActions">
-          <StyledBtn onClick={handleClickModalRoomLeave} width="200px" height="48px" color="red">
-            나가기
-          </StyledBtn>
-          {!isInterviewer && (
-            <NewStyledBtn
-              onClick={handleClickStart}
-              width="200px"
-              height="48px"
-              color="orange"
-              ready={ready}
-            >
-              GO
-            </NewStyledBtn>
-          )}
-        </div>
+        {publisher && (
+          <div className="interviewActions">
+            <StyledBtn onClick={handleClickModalRoomLeave} width="200px" height="48px" color="red">
+              나가기
+            </StyledBtn>
+            {!isInterviewer && (
+              <NewStyledBtn
+                onClick={handleClickStart}
+                width="200px"
+                height="48px"
+                color="orange"
+                ready={ready}
+              >
+                GO
+              </NewStyledBtn>
+            )}
+          </div>
+        )}
       </div>
       {session ? (
         <>

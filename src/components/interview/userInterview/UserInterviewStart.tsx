@@ -135,7 +135,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
 };
 
 const StyledUserInterviewStart = styled.div`
-  width: 99vw;
+  width: 100vw;
   overflow-x: hidden;
   .subscribersContents {
     position: relative;
