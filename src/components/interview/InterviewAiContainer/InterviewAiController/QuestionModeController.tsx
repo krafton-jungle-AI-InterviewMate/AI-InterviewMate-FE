@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useRecoilValue, useRecoilState } from "recoil";
-import { interviewQuestionNumberAtom, timelineRecordAtom, recordModeAtom } from "store/interview/atom";
+import { interviewQuestionNumberAtom, timelineRecordAtom } from "store/interview/atom";
 
 import useAzureTTS, { UseAzureTTSParams } from "hooks/useAzureTTS";
 
@@ -16,21 +16,18 @@ const QuestionModeController = (props: QuestionModeControllerProps) => {
 
   const [ timelineRecord, setTimelineRecord ] = useRecoilState(timelineRecordAtom);
   const interviewQuestionNumber = useRecoilValue(interviewQuestionNumberAtom);
-  const isRecordMode = useRecoilValue(recordModeAtom);
 
   useEffect(() => {
-    if (isRecordMode) {
-      setTimelineRecord((curr) => ({
-        ...curr,
-        timeline: {
-          ...curr.timeline,
-          questionModeStart: [
-            ...curr.timeline.questionModeStart,
-            createTimeline(timelineRecord.startTime),
-          ],
-        },
-      }));
-    }
+    setTimelineRecord((curr) => ({
+      ...curr,
+      timeline: {
+        ...curr.timeline,
+        questionModeStart: [
+          ...curr.timeline.questionModeStart,
+          createTimeline(timelineRecord.startTime),
+        ],
+      },
+    }));
   }, []);
 
   useAzureTTS(props);

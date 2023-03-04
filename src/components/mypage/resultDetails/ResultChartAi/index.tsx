@@ -2,39 +2,29 @@ import { Chart as ChartJS, registerables } from "chart.js";
 import { Line } from "react-chartjs-2";
 ChartJS.register(...registerables);
 
+import { RatingDetail } from "api/mypage/types";
 import * as Config from "components/common/chartConfig";
+import dataGenerator from "./generateData";
 
 import styled from "@emotion/styled";
 import { commonLabelStyle } from "styles/resultDetails";
 
-const data = {
-  labels: [ "Q1", "Q2", "Q3" ],
-  datasets: [
-    {
-      id: 1,
-      label: Config.LABEL_EYE,
-      data: [ 5, 6, 2 ],
-      borderColor: Config.BORDER_COLOR_EYE,
-      backgroundColor: Config.BACKGROUND_COLOR_EYE,
-      borderWidth: Config.BORDER_WIDTH,
-    },
-    {
-      id: 2,
-      label: Config.LABEL_ATTITUDE,
-      data: [ 3, 2, 1 ],
-      borderColor: Config.BORDER_COLOR_ATTITUDE,
-      backgroundColor: Config.BACKGROUND_COLOR_ATTITUDE,
-      borderWidth: Config.BORDER_WIDTH,
-    },
-  ],
-};
+type ResultChartAiProps = {
+  resultDetail: RatingDetail;
+}
 
-const ResultChartAi = () => {
+const ResultChartAi = (props: ResultChartAiProps) => {
+  const {
+    resultDetail,
+  } = props;
+
   return (
     <StyledChartWrap>
       <StyledTitle>문제당 이탈 횟수</StyledTitle>
       <StyledChartBox>
-        <Line data={data} options={Config.chartAiOption}
+        <Line
+          data={dataGenerator({ timeline: resultDetail.timelines })}
+          options={Config.chartAiOption}
         />
       </StyledChartBox>
     </StyledChartWrap>

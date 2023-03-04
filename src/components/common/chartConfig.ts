@@ -57,6 +57,10 @@ export const chartUserOption: ChartOptionType = {
     },
     y: {
       axis: "y",
+      beginAtZero: true,
+      ticks: {
+        stepSize: 1,
+      },
       afterDataLimits: (scale) => {
         scale.max = scale.max * 1.2;
       },
@@ -101,6 +105,10 @@ export const chartAiOption: ChartOptionType = {
     },
     y: {
       axis: "y",
+      beginAtZero: true,
+      ticks: {
+        stepSize: 1,
+      },
       afterDataLimits: (scale) => {
         scale.max = scale.max * 1.2;
       },

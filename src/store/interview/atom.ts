@@ -6,6 +6,7 @@ import {
   AiInterviewProcessTypes,
   TimelineRecord,
 } from "types/interview";
+import { ScriptRequestsDtos } from "api/mypage/types";
 import { PostInterviewRoomsResponse, PostInterviewRoomsResponseData } from "api/interview/type";
 import { InitialTimelineRecord } from "constants/interview";
 
@@ -32,7 +33,7 @@ export const interviewQuestionTotalAtom = atom<number>({
 });
 
 /** 인터뷰 진행 중 채점 관련 */
-export const answerScriptAtom = atom<string[]>({
+export const answerScriptAtom = atom<ScriptRequestsDtos[]>({
   key: "AnswerScript",
   default: [],
 });
@@ -134,4 +135,14 @@ export const recordModeAtom = atom<boolean>({
 export const timelineRecordAtom = atom<TimelineRecord>({
   key: "TimelineRecord",
   default: InitialTimelineRecord,
+});
+
+export const videoBlobAtom = atom<null | Blob>({
+  key: "VideoBlob",
+  default: null,
+});
+
+export const videoUrlAtom = atom<string>({
+  key: "VideoUrl",
+  default: "",
 });
