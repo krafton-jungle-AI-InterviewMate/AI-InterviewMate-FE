@@ -32,7 +32,7 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
   const setIsInterviewer = useSetRecoilState(isInterviewerAtom);
 
   const navigate = useNavigate();
-  const [isPrivate, setIsPrivate] = useState(false);
+  const [ isPrivate, setIsPrivate ] = useState(false);
   const onChangePublic = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
       currentTarget: { value },
@@ -74,10 +74,10 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
       },
     );
   };
-  const roomPeopleNumArr = [1, 2, 3];
-  const isPrivateArr = [false, true];
-  const FeedbackArr = ["ON", "OFF"];
-  const roomTimeArr = [15, 30, 45, 60];
+  const roomPeopleNumArr = [ 1, 2, 3 ];
+  const isPrivateArr = [ false, true ];
+  const FeedbackArr = [ "ON", "OFF" ];
+  const roomTimeArr = [ 15, 30, 45, 60 ];
   return (
     <StyledUserRoomForm
       roomNameError={errors.roomName?.message}

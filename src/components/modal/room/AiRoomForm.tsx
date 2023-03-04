@@ -37,7 +37,7 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
   const setRecord = useSetRecoilState(recordModeAtom);
   const setAiRoomResponse = useSetRecoilState(aiRoomResponseAtom);
   const setInterviewData = useSetRecoilState(interviewDataAtom);
-  const [questionNum, setQuestionNum] = useState(0);
+  const [ questionNum, setQuestionNum ] = useState(0);
 
   const onChangeFeedback = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
