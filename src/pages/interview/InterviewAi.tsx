@@ -43,7 +43,7 @@ const InterviewAi = () => {
       setAiInterviewNextProcess("end");
     }
 
-    window.scrollTo({
+    window.scroll({
       top: 0,
       behavior: "smooth",
     });
