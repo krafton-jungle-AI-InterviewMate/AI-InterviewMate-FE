@@ -48,7 +48,6 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm<InputRoomFormProps>({
     defaultValues: {
       roomName: "면접 화이팅",
@@ -137,7 +136,6 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
                 value={data + 1}
                 id={`roomPeopleNum${idx}`}
                 required
-                checked={String(data + 1) === watch().roomPeopleNum}
               />
             </StyledRadioWrap>
           ))}
@@ -243,7 +241,6 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
                 value={String(data)}
                 id={`roomTime${idx}`}
                 required
-                checked={data === Number(watch().roomTime)}
               />
             </StyledRadioWrap>
           ))}
