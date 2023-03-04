@@ -9,7 +9,7 @@ import {
   isInterviewStartAtom,
   motionSnapshotAtom,
   roomPeopleNowAtom,
-  userInterviewHostVideoAtom,
+  timelineRecordAtom,
 } from "store/interview/atom";
 import { useNavigate } from "react-router";
 import UserInterviewReady from "components/interview/userInterview/UserInterviewReady";
@@ -20,6 +20,7 @@ import useInitializeInterviewState from "hooks/useInitializeInterviewState";
 import useFaceLandmarksDetection from "hooks/useFaceLandmarksDetection";
 import { toast } from "react-toastify";
 import * as Styled from "pages/interview/InterviewReady/style";
+import { usePostRatingViewee } from "hooks/queries/mypage";
 
 const UserInterview = () => {
   const userInterviewData = useRecoilValue(interviewDataAtom);
@@ -29,8 +30,10 @@ const UserInterview = () => {
   const isInterviewer = useRecoilValue(isInterviewerAtom);
   const [host, setHost] = useRecoilState(hostAtom);
   const setComment = useSetRecoilState(interviewCommentAtom);
-  const video = useRecoilValue(userInterviewHostVideoAtom);
   const setMotionSnapshot = useSetRecoilState(motionSnapshotAtom);
+  const {
+    timeline: { eyes, attitude, questionModeStart },
+  } = useRecoilValue(timelineRecordAtom);
 
   const navigate = useNavigate();
 
@@ -41,9 +44,12 @@ const UserInterview = () => {
   const [subscribers, setSubscribers] = useState<Array<any>>([]);
   const [ready, setReady] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [video, setVideo] = useState<null | HTMLVideoElement>(null);
 
   const { mutate: putInterviewRoomsMutate } = usePutInterviewRooms();
   const { mutate: deleteInterviewRoomsMutate } = useDeleteInterviewRooms();
+  const { mutate: postRatingVieweeMutate, isLoading } = usePostRatingViewee();
+
   const { initializeInterviewState } = useInitializeInterviewState();
   const { isVideoReady, setNewDetector, setIsDetectionOn, updateFace, detector } =
     useFaceLandmarksDetection({
@@ -250,12 +256,14 @@ const UserInterview = () => {
   };
 
   const handleClickStart = async () => {
+    console.log(detector);
     // 면접 시작
-    if (ready) {
+    if (ready && detector) {
       try {
         if (!detector) {
           throw new Error("detector is not ready");
         }
+
         initializeInterviewState();
         setIsDetectionOn(true);
 
@@ -267,7 +275,6 @@ const UserInterview = () => {
           setMotionSnapshot(newFace);
         } else {
           toast("화면에서 얼굴이 인식되지 않습니다", Styled.toastOptions);
-          return;
         }
 
         session
@@ -358,10 +365,12 @@ const UserInterview = () => {
           publisher={publisher}
           subscribers={subscribers}
           isOpen={isOpen}
+          video={video}
           handleClickModalClose={handleClickModalClose}
           handleClickModalRoomLeave={handleClickModalRoomLeave}
           handleClickInterviewOut={handleClickInterviewOut}
           InterviewEnd={InterviewEnd}
+          setVideo={setVideo}
         />
       ) : (
         <UserInterviewReady
@@ -374,6 +383,7 @@ const UserInterview = () => {
           handleClickStart={handleClickStart}
           handleClickModalClose={handleClickModalClose}
           handleClickReadyOut={handleClickReadyOut}
+          setVideo={setVideo}
         />
       )}
     </>

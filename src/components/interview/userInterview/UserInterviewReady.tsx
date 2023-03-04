@@ -14,6 +14,7 @@ interface UserInterviewReadyProps {
   subscribers: Array<any>;
   ready: boolean;
   isOpen: boolean;
+  setVideo: (video: HTMLVideoElement) => void;
   handleClickReadyOut: () => void;
   handleClickModalRoomLeave: () => void;
   handleClickStart: () => void;
@@ -27,6 +28,7 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
     subscribers,
     ready,
     isOpen,
+    setVideo,
     handleClickReadyOut,
     handleClickModalClose,
     handleClickModalRoomLeave,
@@ -69,13 +71,13 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
         <>
           <div className="publisherContents">
             {publisher && host === publisher.stream.connection.connectionId ? (
-              <UserVideoComponent streamManager={publisher} />
+              <UserVideoComponent streamManager={publisher} setVideo={setVideo} />
             ) : (
               <>
                 {subscribers.map(
                   (sub, i) =>
                     host === sub.stream.connection.connectionId && (
-                      <UserVideoComponent key={i} streamManager={sub} />
+                      <UserVideoComponent key={i} streamManager={sub} setVideo={setVideo} />
                     ),
                 )}
               </>
@@ -84,14 +86,14 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
           <div className="subscribersContents">
             {publisher && host !== publisher.stream.connection.connectionId && (
               <div className="subscribers">
-                <UserVideoComponent streamManager={publisher} />
+                <UserVideoComponent streamManager={publisher} setVideo={setVideo} />
               </div>
             )}
             {subscribers.map(
               (sub, i) =>
                 host !== sub.stream.connection.connectionId && (
                   <div key={i} className="subscribers">
-                    <UserVideoComponent streamManager={sub} />
+                    <UserVideoComponent streamManager={sub} setVideo={setVideo} />
                   </div>
                 ),
             )}
@@ -171,7 +173,7 @@ const StyledUserInterview = styled.div<StyledUserInterviewProps>`
     .subscribers {
       width: 333px;
       height: 250px;
-      background-color: var(--font-gray);
+      background-color: var(--main-black);
     }
   }
   .publisherContents {
@@ -180,7 +182,7 @@ const StyledUserInterview = styled.div<StyledUserInterviewProps>`
     align-items: flex-end;
     width: 1000px;
     height: 750px;
-    background-color: var(--font-gray);
+    background-color: var(--main-black);
   }
 `;
 

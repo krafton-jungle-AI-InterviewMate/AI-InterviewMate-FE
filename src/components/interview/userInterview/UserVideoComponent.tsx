@@ -1,16 +1,17 @@
 import OpenViduVideoComponent from "./OvVideo";
 import styled from "@emotion/styled";
-import Loading from "components/common/Loading";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { hostAtom, isInterviewStartAtom } from "store/interview/atom";
+import Loading from "components/common/Loading";
 
 interface UserVideoComponentProps {
   streamManager: any;
+  setVideo: (video: HTMLVideoElement) => void;
 }
 
 const UserVideoComponent = (props: UserVideoComponentProps) => {
-  const { streamManager } = props;
+  const { streamManager, setVideo } = props;
   const [isLoading, setIsLoading] = useState(true);
   const host = useRecoilValue(hostAtom);
   const isInterviewStart = useRecoilValue(isInterviewStartAtom);
@@ -26,7 +27,7 @@ const UserVideoComponent = (props: UserVideoComponentProps) => {
     <StyledUserVideoComponent isHost={isHost} isInterviewStart={isInterviewStart}>
       {!isLoading ? (
         <div className="streamcomponent">
-          <OpenViduVideoComponent streamManager={streamManager} />
+          <OpenViduVideoComponent streamManager={streamManager} setVideo={setVideo} />
           {!isInterviewStart && (
             <p>
               <span className="interviewer">{isHost ? "면접자" : "면접관"}</span>
