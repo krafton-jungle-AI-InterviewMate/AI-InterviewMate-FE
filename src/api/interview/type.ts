@@ -23,7 +23,7 @@ export type PostInterviewRoomsPayloadData = {
   roomType: RoomTypes;
   roomQuestionBoxIdx: number;
   roomQuestionNum?: number;
-  roomTime: any;
+  roomTime?: any;
 };
 
 export type PostInterviewRoomsPayload = {
@@ -58,16 +58,16 @@ export type PostInterviewRooms = (
 ) => Promise<AxiosResponse<PostInterviewRoomsResponse>>;
 
 export type InterviewRooms = {
+  idx: number;
   roomName: string;
   nickname: string;
   roomPeopleNum: number;
-  roomPeopleNow: number;
   roomTime: number;
   roomIsPrivate: boolean;
   roomType: RoomTypes;
   roomStatus: RoomStatus;
   createdAt: string;
-  idx: number;
+  interviewerIdxes: Array<string>;
 };
 
 export type GetInterviewRoomsResponse = ResponseStatus & {

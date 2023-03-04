@@ -1,14 +1,14 @@
 import { StyledBtn } from "styles/StyledBtn";
 import { useForm } from "react-hook-form";
-import FormControl from "@mui/material/FormControl";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormLabel from "@mui/material/FormLabel";
+// import FormControl from "@mui/material/FormControl";
+// import Radio from "@mui/material/Radio";
+// import RadioGroup from "@mui/material/RadioGroup";
+// import FormControlLabel from "@mui/material/FormControlLabel";
+// import FormLabel from "@mui/material/FormLabel";
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import { useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilState } from "recoil";
 import { feedbackAtom, interviewDataAtom, isInterviewerAtom } from "store/interview/atom";
 import { usePostInterviewRooms } from "hooks/queries/interview";
 import { useNavigate } from "react-router-dom";
@@ -18,17 +18,19 @@ import { QuestionBoxes } from "api/questionBoxes/type";
 interface InputRoomFormProps {
   email?: string;
   roomName: string;
-  roomPeopleNum?: number;
+  roomPeopleNum: string;
   roomPassword?: string;
-  isPrivate?: boolean;
+  isPrivate: boolean;
   roomType: RoomTypes;
   roomQuestionBoxIdx: number;
-  roomTime?: number;
+  roomTime: number;
+  feedback: "ON" | "OFF";
+  record: "ON" | "OFF";
 }
 
 function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
   const setUserInterviewData = useSetRecoilState(interviewDataAtom);
-  const feedback = useSetRecoilState(feedbackAtom);
+  const [ feedback, setFeedback ] = useRecoilState(feedbackAtom);
   const setIsInterviewer = useSetRecoilState(isInterviewerAtom);
 
   const navigate = useNavigate();
@@ -44,22 +46,31 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
     const {
       target: { value },
     } = event;
-    feedback(value);
+    setFeedback(value);
   };
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<InputRoomFormProps>();
+    watch,
+  } = useForm<InputRoomFormProps>({
+    defaultValues: {
+      roomName: "면접 화이팅",
+      roomPeopleNum: "2",
+      isPrivate: false,
+      roomType: "USER",
+      roomTime: 15,
+    },
+  });
 
   const { mutate, isLoading } = usePostInterviewRooms();
 
-  const onValid = (data: any) => {
-    data["roomType"] = roomType;
+  const onValid = (data) => {
     if (isLoading) {
       return;
     }
+
     mutate(
       { data },
       {
@@ -115,42 +126,45 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
           ) : null}
         </div>
         <span className="guide">
-          최소 2자 ~ 최대 10자까지 입력 가능합니다. 특수문자는 사용 불가능합니다. <br /> (띄어쓰기 제외)
+          최소 2자 ~ 최대 10자까지 입력 가능합니다. 특수문자는 사용 불가능합니다. <br /> (띄어쓰기
+          제외)
         </span>
         <div className="inputContent">
-          <FormControl className="radioForm">
-            <FormLabel>면접관 수</FormLabel>
-            <RadioGroup row>
-              {roomPeopleNumArr.map((data, idx) => (
-                <FormControlLabel
-                  key={`roomPeopleNum${idx}`}
-                  value={data + 1}
-                  control={<Radio {...register("roomPeopleNum", { required: true })} />}
-                  label={`${data}명`}
-                />
-              ))}
-            </RadioGroup>
-          </FormControl>
+          <p>면접관 수</p>
+          {roomPeopleNumArr.map((data, idx) => (
+            <StyledRadioWrap key={`roomPeopleNum${idx}`}>
+              <label htmlFor={`roomPeopleNum${idx}`}>
+                {data}명
+              </label>
+              <input
+                {...register("roomPeopleNum")}
+                type="radio"
+                value={data + 1}
+                id={`roomPeopleNum${idx}`}
+                required
+                checked={String(data + 1) === watch().roomPeopleNum}
+              />
+            </StyledRadioWrap>
+          ))}
         </div>
         <div className="inputContent">
-          <FormControl className="radioForm">
-            <FormLabel>공개 여부</FormLabel>
-            <RadioGroup row>
-              {isPrivateArr.map((data, idx) => (
-                <FormControlLabel
-                  key={`isPrivate${idx}`}
-                  value={data}
-                  control={
-                    <Radio
-                      {...register("isPrivate", { required: true })}
-                      onChange={onChangePublic}
-                    />
-                  }
-                  label={data ? "비공개" : "공개"}
-                />
-              ))}
-            </RadioGroup>
-          </FormControl>
+          <p>공개 여부</p>
+          {isPrivateArr.map((data, idx) => (
+            <StyledRadioWrap key={`isPrivate${idx}`}>
+              <label htmlFor={`isPrivate${idx}`}>
+                {data ? "비공개" : "공개"}
+              </label>
+              <input
+                {...register("isPrivate")}
+                type="radio"
+                value={String(data)}
+                id={`isPrivate${idx}`}
+                required
+                checked={isPrivate === data}
+                onChange={onChangePublic}
+              />
+            </StyledRadioWrap>
+          ))}
         </div>
         {isPrivate ? (
           <>
@@ -188,46 +202,56 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
           </>
         ) : null}
         <div className="inputContent">
-          <FormControl className="radioForm">
-            <FormLabel>실시간 피드백</FormLabel>
-            <RadioGroup row>
-              {FeedbackArr.map((data, idx) => (
-                <FormControlLabel
-                  key={`Feedback${idx}`}
-                  value={data}
-                  control={<Radio onChange={onChangeFeedback} required />}
-                  label={data}
-                />
-              ))}
-            </RadioGroup>
-          </FormControl>
+          <p>실시간 피드백</p>
+          {FeedbackArr.map((data, idx) => (
+            <StyledRadioWrap key={`Feedback${idx}`}>
+              <label htmlFor={`Feedback${idx}`}>
+                {data}
+              </label>
+              <input
+                {...register("feedback")}
+                type="radio"
+                value={data}
+                id={`Feedback${idx}`}
+                required
+                onChange={onChangeFeedback}
+                checked={feedback === data}
+              />
+            </StyledRadioWrap>
+          ))}
         </div>
         <span className="guide">실시간 피드백 설정은 방 생성 이후에는 수정하실 수 없습니다.</span>
         <div className="inputContent">
           <label htmlFor="question">질문 꾸러미</label>
           <select id="question" {...register("roomQuestionBoxIdx", { required: true })}>
-            {questionBoxes.map((data: QuestionBoxes, idx: number) => (
-              <option key={idx} value={data.questionBoxIdx}>
-                {data.questionBoxName}
-              </option>
-            ))}
+            {questionBoxes.map(
+              (data: QuestionBoxes, idx: number) =>
+                data.questionNum > 0 && (
+                  <option key={idx} value={data.questionBoxIdx}>
+                    {data.questionBoxName}
+                  </option>
+                ),
+            )}
           </select>
         </div>
         <span className="guide">면접관에게 보여질 질문 꾸러미를 선택해주세요.</span>
         <div className="inputContent">
-          <FormControl className="radioForm">
-            <FormLabel>시간 제한</FormLabel>
-            <RadioGroup row>
-              {roomTimeArr.map((data, idx) => (
-                <FormControlLabel
-                  key={`roomTime${idx}`}
-                  value={data}
-                  control={<Radio {...register("roomTime", { required: true })} />}
-                  label={`${data}분`}
-                />
-              ))}
-            </RadioGroup>
-          </FormControl>
+          <p>시간 제한</p>
+          {roomTimeArr.map((data, idx) => (
+            <StyledRadioWrap key={`roomTime${idx}`}>
+              <label htmlFor={`roomTime${idx}`}>
+                {data}분
+              </label>
+              <input
+                {...register("roomTime")}
+                type="radio"
+                value={String(data)}
+                id={`roomTime${idx}`}
+                required
+                checked={data === Number(watch().roomTime)}
+              />
+            </StyledRadioWrap>
+          ))}
         </div>
         <div className="submitAndCancel">
           <StyledBtn width="300px" height="58px" color="orange">
@@ -255,6 +279,11 @@ const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`
       display: flex;
       align-items: center;
       margin-top: 20px;
+      p {
+        font-size: 20px;
+        font-weight: 500;
+        width: 140px;
+      }
       label {
         display: inline-block;
         text-align: left;
@@ -320,6 +349,26 @@ const StyledUserRoomForm = styled.div<StyledUserRoomFormProps>`
       justify-content: space-evenly;
       margin-top: 80px;
     }
+  }
+`;
+
+const StyledRadioWrap = styled.div`
+  display: flex;
+  flex-flow: row-reverse nowrap;
+  align-items: center;
+  margin-left: 14px;
+
+  &:first-of-type {
+    margin-left: 0;
+  }
+
+  & label {
+    text-align: left !important;
+    width: 80px !important;
+  }
+
+  & input {
+    width: 50px !important;
   }
 `;
 

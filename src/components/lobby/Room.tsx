@@ -50,7 +50,7 @@ const StyledRoom = styled.div<IRoomProps>`
         height: 24px;
         font-size: 16px;
         background-color: ${props =>
-    props.roomType === "AI" ? "var(--push-gray)" : "var(--main-black)"};
+          props.roomType === "AI" ? "var(--push-gray)" : "var(--main-black)"};
         border-radius: 5px;
         color: var(--main-white);
       }
@@ -67,7 +67,7 @@ const StyledRoom = styled.div<IRoomProps>`
       }
       .roomStatus {
         color: ${props =>
-    props.roomStatus === "CREATE" ? "var(--main-orange)" : "var(--main-black)"};
+          props.roomStatus === "CREATE" ? "var(--main-orange)" : "var(--main-black)"};
       }
       .warningComment {
         display: flex;
@@ -97,7 +97,7 @@ interface RoomProps {
   roomIsPrivate: boolean; // 잠금 여부
   roomStatus: RoomStatus; // 방 상태
   roomTime?: number; // 인터뷰 시간
-  roomPeopleNow: number; // 현재 인원 수
+  interviewerIdxes: number; // 현재 인원 수
   roomPeopleNum: number; // 총 인원 수
   idx: number;
   setIsJoinError: (text: boolean) => void;
@@ -110,7 +110,7 @@ const Room = ({
   roomIsPrivate,
   roomStatus,
   roomTime,
-  roomPeopleNow,
+  interviewerIdxes,
   roomPeopleNum,
   idx,
   setIsJoinError,
@@ -130,24 +130,27 @@ const Room = ({
       setIsPasswordPopupOpen(true);
       return;
     }
-    if (roomType === "AI" || roomPeopleNow === roomPeopleNum || roomStatus === "PROCEED") {
+    if (roomType === "AI" || interviewerIdxes === roomPeopleNum || roomStatus === "PROCEED") {
       setIsJoinError(true);
       return;
     }
     if (!isLoading) {
-      mutate({
-        roomIdx: idx,
-        password: null, // TODO: 비밀번호 검증
-      }, {
-        onSuccess: ({ data }) => {
-          setUserInterviewData(data.data);
-          setIsInterviewer(true);
-          navigate("/interview/user");
+      mutate(
+        {
+          roomIdx: idx,
+          password: null, // TODO: 비밀번호 검증
         },
-        onError(error) {
-          alert(error);
+        {
+          onSuccess: ({ data }) => {
+            setUserInterviewData(data.data);
+            setIsInterviewer(true);
+            navigate("/interview/user");
+          },
+          onError(error) {
+            alert(error);
+          },
         },
-      });
+      );
     }
   };
   return (
@@ -173,14 +176,14 @@ const Room = ({
           ) : roomIsPrivate ? (
             <div className="roomInfo">
               <span>
-                {roomPeopleNow} / {roomPeopleNum}
+                {interviewerIdxes} / {roomPeopleNum}
               </span>
               <RiGitRepositoryPrivateFill size={32} color="var(--push-gray)" />
             </div>
           ) : (
             <div className="roomInfo">
               <span>
-                {roomPeopleNow} / {roomPeopleNum}
+                {interviewerIdxes} / {roomPeopleNum}
               </span>
               <MdPublic size={32} color="var(--push-gray)" />
             </div>
