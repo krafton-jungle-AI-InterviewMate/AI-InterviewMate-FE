@@ -33,7 +33,6 @@ const QuestionDetails = () => {
   );
   const {
     mutate: deleteQuestion,
-    isSuccess: isDeleteSuccess,
   } = useDeleteQuestion();
   const {
     mutate: modifyQuestionBoxName,
@@ -45,12 +44,6 @@ const QuestionDetails = () => {
       setTitle(data.data?.data?.questionBoxName ?? "");
     }
   }, [ data ]);
-
-  useEffect(() => {
-    if (isDeleteSuccess) {
-      refetch();
-    }
-  }, [ isDeleteSuccess ]);
 
   useEffect(() => {
     if (isModifyComplete) {
@@ -94,7 +87,15 @@ const QuestionDetails = () => {
       return;
     }
 
-    deleteQuestion(deleteTarget.questionIdx);
+    deleteQuestion(
+      deleteTarget.questionIdx,
+      {
+        onSuccess: () => {
+          setIsDeletePopupOpen(false);
+          refetch();
+        },
+      },
+    );
   };
 
   const handleTitleModify = () => {
