@@ -406,8 +406,8 @@ const UserInterview = () => {
   }, [publisher]);
 
   useEffect(() => {
-    console.log("isInterviewer: ", isInterviewer);
-    console.log("videoRef.current: ", videoRef.current);
+    // console.log("isInterviewer: ", isInterviewer);
+    // console.log("videoRef.current: ", videoRef.current);
     if (!isInterviewer && videoRef.current) {
       setVideo(videoRef.current);
     }

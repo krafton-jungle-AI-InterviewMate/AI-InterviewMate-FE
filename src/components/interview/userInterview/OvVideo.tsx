@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { css } from "@emotion/react";
 import { useRecoilValue } from "recoil";
 import { hostAtom, isInterviewStartAtom } from "store/interview/atom";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 interface OpenViduVideoComponentProps {
   streamManager: any;
@@ -16,17 +16,28 @@ const OpenViduVideoComponent = (props: OpenViduVideoComponentProps) => {
   const host = useRecoilValue(hostAtom);
 
   const [isHost, setIsHost] = useState(false);
+  const interviewerVideoRef = useRef<null | HTMLVideoElement>(null);
+
+  console.log("외부의 ref", videoRef);
 
   useEffect(() => {
-    if (streamManager && videoRef) {
-      streamManager.addVideoElement(videoRef.current);
-      setIsHost(host === streamManager.stream.connection.connectionId);
+    console.log("내부의 ref", videoRef);
+    if (isHost) {
+      if (streamManager && videoRef.current) {
+        streamManager.addVideoElement(videoRef.current);
+        setIsHost(host === streamManager.stream.connection.connectionId);
+      }
+    } else {
+      if (streamManager && interviewerVideoRef.current) {
+        streamManager.addVideoElement(interviewerVideoRef.current);
+        setIsHost(host === streamManager.stream.connection.connectionId);
+      }
     }
   }, [streamManager, videoRef]);
 
   return (
     <StyledOpenViduVideoComponent isInterviewStart={isInterviewStart} isHost={isHost}>
-      <video autoPlay={true} ref={videoRef} />
+      <video autoPlay={true} ref={isHost ? videoRef : interviewerVideoRef} />
     </StyledOpenViduVideoComponent>
   );
 };
