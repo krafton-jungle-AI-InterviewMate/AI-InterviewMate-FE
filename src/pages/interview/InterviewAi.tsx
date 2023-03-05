@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { aiInterviewNextProcessAtom, aiRoomResponseAtom } from "store/interview/atom";
@@ -42,7 +42,9 @@ const InterviewAi = () => {
     else {
       setAiInterviewNextProcess("end");
     }
+  }, []);
 
+  useLayoutEffect(() => {
     window.scroll({
       top: 0,
       behavior: "smooth",
