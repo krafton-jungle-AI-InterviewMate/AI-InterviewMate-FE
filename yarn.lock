@@ -1194,8 +1194,8 @@ __metadata:
   linkType: hard
 
 "@tanstack/react-query-devtools@npm:^4.24.6":
-  version: 4.24.13
-  resolution: "@tanstack/react-query-devtools@npm:4.24.13"
+  version: 4.24.14
+  resolution: "@tanstack/react-query-devtools@npm:4.24.14"
   dependencies:
     "@tanstack/match-sorter-utils": ^8.7.0
     superjson: ^1.10.0
@@ -1204,7 +1204,7 @@ __metadata:
     "@tanstack/react-query": 4.24.10
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: 6acd6e25b70016e27e838fb215d0aaa796cf92432c8b6cbcbda3b9961459fbe516a13eaef72fa27952ce61ad094f1fe523bdfd5e7c6b208c48bdd3bdf472b1be
+  checksum: b0a669c319378ae08ebea3838d1ad89d43b77aa82545fd4cc1b2f01a69fcbb6a9be394a45a28113ed85f2e08c2aa95a4ded431d1c455176f316551b84eb54738
   languageName: node
   linkType: hard
 
