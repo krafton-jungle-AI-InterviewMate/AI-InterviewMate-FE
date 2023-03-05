@@ -45,7 +45,7 @@ const InterviewAi = () => {
   }, []);
 
   useLayoutEffect(() => {
-    window.scroll({
+    window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
