@@ -13,13 +13,12 @@ export const useRecorderPermission = (
       preferCurrentTab: true,
       audio: true,
     });
-
+    
     stream_test = stream_test.getAudioTracks();
     let stream2 = new MediaStream();
     stream2.addTrack(stream_test[0]);
 
-    console.log(stream);
-    let recorder = new MultiStreamRecorder([stream, stream2], {
+    let recorder = await new MultiStreamRecorder([stream, stream2], {
       mimeType: 'video/webm'
     });
 

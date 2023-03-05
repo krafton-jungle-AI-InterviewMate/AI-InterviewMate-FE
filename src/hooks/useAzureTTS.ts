@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import {
   interviewModeAtom,
@@ -7,6 +7,7 @@ import {
   playerAtom,
 } from "store/interview/atom";
 import { QuestionListItem } from "api/interview/type";
+import { useRecorderPermission } from "hooks/useRecorderPermission";
 
 export type UseAzureTTSParams = {
   questionList: QuestionListItem[];
@@ -22,11 +23,17 @@ const useAzureTTS = (params: UseAzureTTSParams) => {
   const [ synthesizer, setSynthesizer ] = useRecoilState(synthesizerAtom);
   const [ player, setPlayer ] = useRecoilState(playerAtom);
 
+  const {
+    getPermissionInitializeRecorder,
+  } = useRecorderPermission("video");
+
   const synthesizeSpeech = async () => {
     if (!(synthesizer && player)) {
       console.log("synthesizer is null");
       return;
     }
+
+    const rec = await getPermissionInitializeRecorder();
 
     synthesizer.speakTextAsync(
       questionList[interviewQuestionNumber].questionTitle,
