@@ -4,6 +4,7 @@ import {
   useQuestionDetails,
   useDeleteQuestion,
   usePutQuestionBoxName,
+  useGetQuestionBoxes,
 } from "hooks/queries/questionBoxes";
 import { Question } from "api/questionBoxes/type";
 
@@ -32,6 +33,9 @@ const QuestionDetails = () => {
     Number(searchParams.get("box")),
   );
   const {
+    refetch: refetchList,
+  } = useGetQuestionBoxes();
+  const {
     mutate: deleteQuestion,
     isLoading: isDeleteLoading,
     isSuccess: isDeleteSuccess,
@@ -55,6 +59,9 @@ const QuestionDetails = () => {
         setShowCheckIcon(false);
       }, 1000 * 3);
 
+      refetch();
+      refetchList();
+
       return (() => {
         window.clearTimeout(timerId);
       });
@@ -68,6 +75,7 @@ const QuestionDetails = () => {
 
     if (isDeleteSuccess) {
       refetch();
+      refetchList();
     }
   }, [ isDeleteLoading ]);
 
@@ -188,9 +196,10 @@ const QuestionDetails = () => {
                 <StyledBtn
                   type="button"
                   onClick={() => handleQuestionDelete(question)}
-                  width="100px"
-                  height="32px"
+                  width="120px"
+                  height="52px"
                   color="red"
+                  style={{ fontSize: "1.4rem" }}
                 >
                   삭제
                 </StyledBtn>

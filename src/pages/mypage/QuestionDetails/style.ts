@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { a11yHidden } from "styles/common";
 
 export const Wrapper = styled.section`
-  width: 900px;
+  width: 1200px;
   margin-top: 70px;
 `;
 
@@ -12,14 +12,14 @@ export const TitleWrap = styled.div`
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: center;
-  width: 442px;
+  width: 642px;
   margin-bottom: 44px;
 `;
 
 export const CheckIcon = styled.i`
   position: absolute;
-  right: -30px;
-  font-size: 24px;
+  right: -50px;
+  font-size: 2rem;
   font-style: normal;
 `;
 
@@ -32,7 +32,7 @@ export const Input = styled.input`
   border: 0;
   border-bottom: 1px solid var(--push-gray);
   font-family: "Archivo", "Spoqa Han Sans Neo", sans-serif;
-  font-size: 24px;
+  font-size: 2rem;
   color: var(--main-black);
   padding: 6px;
 `;
@@ -43,7 +43,7 @@ export const EditButton = styled.button`
   right: 0;
   transform: translate(0, -50%);
   background-color: transparent;
-  font-size: 16px;
+  font-size: 1.6rem;
   color: var(--font-gray);
 `;
 
@@ -56,7 +56,7 @@ export const List = styled.ul`
 
   & .empty {
     padding-top: 60px;
-    font-size: 16px;
+    font-size: 1.6rem;
     color: var(--font-gray);
     opacity: .6;
   }
@@ -68,9 +68,9 @@ export const Question = styled.li`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 48px;
+  height: 78px;
   border-radius: var(--button-border-radius);
-  border: 1px solid var(--main-gray);
+  border: 2px solid var(--main-black);
   box-shadow: var(--box-shadow);
   margin-bottom: 32px;
   padding: 7px 10px 7px 32px;
@@ -95,12 +95,12 @@ export const Icon = styled.i`
   flex-flow: row nowrap;
   justify-content: center;
   align-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 6px;
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
   font-style: normal;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 1.8rem;
   color: var(--main-white);
   background-color: var(--main-black);
   margin-right: 12px;
@@ -109,7 +109,7 @@ export const Icon = styled.i`
 export const QuestionButton = styled.button`
   background-color: transparent;
   border: none;
-  font-size: 20px;
+  font-size: 1.6rem;
   font-weight: 500;
   color: var(--main-black);
   padding-left: 0;
@@ -129,13 +129,13 @@ export const FixedBottom = styled.div`
 `;
 
 export const AddQuestionButton = styled.button`
-  width: 442px;
-  height: 60px;
+  width: 1000px;
+  height: 80px;
   margin: 0px auto 60px;
   border-radius: var(--button-border-radius);
   background-color: var(--main-orange);
   color: var(--main-white);
-  font-size: 20px;
+  font-size: 2rem;
   font-weight: 500;
   transition: background-color 200ms;
 
