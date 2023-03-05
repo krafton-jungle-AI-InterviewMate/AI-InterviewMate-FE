@@ -33,6 +33,8 @@ const QuestionDetails = () => {
   );
   const {
     mutate: deleteQuestion,
+    isLoading: isDeleteLoading,
+    isSuccess: isDeleteSuccess,
   } = useDeleteQuestion();
   const {
     mutate: modifyQuestionBoxName,
@@ -58,6 +60,16 @@ const QuestionDetails = () => {
       });
     }
   }, [ isModifyComplete ]);
+
+  useEffect(() => {
+    if (isDeleteLoading) {
+      return;
+    }
+
+    if (isDeleteSuccess) {
+      refetch();
+    }
+  }, [ isDeleteLoading ]);
 
   const questionBoxIdx = useMemo(() => {
     return Number(searchParams.get("box") ?? 999);
@@ -92,7 +104,6 @@ const QuestionDetails = () => {
       {
         onSuccess: () => {
           setIsDeletePopupOpen(false);
-          refetch();
         },
       },
     );
