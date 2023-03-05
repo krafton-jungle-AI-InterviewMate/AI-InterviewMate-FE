@@ -119,7 +119,7 @@ const CreateRoom = (props: CreateRoomProps) => {
               </StyledTabBtn>
             </div>
           </div>
-          {/* {roomType === "USER" ? (
+          {roomType === "USER" ? (
             <UserRoomForm
               roomType={roomType}
               onClickModalClose={onClose}
@@ -131,7 +131,7 @@ const CreateRoom = (props: CreateRoomProps) => {
               onClickModalClose={onClose}
               questionBoxes={questionBoxes}
             />
-          )} */}
+          )}
         </div>
       </StyledWrap>
     </Modal>
