@@ -210,7 +210,7 @@ const StyledAiVideoWrap = styled.div`
   overflow: hidden;
   box-shadow: var(--box-shadow);
   margin: 0 auto;
-  margin-top: 140px;
+  margin-top: 240px;
   border: 1px solid var(--main-gray);
 
   & video {
@@ -234,7 +234,7 @@ const StyledVideoWrap = styled.div`
   overflow: hidden;
   box-shadow: var(--box-shadow);
   margin: 0 auto;
-  margin-top: 140px;
+  margin-top: 240px;
   border: 1px solid var(--main-gray);
 
   & video {
