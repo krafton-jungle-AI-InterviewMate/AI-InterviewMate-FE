@@ -1,8 +1,7 @@
 import { OpenVidu } from "openvidu-browser";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
-  answerScriptAtom,
   hostAtom,
   interviewCommentAtom,
   interviewDataAtom,
@@ -34,7 +33,6 @@ const UserInterview = () => {
   const [host, setHost] = useRecoilState(hostAtom);
   const setComment = useSetRecoilState(interviewCommentAtom);
   const setMotionSnapshot = useSetRecoilState(motionSnapshotAtom);
-  const answerScript = useRecoilValue(answerScriptAtom);
   const {
     timeline: { eyes, attitude, questionModeStart },
   } = useRecoilValue(timelineRecordAtom);
@@ -50,16 +48,37 @@ const UserInterview = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [video, setVideo] = useState<null | HTMLVideoElement>(null);
 
+  const videoRef = useRef<null | HTMLVideoElement>(null);
+
   const { mutate: putInterviewRoomsMutate } = usePutInterviewRooms();
   const { mutate: deleteInterviewRoomsMutate } = useDeleteInterviewRooms();
   const { mutate: postRatingVieweeMutate, isLoading } = usePostRatingViewee();
 
   const { initializeInterviewState } = useInitializeInterviewState();
-  const { isVideoReady, setNewDetector, setIsDetectionOn, updateFace, detector } =
+  const { isVideoReady, setIsVideoReady, setNewDetector, setIsDetectionOn, updateFace, detector } =
     useFaceLandmarksDetection({
       video,
       isOneOff: true,
     });
+
+  useEffect(() => {
+    if (!video) {
+      return;
+    }
+
+    const getReadyState = () => {
+      const { readyState } = video;
+      if (readyState === 4) {
+        setIsVideoReady(true);
+      }
+    };
+
+    video.addEventListener("loadedmetadata", getReadyState);
+
+    return () => {
+      video.removeEventListener("loadedmetadata", getReadyState);
+    };
+  }, [video]);
 
   useEffect(() => {
     if (isVideoReady) {
@@ -70,11 +89,15 @@ const UserInterview = () => {
   }, [isVideoReady]);
 
   useEffect(() => {
+    if (publisher && host && host === publisher.connection.connectionId) {
+      setVideo(videoRef.current);
+    }
     window.addEventListener("beforeunload", onbeforeunload);
     return () => {
       window.removeEventListener("beforeunload", onbeforeunload);
     };
   }, []);
+  console.log("video: ", video);
 
   const onbeforeunload = event => {
     leaveSession();
@@ -260,9 +283,9 @@ const UserInterview = () => {
   };
 
   const handleClickStart = async () => {
-    console.log(detector);
+    console.log("detector :", detector);
     // 면접 시작
-    if (ready && detector) {
+    if (ready) {
       try {
         if (!detector) {
           throw new Error("detector is not ready");
@@ -318,8 +341,10 @@ const UserInterview = () => {
         attitudeTimelines: deduplicate(attitude),
         questionTimelines: questionModeStart,
         comments: [],
-        scripts: answerScript,
+        scripts: [],
       };
+
+      console.log(data);
       const { roomIdx } = userInterviewData;
       postRatingVieweeMutate(
         {
@@ -354,6 +379,7 @@ const UserInterview = () => {
   useEffect(() => {
     console.log(subscribers);
     console.log(userInterviewData);
+
     setRoomPeopleNow(subscribers.length);
     if (subscribers.length) {
       setReady(true);
@@ -396,7 +422,7 @@ const UserInterview = () => {
           handleClickModalRoomLeave={handleClickModalRoomLeave}
           handleClickInterviewOut={handleClickInterviewOut}
           InterviewEnd={InterviewEnd}
-          setVideo={setVideo}
+          videoRef={videoRef}
         />
       ) : (
         <UserInterviewReady
@@ -409,7 +435,7 @@ const UserInterview = () => {
           handleClickStart={handleClickStart}
           handleClickModalClose={handleClickModalClose}
           handleClickReadyOut={handleClickReadyOut}
-          setVideo={setVideo}
+          videoRef={videoRef}
         />
       )}
     </>

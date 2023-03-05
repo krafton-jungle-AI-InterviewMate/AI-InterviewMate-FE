@@ -14,7 +14,7 @@ interface UserInterviewReadyProps {
   subscribers: Array<any>;
   ready: boolean;
   isOpen: boolean;
-  setVideo: (video: HTMLVideoElement) => void;
+  videoRef: React.MutableRefObject<HTMLVideoElement | null>;
   handleClickReadyOut: () => void;
   handleClickModalRoomLeave: () => void;
   handleClickStart: () => void;
@@ -28,7 +28,7 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
     subscribers,
     ready,
     isOpen,
-    setVideo,
+    videoRef,
     handleClickReadyOut,
     handleClickModalClose,
     handleClickModalRoomLeave,
@@ -71,13 +71,13 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
         <>
           <div className="publisherContents">
             {publisher && host === publisher.stream.connection.connectionId ? (
-              <UserVideoComponent streamManager={publisher} setVideo={setVideo} />
+              <UserVideoComponent streamManager={publisher} videoRef={videoRef} />
             ) : (
               <>
                 {subscribers.map(
                   (sub, i) =>
                     host === sub.stream.connection.connectionId && (
-                      <UserVideoComponent key={i} streamManager={sub} setVideo={setVideo} />
+                      <UserVideoComponent key={i} streamManager={sub} videoRef={videoRef} />
                     ),
                 )}
               </>
@@ -86,14 +86,14 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
           <div className="subscribersContents">
             {publisher && host !== publisher.stream.connection.connectionId && (
               <div className="subscribers">
-                <UserVideoComponent streamManager={publisher} setVideo={setVideo} />
+                <UserVideoComponent streamManager={publisher} videoRef={videoRef} />
               </div>
             )}
             {subscribers.map(
               (sub, i) =>
                 host !== sub.stream.connection.connectionId && (
                   <div key={i} className="subscribers">
-                    <UserVideoComponent streamManager={sub} setVideo={setVideo} />
+                    <UserVideoComponent streamManager={sub} videoRef={videoRef} />
                   </div>
                 ),
             )}

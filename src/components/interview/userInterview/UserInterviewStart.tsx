@@ -1,7 +1,12 @@
 import styled from "@emotion/styled";
 import { Dialog, DialogActions, DialogTitle } from "@mui/material";
-import { useRecoilValue } from "recoil";
-import { feedbackAtom, hostAtom, interviewDataAtom } from "store/interview/atom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  feedbackAtom,
+  hostAtom,
+  interviewDataAtom,
+  timelineRecordAtom,
+} from "store/interview/atom";
 import { StyledBtn } from "styles/StyledBtn";
 import InterviewQuestionTab from "./InterviewerQuestionTap";
 import UserVideoComponent from "./UserVideoComponent";
@@ -20,7 +25,7 @@ interface UserInterviewStartProps {
   subscribers: Array<any>;
   isOpen: boolean;
   video: HTMLVideoElement | null;
-  setVideo: (video: HTMLVideoElement) => void;
+  videoRef: React.MutableRefObject<HTMLVideoElement | null>;
   handleClickModalClose: () => void;
   handleClickModalRoomLeave: () => void;
   handleClickInterviewOut: () => void;
@@ -34,7 +39,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
     subscribers,
     isOpen,
     video,
-    setVideo,
+    videoRef,
     handleClickModalClose,
     handleClickModalRoomLeave,
     handleClickInterviewOut,
@@ -44,9 +49,14 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
   const userInterviewData = useRecoilValue(interviewDataAtom);
   const host = useRecoilValue(hostAtom);
   const feedbackMode = useRecoilValue(feedbackAtom);
+  const [timelineRecord, setTimelineRecord] = useRecoilState(timelineRecordAtom);
+
+  useEffect(() => {
+    console.log("timelineRecord: ", timelineRecord);
+  }, [timelineRecord]);
 
   const isRealtimeMode = useMemo(() => feedbackMode === "ON", [feedbackMode]);
-
+  console.log("interviewStart video: ", video);
   const { face, setIsDetectionOn } = useFaceLandmarksDetection({ video });
   const { horizontalRatio } = useCheckIrisPosition({ face });
   const { isBadMotion } = useCheckHeadMotion({ face });
@@ -60,7 +70,13 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
   });
 
   useEffect(() => {
-    setIsDetectionOn(true);
+    if (video) {
+      setTimelineRecord(curr => ({
+        ...curr,
+        startTime: Date.now(),
+      }));
+      setIsDetectionOn(true);
+    }
 
     const timerId = window.setTimeout(() => {
       setIsDetectionOn(false);
@@ -80,14 +96,14 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
             <div className="subscribersVideo">
               {publisher && host !== publisher.stream.connection.connectionId && (
                 <div className="publisherVideo">
-                  <UserVideoComponent streamManager={publisher} setVideo={setVideo} />
+                  <UserVideoComponent streamManager={publisher} videoRef={videoRef} />
                 </div>
               )}
               {subscribers.map(
                 (sub, i) =>
                   host !== sub.stream.connection.connectionId && (
                     <div key={i}>
-                      <UserVideoComponent streamManager={sub} setVideo={setVideo} />
+                      <UserVideoComponent streamManager={sub} videoRef={videoRef} />
                     </div>
                   ),
               )}

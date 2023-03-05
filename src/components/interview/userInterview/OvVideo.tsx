@@ -1,37 +1,26 @@
 import styled from "@emotion/styled";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { css } from "@emotion/react";
 import { useRecoilValue } from "recoil";
-import { hostAtom, isInterviewerAtom, isInterviewStartAtom } from "store/interview/atom";
+import { hostAtom, isInterviewStartAtom } from "store/interview/atom";
 import { useState } from "react";
-import Loading from "components/common/Loading";
 
 interface OpenViduVideoComponentProps {
   streamManager: any;
-  setVideo: (video: HTMLVideoElement) => void;
+  videoRef: React.MutableRefObject<HTMLVideoElement | null>;
 }
 
 const OpenViduVideoComponent = (props: OpenViduVideoComponentProps) => {
-  const { streamManager, setVideo } = props;
+  const { streamManager, videoRef } = props;
   const isInterviewStart = useRecoilValue(isInterviewStartAtom);
   const host = useRecoilValue(hostAtom);
-  const isInterviewer = useRecoilValue(isInterviewerAtom);
 
   const [isHost, setIsHost] = useState(false);
-
-  const videoRef = useRef<null | HTMLVideoElement>(null);
 
   useEffect(() => {
     if (streamManager && videoRef) {
       streamManager.addVideoElement(videoRef.current);
       setIsHost(host === streamManager.stream.connection.connectionId);
-      if (
-        host === streamManager.stream.connection.connectionId &&
-        videoRef.current &&
-        !isInterviewer
-      ) {
-        setVideo(videoRef.current);
-      }
     }
   }, [streamManager, videoRef]);
 
