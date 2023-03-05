@@ -68,6 +68,7 @@ const UserInterview = () => {
 
     const getReadyState = () => {
       const { readyState } = video;
+      console.log("readyState: ", readyState);
       if (readyState === 4) {
         setIsVideoReady(true);
       }
@@ -89,15 +90,11 @@ const UserInterview = () => {
   }, [isVideoReady]);
 
   useEffect(() => {
-    if (publisher && host && host === publisher.connection.connectionId) {
-      setVideo(videoRef.current);
-    }
     window.addEventListener("beforeunload", onbeforeunload);
     return () => {
       window.removeEventListener("beforeunload", onbeforeunload);
     };
   }, []);
-  console.log("video: ", video);
 
   const onbeforeunload = event => {
     leaveSession();
@@ -379,7 +376,6 @@ const UserInterview = () => {
   useEffect(() => {
     console.log(subscribers);
     console.log(userInterviewData);
-
     setRoomPeopleNow(subscribers.length);
     if (subscribers.length) {
       setReady(true);
@@ -408,6 +404,14 @@ const UserInterview = () => {
       setHost(publisher.stream.connection.connectionId);
     }
   }, [publisher]);
+
+  useEffect(() => {
+    console.log("isInterviewer: ", isInterviewer);
+    console.log("videoRef.current: ", videoRef.current);
+    if (!isInterviewer && videoRef.current) {
+      setVideo(videoRef.current);
+    }
+  }, [videoRef, subscribers]);
 
   return (
     <>

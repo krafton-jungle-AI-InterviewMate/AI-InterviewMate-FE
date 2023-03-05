@@ -128,11 +128,11 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
                 {subscribers.map(
                   (sub, i) =>
                     host === sub.stream.connection.connectionId && (
-                      <UserVideoComponent key={i} streamManager={sub} setVideo={setVideo} />
+                      <UserVideoComponent key={i} streamManager={sub} videoRef={videoRef} />
                     ),
                 )}
                 {host === publisher.stream.connection.connectionId && (
-                  <UserVideoComponent streamManager={publisher} setVideo={setVideo} />
+                  <UserVideoComponent streamManager={publisher} videoRef={videoRef} />
                 )}
                 {host !== publisher.stream.connection.connectionId && <InterviewQuestionTab />}
               </div>
