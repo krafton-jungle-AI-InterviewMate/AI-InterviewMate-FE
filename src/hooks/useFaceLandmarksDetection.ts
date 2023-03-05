@@ -114,6 +114,7 @@ const useFaceLandmarksDetection = (params: UseVideoFaceMeshParams) => {
 
   return {
     isVideoReady,
+    setIsVideoReady,
     isDetectorLoading,
     faceMeshErrorMsg,
     setNewDetector,
