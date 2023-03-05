@@ -7,18 +7,23 @@ import { useDeleteQuestionBoxes } from "hooks/queries/questionBoxes";
 import { PagesPath } from "constants/pages";
 
 const StyledQuestions = styled.div`
-  width: 900px;
-  height: 48px;
+  width: 1200px;
+  height: 78px;
   box-sizing: border-box;
+  box-shadow: 0px 6px 24px 0px rgba(218, 130, 23, 0.1), 6px 0px 24px 0px rgba(0, 115, 255, 0.1);
   margin-bottom: 32px;
   border-radius: 5px 15px;
-  border: 1px solid var(--main-gray);
+  border: 2px solid var(--main-black);
   background-color: var(--main-white);
   color: var(--main-black);
   transition: all 0.2s;
   filter: drop-shadow(0px 6px 24px rgba(0, 0, 0, 0.03));
   &:hover {
-    border-color: var(--main-orange);
+    box-shadow: 0px 6px 24px 0px rgba(218, 130, 23, 0.357), 6px 0px 24px 0px rgba(0, 115, 255, 0.357);
+  }
+  & button {
+    font-weight: 500;
+    font-size: 1.6rem;
   }
   .contents {
     height: 100%;
@@ -40,16 +45,17 @@ const StyledLink = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 700px;
-  padding: 10px 0;
+  width: 980px;
+  padding: 30px 0;
   h2 {
-    font-size: 20px;
+    font-size: 2rem;
     font-weight: 500;
     margin: 0;
     color: var(--main-black);
   }
   span {
     color: var(--main-black);
+    font-size: 1.6rem;
   }
 `;
 
@@ -108,8 +114,8 @@ const Questions = ({ boxName, idx, questionNum }: QuestionsProps) => {
         <StyledClearBtn
           questionNum={questionNum}
           onClick={handleClickDelete}
-          width="100px"
-          height="32px"
+          width="140px"
+          height="52px"
           color="red"
           disabled={!questionNum}
         >
