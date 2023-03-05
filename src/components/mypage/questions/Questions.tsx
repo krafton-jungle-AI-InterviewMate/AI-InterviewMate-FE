@@ -77,7 +77,7 @@ interface QuestionsProps {
 }
 
 const Questions = ({ boxName, idx, questionNum }: QuestionsProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [ isOpen, setIsOpen ] = useState(false);
   const { mutate, isLoading } = useDeleteQuestionBoxes();
   const handleClickDelete = () => {
     setIsOpen(true);
