@@ -34,7 +34,7 @@ const UserInterview = () => {
   const setComment = useSetRecoilState(interviewCommentAtom);
   const setMotionSnapshot = useSetRecoilState(motionSnapshotAtom);
   const {
-    timeline: { eyes, attitude, questionModeStart },
+    timeline: { eyes, attitude },
   } = useRecoilValue(timelineRecordAtom);
 
   const navigate = useNavigate();
@@ -145,6 +145,7 @@ const UserInterview = () => {
       console.log(subscribers.length);
       if (event.data === "면접자") {
         setIsInterviewStart(false);
+        setIsDetectionOn(false);
         leaveSession();
         navigate("/lobby");
       } else if (
@@ -336,7 +337,7 @@ const UserInterview = () => {
       const data: PostRatingVieweePayloadData = {
         eyeTimelines: deduplicate(eyes),
         attitudeTimelines: deduplicate(attitude),
-        questionTimelines: questionModeStart,
+        questionTimelines: [],
         comments: [],
         scripts: [],
       };
@@ -406,8 +407,6 @@ const UserInterview = () => {
   }, [publisher]);
 
   useEffect(() => {
-    // console.log("isInterviewer: ", isInterviewer);
-    // console.log("videoRef.current: ", videoRef.current);
     if (!isInterviewer && videoRef.current) {
       setVideo(videoRef.current);
     }
