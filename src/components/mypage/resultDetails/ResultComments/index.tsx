@@ -1,21 +1,28 @@
 import { useState } from "react";
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 
 import styled from "@emotion/styled";
 import { commonLabelStyle } from "styles/resultDetails";
+import { RatingDetail } from "api/mypage/types";
+import { useEffect } from "react";
 
-const ResultComments = () => {
-  const [ currInterviewer, setCurrInterviewer ] = useState("면접관1");
+type ResultCommentsProps = {
+  resultDetail: RatingDetail;
+};
+
+const ResultComments = (props: ResultCommentsProps) => {
+  const { resultDetail } = props;
+  const [currInterviewer, setCurrInterviewer] = useState(0);
+  const [comment, setComment] = useState("");
 
   const handleChange = (event: SelectChangeEvent) => {
     setCurrInterviewer(event.target.value);
   };
+
+  useEffect(() => {
+    setComment(resultDetail.comments[currInterviewer].comment);
+    console.log(comment);
+  }, [currInterviewer]);
 
   return (
     <StyledCommentsWrap>
@@ -40,18 +47,19 @@ const ResultComments = () => {
             }}
             onChange={handleChange}
           >
-            <MenuItem value="면접관1">
-              면접관1
-            </MenuItem>
-            <MenuItem value="면접관2">
-              면접관2
-            </MenuItem>
+            {resultDetail.comments ? (
+              resultDetail.comments.map((_, index) => (
+                <MenuItem key={`comment${index}`} value={index}>
+                  면접관{index + 1}
+                </MenuItem>
+              ))
+            ) : (
+              <MenuItem value={0}>코멘트가 없습니다.</MenuItem>
+            )}
           </Select>
         </FormControl>
 
-        <p>
-          황석님은 자신있는 목소리가 장점이라고 생각합니다. CS 지식과 시선처리에 집중한다면 좋은 성과를 기대할 수 있을 것 입니다. 면접 준비 화이팅 하세요!!
-        </p>
+        <p>{comment}</p>
       </StyledCommentsBox>
     </StyledCommentsWrap>
   );
@@ -103,7 +111,7 @@ const StyledCommentsBox = styled.div`
       border-radius: 6px;
     }
     &::-webkit-scrollbar-thumb:hover {
-      background: rgba(0, 0, 0, .2);
+      background: rgba(0, 0, 0, 0.2);
     }
   }
 `;
