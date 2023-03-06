@@ -3,7 +3,7 @@ import { AxiosResponse } from "axios";
 type ResponseStatus = {
   statusCode: number;
   statusMsg: string;
-}
+};
 
 export type RoomTypes = "USER" | "AI";
 
@@ -24,7 +24,7 @@ export type GetRatingHistory = () => Promise<AxiosResponse<GetRatingHistoryRespo
 
 export type Timestamp = {
   type: "eye" | "attitude" | "question";
-  timestamp: string
+  timestamp: string;
 };
 
 export type ScriptWithQuestionTitle = {
@@ -40,13 +40,17 @@ export type RatingDetail = {
   createdAt: string;
   roomName: string;
   roomQuestionNum: number;
+  comments: Array<string>;
 };
 
 export type GetRatingDetailResponse = ResponseStatus & {
   data: RatingDetail;
 };
 
-export type GetRatingDetail = (roomIdx: number, type: RoomTypes) => Promise<AxiosResponse<GetRatingDetailResponse>>;
+export type GetRatingDetail = (
+  roomIdx: number,
+  type: RoomTypes,
+) => Promise<AxiosResponse<GetRatingDetailResponse>>;
 
 export type CommentsRequestDtos = {
   viewerIdx: number;
@@ -75,26 +79,32 @@ export type PostRatingVieweePayloadData = {
 export type PostRatingVieweePayload = {
   data: PostRatingVieweePayloadData;
   roomIdx: number;
-}
+};
 
 export type PostRatingVieweeResponse = {
   data: null;
   statusCode: number;
   statusMsg: string;
-}
+};
 
-export type PostRatingViewee = (payload: PostRatingVieweePayload) => Promise<AxiosResponse<PostRatingVieweeResponse>>;
+export type PostRatingViewee = (
+  payload: PostRatingVieweePayload,
+) => Promise<AxiosResponse<PostRatingVieweeResponse>>;
 
 export type PostResultMemoPayload = {
   roomIdx: number;
   memo: string;
 };
 
-export type PostResultMemo = (payload: PostResultMemoPayload) => Promise<AxiosResponse<ResponseStatus>>;
+export type PostResultMemo = (
+  payload: PostResultMemoPayload,
+) => Promise<AxiosResponse<ResponseStatus>>;
 
 export type PostResultCommentPayload = {
   roomIdx: number;
   comment: string;
 };
 
-export type PostResultComment = (payload: PostResultCommentPayload) => Promise<AxiosResponse<ResponseStatus>>;
+export type PostResultComment = (
+  payload: PostResultCommentPayload,
+) => Promise<AxiosResponse<ResponseStatus>>;
