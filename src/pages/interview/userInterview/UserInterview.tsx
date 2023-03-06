@@ -28,9 +28,9 @@ const UserInterview = () => {
   const userInterviewData = useRecoilValue(interviewDataAtom);
   const { nickname } = useRecoilValue(memberAtom);
   const setRoomPeopleNow = useSetRecoilState(roomPeopleNowAtom);
-  const [isInterviewStart, setIsInterviewStart] = useRecoilState(isInterviewStartAtom);
+  const [ isInterviewStart, setIsInterviewStart ] = useRecoilState(isInterviewStartAtom);
   const isInterviewer = useRecoilValue(isInterviewerAtom);
-  const [host, setHost] = useRecoilState(hostAtom);
+  const [ host, setHost ] = useRecoilState(hostAtom);
   const setComment = useSetRecoilState(interviewCommentAtom);
   const setMotionSnapshot = useSetRecoilState(motionSnapshotAtom);
   const {
@@ -39,14 +39,14 @@ const UserInterview = () => {
 
   const navigate = useNavigate();
 
-  const [OV, setOV] = useState<any>(null);
-  const [myUserName, setMyUserName] = useState<string | undefined>(nickname);
-  const [session, setSession] = useState<any>(undefined);
-  const [publisher, setPublisher] = useState<any>(undefined);
-  const [subscribers, setSubscribers] = useState<Array<any>>([]);
-  const [ready, setReady] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [video, setVideo] = useState<null | HTMLVideoElement>(null);
+  const [ OV, setOV ] = useState<any>(null);
+  const [ myUserName, setMyUserName ] = useState<string | undefined>(nickname);
+  const [ session, setSession ] = useState<any>(undefined);
+  const [ publisher, setPublisher ] = useState<any>(undefined);
+  const [ subscribers, setSubscribers ] = useState<Array<any>>([]);
+  const [ ready, setReady ] = useState(false);
+  const [ isOpen, setIsOpen ] = useState(false);
+  const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
 
   const videoRef = useRef<null | HTMLVideoElement>(null);
 
@@ -79,7 +79,7 @@ const UserInterview = () => {
     return () => {
       video.removeEventListener("loadedmetadata", getReadyState);
     };
-  }, [video]);
+  }, [ video ]);
 
   useEffect(() => {
     if (isVideoReady) {
@@ -87,7 +87,7 @@ const UserInterview = () => {
         await setNewDetector();
       })();
     }
-  }, [isVideoReady]);
+  }, [ isVideoReady ]);
 
   useEffect(() => {
     window.addEventListener("beforeunload", onbeforeunload);
@@ -120,7 +120,7 @@ const UserInterview = () => {
 
     session.on("streamCreated", event => {
       const newSubscriber = session.subscribe(event.stream, undefined);
-      setSubscribers(curr => [...curr, newSubscriber]);
+      setSubscribers(curr => [ ...curr, newSubscriber ]);
     });
 
     session.on("streamDestroyed", event => {
@@ -148,7 +148,8 @@ const UserInterview = () => {
         setIsDetectionOn(false);
         leaveSession();
         navigate("/lobby");
-      } else if (
+      }
+      else if (
         event.data === "면접관" &&
         subscribers.length === 0 &&
         host === publisher.stream.connection.connectionId
@@ -203,7 +204,7 @@ const UserInterview = () => {
       .catch(error => {
         console.log("There was an error connecting to the session:", error.code, error.message);
       });
-  }, [session]);
+  }, [ session ]);
 
   const leaveSession = () => {
     if (session) {
@@ -298,7 +299,8 @@ const UserInterview = () => {
           setIsDetectionOn(false);
           toast.clearWaitingQueue();
           setMotionSnapshot(newFace);
-        } else {
+        }
+        else {
           toast("화면에서 얼굴이 인식되지 않습니다", Styled.toastOptions);
         }
 
@@ -322,7 +324,8 @@ const UserInterview = () => {
             alert(error);
           },
         });
-      } catch (e) {
+      }
+      catch (e) {
         console.log(e);
       }
     }
@@ -366,7 +369,8 @@ const UserInterview = () => {
           alert(error);
         },
       });
-    } else {
+    }
+    else {
       setIsInterviewStart(false);
       leaveSession();
       console.log("면접을 정상적으로 종료합니다.");
@@ -380,7 +384,8 @@ const UserInterview = () => {
     setRoomPeopleNow(subscribers.length);
     if (subscribers.length) {
       setReady(true);
-    } else {
+    }
+    else {
       setReady(false);
     }
     if (!isInterviewer && session && publisher) {
@@ -397,20 +402,20 @@ const UserInterview = () => {
           console.error(error);
         });
     }
-  }, [subscribers]);
+  }, [ subscribers ]);
 
   useEffect(() => {
     if (publisher && !isInterviewer) {
       console.log(publisher);
       setHost(publisher.stream.connection.connectionId);
     }
-  }, [publisher]);
+  }, [ publisher ]);
 
   useEffect(() => {
     if (!isInterviewer && videoRef.current) {
       setVideo(videoRef.current);
     }
-  }, [videoRef, subscribers]);
+  }, [ videoRef, subscribers ]);
 
   return (
     <>

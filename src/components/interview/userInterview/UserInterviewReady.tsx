@@ -37,13 +37,13 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
   const isInterviewer = useRecoilValue(isInterviewerAtom);
   const host = useRecoilValue(hostAtom);
 
-  const [isHost, setIsHost] = useState(false);
+  const [ isHost, setIsHost ] = useState(false);
 
   useEffect(() => {
     if (publisher) {
       setIsHost(host === publisher.stream.connection.connectionId);
     }
-  }, [host]);
+  }, [ host ]);
 
   return (
     <StyledUserInterview isHost={isHost}>

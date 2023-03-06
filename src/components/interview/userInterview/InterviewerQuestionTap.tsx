@@ -8,9 +8,9 @@ type Tab = "question" | "comment";
 
 const InterviewQuestionTab = () => {
   const userInterviewData = useRecoilValue(interviewDataAtom);
-  const [comment, setComment] = useRecoilState(interviewCommentAtom);
+  const [ comment, setComment ] = useRecoilState(interviewCommentAtom);
 
-  const [tabName, setTabName] = useState<Tab>("question");
+  const [ tabName, setTabName ] = useState<Tab>("question");
 
   const handleClickTab = (event: React.MouseEvent<HTMLButtonElement>) => {
     setTabName(event.currentTarget.name as Tab);

@@ -15,7 +15,7 @@ const OpenViduVideoComponent = (props: OpenViduVideoComponentProps) => {
   const isInterviewStart = useRecoilValue(isInterviewStartAtom);
   const host = useRecoilValue(hostAtom);
 
-  const [isHost, setIsHost] = useState(false);
+  const [ isHost, setIsHost ] = useState(false);
   const interviewerVideoRef = useRef<null | HTMLVideoElement>(null);
 
   console.log("외부의 ref", videoRef);
@@ -27,13 +27,14 @@ const OpenViduVideoComponent = (props: OpenViduVideoComponentProps) => {
         streamManager.addVideoElement(videoRef.current);
         setIsHost(host === streamManager.stream.connection.connectionId);
       }
-    } else {
+    }
+    else {
       if (streamManager && interviewerVideoRef.current) {
         streamManager.addVideoElement(interviewerVideoRef.current);
         setIsHost(host === streamManager.stream.connection.connectionId);
       }
     }
-  }, [streamManager, videoRef]);
+  }, [ streamManager, videoRef ]);
 
   return (
     <StyledOpenViduVideoComponent isInterviewStart={isInterviewStart} isHost={isHost}>
@@ -56,13 +57,13 @@ const StyledOpenViduVideoComponent = styled.div<StyledOpenViduVideoComponentProp
           }
         `
       : isHost
-      ? css`
+        ? css`
           height: 750px;
           video {
             width: 1000px;
           }
         `
-      : css`
+        : css`
           height: ${isInterviewStart ? "180px" : "250px"};
           video {
             height: ${isInterviewStart ? "180px" : "250px"};
