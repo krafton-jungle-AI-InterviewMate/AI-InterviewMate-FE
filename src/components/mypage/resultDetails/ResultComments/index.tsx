@@ -21,7 +21,6 @@ const ResultComments = (props: ResultCommentsProps) => {
 
   useEffect(() => {
     setComment(resultDetail.comments[currInterviewer].comment);
-    console.log(comment);
   }, [currInterviewer]);
 
   return (
