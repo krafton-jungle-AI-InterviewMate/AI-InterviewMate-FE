@@ -12,15 +12,15 @@ type ResultCommentsProps = {
 
 const ResultComments = (props: ResultCommentsProps) => {
   const { resultDetail } = props;
-  const [currInterviewer, setCurrInterviewer] = useState(0);
+  const [currInterviewer, setCurrInterviewer] = useState("");
   const [comment, setComment] = useState("");
 
   const handleChange = (event: SelectChangeEvent) => {
-    setCurrInterviewer(event.target.value);
+    setCurrInterviewer(event.target.value as string);
   };
 
   useEffect(() => {
-    setComment(resultDetail.comments[currInterviewer].comment);
+    setComment(resultDetail.comments[currInterviewer + 0].comment);
   }, [currInterviewer]);
 
   return (
