@@ -1,9 +1,10 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   feedbackAtom,
   hostAtom,
   interviewDataAtom,
+  isInterviewerAtom,
   timelineRecordAtom,
 } from "store/interview/atom";
 
@@ -27,8 +28,6 @@ interface UserInterviewStartProps {
   publisher: any;
   subscribers: Array<any>;
   isOpen: boolean;
-  video: HTMLVideoElement | null;
-  setVideo: React.Dispatch<React.SetStateAction<HTMLVideoElement | null>>;
   handleClickModalClose: () => void;
   handleClickModalRoomLeave: () => void;
   handleClickInterviewOut: () => void;
@@ -41,8 +40,6 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
     publisher,
     subscribers,
     isOpen,
-    video,
-    setVideo,
     handleClickModalClose,
     handleClickModalRoomLeave,
     handleClickInterviewOut,
@@ -52,10 +49,14 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
   const userInterviewData = useRecoilValue(interviewDataAtom);
   const host = useRecoilValue(hostAtom);
   const feedbackMode = useRecoilValue(feedbackAtom);
+  const isInterviewer = useRecoilValue(isInterviewerAtom);
   const [ timelineRecord, setTimelineRecord ] = useRecoilState(timelineRecordAtom);
+
+  const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
 
   const isRealtimeMode = useMemo(() => feedbackMode === "ON", [ feedbackMode ]);
   const { face, setIsDetectionOn } = useFaceLandmarksDetection({ video });
+
   const { horizontalRatio } = useCheckIrisPosition({ face });
   const { isBadMotion } = useCheckHeadMotion({ face });
   const { showFeedback: showIrisFeedback } = useIrisAssessment({
@@ -68,7 +69,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
   });
 
   useEffect(() => {
-    if (video) {
+    if (video && !isInterviewer) {
       setTimelineRecord(curr => ({
         ...curr,
         startTime: Date.now(),
@@ -77,7 +78,10 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
     }
 
     const timerId = window.setTimeout(() => {
-      setIsDetectionOn(false);
+      if (!isInterviewer) {
+        setIsDetectionOn(false);
+      }
+
       InterviewEnd();
     }, userInterviewData?.roomTime * 1000 * 60);
 
@@ -86,7 +90,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
     };
   }, []);
 
-  console.log(timelineRecord);
+  console.log("horizontalRatio: ", horizontalRatio);
 
   return (
     <StyledUserInterviewStart>

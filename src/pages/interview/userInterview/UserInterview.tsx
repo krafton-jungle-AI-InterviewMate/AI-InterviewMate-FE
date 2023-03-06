@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { OpenVidu } from "openvidu-browser";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
@@ -8,7 +8,6 @@ import {
   interviewDataAtom,
   isInterviewerAtom,
   isInterviewStartAtom,
-  motionSnapshotAtom,
   roomPeopleNowAtom,
   timelineRecordAtom,
 } from "store/interview/atom";
@@ -16,11 +15,7 @@ import { memberAtom } from "store/auth/atom";
 
 import UserInterviewReady from "components/interview/userInterview/UserInterviewReady";
 import UserInterviewStart from "components/interview/userInterview/UserInterviewStart";
-import { toast } from "react-toastify";
-import * as Styled from "pages/interview/InterviewReady/style";
 
-import useInitializeInterviewState from "hooks/useInitializeInterviewState";
-import useFaceLandmarksDetection from "hooks/useFaceLandmarksDetection";
 import { useDeleteInterviewRooms, usePutInterviewRooms } from "hooks/queries/interview";
 import { usePostRatingViewee } from "hooks/queries/mypage";
 import { PostRatingVieweePayloadData } from "api/mypage/types";
@@ -34,7 +29,6 @@ const UserInterview = () => {
   const isInterviewer = useRecoilValue(isInterviewerAtom);
   const [ host, setHost ] = useRecoilState(hostAtom);
   const setComment = useSetRecoilState(interviewCommentAtom);
-  const setMotionSnapshot = useSetRecoilState(motionSnapshotAtom);
   const {
     timeline: { eyes, attitude },
   } = useRecoilValue(timelineRecordAtom);
@@ -48,28 +42,10 @@ const UserInterview = () => {
   const [ subscribers, setSubscribers ] = useState<Array<any>>([]);
   const [ ready, setReady ] = useState(false);
   const [ isOpen, setIsOpen ] = useState(false);
-  const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
-
-  const videoRef = useRef<null | HTMLVideoElement>(null);
 
   const { mutate: putInterviewRoomsMutate } = usePutInterviewRooms();
   const { mutate: deleteInterviewRoomsMutate } = useDeleteInterviewRooms();
   const { mutate: postRatingVieweeMutate } = usePostRatingViewee();
-
-  const { initializeInterviewState } = useInitializeInterviewState();
-  const { isVideoReady, setNewDetector, setIsDetectionOn, updateFace, detector } =
-    useFaceLandmarksDetection({
-      video,
-      isOneOff: true,
-    });
-
-  useEffect(() => {
-    if (isVideoReady) {
-      (async () => {
-        await setNewDetector();
-      })();
-    }
-  }, [ isVideoReady ]);
 
   useEffect(() => {
     window.addEventListener("beforeunload", onbeforeunload);
@@ -127,7 +103,6 @@ const UserInterview = () => {
       console.log(subscribers.length);
       if (event.data === "면접자") {
         setIsInterviewStart(false);
-        setIsDetectionOn(false);
         leaveSession();
         navigate("/lobby");
       }
@@ -267,24 +242,6 @@ const UserInterview = () => {
     // 면접 시작
     if (ready) {
       try {
-        if (!detector) {
-          throw new Error("detector is not ready");
-        }
-
-        initializeInterviewState();
-        setIsDetectionOn(true);
-
-        const newFace = await updateFace(detector);
-
-        if (newFace) {
-          setIsDetectionOn(false);
-          toast.clearWaitingQueue();
-          setMotionSnapshot(newFace);
-        }
-        else {
-          toast("화면에서 얼굴이 인식되지 않습니다", Styled.toastOptions);
-        }
-
         session
           .signal({
             data: true,
@@ -391,12 +348,6 @@ const UserInterview = () => {
     }
   }, [ publisher ]);
 
-  useEffect(() => {
-    if (!isInterviewer && videoRef.current) {
-      setVideo(videoRef.current);
-    }
-  }, [ videoRef, subscribers ]);
-
   return (
     <>
       {isInterviewStart ? (
@@ -405,12 +356,10 @@ const UserInterview = () => {
           publisher={publisher}
           subscribers={subscribers}
           isOpen={isOpen}
-          video={video}
           handleClickModalClose={handleClickModalClose}
           handleClickModalRoomLeave={handleClickModalRoomLeave}
           handleClickInterviewOut={handleClickInterviewOut}
           InterviewEnd={InterviewEnd}
-          setVideo={setVideo}
         />
       ) : (
         <UserInterviewReady
@@ -423,7 +372,6 @@ const UserInterview = () => {
           handleClickStart={handleClickStart}
           handleClickModalClose={handleClickModalClose}
           handleClickReadyOut={handleClickReadyOut}
-          setVideo={setVideo}
         />
       )}
     </>

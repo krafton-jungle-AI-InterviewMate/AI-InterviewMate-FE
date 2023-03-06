@@ -1,11 +1,20 @@
 import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { hostAtom, isInterviewerAtom } from "store/interview/atom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  hostAtom,
+  isInterviewerAtom,
+  motionSnapshotAtom,
+} from "store/interview/atom";
+
+import useInitializeInterviewState from "hooks/useInitializeInterviewState";
+import useFaceLandmarksDetection from "hooks/useFaceLandmarksDetection";
 
 import { Dialog, DialogActions, DialogTitle } from "@mui/material";
 import UserVideoComponent from "./UserVideoComponent";
 import Loading from "components/common/Loading";
 import { StyledBtn } from "styles/StyledBtn";
+import { toast } from "react-toastify";
+import * as Styled from "pages/interview/InterviewReady/style";
 
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
@@ -16,10 +25,9 @@ interface UserInterviewReadyProps {
   subscribers: Array<any>;
   ready: boolean;
   isOpen: boolean;
-  setVideo: React.Dispatch<React.SetStateAction<HTMLVideoElement | null>>;
   handleClickReadyOut: () => void;
   handleClickModalRoomLeave: () => void;
-  handleClickStart: () => void;
+  handleClickStart: () => Promise<void>;
   handleClickModalClose: () => void;
 }
 
@@ -30,7 +38,6 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
     subscribers,
     ready,
     isOpen,
-    setVideo,
     handleClickReadyOut,
     handleClickModalClose,
     handleClickModalRoomLeave,
@@ -38,14 +45,56 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
   } = props;
   const isInterviewer = useRecoilValue(isInterviewerAtom);
   const host = useRecoilValue(hostAtom);
+  const setMotionSnapshot = useSetRecoilState(motionSnapshotAtom);
 
   const [ isHost, setIsHost ] = useState(false);
+  const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
+
+  const { initializeInterviewState } = useInitializeInterviewState();
+  const { isVideoReady, setNewDetector, setIsDetectionOn, updateFace, detector } =
+    useFaceLandmarksDetection({
+      video,
+      isOneOff: true,
+    });
 
   useEffect(() => {
     if (publisher) {
       setIsHost(host === publisher.stream.connection.connectionId);
     }
   }, [ host ]);
+
+  useEffect(() => {
+    if (isVideoReady && !isInterviewer) {
+      (async () => {
+        await setNewDetector();
+      })();
+    }
+  }, [ isVideoReady, isInterviewer ]);
+
+  const handleStart = async () => {
+    if (!detector) {
+      throw new Error("detector is not ready");
+    }
+
+    initializeInterviewState();
+
+    if (!isInterviewer) {
+      setIsDetectionOn(true);
+
+      const newFace = await updateFace(detector);
+
+      if (newFace) {
+        setIsDetectionOn(false);
+        toast.clearWaitingQueue();
+        setMotionSnapshot(newFace);
+      }
+      else {
+        toast("화면에서 얼굴이 인식되지 않습니다", Styled.toastOptions);
+      }
+    }
+
+    await handleClickStart();
+  };
 
   return (
     <StyledUserInterview isHost={isHost}>
@@ -57,7 +106,7 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
             </StyledBtn>
             {!isInterviewer && (
               <NewStyledBtn
-                onClick={handleClickStart}
+                onClick={handleStart}
                 width="200px"
                 height="48px"
                 color="orange"
