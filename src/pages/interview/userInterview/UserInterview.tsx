@@ -93,11 +93,7 @@ const UserInterview = () => {
         setIsInterviewStart(false);
         leaveSession();
         navigate("/lobby");
-      } else if (
-        event.data === "면접관" &&
-        subscribers.length === 0 &&
-        host === publisher.stream.connection.connectionId
-      ) {
+      } else if (event.data === "면접관" && subscribers.length === 0 && !isInterviewer) {
         setIsInterviewStart(false);
         leaveSession();
         navigate("/lobby");
