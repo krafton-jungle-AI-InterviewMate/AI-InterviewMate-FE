@@ -9,43 +9,33 @@ import {
   isInterviewerAtom,
   isInterviewStartAtom,
   roomPeopleNowAtom,
-  timelineRecordAtom,
 } from "store/interview/atom";
 import { memberAtom } from "store/auth/atom";
-
 import UserInterviewReady from "components/interview/userInterview/UserInterviewReady";
 import UserInterviewStart from "components/interview/userInterview/UserInterviewStart";
-
 import { useDeleteInterviewRooms, usePutInterviewRooms } from "hooks/queries/interview";
-import { usePostRatingViewee } from "hooks/queries/mypage";
-import { PostRatingVieweePayloadData } from "api/mypage/types";
-import { deduplicate } from "lib/interview";
 
 const UserInterview = () => {
   const userInterviewData = useRecoilValue(interviewDataAtom);
   const { nickname } = useRecoilValue(memberAtom);
   const setRoomPeopleNow = useSetRecoilState(roomPeopleNowAtom);
-  const [ isInterviewStart, setIsInterviewStart ] = useRecoilState(isInterviewStartAtom);
+  const [isInterviewStart, setIsInterviewStart] = useRecoilState(isInterviewStartAtom);
   const isInterviewer = useRecoilValue(isInterviewerAtom);
-  const [ host, setHost ] = useRecoilState(hostAtom);
+  const [host, setHost] = useRecoilState(hostAtom);
   const setComment = useSetRecoilState(interviewCommentAtom);
-  const {
-    timeline: { eyes, attitude },
-  } = useRecoilValue(timelineRecordAtom);
 
   const navigate = useNavigate();
 
-  const [ OV, setOV ] = useState<any>(null);
-  const [ myUserName, setMyUserName ] = useState<string | undefined>(nickname);
-  const [ session, setSession ] = useState<any>(undefined);
-  const [ publisher, setPublisher ] = useState<any>(undefined);
-  const [ subscribers, setSubscribers ] = useState<Array<any>>([]);
-  const [ ready, setReady ] = useState(false);
-  const [ isOpen, setIsOpen ] = useState(false);
+  const [OV, setOV] = useState<any>(null);
+  const [myUserName, setMyUserName] = useState<string | undefined>(nickname);
+  const [session, setSession] = useState<any>(undefined);
+  const [publisher, setPublisher] = useState<any>(undefined);
+  const [subscribers, setSubscribers] = useState<Array<any>>([]);
+  const [ready, setReady] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const { mutate: putInterviewRoomsMutate } = usePutInterviewRooms();
   const { mutate: deleteInterviewRoomsMutate } = useDeleteInterviewRooms();
-  const { mutate: postRatingVieweeMutate } = usePostRatingViewee();
 
   useEffect(() => {
     window.addEventListener("beforeunload", onbeforeunload);
@@ -78,7 +68,7 @@ const UserInterview = () => {
 
     session.on("streamCreated", event => {
       const newSubscriber = session.subscribe(event.stream, undefined);
-      setSubscribers(curr => [ ...curr, newSubscriber ]);
+      setSubscribers(curr => [...curr, newSubscriber]);
     });
 
     session.on("streamDestroyed", event => {
@@ -99,14 +89,11 @@ const UserInterview = () => {
 
     session.on("signal:interviewOut", event => {
       console.log(event.type);
-      console.log(event.data);
-      console.log(subscribers.length);
       if (event.data === "면접자") {
         setIsInterviewStart(false);
         leaveSession();
         navigate("/lobby");
-      }
-      else if (
+      } else if (
         event.data === "면접관" &&
         subscribers.length === 0 &&
         host === publisher.stream.connection.connectionId
@@ -161,7 +148,7 @@ const UserInterview = () => {
       .catch(error => {
         console.log("There was an error connecting to the session:", error.code, error.message);
       });
-  }, [ session ]);
+  }, [session]);
 
   const leaveSession = () => {
     if (session) {
@@ -177,6 +164,7 @@ const UserInterview = () => {
 
   useEffect(() => {
     setIsInterviewStart(false);
+    setComment("");
     joinSession();
   }, []);
 
@@ -228,7 +216,6 @@ const UserInterview = () => {
     deleteInterviewRoomsMutate(userInterviewData!.roomIdx, {
       onSuccess: () => {
         console.log("면접방을 나갔습니다.");
-        setComment("");
         leaveSession();
         navigate("/lobby");
       },
@@ -262,8 +249,7 @@ const UserInterview = () => {
             alert(error);
           },
         });
-      }
-      catch (e) {
+      } catch (e) {
         console.log(e);
       }
     }
@@ -274,40 +260,20 @@ const UserInterview = () => {
     if (!userInterviewData) {
       return;
     }
+    const { roomIdx } = userInterviewData;
     if (host === publisher.stream.connection.connectionId) {
-      const data: PostRatingVieweePayloadData = {
-        eyeTimelines: deduplicate(eyes),
-        attitudeTimelines: deduplicate(attitude),
-        questionTimelines: [],
-        comments: [],
-        scripts: [],
-      };
-
-      const { roomIdx } = userInterviewData;
-      postRatingVieweeMutate(
-        {
-          roomIdx,
-          data,
-        },
-        {
-          onError(error) {
-            alert(error);
-          },
-        },
-      );
-      putInterviewRoomsMutate(userInterviewData.roomIdx, {
+      putInterviewRoomsMutate(roomIdx, {
         onSuccess: () => {
           setIsInterviewStart(false);
-          leaveSession();
           console.log("면접을 정상적으로 종료합니다.");
+          leaveSession();
           navigate("/interview/end");
         },
         onError(error) {
           alert(error);
         },
       });
-    }
-    else {
+    } else {
       setIsInterviewStart(false);
       leaveSession();
       console.log("면접을 정상적으로 종료합니다.");
@@ -316,13 +282,10 @@ const UserInterview = () => {
   };
 
   useEffect(() => {
-    console.log(subscribers);
-    console.log(userInterviewData);
     setRoomPeopleNow(subscribers.length);
     if (subscribers.length) {
       setReady(true);
-    }
-    else {
+    } else {
       setReady(false);
     }
     if (!isInterviewer && session && publisher) {
@@ -332,21 +295,17 @@ const UserInterview = () => {
           to: subscribers,
           type: "setHost",
         })
-        .then(() => {
-          console.log(host);
-        })
         .catch(error => {
           console.error(error);
         });
     }
-  }, [ subscribers ]);
+  }, [subscribers]);
 
   useEffect(() => {
     if (publisher && !isInterviewer) {
-      console.log(publisher);
       setHost(publisher.stream.connection.connectionId);
     }
-  }, [ publisher ]);
+  }, [publisher]);
 
   return (
     <>
