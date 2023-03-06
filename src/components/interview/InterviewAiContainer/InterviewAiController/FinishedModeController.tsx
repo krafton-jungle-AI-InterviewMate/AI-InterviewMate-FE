@@ -162,19 +162,19 @@ const StyledComment = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  font-size: 20px;
+  font-size: 2rem;
   font-weight: 500;
 `;
 
 const StyledSubmitButton = styled.button`
-  border-radius: 5px;
-  padding: 10px;
-  font-size: 16px;
+  border-radius: 10px;
+  padding: 16px;
+  font-size: 1.4rem;
   font-weight: 500;
   color: var(--main-white);
   margin-left: 50px;
   transition: all 200ms;
-  background-color: var(--main-orange);
+  background-color: var(--main-black);
 
   &:hover {
     background-color: var(--light-orange);

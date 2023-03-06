@@ -23,10 +23,10 @@ const StyledInterviewComment = styled.div`
   height: 88px;
   margin: 0 auto;
   background-color: var(--main-white);
-  border: 1px solid var(--main-gray);
+  border: 2px solid var(--main-black);
   border-radius: var(--button-border-radius);
-  box-shadow: var(--box-shadow);
-  color: var(--font-gray);
+  box-shadow: 0px 6px 24px 0px rgba(255, 132, 0, 0.357), 6px 0px 24px 0px rgba(0, 255, 149, 0.357);
+  color: var(--main-black);
   word-break: keep-all;
   line-height: 1.2;
   padding: 0 10px;

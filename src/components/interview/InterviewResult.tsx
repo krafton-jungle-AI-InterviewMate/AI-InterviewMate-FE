@@ -7,26 +7,26 @@ interface StyledResultProps {
 }
 
 const StyledResult = styled.div<StyledResultProps>`
-  width: 834px;
-  height: 130px;
+  width: 1000px;
+  height: 230px;
   display: flex;
   justify-content: space-between;
   border-radius: 5px 15px;
-  border: 1px solid var(--main-gray);
+  border: 2px solid var(--main-black);
   padding: 24px 32px;
   margin-bottom: 50px;
   box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.04);
   .nameDate {
     text-align: left;
     h2 {
-      font-size: 24px;
+      font-size: 2rem;
       font-weight: 500;
       color: var(--main-black);
       margin: 0 0 14px;
     }
     p {
-      font-size: 14px;
-      color: var(--main-black);
+      font-size: 1.6rem;
+      color: var(--font-gray);
       margin: 0;
     }
   }
@@ -35,16 +35,17 @@ const StyledResult = styled.div<StyledResultProps>`
     flex-direction: column;
     justify-content: space-between;
     .interviewer {
-      width: 100px;
-      height: 24px;
-      font-size: 12px;
+      width: 200px;
+      height: 60px;
+      line-height: 60px;
+      font-size: 1.6rem;
       color: var(--main-white);
       background-color: ${props =>
-    props.roomType === "AI" ? "var(--push-gray)" : "var(--main-black)"};
-      border-radius: 5px;
+    props.roomType === "AI" ? "var(--main-blue)" : "var(--main-black)"};
+      border-radius: 10px;
     }
     span {
-      font-size: 14px;
+      font-size: 1.6rem;
       color: var(--font-gray);
     }
   }

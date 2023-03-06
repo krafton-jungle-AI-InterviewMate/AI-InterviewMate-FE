@@ -23,12 +23,14 @@ const StyledRoom = styled.div<IRoomProps>`
     width: 488px;
     height: 165px;
     border-radius: 16px;
-    border: 1px solid var(--main-black);
+    border: 2px solid var(--main-black);
+    box-shadow: 0px 6px 10px 0px rgba(255, 132, 0, 0.2), 6px 0px 10px 0px rgba(0, 162, 255, 0.03);
     background-color: var(--main-white);
     padding: 28px 42px;
-    filter: drop-shadow(0px 6px 24px rgba(0, 0, 0, 0.03));
+    cursor: pointer;
+    transition: box-shadow 300ms;
     &:hover {
-      cursor: pointer;
+      box-shadow: 0px 6px 24px 0px rgba(218, 130, 23, 0.357), 6px 0px 24px 0px rgba(0, 115, 255, 0.357);
     }
     .roomHeader {
       display: flex;
@@ -38,19 +40,20 @@ const StyledRoom = styled.div<IRoomProps>`
         text-align: left;
         p {
           margin: 0;
-          font-size: 24px;
+          margin-bottom: 14px;
+          font-size: 2rem;
           font-weight: 500;
         }
         span {
-          font-size: 16px;
+          font-size: 1.2rem;
         }
       }
       .interviewer {
         width: 100px;
         height: 24px;
-        font-size: 16px;
+        font-size: 1.2rem;
         background-color: ${props =>
-          props.roomType === "AI" ? "var(--push-gray)" : "var(--main-black)"};
+    props.roomType === "AI" ? "var(--push-gray)" : "var(--main-black)"};
         border-radius: 5px;
         color: var(--main-white);
       }
@@ -61,19 +64,19 @@ const StyledRoom = styled.div<IRoomProps>`
       justify-content: space-between;
       align-items: center;
       color: var(--font-gray);
-      font-size: 20px;
+      font-size: 1.6rem;
       p {
         margin: 0;
       }
       .roomStatus {
         color: ${props =>
-          props.roomStatus === "CREATE" ? "var(--main-orange)" : "var(--main-black)"};
+    props.roomStatus === "CREATE" ? "var(--main-orange)" : "var(--main-black)"};
       }
       .warningComment {
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 16px;
+        font-size: 1rem;
         line-height: 1.5;
         p {
           margin-left: 6px;
@@ -83,7 +86,7 @@ const StyledRoom = styled.div<IRoomProps>`
         display: flex;
         align-items: flex-end;
         span {
-          font-size: 16px;
+          font-size: 1.6rem;
           margin-right: 12px;
         }
       }

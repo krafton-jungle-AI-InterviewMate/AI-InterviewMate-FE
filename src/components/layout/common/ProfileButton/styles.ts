@@ -1,4 +1,5 @@
 import { SxProps } from "@mui/material";
+import styled from "@emotion/styled";
 
 export const popoverStyleOverride: SxProps = {
   "& .MuiPaper-root": {
@@ -12,7 +13,7 @@ export const popoverStyleOverride: SxProps = {
     justifyContent: "space-evenly",
     alignContent: "center",
     textAlign: "center",
-    fontSize: "14px",
+    fontSize: "1.2rem",
   },
   "& button.logout": {
     background: "none",

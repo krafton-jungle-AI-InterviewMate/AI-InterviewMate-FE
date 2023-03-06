@@ -8,7 +8,7 @@ export const Wrapper = styled.section`
 `;
 
 export const ConfirmText = styled.p`
-  font-size: 16px;
+  font-size: 1.4rem;
   text-align: center;
 `;
 
@@ -93,7 +93,6 @@ export const ButtonBox = styled.div`
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: center;
-  width: 430px;
 `;
 
 export const CancelButton = styled.button`
@@ -101,6 +100,12 @@ export const CancelButton = styled.button`
   background-color: var(--main-white);
   border: 1px solid var(--main-gray);
   box-shadow: var(--box-shadow);
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.4rem;
+  font-weight: 500;
 
   &:hover {
     background-color: var(--light-alert);
@@ -120,6 +125,8 @@ export const GoButton = styled.button`
   background-color: var(--main-orange);
   color: var(--main-white);
   margin-left: 28px;
+  font-size: 1.4rem;
+  font-weight: 500;
 
   &:hover {
     background-color: var(--light-orange);
@@ -178,10 +185,16 @@ export const toastOptions: ToastOptions = {
 export const SelectButton = styled.button`
   ${commonButtonStyle}
   position: absolute;
-  top: -62px;
+  top: -82px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
   background-color: var(--main-white);
   border: 1px solid var(--main-gray);
   box-shadow: var(--box-shadow);
+  font-size: 1.4rem;
+  font-weight: 500;
 
   &:hover {
     background-color: var(--main-blue);
@@ -197,7 +210,7 @@ export const MiniProfile = styled.span`
   bottom: -40px;
   width: 272px;
   word-break: keep-all;
-  font-size: 12px;
+  font-size: 1.4rem;
   line-height: 1.2;
   color: var(--font-gray);
 `;

@@ -12,12 +12,12 @@ export const FormWrap = styled.div`
   display: flex;
   flex-flow: column nowrap;
   align-items: flex-start;
-  margin: 0 auto 224px;
+  margin: 0 auto 244px;
 `;
 
 export const H2 = styled.h2`
   font-weight: 500;
-  font-size: 24px;
+  font-size: 2rem;
   margin: 0;
   `;
 
@@ -34,7 +34,7 @@ export const InputWrap = styled.div`
     position: absolute;
     right: -255px;
     width: 240px;
-    font-size: 12px;
+    font-size: 1.2rem;
     line-height: 1.2;
     color: var(--light-alert);
   }
@@ -42,21 +42,23 @@ export const InputWrap = styled.div`
 
 export const Label = styled.label`
   text-align: left;
-  font-size: 16px;
+  font-size: 1.6rem;
   color: var(--main-black);
+  width: 100px;
 `;
 
 export const Input = styled.input`
   width: 480px;
-  height: 30px;
+  height: 60px;
   border-radius: 10px;
   border: 1px solid var(--main-black);
   padding-left: 10px;
+  font-size: 1.6rem;
 `;
 
 export const KeywordButtonWrap = styled.div`
   position: absolute;
-  right: -176px;
+  right: -206px;
 
   & em {
     position: absolute;
@@ -70,19 +72,21 @@ export const KeywordButtonWrap = styled.div`
 
 export const KeywordButton = styled.button`
   ${commonFlexStyle};
-  width: 160px;
-  height: 32px;
+  width: 180px;
+  height: 52px;
   color: var(--main-white);
   background-color: var(--main-black);
   border-radius: var(--button-border-radius);
+  font-size: 1.4rem;
 `;
 
 export const Small = styled.small`
   position: absolute;
-  bottom: -26px;
-  left: 65px;
-  font-size: 12px;
+  bottom: -66px;
+  left: 100px;
+  font-size: 1.2rem;
   color: var(--font-gray);
+  word-break: keep-all;
 `;
 
 export const KeywordWrap = styled.div`
@@ -90,19 +94,19 @@ export const KeywordWrap = styled.div`
   ${commonFlexStyle};
   flex-wrap: wrap;
   justify-content: flex-start;
-  top: 260px;
-  left: 132px;
+  top: 360px;
+  left: 162px;
   margin-top: 26px;
 `;
 
 export const Keyword = styled.div`
   ${commonFlexStyle};
-  height: 28;
+  height: 32px;
   background-color: var(--main-white);
   border: 1px solid var(--main-gray);
   border-radius: 3px;
   box-shadow: var(--box-shadow);
-  font-size: 14px;
+  font-size: 1.2rem;
   color: var(--font-gray);
   margin-right: 24px;
   margin-bottom: 10px;
@@ -126,6 +130,8 @@ export const commonButtonStyle = css`
   width: 300px;
   height: 54px;
   border-radius: var(--button-border-radius);
+  font-size: 1.4rem;
+  font-weight: 500;
 `;
 
 export const ConfirmButton = styled.button`

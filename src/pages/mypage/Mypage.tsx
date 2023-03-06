@@ -12,7 +12,7 @@ import Popup from "components/common/Popup";
 import styled from "@emotion/styled";
 
 const StyledMypage = styled.div`
-  width: 1000px;
+  width: 1200px;
   margin-top: 150px;
   display: flex;
   flex-wrap: wrap;
@@ -23,31 +23,29 @@ const StyledMypage = styled.div`
     margin-bottom: 100px;
     text-align: left;
     h2 {
-      font-size: 20px;
+      font-size: 2rem;
       font-weight: 500;
       margin: 0;
     }
     hr {
-      width: 250px;
-      height: 2px;
-      background-color: var(--main-black);
-      margin: 2px 0 15px;
+      width: 450px;
+      height: 4px;
+      background: rgb(20,110,180);
+      background: linear-gradient(90deg, rgba(20,110,180,1) 0%, rgba(119,119,119,0.4) 100%);
+      margin: 2px 0 35px;
       border: none;
     }
     a,
     button.logout,
     button.profile {
       display: block;
-      margin-bottom: 10px;
-      font-size: 16px;
-      font-weight: 500;
+      margin-bottom: 20px;
+      font-size: 1.6rem;
+      font-weight: 400;
       color: var(--font-gray);
       &:hover {
         color: var(--main-blue);
       }
-    }
-    a:first-of-type {
-      margin-bottom: 10px;
     }
     button.logout,
     button.profile {
@@ -55,6 +53,7 @@ const StyledMypage = styled.div`
       padding: 0;
       outline: none;
       border: none;
+      margin-bottom: 10px;
     }
   }
 `;

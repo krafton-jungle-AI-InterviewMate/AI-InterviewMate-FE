@@ -28,7 +28,7 @@ const modalStyles: ModalProps["styles"] = {
   modal: {
     position: "relative",
     width: "900px",
-    height: "420px",
+    height: "520px",
     padding: "69px 67px",
     boxShadow: "var(--box-shadow)",
     borderRadius: "15px",

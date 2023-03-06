@@ -4,6 +4,7 @@ import {
   useQuestionDetails,
   useDeleteQuestion,
   usePutQuestionBoxName,
+  useGetQuestionBoxes,
 } from "hooks/queries/questionBoxes";
 import { Question } from "api/questionBoxes/type";
 
@@ -32,7 +33,11 @@ const QuestionDetails = () => {
     Number(searchParams.get("box")),
   );
   const {
+    refetch: refetchList,
+  } = useGetQuestionBoxes();
+  const {
     mutate: deleteQuestion,
+    isLoading: isDeleteLoading,
     isSuccess: isDeleteSuccess,
   } = useDeleteQuestion();
   const {
@@ -47,12 +52,6 @@ const QuestionDetails = () => {
   }, [ data ]);
 
   useEffect(() => {
-    if (isDeleteSuccess) {
-      refetch();
-    }
-  }, [ isDeleteSuccess ]);
-
-  useEffect(() => {
     if (isModifyComplete) {
       setShowCheckIcon(true);
 
@@ -60,11 +59,25 @@ const QuestionDetails = () => {
         setShowCheckIcon(false);
       }, 1000 * 3);
 
+      refetch();
+      refetchList();
+
       return (() => {
         window.clearTimeout(timerId);
       });
     }
   }, [ isModifyComplete ]);
+
+  useEffect(() => {
+    if (isDeleteLoading) {
+      return;
+    }
+
+    if (isDeleteSuccess) {
+      refetch();
+      refetchList();
+    }
+  }, [ isDeleteLoading ]);
 
   const questionBoxIdx = useMemo(() => {
     return Number(searchParams.get("box") ?? 999);
@@ -94,7 +107,14 @@ const QuestionDetails = () => {
       return;
     }
 
-    deleteQuestion(deleteTarget.questionIdx);
+    deleteQuestion(
+      deleteTarget.questionIdx,
+      {
+        onSuccess: () => {
+          setIsDeletePopupOpen(false);
+        },
+      },
+    );
   };
 
   const handleTitleModify = () => {
@@ -176,9 +196,10 @@ const QuestionDetails = () => {
                 <StyledBtn
                   type="button"
                   onClick={() => handleQuestionDelete(question)}
-                  width="100px"
-                  height="32px"
+                  width="120px"
+                  height="52px"
                   color="red"
+                  style={{ fontSize: "1.4rem" }}
                 >
                   삭제
                 </StyledBtn>

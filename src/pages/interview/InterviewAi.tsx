@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { aiInterviewNextProcessAtom } from "store/interview/atom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { aiInterviewNextProcessAtom, aiRoomResponseAtom } from "store/interview/atom";
+
+import { useDeleteInterviewRooms } from "hooks/queries/interview";
 
 import Popup from "components/common/Popup";
 import InterviewAiContainer from "components/interview/InterviewAiContainer";
@@ -10,13 +12,27 @@ import { commonButtonStyle } from "styles/common";
 
 const InterviewAi = () => {
   const navigate = useNavigate();
+  const aiRoomResponse = useRecoilValue(aiRoomResponseAtom);
   const [ aiInterviewNextProcess, setAiInterviewNextProcess ] = useRecoilState(aiInterviewNextProcessAtom);
 
   const [ isConfirmPopupOpen, setIsConfirmPopupOpen ] = useState(false);
 
+  const { mutate: deleteRoom } = useDeleteInterviewRooms();
+
   const handleLeave = () => {
-    setAiInterviewNextProcess("ready");
-    navigate("/lobby", { replace: true });
+    if (!aiRoomResponse) {
+      return;
+    }
+
+    deleteRoom(
+      aiRoomResponse.data.roomIdx,
+      {
+        onSuccess: () => {
+          setAiInterviewNextProcess("ready");
+          navigate("/lobby", { replace: true });
+        },
+      },
+    );
   };
 
   useEffect(() => {
@@ -26,6 +42,13 @@ const InterviewAi = () => {
     else {
       setAiInterviewNextProcess("end");
     }
+  }, []);
+
+  useLayoutEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }, []);
 
   return (
@@ -64,7 +87,8 @@ const StyledWrap = styled.div`
 `;
 
 const StyledConfirmText = styled.p`
-  font-size: 16px;
+  font-size: 2rem;
+  line-height: 1.5;
   text-align: center;
 `;
 
@@ -89,8 +113,11 @@ const StyledFeedbackSection = styled.section`
 
 const StyledExitButton = styled.button`
   ${commonButtonStyle}
+  margin-top: 100px;
   margin-right: 28px;
   align-self: flex-end;
+  font-size: 1.4rem;
+  font-weight: 500;
 
   background-color: var(--main-white);
   border: 1px solid var(--main-gray);

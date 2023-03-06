@@ -64,7 +64,7 @@ const ProfileButton = () => {
       </Popover>
     </>
   ) : (
-    <Link to={PagesPath.LOGIN}>
+    <Link to={PagesPath.LOGIN} style={{ fontSize: "1.8rem" }}>
       로그인
     </Link>
   );

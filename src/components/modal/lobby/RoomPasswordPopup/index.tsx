@@ -22,7 +22,7 @@ const RoomPasswordPopup = (props: RoomPasswordPopupProps) => {
   const setUserInterviewData = useSetRecoilState(interviewDataAtom);
   const setIsInterviewer = useSetRecoilState(isInterviewerAtom);
 
-  const [roomPassword, setRoomPassword] = useState(""); // TODO: 변수명 수정
+  const [ roomPassword, setRoomPassword ] = useState(""); // TODO: 변수명 수정
 
   const { mutate, isLoading } = usePostJoinRoom();
 

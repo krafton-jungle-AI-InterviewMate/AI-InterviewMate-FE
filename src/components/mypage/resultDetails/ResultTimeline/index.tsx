@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Timeline,
   TimelineItem,
@@ -12,14 +12,14 @@ import ResultTimelineItem from "./ResultTimelineItem";
 import { VideoJsPlayer as Player } from "video.js";
 
 import throttle from "lodash.throttle";
-import { createTimestampFromSeconds } from "./utils";
-import { Timestamp } from "api/mypage/types";
+import { createTimestampFromSeconds, mapQuestionsIdx } from "./utils";
+import { RatingDetail } from "api/mypage/types";
 
 import styled from "@emotion/styled";
 import { commonLabelStyle } from "styles/resultDetails";
 
 type ResultTimelineProps = {
-  data: Timestamp[];
+  data: RatingDetail;
   videoRef: React.MutableRefObject<Player | null>;
 };
 
@@ -31,6 +31,10 @@ const ResultTimeline = (props: ResultTimelineProps) => {
 
   const [ duration, setDuration ] = useState<number | null>(0);
   const [ currentTime, setCurrentTime ] = useState<number | null>(null);
+
+  const questionsIdx = useMemo(() => {
+    return mapQuestionsIdx(data.timelines);
+  }, [ data ]);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -65,7 +69,9 @@ const ResultTimeline = (props: ResultTimelineProps) => {
         <Timeline>
 
           <TimelineItem>
-            <TimelineOppositeContent color="var(--font-gray)">
+            <TimelineOppositeContent
+              color="var(--font-gray)"
+            >
               00:00
             </TimelineOppositeContent>
             <TimelineSeparator>
@@ -81,17 +87,21 @@ const ResultTimeline = (props: ResultTimelineProps) => {
             <TimelineContent>면접 시작</TimelineContent>
           </TimelineItem>
 
-          {data.map((timestamp, idx) =>
+          {data.timelines.map((timestamp, idx) =>
             <ResultTimelineItem
               key={idx}
               handleVideoProgress={handleVideoProgress}
+              questionCount={questionsIdx[idx] ?? 0}
+              scripts={data.scripts}
               {...timestamp}
             />,
           )}
 
           {/* LAST ITEM */}
           <TimelineItem>
-            <TimelineOppositeContent color="var(--font-gray)">
+            <TimelineOppositeContent
+              color="var(--font-gray)"
+            >
               {createTimestampFromSeconds(Math.floor(duration ?? 0))}
             </TimelineOppositeContent>
             <TimelineSeparator>
@@ -119,6 +129,11 @@ const StyledTimelineWrap = styled.div`
   margin-left: 40px;
   align-self: flex-start;
   height: 542px;
+
+  & *:not(h3) {
+    font-size: 1.4rem !important;
+    font-weight: 500;
+  }
 `;
 
 const StyledTitle = styled.h3`
@@ -133,7 +148,7 @@ const StyledScrollBox = styled.div`
   overflow-y: auto;
   border-radius: 16px;
   padding: 10px;
-  border: 1px solid var(--main-gray);
+  border: 2px solid var(--main-black);
   box-shadow: var(--box-shadow);
   box-sizing: border-box;
 

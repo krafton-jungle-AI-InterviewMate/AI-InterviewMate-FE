@@ -1,3 +1,5 @@
+import { ScriptWithQuestionTitle, Timestamp } from "api/mypage/types";
+
 export const createTimestampFromSeconds = (seconds: number) => {
   const mm = Math.floor(seconds / 60);
   const ss = seconds % 60;
@@ -17,4 +19,24 @@ export const getTimestampText = (type: "eye" | "attitude" | "question") => {
   default:
     return "";
   }
+};
+
+export const getQuestionText = (
+  questionCount: number,
+  scripts: ScriptWithQuestionTitle[],
+) => {
+  return `Q${questionCount}. ${scripts[questionCount - 1].questionTitle}`;
+};
+
+export const mapQuestionsIdx = (timeline: Timestamp[]) => {
+  const questions: { [questionIdx: number]: number } = {};
+  let count = 1;
+
+  timeline.forEach(({ type }, idx) => {
+    if (type === "question") {
+      questions[idx] = count++;
+    }
+  });
+
+  return questions;
 };
