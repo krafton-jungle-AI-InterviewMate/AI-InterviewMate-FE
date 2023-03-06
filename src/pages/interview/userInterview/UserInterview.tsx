@@ -1,5 +1,6 @@
-import { OpenVidu } from "openvidu-browser";
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router";
+import { OpenVidu } from "openvidu-browser";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   hostAtom,
@@ -11,15 +12,16 @@ import {
   roomPeopleNowAtom,
   timelineRecordAtom,
 } from "store/interview/atom";
-import { useNavigate } from "react-router";
-import UserInterviewReady from "components/interview/userInterview/UserInterviewReady";
-import { useDeleteInterviewRooms, usePutInterviewRooms } from "hooks/queries/interview";
 import { memberAtom } from "store/auth/atom";
-import UserInterviewStart from "./../../../components/interview/userInterview/UserInterviewStart";
-import useInitializeInterviewState from "hooks/useInitializeInterviewState";
-import useFaceLandmarksDetection from "hooks/useFaceLandmarksDetection";
+
+import UserInterviewReady from "components/interview/userInterview/UserInterviewReady";
+import UserInterviewStart from "components/interview/userInterview/UserInterviewStart";
 import { toast } from "react-toastify";
 import * as Styled from "pages/interview/InterviewReady/style";
+
+import useInitializeInterviewState from "hooks/useInitializeInterviewState";
+import useFaceLandmarksDetection from "hooks/useFaceLandmarksDetection";
+import { useDeleteInterviewRooms, usePutInterviewRooms } from "hooks/queries/interview";
 import { usePostRatingViewee } from "hooks/queries/mypage";
 import { PostRatingVieweePayloadData } from "api/mypage/types";
 import { deduplicate } from "lib/interview";

@@ -1,12 +1,14 @@
+import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { hostAtom, isInterviewerAtom } from "store/interview/atom";
+
 import { Dialog, DialogActions, DialogTitle } from "@mui/material";
 import UserVideoComponent from "./UserVideoComponent";
 import Loading from "components/common/Loading";
-import styled from "@emotion/styled";
 import { StyledBtn } from "styles/StyledBtn";
-import { hostAtom, isInterviewerAtom } from "store/interview/atom";
-import { useRecoilValue } from "recoil";
+
+import styled from "@emotion/styled";
 import { css } from "@emotion/react";
-import { useEffect, useState } from "react";
 
 interface UserInterviewReadyProps {
   session: any;

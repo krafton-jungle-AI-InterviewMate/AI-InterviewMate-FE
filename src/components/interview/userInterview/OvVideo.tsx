@@ -1,9 +1,9 @@
-import styled from "@emotion/styled";
-import { useEffect } from "react";
-import { css } from "@emotion/react";
+import { useState, useRef, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { hostAtom, isInterviewStartAtom } from "store/interview/atom";
-import { useState, useRef } from "react";
+
+import styled from "@emotion/styled";
+import { css } from "@emotion/react";
 
 interface OpenViduVideoComponentProps {
   streamManager: any;
