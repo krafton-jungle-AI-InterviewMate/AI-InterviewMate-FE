@@ -77,6 +77,9 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
       setIsDetectionOn(true);
     }
 
+  }, [ video ]);
+
+  useEffect(() => {
     const timerId = window.setTimeout(() => {
       if (!isInterviewer) {
         setIsDetectionOn(false);
@@ -89,8 +92,6 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
       window.clearTimeout(timerId);
     };
   }, []);
-
-  console.log("horizontalRatio: ", horizontalRatio);
 
   return (
     <StyledUserInterviewStart>
