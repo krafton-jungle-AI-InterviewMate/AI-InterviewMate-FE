@@ -23,7 +23,7 @@ const IntervieweeWebcam = (props: IntervieweeWebcamProps) => {
 
   return (
     <StyledWebcamWrap>
-      {!isWebcamReady && <Skeleton variant="rectangular" width={900} height={750} />}
+      {!isWebcamReady && <Skeleton variant="rectangular" width={1000} height={750} />}
       <Webcam ref={webcamRef} mirrored={false} onCanPlay={() => setIsWebcamReady(true)} />
     </StyledWebcamWrap>
   );
