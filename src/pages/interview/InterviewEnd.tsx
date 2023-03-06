@@ -8,16 +8,23 @@ import {
   interviewCommentAtom,
   interviewDataAtom,
   isInterviewerAtom,
+  timelineRecordAtom,
 } from "store/interview/atom";
-import { usePostResultComment } from "hooks/queries/mypage";
+import { usePostRatingViewee, usePostResultComment } from "hooks/queries/mypage";
+import { deduplicate } from "lib/interview";
+import { PostRatingVieweePayloadData } from "api/mypage/types";
 
 const InterviewEnd = () => {
   const setAiInterviewNextProcess = useSetRecoilState(aiInterviewNextProcessAtom);
-  const [ comment, setComment ] = useRecoilState(interviewCommentAtom);
+  const [comment, setComment] = useRecoilState(interviewCommentAtom);
   const isInterviewer = useRecoilValue(isInterviewerAtom);
   const interviewData = useRecoilValue(interviewDataAtom);
+  const {
+    timeline: { eyes, attitude },
+  } = useRecoilValue(timelineRecordAtom);
 
   const { mutate } = usePostResultComment();
+  const { mutate: postRatingVieweeMutate } = usePostRatingViewee();
   const navigate = useNavigate();
 
   const textarea = useRef<any>(0);
@@ -48,6 +55,30 @@ const InterviewEnd = () => {
   };
 
   useEffect(() => {
+    if (!isInterviewer && interviewData) {
+      const { roomIdx } = interviewData;
+      const data: PostRatingVieweePayloadData = {
+        eyeTimelines: deduplicate(eyes),
+        attitudeTimelines: deduplicate(attitude),
+        questionTimelines: [],
+        comments: [],
+        scripts: [],
+      };
+      postRatingVieweeMutate(
+        {
+          roomIdx,
+          data,
+        },
+        {
+          onSuccess: () => {
+            console.log("postRatingViewee", data);
+          },
+          onError(error) {
+            alert(error);
+          },
+        },
+      );
+    }
     setAiInterviewNextProcess("ready");
   }, []);
 

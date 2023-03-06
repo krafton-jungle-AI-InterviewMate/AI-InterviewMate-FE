@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { hostAtom, isInterviewStartAtom } from "store/interview/atom";
+import { hostAtom, isInterviewerAtom, isInterviewStartAtom } from "store/interview/atom";
 
 import IntervieweeWebcam from "./IntervieweeWebcam";
 import OpenViduVideoComponent from "./OvVideo";
@@ -14,23 +14,24 @@ interface UserVideoComponentProps {
 
 const UserVideoComponent = (props: UserVideoComponentProps) => {
   const { streamManager, setVideo } = props;
-  const [ isLoading, setIsLoading ] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const host = useRecoilValue(hostAtom);
   const isInterviewStart = useRecoilValue(isInterviewStartAtom);
-  const [ isHost, setIsHost ] = useState(false);
+  const isInterviewer = useRecoilValue(isInterviewerAtom);
+  const [isHost, setIsHost] = useState(false);
 
   useEffect(() => {
     if (streamManager) {
       setIsLoading(false);
       setIsHost(host === streamManager.stream.connection.connectionId);
     }
-  }, [ streamManager ]);
+  }, [streamManager]);
 
   return (
     <StyledUserVideoComponent isHost={isHost} isInterviewStart={isInterviewStart}>
       {!isLoading ? (
         <div className="streamcomponent">
-          {isHost ? (
+          {isHost && !isInterviewer ? (
             <IntervieweeWebcam setVideo={setVideo} />
           ) : (
             <OpenViduVideoComponent streamManager={streamManager} />
@@ -38,7 +39,7 @@ const UserVideoComponent = (props: UserVideoComponentProps) => {
           {!isInterviewStart && (
             <p>
               <span className="interviewer">{isHost ? "면접자" : "면접관"}</span>
-              <span className="nickname">{streamManager.stream.connection.data.split("\"")[3]}</span>
+              <span className="nickname">{streamManager.stream.connection.data.split('"')[3]}</span>
             </p>
           )}
         </div>

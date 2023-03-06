@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 import {
   feedbackAtom,
   hostAtom,
@@ -50,11 +50,11 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
   const host = useRecoilValue(hostAtom);
   const feedbackMode = useRecoilValue(feedbackAtom);
   const isInterviewer = useRecoilValue(isInterviewerAtom);
-  const [ timelineRecord, setTimelineRecord ] = useRecoilState(timelineRecordAtom);
+  const setTimelineRecord = useSetRecoilState(timelineRecordAtom);
 
-  const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
+  const [video, setVideo] = useState<null | HTMLVideoElement>(null);
 
-  const isRealtimeMode = useMemo(() => feedbackMode === "ON", [ feedbackMode ]);
+  const isRealtimeMode = useMemo(() => feedbackMode === "ON", [feedbackMode]);
   const { face, setIsDetectionOn } = useFaceLandmarksDetection({ video });
 
   const { horizontalRatio } = useCheckIrisPosition({ face });
@@ -76,8 +76,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
       }));
       setIsDetectionOn(true);
     }
-
-  }, [ video ]);
+  }, [video]);
 
   useEffect(() => {
     const timerId = window.setTimeout(() => {
@@ -188,6 +187,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
 const StyledUserInterviewStart = styled.div`
   width: 100vw;
   overflow-x: hidden;
+  overflow-y: hidden;
   .subscribersContents {
     position: relative;
     display: flex;
