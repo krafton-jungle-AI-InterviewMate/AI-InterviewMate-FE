@@ -16,7 +16,7 @@ interface UserInterviewReadyProps {
   subscribers: Array<any>;
   ready: boolean;
   isOpen: boolean;
-  videoRef: React.MutableRefObject<HTMLVideoElement | null>;
+  setVideo: React.Dispatch<React.SetStateAction<HTMLVideoElement | null>>;
   handleClickReadyOut: () => void;
   handleClickModalRoomLeave: () => void;
   handleClickStart: () => void;
@@ -30,7 +30,7 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
     subscribers,
     ready,
     isOpen,
-    videoRef,
+    setVideo,
     handleClickReadyOut,
     handleClickModalClose,
     handleClickModalRoomLeave,
@@ -73,13 +73,13 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
         <>
           <div className="publisherContents">
             {publisher && host === publisher.stream.connection.connectionId ? (
-              <UserVideoComponent streamManager={publisher} videoRef={videoRef} />
+              <UserVideoComponent streamManager={publisher} setVideo={setVideo} />
             ) : (
               <>
                 {subscribers.map(
                   (sub, i) =>
                     host === sub.stream.connection.connectionId && (
-                      <UserVideoComponent key={i} streamManager={sub} videoRef={videoRef} />
+                      <UserVideoComponent key={i} streamManager={sub} setVideo={setVideo} />
                     ),
                 )}
               </>
@@ -88,14 +88,14 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
           <div className="subscribersContents">
             {publisher && host !== publisher.stream.connection.connectionId && (
               <div className="subscribers">
-                <UserVideoComponent streamManager={publisher} videoRef={videoRef} />
+                <UserVideoComponent streamManager={publisher} setVideo={setVideo} />
               </div>
             )}
             {subscribers.map(
               (sub, i) =>
                 host !== sub.stream.connection.connectionId && (
                   <div key={i} className="subscribers">
-                    <UserVideoComponent streamManager={sub} videoRef={videoRef} />
+                    <UserVideoComponent streamManager={sub} setVideo={setVideo} />
                   </div>
                 ),
             )}

@@ -54,7 +54,7 @@ const UserInterview = () => {
 
   const { mutate: putInterviewRoomsMutate } = usePutInterviewRooms();
   const { mutate: deleteInterviewRoomsMutate } = useDeleteInterviewRooms();
-  const { mutate: postRatingVieweeMutate, isLoading } = usePostRatingViewee();
+  const { mutate: postRatingVieweeMutate } = usePostRatingViewee();
 
   const { initializeInterviewState } = useInitializeInterviewState();
   const { isVideoReady, setIsVideoReady, setNewDetector, setIsDetectionOn, updateFace, detector } =
@@ -63,25 +63,25 @@ const UserInterview = () => {
       isOneOff: true,
     });
 
-  useEffect(() => {
-    if (!video) {
-      return;
-    }
+  // useEffect(() => {
+  //   if (!video) {
+  //     return;
+  //   }
 
-    const getReadyState = () => {
-      const { readyState } = video;
+  //   const getReadyState = () => {
+  //     const { readyState } = video;
 
-      if (readyState === 4) {
-        setIsVideoReady(true);
-      }
-    };
+  //     if (readyState === 4) {
+  //       setIsVideoReady(true);
+  //     }
+  //   };
 
-    video.addEventListener("loadedmetadata", getReadyState);
+  //   video.addEventListener("loadedmetadata", getReadyState);
 
-    return () => {
-      video.removeEventListener("loadedmetadata", getReadyState);
-    };
-  }, [ video ]);
+  //   return () => {
+  //     video.removeEventListener("loadedmetadata", getReadyState);
+  //   };
+  // }, [ video ]);
 
   useEffect(() => {
     if (isVideoReady) {
@@ -430,7 +430,7 @@ const UserInterview = () => {
           handleClickModalRoomLeave={handleClickModalRoomLeave}
           handleClickInterviewOut={handleClickInterviewOut}
           InterviewEnd={InterviewEnd}
-          videoRef={videoRef}
+          setVideo={setVideo}
         />
       ) : (
         <UserInterviewReady
@@ -443,7 +443,7 @@ const UserInterview = () => {
           handleClickStart={handleClickStart}
           handleClickModalClose={handleClickModalClose}
           handleClickReadyOut={handleClickReadyOut}
-          videoRef={videoRef}
+          setVideo={setVideo}
         />
       )}
     </>

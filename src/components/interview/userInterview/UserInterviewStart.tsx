@@ -28,7 +28,7 @@ interface UserInterviewStartProps {
   subscribers: Array<any>;
   isOpen: boolean;
   video: HTMLVideoElement | null;
-  videoRef: React.MutableRefObject<HTMLVideoElement | null>;
+  setVideo: React.Dispatch<React.SetStateAction<HTMLVideoElement | null>>;
   handleClickModalClose: () => void;
   handleClickModalRoomLeave: () => void;
   handleClickInterviewOut: () => void;
@@ -42,7 +42,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
     subscribers,
     isOpen,
     video,
-    videoRef,
+    setVideo,
     handleClickModalClose,
     handleClickModalRoomLeave,
     handleClickInterviewOut,
@@ -86,6 +86,8 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
     };
   }, []);
 
+  console.log(timelineRecord);
+
   return (
     <StyledUserInterviewStart>
       {session && (
@@ -94,14 +96,14 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
             <div className="subscribersVideo">
               {publisher && host !== publisher.stream.connection.connectionId && (
                 <div className="publisherVideo">
-                  <UserVideoComponent streamManager={publisher} videoRef={videoRef} />
+                  <UserVideoComponent streamManager={publisher} setVideo={setVideo} />
                 </div>
               )}
               {subscribers.map(
                 (sub, i) =>
                   host !== sub.stream.connection.connectionId && (
                     <div key={i}>
-                      <UserVideoComponent streamManager={sub} videoRef={videoRef} />
+                      <UserVideoComponent streamManager={sub} setVideo={setVideo} />
                     </div>
                   ),
               )}
@@ -126,11 +128,11 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
                 {subscribers.map(
                   (sub, i) =>
                     host === sub.stream.connection.connectionId && (
-                      <UserVideoComponent key={i} streamManager={sub} videoRef={videoRef} />
+                      <UserVideoComponent key={i} streamManager={sub} setVideo={setVideo} />
                     ),
                 )}
                 {host === publisher.stream.connection.connectionId && (
-                  <UserVideoComponent streamManager={publisher} videoRef={videoRef} />
+                  <UserVideoComponent streamManager={publisher} setVideo={setVideo} />
                 )}
                 {host !== publisher.stream.connection.connectionId && <InterviewQuestionTab />}
               </div>
