@@ -57,31 +57,11 @@ const UserInterview = () => {
   const { mutate: postRatingVieweeMutate } = usePostRatingViewee();
 
   const { initializeInterviewState } = useInitializeInterviewState();
-  const { isVideoReady, setIsVideoReady, setNewDetector, setIsDetectionOn, updateFace, detector } =
+  const { isVideoReady, setNewDetector, setIsDetectionOn, updateFace, detector } =
     useFaceLandmarksDetection({
       video,
       isOneOff: true,
     });
-
-  // useEffect(() => {
-  //   if (!video) {
-  //     return;
-  //   }
-
-  //   const getReadyState = () => {
-  //     const { readyState } = video;
-
-  //     if (readyState === 4) {
-  //       setIsVideoReady(true);
-  //     }
-  //   };
-
-  //   video.addEventListener("loadedmetadata", getReadyState);
-
-  //   return () => {
-  //     video.removeEventListener("loadedmetadata", getReadyState);
-  //   };
-  // }, [ video ]);
 
   useEffect(() => {
     if (isVideoReady) {
