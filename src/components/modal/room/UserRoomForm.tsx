@@ -18,12 +18,12 @@ interface InputRoomFormProps {
   isPrivate: boolean;
   roomType: RoomTypes;
   roomQuestionBoxIdx: number;
-  roomTime: number;
+  roomTime: string;
   feedback: "ON" | "OFF";
   record: "ON" | "OFF";
 }
 
-function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
+function UserRoomForm({ onClickModalClose, questionBoxes }) {
   const setUserInterviewData = useSetRecoilState(interviewDataAtom);
   const [ feedback, setFeedback ] = useRecoilState(feedbackAtom);
   const setIsInterviewer = useSetRecoilState(isInterviewerAtom);
@@ -54,7 +54,7 @@ function UserRoomForm({ onClickModalClose, roomType, questionBoxes }) {
       roomPeopleNum: "2",
       isPrivate: false,
       roomType: "USER",
-      roomTime: 15,
+      roomTime: String(15),
     },
   });
 

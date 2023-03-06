@@ -55,7 +55,11 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<InputRoomFormProps>();
+  } = useForm<InputRoomFormProps>({
+    defaultValues: {
+      roomName: "AI와 면접 연습",
+    },
+  });
 
   const { mutate, isLoading } = usePostInterviewRooms();
 
