@@ -54,12 +54,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
   const feedbackMode = useRecoilValue(feedbackAtom);
   const [ timelineRecord, setTimelineRecord ] = useRecoilState(timelineRecordAtom);
 
-  useEffect(() => {
-    console.log("timelineRecord: ", timelineRecord);
-  }, [ timelineRecord ]);
-
   const isRealtimeMode = useMemo(() => feedbackMode === "ON", [ feedbackMode ]);
-  console.log("interviewStart video: ", video);
   const { face, setIsDetectionOn } = useFaceLandmarksDetection({ video });
   const { horizontalRatio } = useCheckIrisPosition({ face });
   const { isBadMotion } = useCheckHeadMotion({ face });

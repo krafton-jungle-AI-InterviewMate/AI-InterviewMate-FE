@@ -18,10 +18,7 @@ const OpenViduVideoComponent = (props: OpenViduVideoComponentProps) => {
   const [ isHost, setIsHost ] = useState(false);
   const interviewerVideoRef = useRef<null | HTMLVideoElement>(null);
 
-  console.log("외부의 ref", videoRef);
-
   useEffect(() => {
-    console.log("내부의 ref", videoRef);
     if (isHost) {
       if (streamManager && videoRef.current) {
         streamManager.addVideoElement(videoRef.current);

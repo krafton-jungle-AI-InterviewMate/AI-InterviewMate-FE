@@ -70,7 +70,7 @@ const UserInterview = () => {
 
     const getReadyState = () => {
       const { readyState } = video;
-      console.log("readyState: ", readyState);
+
       if (readyState === 4) {
         setIsVideoReady(true);
       }
@@ -284,7 +284,6 @@ const UserInterview = () => {
   };
 
   const handleClickStart = async () => {
-    console.log("detector :", detector);
     // 면접 시작
     if (ready) {
       try {
@@ -347,7 +346,6 @@ const UserInterview = () => {
         scripts: [],
       };
 
-      console.log(data);
       const { roomIdx } = userInterviewData;
       postRatingVieweeMutate(
         {
