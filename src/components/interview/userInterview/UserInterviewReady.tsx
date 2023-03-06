@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import {
-  hostAtom,
-  isInterviewerAtom,
-  motionSnapshotAtom,
-} from "store/interview/atom";
+import { hostAtom, isInterviewerAtom, motionSnapshotAtom } from "store/interview/atom";
 
 import useInitializeInterviewState from "hooks/useInitializeInterviewState";
 import useFaceLandmarksDetection from "hooks/useFaceLandmarksDetection";
@@ -47,8 +43,8 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
   const host = useRecoilValue(hostAtom);
   const setMotionSnapshot = useSetRecoilState(motionSnapshotAtom);
 
-  const [ isHost, setIsHost ] = useState(false);
-  const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
+  const [isHost, setIsHost] = useState(false);
+  const [video, setVideo] = useState<null | HTMLVideoElement>(null);
 
   const { initializeInterviewState } = useInitializeInterviewState();
   const { isVideoReady, setNewDetector, setIsDetectionOn, updateFace, detector } =
@@ -61,7 +57,7 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
     if (publisher) {
       setIsHost(host === publisher.stream.connection.connectionId);
     }
-  }, [ host ]);
+  }, [host]);
 
   useEffect(() => {
     if (isVideoReady && !isInterviewer) {
@@ -69,7 +65,7 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
         await setNewDetector();
       })();
     }
-  }, [ isVideoReady, isInterviewer ]);
+  }, [isVideoReady, isInterviewer]);
 
   const handleStart = async () => {
     if (!detector) {
@@ -87,8 +83,7 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
         setIsDetectionOn(false);
         toast.clearWaitingQueue();
         setMotionSnapshot(newFace);
-      }
-      else {
+      } else {
         toast("화면에서 얼굴이 인식되지 않습니다", Styled.toastOptions);
       }
     }
@@ -202,7 +197,7 @@ const StyledUserInterview = styled.div<StyledUserInterviewProps>`
   justify-content: space-between;
   .interviewActionsContents {
     position: absolute;
-    z-index: 10;
+    z-index: 200;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;

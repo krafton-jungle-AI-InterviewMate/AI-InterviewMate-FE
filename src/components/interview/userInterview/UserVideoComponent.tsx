@@ -54,6 +54,7 @@ interface StyledUserVideoComponentProps {
 }
 
 const StyledUserVideoComponent = styled.div<StyledUserVideoComponentProps>`
+  margin-top: ${props => (props.isHost ? "100px" : "0")};
   .streamcomponent {
     position: relative;
     display: flex;

@@ -121,9 +121,9 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
               >
                 면접 나가기
               </StyledBtn>
+              <UserInterviewTimer roomTime={userInterviewData?.roomTime} />
             </div>
           </div>
-          <UserInterviewTimer roomTime={userInterviewData?.roomTime} />
           {showIrisFeedback && <InterviewFeedback feedbackType="iris" />}
           {showMotionFeedback && <InterviewFeedback feedbackType="motion" />}
           <div className="publisherContents">

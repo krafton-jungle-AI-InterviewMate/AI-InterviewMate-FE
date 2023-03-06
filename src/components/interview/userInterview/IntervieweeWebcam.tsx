@@ -4,6 +4,7 @@ import Webcam from "react-webcam";
 import Skeleton from "@mui/material/Skeleton";
 
 import styled from "@emotion/styled";
+import InterviewAlertBox from "../InterviewAlertBox";
 
 type IntervieweeWebcamProps = {
   setVideo: React.Dispatch<React.SetStateAction<HTMLVideoElement | null>>;
@@ -25,15 +26,17 @@ const IntervieweeWebcam = (props: IntervieweeWebcamProps) => {
     <StyledWebcamWrap>
       {!isWebcamReady && <Skeleton variant="rectangular" width={1000} height={750} />}
       <Webcam ref={webcamRef} mirrored={false} onCanPlay={() => setIsWebcamReady(true)} />
+      <InterviewAlertBox webcamWidth={1000} webcamHeight={750} />
     </StyledWebcamWrap>
   );
 };
 
 const StyledWebcamWrap = styled.div`
   width: 1000px;
-  height: 750px;
 
   video {
+    position: relative;
+    z-index: 100;
     width: 1000px;
     height: 750px;
   }
