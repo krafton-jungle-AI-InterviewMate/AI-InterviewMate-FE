@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import * as FaceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
+import { useRecoilValue } from "recoil";
+import { isInterviewerAtom } from "store/interview/atom";
+
 import { checkHorizontalRatio } from "lib/faceLandmarkDetection";
 
 type UseCheckIrisPositionParams = {
@@ -11,10 +14,16 @@ const useCheckIrisPosition = (params: UseCheckIrisPositionParams) => {
     face,
   } = params;
 
+  const isInterviewer = useRecoilValue(isInterviewerAtom);
+
   const [ horizontalRatio, setHorizontalRatio ] = useState(0.5);
   const [ increments, setIncrements ] = useState(0);
 
   useEffect(() => {
+    if (isInterviewer) {
+      return;
+    }
+
     if (face) {
       const ratio = checkHorizontalRatio(face.keypoints);
       setHorizontalRatio(ratio);

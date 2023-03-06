@@ -1,9 +1,9 @@
-import styled from "@emotion/styled";
-import { useEffect, useRef } from "react";
-import { css } from "@emotion/react";
+import { useState, useRef, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { hostAtom, isInterviewStartAtom } from "store/interview/atom";
-import { useState } from "react";
+
+import styled from "@emotion/styled";
+import { css } from "@emotion/react";
 
 interface OpenViduVideoComponentProps {
   streamManager: any;
@@ -14,20 +14,19 @@ const OpenViduVideoComponent = (props: OpenViduVideoComponentProps) => {
   const isInterviewStart = useRecoilValue(isInterviewStartAtom);
   const host = useRecoilValue(hostAtom);
 
-  const [isHost, setIsHost] = useState(false);
-
-  const videoRef = useRef<null | HTMLVideoElement>(null);
+  const [ isHost, setIsHost ] = useState(false);
+  const interviewerVideoRef = useRef<null | HTMLVideoElement>(null);
 
   useEffect(() => {
-    if (streamManager && videoRef) {
-      streamManager.addVideoElement(videoRef.current);
+    if (streamManager && interviewerVideoRef) {
+      streamManager.addVideoElement(interviewerVideoRef.current);
       setIsHost(host === streamManager.stream.connection.connectionId);
     }
-  }, [streamManager]);
+  }, [ streamManager, interviewerVideoRef ]);
 
   return (
     <StyledOpenViduVideoComponent isInterviewStart={isInterviewStart} isHost={isHost}>
-      <video autoPlay={true} ref={videoRef} />
+      <video autoPlay={true} ref={interviewerVideoRef} />
     </StyledOpenViduVideoComponent>
   );
 };
@@ -46,13 +45,13 @@ const StyledOpenViduVideoComponent = styled.div<StyledOpenViduVideoComponentProp
           }
         `
       : isHost
-      ? css`
+        ? css`
           height: 750px;
           video {
             width: 1000px;
           }
         `
-      : css`
+        : css`
           height: ${isInterviewStart ? "180px" : "250px"};
           video {
             height: ${isInterviewStart ? "180px" : "250px"};

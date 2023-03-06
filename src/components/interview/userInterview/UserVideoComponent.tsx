@@ -1,36 +1,44 @@
-import OpenViduVideoComponent from "./OvVideo";
-import styled from "@emotion/styled";
-import Loading from "components/common/Loading";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { hostAtom, isInterviewStartAtom } from "store/interview/atom";
 
+import IntervieweeWebcam from "./IntervieweeWebcam";
+import OpenViduVideoComponent from "./OvVideo";
+
+import styled from "@emotion/styled";
+
 interface UserVideoComponentProps {
   streamManager: any;
+  setVideo: React.Dispatch<React.SetStateAction<HTMLVideoElement | null>>;
 }
 
 const UserVideoComponent = (props: UserVideoComponentProps) => {
-  const { streamManager } = props;
-  const [isLoading, setIsLoading] = useState(true);
+  const { streamManager, setVideo } = props;
+  const [ isLoading, setIsLoading ] = useState(true);
   const host = useRecoilValue(hostAtom);
   const isInterviewStart = useRecoilValue(isInterviewStartAtom);
-  const [isHost, setIsHost] = useState(false);
+  const [ isHost, setIsHost ] = useState(false);
 
   useEffect(() => {
     if (streamManager) {
       setIsLoading(false);
       setIsHost(host === streamManager.stream.connection.connectionId);
     }
-  }, [streamManager]);
+  }, [ streamManager ]);
+
   return (
     <StyledUserVideoComponent isHost={isHost} isInterviewStart={isInterviewStart}>
       {!isLoading ? (
         <div className="streamcomponent">
-          <OpenViduVideoComponent streamManager={streamManager} />
+          {isHost ? (
+            <IntervieweeWebcam setVideo={setVideo} />
+          ) : (
+            <OpenViduVideoComponent streamManager={streamManager} />
+          )}
           {!isInterviewStart && (
             <p>
               <span className="interviewer">{isHost ? "면접자" : "면접관"}</span>
-              <span className="nickname">{streamManager.stream.connection.data.split('"')[3]}</span>
+              <span className="nickname">{streamManager.stream.connection.data.split("\"")[3]}</span>
             </p>
           )}
         </div>
@@ -62,7 +70,7 @@ const StyledUserVideoComponent = styled.div<StyledUserVideoComponentProps>`
       .interviewer {
         padding: 5px 20px;
         border-radius: 5px;
-        font-size: 14px;
+        font-size: 1.4rem;
         font-weight: 400;
         margin-right: 12px;
         color: var(--main-white);
@@ -72,7 +80,7 @@ const StyledUserVideoComponent = styled.div<StyledUserVideoComponentProps>`
       .nickname {
         padding: 5px 20px;
         border-radius: 5px;
-        font-size: 14px;
+        font-size: 1.4rem;
         font-weight: 400;
         margin-right: 12px;
         background-color: var(--main-white);

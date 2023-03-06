@@ -1,12 +1,27 @@
-import styled from "@emotion/styled";
+import { useEffect, useMemo, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  feedbackAtom,
+  hostAtom,
+  interviewDataAtom,
+  isInterviewerAtom,
+  timelineRecordAtom,
+} from "store/interview/atom";
+
 import { Dialog, DialogActions, DialogTitle } from "@mui/material";
-import { useRecoilValue } from "recoil";
-import { hostAtom, interviewDataAtom } from "store/interview/atom";
-import { StyledBtn } from "styles/StyledBtn";
 import InterviewQuestionTab from "./InterviewerQuestionTap";
 import UserVideoComponent from "./UserVideoComponent";
-import { useEffect } from "react";
 import UserInterviewTimer from "./UserInterviewTimer";
+import { StyledBtn } from "styles/StyledBtn";
+
+import useFaceLandmarksDetection from "hooks/useFaceLandmarksDetection";
+import useCheckIrisPosition from "hooks/useCheckIrisPosition";
+import useCheckHeadMotion from "hooks/useCheckHeadMotion";
+import useIrisAssessment from "hooks/useIrisAssessment";
+import useMotionAssessment from "hooks/useMotionAssessment";
+import InterviewFeedback from "../InterviewFeedback";
+
+import styled from "@emotion/styled";
 
 interface UserInterviewStartProps {
   session: any;
@@ -33,9 +48,43 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
 
   const userInterviewData = useRecoilValue(interviewDataAtom);
   const host = useRecoilValue(hostAtom);
+  const feedbackMode = useRecoilValue(feedbackAtom);
+  const isInterviewer = useRecoilValue(isInterviewerAtom);
+  const [ timelineRecord, setTimelineRecord ] = useRecoilState(timelineRecordAtom);
+
+  const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
+
+  const isRealtimeMode = useMemo(() => feedbackMode === "ON", [ feedbackMode ]);
+  const { face, setIsDetectionOn } = useFaceLandmarksDetection({ video });
+
+  const { horizontalRatio } = useCheckIrisPosition({ face });
+  const { isBadMotion } = useCheckHeadMotion({ face });
+  const { showFeedback: showIrisFeedback } = useIrisAssessment({
+    isRealtimeMode,
+    horizontalRatio,
+  });
+  const { showFeedback: showMotionFeedback } = useMotionAssessment({
+    isRealtimeMode,
+    isBadMotion,
+  });
+
+  useEffect(() => {
+    if (video && !isInterviewer) {
+      setTimelineRecord(curr => ({
+        ...curr,
+        startTime: Date.now(),
+      }));
+      setIsDetectionOn(true);
+    }
+
+  }, [ video ]);
 
   useEffect(() => {
     const timerId = window.setTimeout(() => {
+      if (!isInterviewer) {
+        setIsDetectionOn(false);
+      }
+
       InterviewEnd();
     }, userInterviewData?.roomTime * 1000 * 60);
 
@@ -52,14 +101,14 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
             <div className="subscribersVideo">
               {publisher && host !== publisher.stream.connection.connectionId && (
                 <div className="publisherVideo">
-                  <UserVideoComponent streamManager={publisher} />
+                  <UserVideoComponent streamManager={publisher} setVideo={setVideo} />
                 </div>
               )}
               {subscribers.map(
                 (sub, i) =>
                   host !== sub.stream.connection.connectionId && (
                     <div key={i}>
-                      <UserVideoComponent streamManager={sub} />
+                      <UserVideoComponent streamManager={sub} setVideo={setVideo} />
                     </div>
                   ),
               )}
@@ -76,17 +125,19 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
             </div>
           </div>
           <UserInterviewTimer roomTime={userInterviewData?.roomTime} />
+          {showIrisFeedback && <InterviewFeedback feedbackType="iris" />}
+          {showMotionFeedback && <InterviewFeedback feedbackType="motion" />}
           <div className="publisherContents">
             {publisher && (
               <div className="publisherVideo">
                 {subscribers.map(
                   (sub, i) =>
                     host === sub.stream.connection.connectionId && (
-                      <UserVideoComponent key={i} streamManager={sub} />
+                      <UserVideoComponent key={i} streamManager={sub} setVideo={setVideo} />
                     ),
                 )}
                 {host === publisher.stream.connection.connectionId && (
-                  <UserVideoComponent streamManager={publisher} />
+                  <UserVideoComponent streamManager={publisher} setVideo={setVideo} />
                 )}
                 {host !== publisher.stream.connection.connectionId && <InterviewQuestionTab />}
               </div>

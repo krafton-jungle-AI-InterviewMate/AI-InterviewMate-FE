@@ -1,5 +1,6 @@
-import { OpenVidu } from "openvidu-browser";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
+import { OpenVidu } from "openvidu-browser";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   hostAtom,
@@ -8,12 +9,17 @@ import {
   isInterviewerAtom,
   isInterviewStartAtom,
   roomPeopleNowAtom,
+  timelineRecordAtom,
 } from "store/interview/atom";
-import { useNavigate } from "react-router-dom";
-import UserInterviewReady from "components/interview/userInterview/UserInterviewReady";
-import { useDeleteInterviewRooms, usePutInterviewRooms } from "hooks/queries/interview";
 import { memberAtom } from "store/auth/atom";
-import UserInterviewStart from "./../../../components/interview/userInterview/UserInterviewStart";
+
+import UserInterviewReady from "components/interview/userInterview/UserInterviewReady";
+import UserInterviewStart from "components/interview/userInterview/UserInterviewStart";
+
+import { useDeleteInterviewRooms, usePutInterviewRooms } from "hooks/queries/interview";
+import { usePostRatingViewee } from "hooks/queries/mypage";
+import { PostRatingVieweePayloadData } from "api/mypage/types";
+import { deduplicate } from "lib/interview";
 
 const UserInterview = () => {
   const userInterviewData = useRecoilValue(interviewDataAtom);
@@ -23,6 +29,9 @@ const UserInterview = () => {
   const isInterviewer = useRecoilValue(isInterviewerAtom);
   const [ host, setHost ] = useRecoilState(hostAtom);
   const setComment = useSetRecoilState(interviewCommentAtom);
+  const {
+    timeline: { eyes, attitude },
+  } = useRecoilValue(timelineRecordAtom);
 
   const navigate = useNavigate();
 
@@ -36,6 +45,7 @@ const UserInterview = () => {
 
   const { mutate: putInterviewRoomsMutate } = usePutInterviewRooms();
   const { mutate: deleteInterviewRoomsMutate } = useDeleteInterviewRooms();
+  const { mutate: postRatingVieweeMutate } = usePostRatingViewee();
 
   useEffect(() => {
     window.addEventListener("beforeunload", onbeforeunload);
@@ -109,7 +119,7 @@ const UserInterview = () => {
 
     session.on("signal:interviewStart", event => {
       console.log(event.type);
-      setIsInterviewStart(true);
+      setIsInterviewStart(event.data);
     });
 
     session.on("signal:setHost", event => {
@@ -228,36 +238,64 @@ const UserInterview = () => {
     });
   };
 
-  const handleClickStart = () => {
+  const handleClickStart = async () => {
     // 면접 시작
     if (ready) {
-      putInterviewRoomsMutate(userInterviewData!.roomIdx, {
-        onSuccess: () => {
-          setIsInterviewStart(true);
-        },
-        onError(error) {
-          alert(error);
-        },
-      });
-      session
-        .signal({
-          data: true,
-          to: subscribers,
-          type: "interviewStart",
-        })
-        .then(() => {
-          console.log("면접을 시작합니다.");
-        })
-        .catch(error => {
-          console.error(error);
+      try {
+        session
+          .signal({
+            data: true,
+            to: subscribers,
+            type: "interviewStart",
+          })
+          .then(() => {
+            console.log("면접을 시작합니다.");
+          })
+          .catch(error => {
+            console.error(error);
+          });
+        putInterviewRoomsMutate(userInterviewData!.roomIdx, {
+          onSuccess: () => {
+            setIsInterviewStart(true);
+          },
+          onError(error) {
+            alert(error);
+          },
         });
+      }
+      catch (e) {
+        console.log(e);
+      }
     }
   };
 
   const InterviewEnd = () => {
     // 면접 정상 종료
+    if (!userInterviewData) {
+      return;
+    }
     if (host === publisher.stream.connection.connectionId) {
-      putInterviewRoomsMutate(userInterviewData!.roomIdx, {
+      const data: PostRatingVieweePayloadData = {
+        eyeTimelines: deduplicate(eyes),
+        attitudeTimelines: deduplicate(attitude),
+        questionTimelines: [],
+        comments: [],
+        scripts: [],
+      };
+
+      const { roomIdx } = userInterviewData;
+      postRatingVieweeMutate(
+        {
+          roomIdx,
+          data,
+        },
+        {
+          onError(error) {
+            alert(error);
+          },
+        },
+      );
+      putInterviewRoomsMutate(userInterviewData.roomIdx, {
         onSuccess: () => {
           setIsInterviewStart(false);
           leaveSession();

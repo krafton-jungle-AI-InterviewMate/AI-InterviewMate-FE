@@ -1,12 +1,23 @@
+import { useEffect, useState } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  hostAtom,
+  isInterviewerAtom,
+  motionSnapshotAtom,
+} from "store/interview/atom";
+
+import useInitializeInterviewState from "hooks/useInitializeInterviewState";
+import useFaceLandmarksDetection from "hooks/useFaceLandmarksDetection";
+
 import { Dialog, DialogActions, DialogTitle } from "@mui/material";
 import UserVideoComponent from "./UserVideoComponent";
 import Loading from "components/common/Loading";
-import styled from "@emotion/styled";
 import { StyledBtn } from "styles/StyledBtn";
-import { hostAtom, isInterviewerAtom } from "store/interview/atom";
-import { useRecoilValue } from "recoil";
+import { toast } from "react-toastify";
+import * as Styled from "pages/interview/InterviewReady/style";
+
+import styled from "@emotion/styled";
 import { css } from "@emotion/react";
-import { useEffect, useState } from "react";
 
 interface UserInterviewReadyProps {
   session: any;
@@ -16,7 +27,7 @@ interface UserInterviewReadyProps {
   isOpen: boolean;
   handleClickReadyOut: () => void;
   handleClickModalRoomLeave: () => void;
-  handleClickStart: () => void;
+  handleClickStart: () => Promise<void>;
   handleClickModalClose: () => void;
 }
 
@@ -34,14 +45,56 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
   } = props;
   const isInterviewer = useRecoilValue(isInterviewerAtom);
   const host = useRecoilValue(hostAtom);
+  const setMotionSnapshot = useSetRecoilState(motionSnapshotAtom);
 
-  const [isHost, setIsHost] = useState(false);
+  const [ isHost, setIsHost ] = useState(false);
+  const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
+
+  const { initializeInterviewState } = useInitializeInterviewState();
+  const { isVideoReady, setNewDetector, setIsDetectionOn, updateFace, detector } =
+    useFaceLandmarksDetection({
+      video,
+      isOneOff: true,
+    });
 
   useEffect(() => {
     if (publisher) {
       setIsHost(host === publisher.stream.connection.connectionId);
     }
-  }, [host]);
+  }, [ host ]);
+
+  useEffect(() => {
+    if (isVideoReady && !isInterviewer) {
+      (async () => {
+        await setNewDetector();
+      })();
+    }
+  }, [ isVideoReady, isInterviewer ]);
+
+  const handleStart = async () => {
+    if (!detector) {
+      throw new Error("detector is not ready");
+    }
+
+    initializeInterviewState();
+
+    if (!isInterviewer) {
+      setIsDetectionOn(true);
+
+      const newFace = await updateFace(detector);
+
+      if (newFace) {
+        setIsDetectionOn(false);
+        toast.clearWaitingQueue();
+        setMotionSnapshot(newFace);
+      }
+      else {
+        toast("화면에서 얼굴이 인식되지 않습니다", Styled.toastOptions);
+      }
+    }
+
+    await handleClickStart();
+  };
 
   return (
     <StyledUserInterview isHost={isHost}>
@@ -53,7 +106,7 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
             </StyledBtn>
             {!isInterviewer && (
               <NewStyledBtn
-                onClick={handleClickStart}
+                onClick={handleStart}
                 width="200px"
                 height="48px"
                 color="orange"
@@ -69,13 +122,13 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
         <>
           <div className="publisherContents">
             {publisher && host === publisher.stream.connection.connectionId ? (
-              <UserVideoComponent streamManager={publisher} />
+              <UserVideoComponent streamManager={publisher} setVideo={setVideo} />
             ) : (
               <>
                 {subscribers.map(
                   (sub, i) =>
                     host === sub.stream.connection.connectionId && (
-                      <UserVideoComponent key={i} streamManager={sub} />
+                      <UserVideoComponent key={i} streamManager={sub} setVideo={setVideo} />
                     ),
                 )}
               </>
@@ -84,14 +137,14 @@ const UserInterviewReady = (props: UserInterviewReadyProps) => {
           <div className="subscribersContents">
             {publisher && host !== publisher.stream.connection.connectionId && (
               <div className="subscribers">
-                <UserVideoComponent streamManager={publisher} />
+                <UserVideoComponent streamManager={publisher} setVideo={setVideo} />
               </div>
             )}
             {subscribers.map(
               (sub, i) =>
                 host !== sub.stream.connection.connectionId && (
                   <div key={i} className="subscribers">
-                    <UserVideoComponent streamManager={sub} />
+                    <UserVideoComponent streamManager={sub} setVideo={setVideo} />
                   </div>
                 ),
             )}
@@ -171,7 +224,7 @@ const StyledUserInterview = styled.div<StyledUserInterviewProps>`
     .subscribers {
       width: 333px;
       height: 250px;
-      background-color: var(--font-gray);
+      background-color: var(--main-black);
     }
   }
   .publisherContents {
@@ -180,7 +233,7 @@ const StyledUserInterview = styled.div<StyledUserInterviewProps>`
     align-items: flex-end;
     width: 1000px;
     height: 750px;
-    background-color: var(--font-gray);
+    background-color: var(--main-black);
   }
 `;
 
