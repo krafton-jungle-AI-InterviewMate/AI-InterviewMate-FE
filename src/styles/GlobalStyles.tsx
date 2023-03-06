@@ -1,7 +1,7 @@
 import { Global, css } from "@emotion/react";
 
 const globalStyles = css`
-  @import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Roboto:wght@500&display=swap');
+  @import url("https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Roboto:wght@500&display=swap");
 
   :root {
     /** 색상 변수 */
@@ -42,6 +42,7 @@ const globalStyles = css`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
+    overflow-x: hidden;
 
     *::selection {
       color: var(--main-white);
@@ -56,7 +57,12 @@ const globalStyles = css`
       font-size: 12px;
     }
     .progress-bar {
-      background: linear-gradient(-90deg, var(--main-alert) 0%, var(--main-alert) 35%, #fafafa 100%);
+      background: linear-gradient(
+        -90deg,
+        var(--main-alert) 0%,
+        var(--main-alert) 35%,
+        #fafafa 100%
+      );
     }
   }
 
