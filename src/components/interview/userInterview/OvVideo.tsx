@@ -7,11 +7,10 @@ import { css } from "@emotion/react";
 
 interface OpenViduVideoComponentProps {
   streamManager: any;
-  videoRef: React.MutableRefObject<HTMLVideoElement | null>;
 }
 
 const OpenViduVideoComponent = (props: OpenViduVideoComponentProps) => {
-  const { streamManager, videoRef } = props;
+  const { streamManager } = props;
   const isInterviewStart = useRecoilValue(isInterviewStartAtom);
   const host = useRecoilValue(hostAtom);
 
@@ -19,23 +18,15 @@ const OpenViduVideoComponent = (props: OpenViduVideoComponentProps) => {
   const interviewerVideoRef = useRef<null | HTMLVideoElement>(null);
 
   useEffect(() => {
-    if (isHost) {
-      if (streamManager && videoRef.current) {
-        streamManager.addVideoElement(videoRef.current);
-        setIsHost(host === streamManager.stream.connection.connectionId);
-      }
+    if (streamManager && interviewerVideoRef) {
+      streamManager.addVideoElement(interviewerVideoRef.current);
+      setIsHost(host === streamManager.stream.connection.connectionId);
     }
-    else {
-      if (streamManager && interviewerVideoRef.current) {
-        streamManager.addVideoElement(interviewerVideoRef.current);
-        setIsHost(host === streamManager.stream.connection.connectionId);
-      }
-    }
-  }, [ streamManager, videoRef ]);
+  }, [ streamManager, interviewerVideoRef ]);
 
   return (
     <StyledOpenViduVideoComponent isInterviewStart={isInterviewStart} isHost={isHost}>
-      <video autoPlay={true} ref={isHost ? videoRef : interviewerVideoRef} />
+      <video autoPlay={true} ref={interviewerVideoRef} />
     </StyledOpenViduVideoComponent>
   );
 };
