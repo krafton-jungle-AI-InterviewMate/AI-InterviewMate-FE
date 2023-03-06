@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { useSetRecoilState, useRecoilState, useRecoilValue } from "recoil";
-import { motionCountAtom, timelineRecordAtom, recordModeAtom } from "store/interview/atom";
+import {
+  motionCountAtom,
+  timelineRecordAtom,
+  isInterviewerAtom,
+} from "store/interview/atom";
 import { createTimeline } from "lib/interview";
 
 type UseMotionAssessmentParams = {
@@ -20,9 +24,13 @@ const useMotionAssessment = (params: UseMotionAssessmentParams) => {
   const [ timelineRecord, setTimelineRecord ] = useRecoilState(timelineRecordAtom);
   const [ increments, setIncrements ] = useState(0);
   const [ feedbackIncrements, setFeedbackIncrements ] = useState(0);
-  const isRecordMode = useRecoilValue(recordModeAtom);
+  const isInterviewer = useRecoilValue(isInterviewerAtom);
 
   useEffect(() => {
+    if (isInterviewer) {
+      return;
+    }
+
     if (!isRealtimeMode) {
       return;
     }
@@ -68,6 +76,10 @@ const useMotionAssessment = (params: UseMotionAssessmentParams) => {
   };
 
   useEffect(() => {
+    if (isInterviewer) {
+      return;
+    }
+
     assess();
 
     const timerId = window.setTimeout(() => {

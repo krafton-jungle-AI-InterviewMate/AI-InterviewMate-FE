@@ -31,15 +31,24 @@ export const distanceThresholdSelector = selector({
   get: ({ get }) => {
     const { keypoints } = get(motionSnapshotAtom);
 
-    const { right, left } = getFaceDistance(keypoints);
+    if (keypoints.length) {
+      const { right, left } = getFaceDistance(keypoints);
+  
+      const getThreshold = (distance: number) => distance * DISTANCE_THRESHOLD;
 
-    const getThreshold = (distance: number) => distance * DISTANCE_THRESHOLD;
+      return {
+        right,
+        left,
+        rightThreshold: getThreshold(right),
+        leftThreshold: getThreshold(left),
+      };
+    }
 
     return {
-      right,
-      left,
-      rightThreshold: getThreshold(right),
-      leftThreshold: getThreshold(left),
+      right: 0,
+      left: 0,
+      rightThreshold: 0,
+      leftThreshold: 0,
     };
   },
 });

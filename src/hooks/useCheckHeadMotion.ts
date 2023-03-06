@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
+import { isInterviewerAtom } from "store/interview/atom";
 import { boundingBoxSelector, distanceThresholdSelector } from "store/interview/selector";
 import * as FaceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
 import { isInsideHitBox, getFaceDistance, isFaceDistanceStable } from "lib/faceLandmarkDetection";
@@ -15,11 +16,16 @@ const useCheckHeadMotion = (params: UseCheckHeadMotionParams) => {
 
   const hitBox = useRecoilValue(boundingBoxSelector);
   const distanceThreshold = useRecoilValue(distanceThresholdSelector);
+  const isInterviewer = useRecoilValue(isInterviewerAtom);
 
   const [ isBadMotion, setIsBadMotion ] = useState(false);
   const [ increments, setIncrements ] = useState(0);
 
   useEffect(() => {
+    if (isInterviewer) {
+      return;
+    }
+
     if (face) {
       const { box, keypoints } = face;
 
