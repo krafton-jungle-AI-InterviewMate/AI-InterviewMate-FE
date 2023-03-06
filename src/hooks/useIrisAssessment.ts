@@ -4,6 +4,7 @@ import {
   irisCountAtom,
   timelineRecordAtom,
   isInterviewerAtom,
+  showIrisFeedbackAtom,
 } from "store/interview/atom";
 import { THRESHOLD_LEFT, THRESHOLD_RIGHT } from "constants/faceLandmarkDetection";
 import { createTimeline } from "lib/interview";
@@ -20,7 +21,7 @@ const useIrisAssessment = (params: UseIrisAssessmentParams) => {
   } = params;
 
   const [ isShowingFeedback, setIsShowingFeedback ] = useState(false);
-  const [ showFeedback, setShowFeedback ] = useState(false);
+  const [ showFeedback, setShowFeedback ] = useRecoilState(showIrisFeedbackAtom);
   const setIrisCount = useSetRecoilState(irisCountAtom);
   const [ timelineRecord, setTimelineRecord ] = useRecoilState(timelineRecordAtom);
   const [ increments, setIncrements ] = useState(0);

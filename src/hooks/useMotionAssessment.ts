@@ -4,6 +4,7 @@ import {
   motionCountAtom,
   timelineRecordAtom,
   isInterviewerAtom,
+  showMotionFeedbackAtom,
 } from "store/interview/atom";
 import { createTimeline } from "lib/interview";
 
@@ -19,7 +20,7 @@ const useMotionAssessment = (params: UseMotionAssessmentParams) => {
   } = params;
 
   const [ isShowingFeedback, setIsShowingFeedback ] = useState(false);
-  const [ showFeedback, setShowFeedback ] = useState(false);
+  const [ showFeedback, setShowFeedback ] = useRecoilState(showMotionFeedbackAtom);
   const setMotionCount = useSetRecoilState(motionCountAtom);
   const [ timelineRecord, setTimelineRecord ] = useRecoilState(timelineRecordAtom);
   const [ increments, setIncrements ] = useState(0);
