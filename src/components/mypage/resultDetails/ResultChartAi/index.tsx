@@ -22,10 +22,14 @@ const ResultChartAi = (props: ResultChartAiProps) => {
     <StyledChartWrap>
       <StyledTitle>문제당 이탈 횟수</StyledTitle>
       <StyledChartBox>
-        <Line
-          data={dataGenerator({ timeline: resultDetail.timelines })}
-          options={Config.chartAiOption}
-        />
+        {resultDetail.timelines?.length ? (
+          <Line
+            data={dataGenerator({ timeline: resultDetail.timelines })}
+            options={Config.chartAiOption}
+          />
+        ) : (
+          <p>한번도 이탈하지 않으셨군요! 🎉</p>
+        )}
       </StyledChartBox>
     </StyledChartWrap>
   );
@@ -63,5 +67,9 @@ const StyledChartBox = styled.div`
 
   & canvas {
     margin: 0;
+  }
+
+  & p {
+    align-self: center;
   }
 `;
