@@ -9,7 +9,6 @@ type Tab = "question" | "comment";
 
 const InterviewQuestionTab = () => {
   const userInterviewData = useRecoilValue(interviewDataAtom);
-  const { roomIdx } = userInterviewData;
   const [comment, setComment] = useRecoilState(interviewCommentAtom);
 
   const [tabName, setTabName] = useState<Tab>("question");
@@ -25,20 +24,22 @@ const InterviewQuestionTab = () => {
   };
 
   const handleClickSubmitComment = () => {
-    mutate(
-      {
-        roomIdx,
-        comment,
-      },
-      {
-        onSuccess: () => {
-          console.log("중간 저장");
+    if (userInterviewData) {
+      mutate(
+        {
+          roomIdx: userInterviewData.roomIdx,
+          comment,
         },
-        onError(error) {
-          alert(error);
+        {
+          onSuccess: () => {
+            console.log("중간 저장");
+          },
+          onError(error) {
+            alert(error);
+          },
         },
-      },
-    );
+      );
+    }
   };
 
   const textarea = useRef<null | HTMLTextAreaElement>(null);

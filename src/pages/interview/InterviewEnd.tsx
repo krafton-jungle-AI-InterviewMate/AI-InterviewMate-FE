@@ -55,7 +55,7 @@ const InterviewEnd = () => {
   };
 
   useEffect(() => {
-    if (!isInterviewer) {
+    if (!isInterviewer && interviewData) {
       const { roomIdx } = interviewData;
       const data: PostRatingVieweePayloadData = {
         eyeTimelines: deduplicate(eyes),
