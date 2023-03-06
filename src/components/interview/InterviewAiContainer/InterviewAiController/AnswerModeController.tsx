@@ -166,13 +166,14 @@ const StyledNextButton = styled.button`
   height: 160px;
   font-size: 1.4rem;
   text-align: center;
-  background-color: var(--main-orange);
+  background: linear-gradient(90deg, var(--push-orange), transparent) var(--light-orange);
+  place-content: center;
   color: var(--main-white);
   border-radius: 999px;
-  transition: 0.2s;
+  transition: all 300ms;
 
   &:hover {
-    background-color: var(--light-orange);
+    background-color: var(--light-blue);
   }
   &:active {
     background-color: var(--push-orange);
