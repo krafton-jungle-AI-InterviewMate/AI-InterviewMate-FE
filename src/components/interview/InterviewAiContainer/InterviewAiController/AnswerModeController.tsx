@@ -13,7 +13,6 @@ import useIrisAssessment from "hooks/useIrisAssessment";
 import { InterviewModeComment, ANSWER_LIMIT_SECONDS } from "constants/interview";
 import InterviewComment from "../InterviewComment";
 import InterviewAiTimer from "../InterviewAiTimer";
-import InterviewFeedback from "components/interview/InterviewFeedback";
 
 import styled from "@emotion/styled";
 import useCheckHeadMotion from "hooks/useCheckHeadMotion";
@@ -54,15 +53,11 @@ const AnswerModeController = (props: AnswerModeControllerProps) => {
     face,
   });
 
-  const {
-    showFeedback: showIrisFeedback,
-  } = useIrisAssessment({
+  useIrisAssessment({
     isRealtimeMode,
     horizontalRatio,
   });
-  const {
-    showFeedback: showMotionFeedback,
-  } = useMotionAssessment({
+  useMotionAssessment({
     isRealtimeMode,
     isBadMotion,
   });
@@ -106,13 +101,6 @@ const AnswerModeController = (props: AnswerModeControllerProps) => {
           </StyledTimer>
         </StyledFlex>
       </InterviewComment>
-
-      {showIrisFeedback && (
-        <InterviewFeedback feedbackType="iris" />
-      )}
-      {showMotionFeedback && (
-        <InterviewFeedback feedbackType="motion" />
-      )}
 
       <StyledNextButton type="button" onClick={goToNextQuestion}>
         다음으로 넘어가기
@@ -178,13 +166,14 @@ const StyledNextButton = styled.button`
   height: 160px;
   font-size: 1.4rem;
   text-align: center;
-  background-color: var(--main-orange);
+  background: linear-gradient(90deg, var(--push-orange), transparent) var(--light-orange);
+  place-content: center;
   color: var(--main-white);
   border-radius: 999px;
-  transition: 0.2s;
+  transition: all 300ms;
 
   &:hover {
-    background-color: var(--light-orange);
+    background-color: var(--light-blue);
   }
   &:active {
     background-color: var(--push-orange);

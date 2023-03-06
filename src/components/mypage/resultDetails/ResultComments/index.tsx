@@ -82,7 +82,7 @@ const StyledCommentsBox = styled.div`
   height: 100%;
   border-radius: 16px;
   padding: 20px;
-  border: 1px solid var(--main-gray);
+  border: 2px solid var(--main-black);
   box-shadow: var(--box-shadow);
   box-sizing: border-box;
 

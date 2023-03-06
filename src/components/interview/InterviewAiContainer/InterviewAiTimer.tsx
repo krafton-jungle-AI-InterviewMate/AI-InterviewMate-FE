@@ -34,7 +34,7 @@ const StyledClock = styled.div`
   height: 26px;
   border-radius: 999px;
   background-color: var(--main-white);
-  border: 2px solid var(--main-orange);
+  border: 2px solid var(--main-black);
 `;
 
 const StyledSecond = styled.div<{ sec: number }>`
@@ -49,6 +49,6 @@ const StyledSecond = styled.div<{ sec: number }>`
   width: 2px;
   height: calc(50% - 3px);
   border-radius: 3px;
-  background-color: var(--main-orange);
+  background-color: var(--main-black);
 `;
 

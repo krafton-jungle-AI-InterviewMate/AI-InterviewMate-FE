@@ -146,3 +146,13 @@ export const videoUrlAtom = atom<string>({
   key: "VideoUrl",
   default: "",
 });
+
+export const showIrisFeedbackAtom = atom<boolean>({
+  key: "ShowIrisFeedback",
+  default: false,
+});
+
+export const showMotionFeedbackAtom = atom<boolean>({
+  key: "ShowMotionFeedback",
+  default: false,
+});

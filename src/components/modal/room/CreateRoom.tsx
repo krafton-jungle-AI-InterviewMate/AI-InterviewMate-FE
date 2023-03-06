@@ -121,7 +121,6 @@ const CreateRoom = (props: CreateRoomProps) => {
           </div>
           {roomType === "USER" ? (
             <UserRoomForm
-              roomType={roomType}
               onClickModalClose={onClose}
               questionBoxes={questionBoxes}
             />

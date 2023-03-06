@@ -29,6 +29,7 @@ import RecordRTC from "recordrtc";
 
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
+import InterviewAlertBox from "../InterviewAlertBox";
 
 const InterviewAiContainer = () => {
   const interviewMode = useRecoilValue(interviewModeAtom);
@@ -122,6 +123,7 @@ const InterviewAiContainer = () => {
     <StyledWrap>
       <StyledVideoSection>
         <StyledVideoWrap>
+          <InterviewAlertBox webcamWidth={640} webcamHeight={480} />
           {!isWebcamReady && (
             <Skeleton variant="rectangular" width={640} height={480} />
           )}
@@ -231,13 +233,15 @@ const StyledVideoWrap = styled.div`
   ${wrapStyle}
   background-color: #000;
   border-radius: 16px;
-  overflow: hidden;
   box-shadow: var(--box-shadow);
   margin: 0 auto;
   margin-top: 240px;
   border: 1px solid var(--main-gray);
+  overflow: visible;
 
   & video {
     ${commonStyle}
+    border-radius: 16px;
+    z-index: 10;
   }
 `;

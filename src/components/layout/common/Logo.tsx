@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
+import { PagesPath } from "constants/pages";
 import styled from "@emotion/styled";
 
 const Logo = () => {
   return (
     <StyledH1>
-      <Link to="/">
+      <Link to={PagesPath.LOBBY}>
         인터뷰<span>메이트</span>
       </Link>
     </StyledH1>
