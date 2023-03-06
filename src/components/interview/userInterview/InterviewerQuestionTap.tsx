@@ -3,14 +3,18 @@ import { useRef, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { interviewCommentAtom, interviewDataAtom } from "store/interview/atom";
 import styled from "@emotion/styled";
+import { usePostResultComment } from "hooks/queries/mypage";
 
 type Tab = "question" | "comment";
 
 const InterviewQuestionTab = () => {
   const userInterviewData = useRecoilValue(interviewDataAtom);
-  const [ comment, setComment ] = useRecoilState(interviewCommentAtom);
+  const { roomIdx } = userInterviewData;
+  const [comment, setComment] = useRecoilState(interviewCommentAtom);
 
-  const [ tabName, setTabName ] = useState<Tab>("question");
+  const [tabName, setTabName] = useState<Tab>("question");
+
+  const { mutate } = usePostResultComment();
 
   const handleClickTab = (event: React.MouseEvent<HTMLButtonElement>) => {
     setTabName(event.currentTarget.name as Tab);
@@ -18,6 +22,23 @@ const InterviewQuestionTab = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+  };
+
+  const handleClickSubmitComment = () => {
+    mutate(
+      {
+        roomIdx,
+        comment,
+      },
+      {
+        onSuccess: () => {
+          console.log("중간 저장");
+        },
+        onError(error) {
+          alert(error);
+        },
+      },
+    );
   };
 
   const textarea = useRef<null | HTMLTextAreaElement>(null);
@@ -87,6 +108,14 @@ const InterviewQuestionTab = () => {
                 spellCheck={false}
               ></textarea>
             </form>
+            <StyledBtn
+              onClick={handleClickSubmitComment}
+              width="200px"
+              height="48px"
+              color="orange"
+            >
+              코멘트 중간 저장
+            </StyledBtn>
           </div>
         )}
       </div>
@@ -114,7 +143,7 @@ const StyledInterviewQuestionTab = styled.div`
       margin-bottom: 20px;
       width: 326px;
       .questionTitle {
-        font-size: 16px;
+        font-size: 1rem;
         font-weight: 400;
         color: var(--main-black);
         margin: 0 0 10px 0;
@@ -123,18 +152,18 @@ const StyledInterviewQuestionTab = styled.div`
           display: inline;
         }
         span {
-          font-size: 24px;
+          font-size: 1.4rem;
           color: var(--font-gray);
           margin-right: 20px;
         }
       }
       .questionKeyword {
-        font-size: 16px;
+        font-size: 1rem;
         font-weight: 400;
         color: var(--main-black);
         margin: 0;
         span {
-          font-size: 16px;
+          font-size: 1rem;
           font-weight: 400;
           color: var(--font-gray);
           margin-right: 10px;
@@ -144,7 +173,7 @@ const StyledInterviewQuestionTab = styled.div`
     .comment {
       display: flex;
       flex-direction: column;
-      font-size: 16px;
+      font-size: 1.2rem;
       font-weight: 400;
       color: var(--main-black);
       span {
@@ -153,7 +182,7 @@ const StyledInterviewQuestionTab = styled.div`
       textarea {
         width: 314px;
         height: auto;
-        font-size: 20px;
+        font-size: 1.2rem;
         font-weight: 400;
         border-radius: 7px;
         border: 1px solid var(--font-gray);
@@ -161,6 +190,7 @@ const StyledInterviewQuestionTab = styled.div`
         overflow: hidden;
       }
       button {
+        margin-top: 50px;
         align-self: flex-end;
       }
     }
