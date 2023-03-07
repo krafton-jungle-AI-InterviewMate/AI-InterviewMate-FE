@@ -63,6 +63,7 @@ const InterviewEnd = () => {
         {
           onError(error: any) {
             if (error.response.status === 400) {
+              alert("방이 강제로 종료되었습니다.");
               navigate("/lobby");
             }
           },

@@ -18,7 +18,7 @@ import { useDeleteInterviewRooms, usePutInterviewRooms } from "hooks/queries/int
 const UserInterview = () => {
   const userInterviewData = useRecoilValue(interviewDataAtom);
   const { nickname } = useRecoilValue(memberAtom);
-  const [roomPeopleNow, setRoomPeopleNow] = useRecoilState(roomPeopleNowAtom);
+  const setRoomPeopleNow = useSetRecoilState(roomPeopleNowAtom);
   const [isInterviewStart, setIsInterviewStart] = useRecoilState(isInterviewStartAtom);
   const isInterviewer = useRecoilValue(isInterviewerAtom);
   const [host, setHost] = useRecoilState(hostAtom);
@@ -88,17 +88,15 @@ const UserInterview = () => {
     });
 
     session.on("signal:interviewOut", event => {
+      const data = JSON.parse(event.data);
       console.log(event.type);
       console.log(event.data);
-      if (event.data.host) {
-        // 면접자가 나갔을 때 면접관들 모두 로비로
-        console.log("면접자가 나갔을 때 면접관들 모두 로비로");
+      console.log(data.host);
+      if (data.host) {
         setIsInterviewStart(false);
         navigate("/lobby");
         leaveSession();
-      } else if (event.data.length === 0 && !isInterviewer) {
-        // 면접관이 나갔을 때 다른 면접관이 남아있지 않고 본인이 면접자일 때
-        console.log("면접관이 나갔을 때 다른 면접관이 남아있지 않고 본인이 면접자일 때");
+      } else if (data.length === 1 && !isInterviewer) {
         setIsInterviewStart(false);
         navigate("/interview/end");
         leaveSession();
