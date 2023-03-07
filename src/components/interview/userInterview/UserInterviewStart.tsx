@@ -57,11 +57,11 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
   const setTimelineRecord = useSetRecoilState(timelineRecordAtom);
   const setVideoBlob = useSetRecoilState(videoBlobAtom);
   const isRecordMode = useRecoilValue(recordModeAtom);
-  const [ recorder, setRecorder ] = useRecoilState(userRecorderAtom);
+  const [recorder, setRecorder] = useRecoilState(userRecorderAtom);
 
-  const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
+  const [video, setVideo] = useState<null | HTMLVideoElement>(null);
 
-  const isRealtimeMode = useMemo(() => feedbackMode === "ON", [ feedbackMode ]);
+  const isRealtimeMode = useMemo(() => feedbackMode === "ON", [feedbackMode]);
   const { face, setIsDetectionOn } = useFaceLandmarksDetection({ video });
 
   const { horizontalRatio } = useCheckIrisPosition({ face });
@@ -75,9 +75,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
     isBadMotion,
   });
 
-  const {
-    getPermissionInitializeUserRecorder,
-  } = useRecorderPermission("video");
+  const { getPermissionInitializeUserRecorder } = useRecorderPermission("video");
 
   const stopRecording = () => {
     if (isInterviewer) {
@@ -85,7 +83,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
     }
 
     if (recorder) {
-      recorder.stop((blob) => {
+      recorder.stop(blob => {
         setVideoBlob(blob);
       });
     }
@@ -96,13 +94,13 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
       setIsDetectionOn(false);
     }
 
-    interviewEnd();
+    // interviewEnd();
 
     if (isRecordMode) {
       stopRecording();
     }
 
-    setTimelineRecord((curr) => ({
+    setTimelineRecord(curr => ({
       ...curr,
       endTime: Date.now(),
     }));
@@ -115,7 +113,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
       stopRecording();
     }
 
-    setTimelineRecord((curr) => ({
+    setTimelineRecord(curr => ({
       ...curr,
       endTime: Date.now(),
     }));
@@ -129,7 +127,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
       }));
       setIsDetectionOn(true);
     }
-  }, [ video ]);
+  }, [video]);
 
   useEffect(() => {
     const timerId = window.setTimeout(
@@ -151,10 +149,10 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
 
         setRecorder(rec);
       })();
-  
-      return (() => {
+
+      return () => {
         recorder?.clearRecordedData();
-      });
+      };
     }
   }, []);
 
@@ -229,12 +227,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
               로비로 이동하시겠습니까?
             </DialogTitle>
             <DialogActions>
-              <StyledBtn
-                onClick={handleInterviewLeave}
-                width="200px"
-                height="42px"
-                color="orange"
-              >
+              <StyledBtn onClick={handleInterviewLeave} width="200px" height="42px" color="orange">
                 네!
               </StyledBtn>
               <StyledBtn onClick={handleClickModalClose} width="200px" height="42px" color="red">
