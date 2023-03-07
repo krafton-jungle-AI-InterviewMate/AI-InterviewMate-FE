@@ -18,24 +18,7 @@ export const useRecorderPermission = (
   };
 
   const getPermissionInitializeUserRecorder = async () => {
-    let stream1 = await (navigator as any).mediaDevices.getUserMedia({
-      video: true,
-      audio: true,
-    });
-    let screenStream = await (navigator as any).mediaDevices.getDisplayMedia({
-      preferCurrentTab: true,
-      audio: true,
-    });
-    screenStream = screenStream.getAudioTracks();
-
-    let stream2 = new MediaStream();
-    stream2.addTrack(screenStream[0]);
-
-    let recorder = new MultiStreamRecorder([ stream1, stream2 ], {
-      mimeType: "video/webm",
-    });
-
-    return recorder;
+    return; // 여기 함수 아무것도 안쓰는데, 아래 분기에 영향갈까봐 바로 리턴 시켜둘게요...
   };
 
   useEffect(() => {

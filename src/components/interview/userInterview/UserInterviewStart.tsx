@@ -10,7 +10,7 @@ import {
   recordModeAtom,
   userRecorderAtom,
 } from "store/interview/atom";
-import RecordRTC from "recordrtc";
+import RecordRTC, { MultiStreamRecorder } from "recordrtc";
 
 import { Dialog, DialogActions, DialogTitle } from "@mui/material";
 import InterviewQuestionTab from "./InterviewerQuestionTap";
@@ -146,9 +146,27 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
   useEffect(() => {
     if (isRecordMode && !isInterviewer) {
       (async () => {
-        const rec = await getPermissionInitializeUserRecorder();
+        // 저장할 음성 데이터 배열 생성
+        const audioTracks:any = [];
+        // 모든 subscriber에서 오디오 트랙을 추출하여 배열에 추가
+          subscribers.forEach((subscriber) => {
+            const stream = subscriber.stream;
+            const audioTrack = stream.mediaStream.getAudioTracks()[0];
+            audioTracks.push(audioTrack);
+          });
+        // 모든 오디오 트랙을 믹싱하여 새 MediaStream 객체 생성
+        const mixedAudioStream = new MediaStream(audioTracks);
+        // 사용자 웹캠 및 마이크 데이터 불러오기 -> 원래 getPermissionInitializeUserRecorder에 있던 코드!!
+        let userStream = await (navigator as any).mediaDevices.getUserMedia({
+          video: true,
+          audio: true,
+        });
+        // Recorder 할 객체 생성
+        let rec = new MultiStreamRecorder([userStream, mixedAudioStream], {
+          mimeType: "video/webm",
+        });
+        // 영상 녹화
         rec.record();
-
         setRecorder(rec);
       })();
   
