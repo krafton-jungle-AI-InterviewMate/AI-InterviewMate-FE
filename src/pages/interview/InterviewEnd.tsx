@@ -61,9 +61,11 @@ const InterviewEnd = () => {
           data,
         },
         {
-          onError(e) {
-            console.log(e);
-            navigate("lobby");
+          onError(error: any) {
+            if (error.response.status) {
+              console.log(error.response.status);
+              navigate("/lobby");
+            }
           },
         },
       );
