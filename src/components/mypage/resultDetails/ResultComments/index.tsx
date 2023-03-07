@@ -12,16 +12,18 @@ type ResultCommentsProps = {
 
 const ResultComments = (props: ResultCommentsProps) => {
   const { resultDetail } = props;
-  const [ currInterviewer, setCurrInterviewer ] = useState("");
-  const [ comment, setComment ] = useState("");
+  const [currInterviewer, setCurrInterviewer] = useState("");
+  const [comment, setComment] = useState("");
 
   const handleChange = (event: SelectChangeEvent) => {
     setCurrInterviewer(event.target.value);
   };
 
   useEffect(() => {
-    setComment(resultDetail.comments[currInterviewer + 0].comment);
-  }, [ currInterviewer ]);
+    if (resultDetail.comments.length) {
+      setComment(resultDetail.comments[currInterviewer + 0].comment);
+    }
+  }, [currInterviewer]);
 
   return (
     <StyledCommentsWrap>
@@ -46,7 +48,7 @@ const ResultComments = (props: ResultCommentsProps) => {
             }}
             onChange={handleChange}
           >
-            {resultDetail.comments ? (
+            {resultDetail.comments.length ? (
               resultDetail.comments.map((_, index) => (
                 <MenuItem key={`comment${index}`} value={index}>
                   면접관{index + 1}
