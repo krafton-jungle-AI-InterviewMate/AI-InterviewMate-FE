@@ -16,7 +16,7 @@ import { PostRatingVieweePayloadData } from "api/mypage/types";
 
 const InterviewEnd = () => {
   const setAiInterviewNextProcess = useSetRecoilState(aiInterviewNextProcessAtom);
-  const [comment, setComment] = useRecoilState(interviewCommentAtom);
+  const [ comment, setComment ] = useRecoilState(interviewCommentAtom);
   const isInterviewer = useRecoilValue(isInterviewerAtom);
   const interviewData = useRecoilValue(interviewDataAtom);
   const {
@@ -86,15 +86,7 @@ const InterviewEnd = () => {
     <StyledInterviewEnd>
       <>
         <h2>면접 종료!</h2>
-        {interviewData?.roomType === "AI" ? (
-          <div className="aiEndContents">
-            <p>수고하셨습니다.</p>
-            <span>면접 결과는 마이페이지에서 확인하실 수 있습니다.</span>
-            <StyledBtn width="100px" height="32px" color="red" onClick={() => navigate("/lobby")}>
-              나가기
-            </StyledBtn>
-          </div>
-        ) : isInterviewer ? (
+        {interviewData?.roomType === "USER" && isInterviewer ? (
           <div className="userEndContents">
             <p>면접자를 위한 코멘트를 남겨주세요.</p>
             <div>
