@@ -92,15 +92,17 @@ const UserInterview = () => {
       console.log(event.data);
       if (event.data === "면접자") {
         // 면접자가 나갔을 때 면접관들 모두 로비로
+        console.log("면접자가 나갔을 때 면접관들 모두 로비로");
         setIsInterviewStart(false);
-        leaveSession();
         navigate("/lobby");
+        leaveSession();
       }
       if (event.data === "면접관" && subscribers.length === 0 && !isInterviewer) {
         // 면접관이 나갔을 때 다른 면접관이 남아있지 않고 본인이 면접자일 때
+        console.log("면접관이 나갔을 때 다른 면접관이 남아있지 않고 본인이 면접자일 때");
         setIsInterviewStart(false);
-        leaveSession();
         navigate("/interview/end");
+        leaveSession();
       }
     });
 
