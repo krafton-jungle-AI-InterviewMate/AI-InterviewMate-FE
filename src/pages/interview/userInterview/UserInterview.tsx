@@ -18,7 +18,7 @@ import { useDeleteInterviewRooms, usePutInterviewRooms } from "hooks/queries/int
 const UserInterview = () => {
   const userInterviewData = useRecoilValue(interviewDataAtom);
   const { nickname } = useRecoilValue(memberAtom);
-  const setRoomPeopleNow = useSetRecoilState(roomPeopleNowAtom);
+  const [roomPeopleNow, setRoomPeopleNow] = useRecoilState(roomPeopleNowAtom);
   const [isInterviewStart, setIsInterviewStart] = useRecoilState(isInterviewStartAtom);
   const isInterviewer = useRecoilValue(isInterviewerAtom);
   const [host, setHost] = useRecoilState(hostAtom);
@@ -90,14 +90,13 @@ const UserInterview = () => {
     session.on("signal:interviewOut", event => {
       console.log(event.type);
       console.log(event.data);
-      if (event.data === "면접자") {
+      if (event.data.host) {
         // 면접자가 나갔을 때 면접관들 모두 로비로
         console.log("면접자가 나갔을 때 면접관들 모두 로비로");
         setIsInterviewStart(false);
         navigate("/lobby");
         leaveSession();
-      }
-      if (event.data === "면접관" && subscribers.length === 0 && !isInterviewer) {
+      } else if (event.data.length === 0 && !isInterviewer) {
         // 면접관이 나갔을 때 다른 면접관이 남아있지 않고 본인이 면접자일 때
         console.log("면접관이 나갔을 때 다른 면접관이 남아있지 않고 본인이 면접자일 때");
         setIsInterviewStart(false);
@@ -182,7 +181,10 @@ const UserInterview = () => {
     // 인터뷰 도중 나감
     session
       .signal({
-        data: host === publisher.stream.connection.connectionId ? "면접자" : "면접관",
+        data: {
+          host: host === publisher.stream.connection.connectionId,
+          length: subscribers.length,
+        },
         to: subscribers,
         type: "interviewOut",
       })
