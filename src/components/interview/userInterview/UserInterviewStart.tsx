@@ -94,7 +94,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
       setIsDetectionOn(false);
     }
 
-    // interviewEnd();
+    interviewEnd();
 
     if (isRecordMode) {
       stopRecording();

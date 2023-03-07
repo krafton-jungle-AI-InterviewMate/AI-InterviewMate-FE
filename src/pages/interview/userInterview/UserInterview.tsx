@@ -21,7 +21,6 @@ const UserInterview = () => {
   const setRoomPeopleNow = useSetRecoilState(roomPeopleNowAtom);
   const [isInterviewStart, setIsInterviewStart] = useRecoilState(isInterviewStartAtom);
   const isInterviewer = useRecoilValue(isInterviewerAtom);
-  console.log("isInterviewer", isInterviewer);
   const [host, setHost] = useRecoilState(hostAtom);
   const setComment = useSetRecoilState(interviewCommentAtom);
 
