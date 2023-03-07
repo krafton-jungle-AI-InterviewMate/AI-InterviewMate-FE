@@ -100,7 +100,7 @@ const UserInterview = () => {
       ) {
         setIsInterviewStart(false);
         leaveSession();
-        navigate("/lobby");
+        navigate("/interview/end");
       }
     });
 
@@ -255,7 +255,7 @@ const UserInterview = () => {
     }
   };
 
-  const InterviewEnd = () => {
+  const interviewEnd = () => {
     // 면접 정상 종료
     if (!userInterviewData) {
       return;
@@ -319,7 +319,7 @@ const UserInterview = () => {
           handleClickModalClose={handleClickModalClose}
           handleClickModalRoomLeave={handleClickModalRoomLeave}
           handleClickInterviewOut={handleClickInterviewOut}
-          InterviewEnd={InterviewEnd}
+          interviewEnd={interviewEnd}
         />
       ) : (
         <UserInterviewReady

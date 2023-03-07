@@ -118,8 +118,7 @@ const FinishedModeController = () => {
     },
     {
       onSettled: handleProcessingPopupClose,
-    },
-    );
+    });
   };
 
   return (

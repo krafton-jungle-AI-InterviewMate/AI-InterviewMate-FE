@@ -1,5 +1,7 @@
 import { atom } from "recoil";
 import * as FaceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
+import RecordRTC from "recordrtc";
+
 import {
   InterviewModeTypes,
   AiInterviewerTypes,
@@ -160,4 +162,10 @@ export const showMotionFeedbackAtom = atom<boolean>({
 export const preSignedUrlListAtom = atom<string[]>({
   key: "PreSignedUrlList",
   default: [],
+});
+
+export const userRecorderAtom = atom<null | RecordRTC.MultiStreamRecorder>({
+  key: "UserRecorder",
+  default: null,
+  dangerouslyAllowMutability: true,
 });

@@ -4,7 +4,12 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { useSetRecoilState, useRecoilState } from "recoil";
-import { feedbackAtom, interviewDataAtom, isInterviewerAtom } from "store/interview/atom";
+import {
+  feedbackAtom,
+  recordModeAtom,
+  interviewDataAtom,
+  isInterviewerAtom,
+} from "store/interview/atom";
 import { usePostInterviewRooms } from "hooks/queries/interview";
 import { useNavigate } from "react-router-dom";
 import { RoomTypes } from "api/mypage/types";
@@ -26,6 +31,7 @@ interface InputRoomFormProps {
 function UserRoomForm({ onClickModalClose, questionBoxes }) {
   const setUserInterviewData = useSetRecoilState(interviewDataAtom);
   const [ feedback, setFeedback ] = useRecoilState(feedbackAtom);
+  const [ record, setRecord ] = useRecoilState(recordModeAtom);
   const setIsInterviewer = useSetRecoilState(isInterviewerAtom);
 
   const navigate = useNavigate();
@@ -42,6 +48,13 @@ function UserRoomForm({ onClickModalClose, questionBoxes }) {
       target: { value },
     } = event;
     setFeedback(value);
+  };
+
+  const onChangeRecord = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const {
+      target: { value },
+    } = event;
+    setRecord(value === "ON");
   };
 
   const {
@@ -214,6 +227,26 @@ function UserRoomForm({ onClickModalClose, questionBoxes }) {
           ))}
         </div>
         <span className="guide">실시간 피드백 설정은 방 생성 이후에는 수정하실 수 없습니다.</span>
+        <div className="inputContent">
+          <p>면접 영상 녹화</p>
+          {[ "ON", "OFF" ].map((data, idx) => (
+            <StyledRadioWrap key={`Record${idx}`}>
+              <label htmlFor={`Record${idx}`}>
+                {data}
+              </label>
+              <input
+                {...register("record")}
+                type="radio"
+                value={data}
+                id={`Record${idx}`}
+                required
+                onChange={onChangeRecord}
+                checked={data === "ON" ? record : !record}
+              />
+            </StyledRadioWrap>
+          ))}
+        </div>
+        <span className="guide">실시간 녹화 설정은 방 생성 이후에는 수정하실 수 없습니다.</span>
         <div className="inputContent">
           <label htmlFor="question">질문 꾸러미</label>
           <select id="question" {...register("roomQuestionBoxIdx", { required: true })}>
