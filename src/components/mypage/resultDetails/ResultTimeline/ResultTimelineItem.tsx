@@ -29,13 +29,14 @@ const ResultTimelineItem = (props: TempTimelineType) => {
   } = props;
 
   return (
-    <TimelineItem>
+    <TimelineItem
+      onClick={() => handleVideoProgress(timestampToSeconds(timestamp))}
+      sx={{
+        cursor: "pointer",
+      }}
+    >
       <TimelineOppositeContent
         color="var(--font-gray)"
-        sx={{
-          cursor: "pointer",
-        }}
-        onClick={() => handleVideoProgress(timestampToSeconds(timestamp))}
       >
         {timestamp}
       </TimelineOppositeContent>

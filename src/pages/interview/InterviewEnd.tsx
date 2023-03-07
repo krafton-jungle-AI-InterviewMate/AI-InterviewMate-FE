@@ -1,61 +1,33 @@
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { StyledBtn } from "styles/StyledBtn";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   aiInterviewNextProcessAtom,
-  interviewCommentAtom,
   interviewDataAtom,
   isInterviewerAtom,
   timelineRecordAtom,
 } from "store/interview/atom";
-import { usePostRatingViewee, usePostResultComment } from "hooks/queries/mypage";
+import { usePostRatingViewee } from "hooks/queries/mypage";
 import { deduplicate } from "lib/interview";
 import { PostRatingVieweePayloadData } from "api/mypage/types";
 
+import EndCommentForm from "components/interview/EndCommentForm";
+
 const InterviewEnd = () => {
   const setAiInterviewNextProcess = useSetRecoilState(aiInterviewNextProcessAtom);
-  const [comment, setComment] = useRecoilState(interviewCommentAtom);
   const isInterviewer = useRecoilValue(isInterviewerAtom);
   const interviewData = useRecoilValue(interviewDataAtom);
   const {
     timeline: { eyes, attitude },
   } = useRecoilValue(timelineRecordAtom);
 
-  const { mutate } = usePostResultComment();
   const { mutate: postRatingVieweeMutate } = usePostRatingViewee();
   const navigate = useNavigate();
 
-  const textarea = useRef<any>(0);
-
-  const handleResizeHeight = () => {
-    setComment(textarea.current.value);
-    textarea.current.style.height = "auto";
-    textarea.current.style.height = textarea.current.scrollHeight + "px";
-  };
-
-  const handleClickCommentSave = () => {
-    mutate(
-      {
-        roomIdx: interviewData!.roomIdx,
-        comment: comment,
-      },
-      {
-        onSuccess: () => {
-          console.log("저장하고 나가기");
-          setComment("");
-          navigate("/lobby");
-        },
-        onError(error) {
-          alert(error);
-        },
-      },
-    );
-  };
-
   useEffect(() => {
-    if (!isInterviewer && interviewData) {
+    if (interviewData?.roomType === "USER" && !isInterviewer && interviewData) {
       const { roomIdx } = interviewData;
       const data: PostRatingVieweePayloadData = {
         eyeTimelines: deduplicate(eyes),
@@ -64,21 +36,13 @@ const InterviewEnd = () => {
         comments: [],
         scripts: [],
       };
-      postRatingVieweeMutate(
-        {
-          roomIdx,
-          data,
-        },
-        {
-          onSuccess: () => {
-            console.log("postRatingViewee", data);
-          },
-          onError(error) {
-            alert(error);
-          },
-        },
-      );
+
+      postRatingVieweeMutate({
+        roomIdx,
+        data,
+      });
     }
+
     setAiInterviewNextProcess("ready");
   }, []);
 
@@ -86,38 +50,18 @@ const InterviewEnd = () => {
     <StyledInterviewEnd>
       <>
         <h2>면접 종료!</h2>
-        {interviewData?.roomType === "AI" ? (
-          <div className="aiEndContents">
-            <p>수고하셨습니다.</p>
-            <span>면접 결과는 마이페이지에서 확인하실 수 있습니다.</span>
-            <StyledBtn width="100px" height="32px" color="red" onClick={() => navigate("/lobby")}>
-              나가기
-            </StyledBtn>
-          </div>
-        ) : isInterviewer ? (
-          <div className="userEndContents">
-            <p>면접자를 위한 코멘트를 남겨주세요.</p>
-            <div>
-              <textarea
-                onChange={handleResizeHeight}
-                value={comment}
-                ref={textarea}
-                name="comment"
-                id="comment"
-                cols={30}
-                rows={10}
-                spellCheck={false}
-              ></textarea>
-            </div>
-            <StyledBtn onClick={handleClickCommentSave} width="150px" height="32px" color="red">
-              저장하고 나가기
-            </StyledBtn>
-          </div>
+        {interviewData?.roomType === "USER" && isInterviewer ? (
+          <EndCommentForm />
         ) : (
-          <div className="aiEndContents">
+          <div className="commonEndContents">
             <p>수고하셨습니다.</p>
             <span>면접 결과는 마이페이지에서 확인하실 수 있습니다.</span>
-            <StyledBtn width="100px" height="32px" color="red" onClick={() => navigate("/lobby")}>
+            <StyledBtn
+              width="100px"
+              height="32px"
+              color="red"
+              onClick={() => navigate("/lobby")}
+            >
               나가기
             </StyledBtn>
           </div>
@@ -140,7 +84,7 @@ const StyledInterviewEnd = styled.div`
     font-size: 1.6rem;
     margin-top: 20px;
   }
-  .aiEndContents {
+  .commonEndContents {
     display: flex;
     flex-direction: column;
     align-items: center;

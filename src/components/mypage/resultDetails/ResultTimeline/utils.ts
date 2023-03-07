@@ -25,7 +25,7 @@ export const getQuestionText = (
   questionCount: number,
   scripts: ScriptWithQuestionTitle[],
 ) => {
-  return `Q${questionCount}. ${scripts[questionCount - 1].questionTitle}`;
+  return `Q${questionCount}. ${scripts[questionCount - 1]?.questionTitle ?? ""}`;
 };
 
 export const mapQuestionsIdx = (timeline: Timestamp[]) => {

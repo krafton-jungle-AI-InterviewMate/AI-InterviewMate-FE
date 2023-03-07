@@ -8,6 +8,7 @@ import {
   TimelineDot,
   TimelineOppositeContent,
 } from "@mui/lab";
+import Skeleton from "@mui/material/Skeleton";
 import ResultTimelineItem from "./ResultTimelineItem";
 import { VideoJsPlayer as Player } from "video.js";
 
@@ -61,65 +62,76 @@ const ResultTimeline = (props: ResultTimelineProps) => {
     }
   };
 
-  return videoRef.current ? (
+  return (
     <StyledTimelineWrap>
       <StyledTitle>타임라인</StyledTitle>
 
-      <StyledScrollBox>
-        <Timeline>
+      {videoRef.current ? (
+        <StyledScrollBox>
+          <Timeline>
 
-          <TimelineItem>
-            <TimelineOppositeContent
-              color="var(--font-gray)"
-            >
-              00:00
-            </TimelineOppositeContent>
-            <TimelineSeparator>
-              <TimelineDot
-                sx={{
-                  boxShadow: "none",
-                  borderColor: "var(--push-gray)",
-                  backgroundColor: "var(--push-gray)",
-                }}
-              />
-              <TimelineConnector />
-            </TimelineSeparator>
-            <TimelineContent>면접 시작</TimelineContent>
-          </TimelineItem>
+            <TimelineItem>
+              <TimelineOppositeContent
+                color="var(--font-gray)"
+              >
+                00:00
+              </TimelineOppositeContent>
+              <TimelineSeparator>
+                <TimelineDot
+                  sx={{
+                    boxShadow: "none",
+                    borderColor: "var(--push-gray)",
+                    backgroundColor: "var(--push-gray)",
+                  }}
+                />
+                <TimelineConnector />
+              </TimelineSeparator>
+              <TimelineContent>면접 시작</TimelineContent>
+            </TimelineItem>
 
-          {data.timelines.map((timestamp, idx) =>
-            <ResultTimelineItem
-              key={idx}
-              handleVideoProgress={handleVideoProgress}
-              questionCount={questionsIdx[idx] ?? 0}
-              scripts={data.scripts}
-              {...timestamp}
-            />,
-          )}
+            {data.timelines.map((timestamp, idx) =>
+              <ResultTimelineItem
+                key={idx}
+                handleVideoProgress={handleVideoProgress}
+                questionCount={questionsIdx[idx] ?? 0}
+                scripts={data.scripts}
+                {...timestamp}
+              />,
+            )}
 
-          {/* LAST ITEM */}
-          <TimelineItem>
-            <TimelineOppositeContent
-              color="var(--font-gray)"
-            >
-              {createTimestampFromSeconds(Math.floor(duration ?? 0))}
-            </TimelineOppositeContent>
-            <TimelineSeparator>
-              <TimelineDot
-                sx={{
-                  boxShadow: "none",
-                  borderColor: "var(--push-gray)",
-                  backgroundColor: "var(--push-gray)",
-                }}
-              />
-            </TimelineSeparator>
-            <TimelineContent>면접 종료</TimelineContent>
-          </TimelineItem>
+            {/* LAST ITEM */}
+            <TimelineItem>
+              <TimelineOppositeContent
+                color="var(--font-gray)"
+              >
+                {createTimestampFromSeconds(Math.floor(duration ?? 0))}
+              </TimelineOppositeContent>
+              <TimelineSeparator>
+                <TimelineDot
+                  sx={{
+                    boxShadow: "none",
+                    borderColor: "var(--push-gray)",
+                    backgroundColor: "var(--push-gray)",
+                  }}
+                />
+              </TimelineSeparator>
+              <TimelineContent>면접 종료</TimelineContent>
+            </TimelineItem>
 
-        </Timeline>
-      </StyledScrollBox>
+          </Timeline>
+        </StyledScrollBox>
+      ) : (
+        <Skeleton
+          variant="rectangular"
+          width={500}
+          height={501}
+          sx={{
+            borderRadius: "16px",
+          }}
+        />
+      )}
     </StyledTimelineWrap>
-  ) : null;
+  );
 };
 
 export default ResultTimeline;

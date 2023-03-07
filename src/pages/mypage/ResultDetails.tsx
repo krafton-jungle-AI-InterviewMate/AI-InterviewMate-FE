@@ -39,7 +39,11 @@ const ResultDetails = () => {
       <StyledVideoSection>
         {data.data.data.videoUrl ? (
           <>
-            <ResultVideo videoRef={videoRef} videoUrl={data.data.data.videoUrl} />
+            <ResultVideo
+              videoRef={videoRef}
+              videoUrl={data.data.data.videoUrl}
+              refetch={refetch}
+            />
             <ResultTimeline data={data.data.data} videoRef={videoRef} />
           </>
         ) : (
