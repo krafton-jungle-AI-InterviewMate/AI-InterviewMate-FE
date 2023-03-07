@@ -181,10 +181,10 @@ const UserInterview = () => {
     // 인터뷰 도중 나감
     session
       .signal({
-        data: {
+        data: JSON.stringify({
           host: host === publisher.stream.connection.connectionId,
           length: subscribers.length,
-        },
+        }),
         to: subscribers,
         type: "interviewOut",
       })
