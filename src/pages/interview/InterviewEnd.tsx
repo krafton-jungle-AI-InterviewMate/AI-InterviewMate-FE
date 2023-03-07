@@ -45,32 +45,35 @@ const InterviewEnd = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    try {
-      if (interviewData?.roomType === "USER" && !isInterviewer && interviewData) {
-        const { roomIdx } = interviewData;
-        const data: PostRatingVieweePayloadData = {
-          eyeTimelines: deduplicate(eyes),
-          attitudeTimelines: deduplicate(attitude),
-          questionTimelines: [],
-          comments: [],
-          scripts: [],
-        };
+    if (interviewData?.roomType === "USER" && !isInterviewer && interviewData) {
+      const { roomIdx } = interviewData;
+      const data: PostRatingVieweePayloadData = {
+        eyeTimelines: deduplicate(eyes),
+        attitudeTimelines: deduplicate(attitude),
+        questionTimelines: [],
+        comments: [],
+        scripts: [],
+      };
 
-        postRatingVieweeMutate({
+      postRatingVieweeMutate(
+        {
           roomIdx,
           data,
-        });
+        },
+        {
+          onError(e) {
+            console.log(e);
+          },
+        },
+      );
 
-        if (isRecordMode) {
-          if (!videoBlob) {
-            stopRecording();
-          }
-
-          setIsProcessing(true);
+      if (isRecordMode) {
+        if (!videoBlob) {
+          stopRecording();
         }
+
+        setIsProcessing(true);
       }
-    } catch {
-      navigate("lobby");
     }
 
     setAiInterviewNextProcess("ready");
