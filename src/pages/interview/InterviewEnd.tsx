@@ -63,6 +63,7 @@ const InterviewEnd = () => {
         {
           onError(e) {
             console.log(e);
+            navigate("lobby");
           },
         },
       );
