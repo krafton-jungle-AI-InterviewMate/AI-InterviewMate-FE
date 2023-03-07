@@ -96,7 +96,7 @@ const UserInterview = () => {
       } else if (event.data === "면접관" && subscribers.length === 0 && !isInterviewer) {
         setIsInterviewStart(false);
         leaveSession();
-        navigate("/lobby");
+        navigate("/interview/end");
       }
     });
 

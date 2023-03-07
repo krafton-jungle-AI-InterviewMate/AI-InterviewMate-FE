@@ -125,6 +125,7 @@ const InterviewQuestionTab = () => {
 };
 
 const StyledInterviewQuestionTab = styled.div`
+  margin-top: 30px;
   margin-left: 100px;
   text-align: left;
   .contentsTab {
