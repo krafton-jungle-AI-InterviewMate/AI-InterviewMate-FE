@@ -41,6 +41,7 @@ const StyledOpenViduVideoComponent = styled.div<StyledOpenViduVideoComponentProp
     isInterviewStart && isHost
       ? css`
           video {
+            margin-top: -70px;
             width: 900px;
           }
         `
