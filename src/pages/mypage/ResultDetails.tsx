@@ -17,7 +17,7 @@ import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 
 const ResultDetails = () => {
-  const [searchParams] = useSearchParams();
+  const [ searchParams ] = useSearchParams();
   const videoRef = useRef<null | Player>(null);
 
   const { data, isFetching, isSuccess, refetch } = useGetRatingDetail(

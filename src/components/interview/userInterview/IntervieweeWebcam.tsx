@@ -14,13 +14,13 @@ const IntervieweeWebcam = (props: IntervieweeWebcamProps) => {
   const { setVideo } = props;
 
   const webcamRef = useRef<null | Webcam>(null);
-  const [isWebcamReady, setIsWebcamReady] = useState(false);
+  const [ isWebcamReady, setIsWebcamReady ] = useState(false);
 
   useEffect(() => {
     if (isWebcamReady && webcamRef.current) {
       setVideo(webcamRef.current.video);
     }
-  }, [isWebcamReady, webcamRef]);
+  }, [ isWebcamReady, webcamRef ]);
 
   return (
     <StyledWebcamWrap>
@@ -36,7 +36,7 @@ const StyledWebcamWrap = styled.div`
 
   video {
     position: relative;
-    z-index: 100;
+    z-index: 10;
     width: 1000px;
     height: 750px;
   }
