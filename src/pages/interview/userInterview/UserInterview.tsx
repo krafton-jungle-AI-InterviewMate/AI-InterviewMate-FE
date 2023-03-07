@@ -90,14 +90,12 @@ const UserInterview = () => {
     session.on("signal:interviewOut", event => {
       console.log(event.type);
       if (event.data === "면접자") {
+        // 면접자가 나갔을 때 면접관들 모두 로비로
         setIsInterviewStart(false);
         leaveSession();
         navigate("/lobby");
-      } else if (
-        event.data === "면접관" &&
-        subscribers.length === 0 &&
-        host === publisher.stream.connection.connectionId
-      ) {
+      } else if (event.data === "면접관" && subscribers.length === 0 && !isInterviewer) {
+        // 면접관이 나갔을 때 다른 면접관이 남아있지 않고 본인이 면접자일 때
         setIsInterviewStart(false);
         leaveSession();
         navigate("/interview/end");
@@ -194,7 +192,12 @@ const UserInterview = () => {
         console.log("면접방을 나갔습니다.");
         setIsInterviewStart(false);
         leaveSession();
-        navigate("/lobby");
+        if (isInterviewer) {
+          navigate("/lobby");
+        }
+        if (!isInterviewer) {
+          navigate("/interview/end");
+        }
       },
       onError(error) {
         alert(error);
@@ -260,25 +263,10 @@ const UserInterview = () => {
     if (!userInterviewData) {
       return;
     }
-    const { roomIdx } = userInterviewData;
-    if (host === publisher.stream.connection.connectionId) {
-      putInterviewRoomsMutate(roomIdx, {
-        onSuccess: () => {
-          setIsInterviewStart(false);
-          console.log("면접을 정상적으로 종료합니다.");
-          leaveSession();
-          navigate("/interview/end");
-        },
-        onError(error) {
-          alert(error);
-        },
-      });
-    } else {
-      setIsInterviewStart(false);
-      leaveSession();
-      console.log("면접을 정상적으로 종료합니다.");
-      navigate("/interview/end");
-    }
+    setIsInterviewStart(false);
+    leaveSession();
+    console.log("면접을 정상적으로 종료합니다.");
+    navigate("/interview/end");
   };
 
   useEffect(() => {

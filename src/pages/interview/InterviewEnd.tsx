@@ -34,43 +34,43 @@ const InterviewEnd = () => {
   const isRecordMode = useRecoilValue(recordModeAtom);
   const videoUrl = useRecoilValue(videoUrlAtom);
   const recorder = useRecoilValue(userRecorderAtom);
-  const [ videoBlob, setVideoBlob ] = useRecoilState(videoBlobAtom);
+  const [videoBlob, setVideoBlob] = useRecoilState(videoBlobAtom);
 
-  const [ isProcessing, setIsProcessing ] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  const {
-    mutate: postRatingVieweeMutate,
-    isLoading: isPostRatingVieweeLoading,
-  } = usePostRatingViewee();
-  const {
-    mutate: abortVideoUpload,
-  } = usePostAbortVideoUpload();
+  const { mutate: postRatingVieweeMutate, isLoading: isPostRatingVieweeLoading } =
+    usePostRatingViewee();
+  const { mutate: abortVideoUpload } = usePostAbortVideoUpload();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (interviewData?.roomType === "USER" && !isInterviewer && interviewData) {
-      const { roomIdx } = interviewData;
-      const data: PostRatingVieweePayloadData = {
-        eyeTimelines: deduplicate(eyes),
-        attitudeTimelines: deduplicate(attitude),
-        questionTimelines: [],
-        comments: [],
-        scripts: [],
-      };
+    try {
+      if (interviewData?.roomType === "USER" && !isInterviewer && interviewData) {
+        const { roomIdx } = interviewData;
+        const data: PostRatingVieweePayloadData = {
+          eyeTimelines: deduplicate(eyes),
+          attitudeTimelines: deduplicate(attitude),
+          questionTimelines: [],
+          comments: [],
+          scripts: [],
+        };
 
-      postRatingVieweeMutate({
-        roomIdx,
-        data,
-      });
+        postRatingVieweeMutate({
+          roomIdx,
+          data,
+        });
 
-      if (isRecordMode) {
-        if (!videoBlob) {
-          stopRecording();
+        if (isRecordMode) {
+          if (!videoBlob) {
+            stopRecording();
+          }
+
+          setIsProcessing(true);
         }
-
-        setIsProcessing(true);
       }
+    } catch {
+      navigate("lobby");
     }
 
     setAiInterviewNextProcess("ready");
@@ -80,20 +80,22 @@ const InterviewEnd = () => {
     if (videoUrl) {
       setIsProcessing(false);
     }
-  }, [ videoUrl ]);
+  }, [videoUrl]);
 
   const handleProcessingPopupClose = () => {
     setIsProcessing(false);
   };
 
   const handleCancelProcessing = (fileName: string, uploadId: string) => {
-    abortVideoUpload({
-      fileName,
-      uploadId,
-    },
-    {
-      onSettled: handleProcessingPopupClose,
-    });
+    abortVideoUpload(
+      {
+        fileName,
+        uploadId,
+      },
+      {
+        onSettled: handleProcessingPopupClose,
+      },
+    );
   };
 
   const stopRecording = () => {
@@ -102,7 +104,7 @@ const InterviewEnd = () => {
     }
 
     if (recorder) {
-      recorder.stop((blob) => {
+      recorder.stop(blob => {
         setVideoBlob(blob);
       });
     }
@@ -110,13 +112,13 @@ const InterviewEnd = () => {
 
   return (
     <StyledInterviewEnd>
-      {isProcessing &&
+      {isProcessing && (
         <SubmitProcessingPopup
           isOpen={isProcessing}
           handleClose={handleProcessingPopupClose}
           handleCancel={handleCancelProcessing}
         />
-      }
+      )}
       {isPostRatingVieweeLoading ? (
         <Loading margin="0" />
       ) : (
@@ -128,12 +130,7 @@ const InterviewEnd = () => {
             <div className="commonEndContents">
               <p>수고하셨습니다.</p>
               <span>면접 결과는 마이페이지에서 확인하실 수 있습니다.</span>
-              <StyledBtn
-                width="100px"
-                height="32px"
-                color="red"
-                onClick={() => navigate("/lobby")}
-              >
+              <StyledBtn width="100px" height="32px" color="red" onClick={() => navigate("/lobby")}>
                 나가기
               </StyledBtn>
             </div>
