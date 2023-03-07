@@ -92,7 +92,7 @@ const UserInterview = () => {
       if (event.data === "면접자") {
         setIsInterviewStart(false);
         leaveSession();
-        navigate("/lobby");
+        navigate("/interview/end");
       }
       else if (event.data === "면접관" && subscribers.length === 0 && !isInterviewer) {
         setIsInterviewStart(false);
