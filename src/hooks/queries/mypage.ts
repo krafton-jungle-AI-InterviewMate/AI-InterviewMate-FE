@@ -3,7 +3,7 @@ import mypageAPI from "api/mypage";
 import { RoomTypes } from "api/mypage/types";
 
 export const useGetRatingHistory = () => {
-  const { data, isSuccess, isLoading, isError } = useQuery([ "fetchRatingHistory" ], () => {
+  const { data, isSuccess, isLoading, isError } = useQuery(["fetchRatingHistory"], () => {
     return mypageAPI.getRatingHistory();
   });
 
@@ -17,10 +17,11 @@ export const useGetRatingHistory = () => {
 
 export const useGetRatingDetail = (roomIdx: number, type: RoomTypes) => {
   const { data, isSuccess, isLoading, isError, fetchStatus, isFetching, refetch } = useQuery(
-    [ "fetchRatingDetail", `room${roomIdx}` ],
+    ["fetchRatingDetail", `room${roomIdx}`],
     () => {
       return mypageAPI.getRatingDetail(roomIdx, type);
-    });
+    },
+  );
 
   return {
     data,
@@ -35,11 +36,11 @@ export const useGetRatingDetail = (roomIdx: number, type: RoomTypes) => {
 
 export const usePostRatingViewee = () => {
   return useMutation(mypageAPI.postRatingViewee, {
-    onSuccess: (data) => {
+    onSuccess: data => {
       console.log(data);
     },
-    onError: (e) => {
-      console.log(e);
+    onError: e => {
+      // console.log(e);
     },
   });
 };
