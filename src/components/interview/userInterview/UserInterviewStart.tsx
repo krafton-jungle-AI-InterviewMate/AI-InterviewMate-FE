@@ -1,12 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState, useRecoilValue, useRecoilState } from "recoil";
 import {
   feedbackAtom,
   hostAtom,
   interviewDataAtom,
   isInterviewerAtom,
   timelineRecordAtom,
+  videoBlobAtom,
+  recordModeAtom,
+  userRecorderAtom,
 } from "store/interview/atom";
+import RecordRTC from "recordrtc";
 
 import { Dialog, DialogActions, DialogTitle } from "@mui/material";
 import InterviewQuestionTab from "./InterviewerQuestionTap";
@@ -19,7 +23,7 @@ import useCheckIrisPosition from "hooks/useCheckIrisPosition";
 import useCheckHeadMotion from "hooks/useCheckHeadMotion";
 import useIrisAssessment from "hooks/useIrisAssessment";
 import useMotionAssessment from "hooks/useMotionAssessment";
-import InterviewFeedback from "../InterviewFeedback";
+import { useRecorderPermission } from "hooks/useRecorderPermission";
 
 import styled from "@emotion/styled";
 
@@ -31,7 +35,7 @@ interface UserInterviewStartProps {
   handleClickModalClose: () => void;
   handleClickModalRoomLeave: () => void;
   handleClickInterviewOut: () => void;
-  InterviewEnd: () => void;
+  interviewEnd: () => void;
 }
 
 const UserInterviewStart = (props: UserInterviewStartProps) => {
@@ -43,7 +47,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
     handleClickModalClose,
     handleClickModalRoomLeave,
     handleClickInterviewOut,
-    InterviewEnd,
+    interviewEnd,
   } = props;
 
   const userInterviewData = useRecoilValue(interviewDataAtom);
@@ -51,6 +55,9 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
   const feedbackMode = useRecoilValue(feedbackAtom);
   const isInterviewer = useRecoilValue(isInterviewerAtom);
   const setTimelineRecord = useSetRecoilState(timelineRecordAtom);
+  const setVideoBlob = useSetRecoilState(videoBlobAtom);
+  const isRecordMode = useRecoilValue(recordModeAtom);
+  const [ recorder, setRecorder ] = useRecoilState(userRecorderAtom);
 
   const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
 
@@ -59,14 +66,60 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
 
   const { horizontalRatio } = useCheckIrisPosition({ face });
   const { isBadMotion } = useCheckHeadMotion({ face });
-  const { showFeedback: showIrisFeedback } = useIrisAssessment({
+  useIrisAssessment({
     isRealtimeMode,
     horizontalRatio,
   });
-  const { showFeedback: showMotionFeedback } = useMotionAssessment({
+  useMotionAssessment({
     isRealtimeMode,
     isBadMotion,
   });
+
+  const {
+    getPermissionInitializeUserRecorder,
+  } = useRecorderPermission("video");
+
+  const stopRecording = () => {
+    if (isInterviewer) {
+      return;
+    }
+
+    if (recorder) {
+      recorder.stop((blob) => {
+        setVideoBlob(blob);
+      });
+    }
+  };
+
+  const handleInterviewTimeout = () => {
+    if (!isInterviewer) {
+      setIsDetectionOn(false);
+    }
+
+    interviewEnd();
+
+    if (isRecordMode) {
+      stopRecording();
+    }
+
+    setTimelineRecord((curr) => ({
+      ...curr,
+      endTime: Date.now(),
+    }));
+  };
+
+  const handleInterviewLeave = () => {
+    handleClickInterviewOut();
+
+    if (isRecordMode) {
+      stopRecording();
+    }
+
+    setTimelineRecord((curr) => ({
+      ...curr,
+      endTime: Date.now(),
+    }));
+  };
 
   useEffect(() => {
     if (video && !isInterviewer) {
@@ -79,17 +132,30 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
   }, [ video ]);
 
   useEffect(() => {
-    const timerId = window.setTimeout(() => {
-      if (!isInterviewer) {
-        setIsDetectionOn(false);
-      }
-
-      InterviewEnd();
-    }, userInterviewData?.roomTime * 1000 * 60);
+    const timerId = window.setTimeout(
+      handleInterviewTimeout,
+      userInterviewData?.roomTime * 1000 * 60,
+    );
 
     return () => {
       window.clearTimeout(timerId);
     };
+  }, []);
+
+  // * 녹화 시작
+  useEffect(() => {
+    if (isRecordMode && !isInterviewer) {
+      (async () => {
+        const rec = await getPermissionInitializeUserRecorder();
+        rec.record();
+
+        setRecorder(rec);
+      })();
+  
+      return (() => {
+        recorder?.clearRecordedData();
+      });
+    }
   }, []);
 
   return (
@@ -164,7 +230,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
             </DialogTitle>
             <DialogActions>
               <StyledBtn
-                onClick={handleClickInterviewOut}
+                onClick={handleInterviewLeave}
                 width="200px"
                 height="42px"
                 color="orange"

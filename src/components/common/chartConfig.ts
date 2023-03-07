@@ -1,5 +1,13 @@
 import { _DeepPartialObject } from "chart.js/types/utils";
-import { CoreChartOptions, ElementChartOptions, PluginChartOptions, DatasetChartOptions, ScaleChartOptions, LineControllerChartOptions } from "chart.js";
+import {
+  CoreChartOptions,
+  ElementChartOptions,
+  PluginChartOptions,
+  DatasetChartOptions,
+  ScaleChartOptions,
+  LineControllerChartOptions,
+  FontSpec,
+} from "chart.js";
 
 export const LABEL_EYE = "시선 이탈";
 export const LABEL_ATTITUDE = "자세 이탈";
@@ -20,12 +28,18 @@ type ChartOptionType =
   & ScaleChartOptions<"line">
   & LineControllerChartOptions>;
 
+const commonFontStyle: Partial<FontSpec> = {
+  size: 18,
+  family: "\"Archivo\", \"Spoqa Han Sans Neo\", sans-serif",
+};
+
 export const chartUserOption: ChartOptionType = {
   plugins: {
     legend: {
       labels: {
         usePointStyle: true,
         padding: 10,
+        font: commonFontStyle,
       },
     },
     tooltip: {
@@ -42,6 +56,8 @@ export const chartUserOption: ChartOptionType = {
           return `${dataset.label} ${formattedValue}회`;
         },
       },
+      titleFont: commonFontStyle,
+      bodyFont: commonFontStyle,
     },
   },
   scales: {
@@ -50,6 +66,7 @@ export const chartUserOption: ChartOptionType = {
       ticks: {
         stepSize: 1,
         autoSkip: false,
+        font: commonFontStyle,
       },
       grid: {
         color: "#eee",
@@ -60,6 +77,7 @@ export const chartUserOption: ChartOptionType = {
       beginAtZero: true,
       ticks: {
         stepSize: 1,
+        font: commonFontStyle,
       },
       afterDataLimits: (scale) => {
         scale.max = scale.max * 1.2;
@@ -77,6 +95,7 @@ export const chartAiOption: ChartOptionType = {
       labels: {
         usePointStyle: true,
         padding: 10,
+        font: commonFontStyle,
       },
     },
     tooltip: {
@@ -90,6 +109,8 @@ export const chartAiOption: ChartOptionType = {
           return `${dataset.label} ${formattedValue}회`;
         },
       },
+      titleFont: commonFontStyle,
+      bodyFont: commonFontStyle,
     },
   },
   scales: {
@@ -98,6 +119,7 @@ export const chartAiOption: ChartOptionType = {
       ticks: {
         stepSize: 1,
         autoSkip: false,
+        font: commonFontStyle,
       },
       grid: {
         color: "#eee",
@@ -108,6 +130,7 @@ export const chartAiOption: ChartOptionType = {
       beginAtZero: true,
       ticks: {
         stepSize: 1,
+        font: commonFontStyle,
       },
       afterDataLimits: (scale) => {
         scale.max = scale.max * 1.2;

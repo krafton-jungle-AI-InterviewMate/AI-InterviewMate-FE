@@ -1,19 +1,28 @@
-import styled from "@emotion/styled";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { StyledBtn } from "styles/StyledBtn";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState, useRecoilState } from "recoil";
 import {
   aiInterviewNextProcessAtom,
   interviewDataAtom,
   isInterviewerAtom,
   timelineRecordAtom,
+  recordModeAtom,
+  videoUrlAtom,
+  userRecorderAtom,
+  videoBlobAtom,
 } from "store/interview/atom";
-import { usePostRatingViewee } from "hooks/queries/mypage";
-import { deduplicate } from "lib/interview";
-import { PostRatingVieweePayloadData } from "api/mypage/types";
 
+import { usePostAbortVideoUpload } from "hooks/queries/video";
+import { usePostRatingViewee } from "hooks/queries/mypage";
+import { PostRatingVieweePayloadData } from "api/mypage/types";
+import { deduplicate } from "lib/interview";
+
+import SubmitProcessingPopup from "components/interview/SubmitProcessingPopup";
 import EndCommentForm from "components/interview/EndCommentForm";
+import Loading from "components/common/Loading";
+import { StyledBtn } from "styles/StyledBtn";
+
+import styled from "@emotion/styled";
 
 const InterviewEnd = () => {
   const setAiInterviewNextProcess = useSetRecoilState(aiInterviewNextProcessAtom);
@@ -22,8 +31,21 @@ const InterviewEnd = () => {
   const {
     timeline: { eyes, attitude },
   } = useRecoilValue(timelineRecordAtom);
+  const isRecordMode = useRecoilValue(recordModeAtom);
+  const videoUrl = useRecoilValue(videoUrlAtom);
+  const recorder = useRecoilValue(userRecorderAtom);
+  const [ videoBlob, setVideoBlob ] = useRecoilState(videoBlobAtom);
 
-  const { mutate: postRatingVieweeMutate } = usePostRatingViewee();
+  const [ isProcessing, setIsProcessing ] = useState(false);
+
+  const {
+    mutate: postRatingVieweeMutate,
+    isLoading: isPostRatingVieweeLoading,
+  } = usePostRatingViewee();
+  const {
+    mutate: abortVideoUpload,
+  } = usePostAbortVideoUpload();
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,32 +63,83 @@ const InterviewEnd = () => {
         roomIdx,
         data,
       });
+
+      if (isRecordMode) {
+        if (!videoBlob) {
+          stopRecording();
+        }
+
+        setIsProcessing(true);
+      }
     }
 
     setAiInterviewNextProcess("ready");
   }, []);
 
+  useEffect(() => {
+    if (videoUrl) {
+      setIsProcessing(false);
+    }
+  }, [ videoUrl ]);
+
+  const handleProcessingPopupClose = () => {
+    setIsProcessing(false);
+  };
+
+  const handleCancelProcessing = (fileName: string, uploadId: string) => {
+    abortVideoUpload({
+      fileName,
+      uploadId,
+    },
+    {
+      onSettled: handleProcessingPopupClose,
+    });
+  };
+
+  const stopRecording = () => {
+    if (isInterviewer) {
+      return;
+    }
+
+    if (recorder) {
+      recorder.stop((blob) => {
+        setVideoBlob(blob);
+      });
+    }
+  };
+
   return (
     <StyledInterviewEnd>
-      <>
-        <h2>면접 종료!</h2>
-        {interviewData?.roomType === "USER" && isInterviewer ? (
-          <EndCommentForm />
-        ) : (
-          <div className="commonEndContents">
-            <p>수고하셨습니다.</p>
-            <span>면접 결과는 마이페이지에서 확인하실 수 있습니다.</span>
-            <StyledBtn
-              width="100px"
-              height="32px"
-              color="red"
-              onClick={() => navigate("/lobby")}
-            >
-              나가기
-            </StyledBtn>
-          </div>
-        )}
-      </>
+      {isProcessing &&
+        <SubmitProcessingPopup
+          isOpen={isProcessing}
+          handleClose={handleProcessingPopupClose}
+          handleCancel={handleCancelProcessing}
+        />
+      }
+      {isPostRatingVieweeLoading ? (
+        <Loading margin="0" />
+      ) : (
+        <>
+          <h2>면접 종료!</h2>
+          {interviewData?.roomType === "USER" && isInterviewer ? (
+            <EndCommentForm />
+          ) : (
+            <div className="commonEndContents">
+              <p>수고하셨습니다.</p>
+              <span>면접 결과는 마이페이지에서 확인하실 수 있습니다.</span>
+              <StyledBtn
+                width="100px"
+                height="32px"
+                color="red"
+                onClick={() => navigate("/lobby")}
+              >
+                나가기
+              </StyledBtn>
+            </div>
+          )}
+        </>
+      )}
     </StyledInterviewEnd>
   );
 };
