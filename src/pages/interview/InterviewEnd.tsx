@@ -62,8 +62,7 @@ const InterviewEnd = () => {
         },
         {
           onError(error: any) {
-            if (error.response.status) {
-              console.log(error.response.status);
+            if (error.response.status === 400) {
               navigate("/lobby");
             }
           },
