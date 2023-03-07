@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState, useRecoilState } from "recoil";
 import {
   aiInterviewNextProcessAtom,
   interviewDataAtom,
@@ -8,6 +8,8 @@ import {
   timelineRecordAtom,
   recordModeAtom,
   videoUrlAtom,
+  userRecorderAtom,
+  videoBlobAtom,
 } from "store/interview/atom";
 
 import { usePostAbortVideoUpload } from "hooks/queries/video";
@@ -31,6 +33,8 @@ const InterviewEnd = () => {
   } = useRecoilValue(timelineRecordAtom);
   const isRecordMode = useRecoilValue(recordModeAtom);
   const videoUrl = useRecoilValue(videoUrlAtom);
+  const recorder = useRecoilValue(userRecorderAtom);
+  const [ videoBlob, setVideoBlob ] = useRecoilState(videoBlobAtom);
 
   const [ isProcessing, setIsProcessing ] = useState(false);
 
@@ -61,6 +65,10 @@ const InterviewEnd = () => {
       });
 
       if (isRecordMode) {
+        if (!videoBlob) {
+          stopRecording();
+        }
+
         setIsProcessing(true);
       }
     }
@@ -86,6 +94,18 @@ const InterviewEnd = () => {
     {
       onSettled: handleProcessingPopupClose,
     });
+  };
+
+  const stopRecording = () => {
+    if (isInterviewer) {
+      return;
+    }
+
+    if (recorder) {
+      recorder.stop((blob) => {
+        setVideoBlob(blob);
+      });
+    }
   };
 
   return (

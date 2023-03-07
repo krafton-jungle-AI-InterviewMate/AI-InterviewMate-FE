@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState, useRecoilValue, useRecoilState } from "recoil";
 import {
   feedbackAtom,
   hostAtom,
@@ -8,6 +8,7 @@ import {
   timelineRecordAtom,
   videoBlobAtom,
   recordModeAtom,
+  userRecorderAtom,
 } from "store/interview/atom";
 import RecordRTC from "recordrtc";
 
@@ -56,9 +57,9 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
   const setTimelineRecord = useSetRecoilState(timelineRecordAtom);
   const setVideoBlob = useSetRecoilState(videoBlobAtom);
   const isRecordMode = useRecoilValue(recordModeAtom);
+  const [ recorder, setRecorder ] = useRecoilState(userRecorderAtom);
 
   const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
-  const [ recorder, setRecorder ] = useState<null | RecordRTC.MultiStreamRecorder>();
 
   const isRealtimeMode = useMemo(() => feedbackMode === "ON", [ feedbackMode ]);
   const { face, setIsDetectionOn } = useFaceLandmarksDetection({ video });
@@ -88,11 +89,6 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
         setVideoBlob(blob);
       });
     }
-
-    setTimelineRecord((curr) => ({
-      ...curr,
-      endTime: Date.now(),
-    }));
   };
 
   const handleInterviewTimeout = () => {
@@ -105,6 +101,11 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
     if (isRecordMode) {
       stopRecording();
     }
+
+    setTimelineRecord((curr) => ({
+      ...curr,
+      endTime: Date.now(),
+    }));
   };
 
   const handleInterviewLeave = () => {
@@ -113,6 +114,11 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
     if (isRecordMode) {
       stopRecording();
     }
+
+    setTimelineRecord((curr) => ({
+      ...curr,
+      endTime: Date.now(),
+    }));
   };
 
   useEffect(() => {
