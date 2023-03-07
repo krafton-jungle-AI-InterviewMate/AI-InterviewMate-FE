@@ -93,7 +93,11 @@ const UserInterview = () => {
         setIsInterviewStart(false);
         leaveSession();
         navigate("/lobby");
-      } else if (event.data === "면접관" && subscribers.length === 0 && !isInterviewer) {
+      } else if (
+        event.data === "면접관" &&
+        subscribers.length === 0 &&
+        host === publisher.stream.connection.connectionId
+      ) {
         setIsInterviewStart(false);
         leaveSession();
         navigate("/lobby");
@@ -278,6 +282,7 @@ const UserInterview = () => {
   };
 
   useEffect(() => {
+    console.log(subscribers);
     setRoomPeopleNow(subscribers.length);
     if (subscribers.length) {
       setReady(true);
