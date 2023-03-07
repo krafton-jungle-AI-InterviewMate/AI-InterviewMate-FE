@@ -175,7 +175,7 @@ const AiRoomForm = ({ onClickModalClose, roomType, questionBoxes }) => {
             </StyledRadioWrap>
           ))}
         </div>
-        <span className="guide">실시간 피드백 설정은 방 생성 이후에는 수정하실 수 없습니다.</span>
+        <span className="guide">실시간 녹화 설정은 방 생성 이후에는 수정하실 수 없습니다.</span>
         <div className="inputContent">
           <label htmlFor="questionNum">질문 개수</label>
           <input

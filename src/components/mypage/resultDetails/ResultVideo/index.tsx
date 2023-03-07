@@ -7,12 +7,14 @@ import { commonLabelStyle } from "styles/resultDetails";
 type ResultVideoProps = {
   videoRef: React.MutableRefObject<Player | null>;
   videoUrl: string;
+  refetch: () => void;
 };
 
 const ResultVideo = (props: ResultVideoProps) => {
   const {
     videoRef,
     videoUrl,
+    refetch,
   } = props;
 
   const videoJsOptions = {
@@ -41,6 +43,7 @@ const ResultVideo = (props: ResultVideoProps) => {
           videoRef={videoRef}
           options={videoJsOptions}
           onReady={handlePlayerReady}
+          refetch={refetch}
         />
       </StyledVideoWrapper>
     </div>
@@ -66,7 +69,7 @@ const StyledVideoWrapper = styled.div`
   box-sizing: content-box;
   background-color: var(--main-white);
 
-  & > div {
+  & > div:not(.loaderWrap) {
     transform: translateY(15%);
   }
 `;
