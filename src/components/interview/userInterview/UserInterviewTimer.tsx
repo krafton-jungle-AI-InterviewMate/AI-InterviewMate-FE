@@ -44,7 +44,7 @@ const UserInterviewTimer = (props: UserInterviewTimerProps) => {
 
 const StyledUserInterviewTimer = styled.div`
   padding-top: 50px;
-  font-size: 20px;
+  font-size: 2rem;
 `;
 
 export default UserInterviewTimer;
