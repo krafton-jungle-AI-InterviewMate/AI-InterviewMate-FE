@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import {
-  hostAtom,
-  isInterviewerAtom,
-  motionSnapshotAtom,
-} from "store/interview/atom";
+import { hostAtom, isInterviewerAtom, motionSnapshotAtom } from "store/interview/atom";
 
 import useInitializeInterviewState from "hooks/useInitializeInterviewState";
 import useFaceLandmarksDetection from "hooks/useFaceLandmarksDetection";
@@ -202,7 +198,7 @@ const StyledUserInterview = styled.div<StyledUserInterviewProps>`
   justify-content: space-between;
   .interviewActionsContents {
     position: absolute;
-    z-index: 10;
+    z-index: 11;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;

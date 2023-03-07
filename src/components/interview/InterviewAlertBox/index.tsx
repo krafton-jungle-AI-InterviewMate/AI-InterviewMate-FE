@@ -10,10 +10,7 @@ type InterviewAlertBoxProps = {
 };
 
 const InterviewAlertBox = (props: InterviewAlertBoxProps) => {
-  const {
-    webcamWidth,
-    webcamHeight,
-  } = props;
+  const { webcamWidth, webcamHeight } = props;
 
   const showIrisFeedback = useRecoilValue(showIrisFeedbackAtom);
   const showMotionFeedback = useRecoilValue(showMotionFeedbackAtom);
@@ -30,7 +27,6 @@ const InterviewAlertBox = (props: InterviewAlertBoxProps) => {
           👁 시선 이탈
         </StyledAlertText>
       </StyledInterviewAlertBox>
-
 
       <StyledInterviewAlertBox
         w={webcamWidth}
@@ -65,24 +61,32 @@ const StyledInterviewAlertBox = styled.div<AlertBoxProps>`
   border-radius: 20px;
   z-index: 9;
 
-  ${({ alertType }) => alertType === "eyes" && css`
-    background: var(--main-orange);
-    box-shadow: 0px 3px 24px 0px rgba(255,153,0,1), 6px 0px 24px 0px rgba(255,0,0,0.357);
-  `};
-  ${({ alertType }) => alertType === "attitude" && css`
-    background: var(--main-blue);
-    box-shadow: 0px 3px 24px 0px rgba(20,110,180,1), 6px 0px 24px 0px rgba(36,117,131,0.357);
-  `};
-  ${({ alertType }) => alertType === "none" && css`
-    background: transparent;
-    box-shadow: none;
-  `};
-  ${({ isBoth }) => isBoth && css`
-    box-shadow: none;
-  `};
+  ${({ alertType }) =>
+    alertType === "eyes" &&
+    css`
+      background: var(--main-orange);
+      box-shadow: 0px 3px 24px 0px rgba(255, 153, 0, 1), 6px 0px 24px 0px rgba(255, 0, 0, 0.357);
+    `};
+  ${({ alertType }) =>
+    alertType === "attitude" &&
+    css`
+      background: var(--main-blue);
+      box-shadow: 0px 3px 24px 0px rgba(20, 110, 180, 1), 6px 0px 24px 0px rgba(36, 117, 131, 0.357);
+    `};
+  ${({ alertType }) =>
+    alertType === "none" &&
+    css`
+      background: transparent;
+      box-shadow: none;
+    `};
+  ${({ isBoth }) =>
+    isBoth &&
+    css`
+      box-shadow: none;
+    `};
 `;
 
-const StyledAlertText = styled.div<{ alertType: "eyes" | "attitude" | "none"; }>`
+const StyledAlertText = styled.div<{ alertType: "eyes" | "attitude" | "none" }>`
   position: absolute;
   top: -60px;
   display: flex;
@@ -95,18 +99,24 @@ const StyledAlertText = styled.div<{ alertType: "eyes" | "attitude" | "none"; }>
   font-size: 1.6rem;
   color: var(--main-white);
 
-  ${({ alertType }) => alertType === "eyes" && css`
-    background-color: var(--main-orange);
-    box-shadow: 0px 3px 24px 0px rgba(255,153,0,1), 6px 0px 24px 0px rgba(255,0,0,0.357);
-    left: 0;
-  `};
-  ${({ alertType }) => alertType === "attitude" && css`
-    background-color: var(--main-blue);
-    box-shadow: 0px 3px 24px 0px rgba(20,110,180,1), 6px 0px 24px 0px rgba(36,117,131,0.357);
-    right: 0;
-  `};
-  ${({ alertType }) => alertType === "none" && css`
-    background-color: transparent;
-    color: transparent;
-  `};
+  ${({ alertType }) =>
+    alertType === "eyes" &&
+    css`
+      background-color: var(--main-orange);
+      box-shadow: 0px 3px 24px 0px rgba(255, 153, 0, 1), 6px 0px 24px 0px rgba(255, 0, 0, 0.357);
+      left: 0;
+    `};
+  ${({ alertType }) =>
+    alertType === "attitude" &&
+    css`
+      background-color: var(--main-blue);
+      box-shadow: 0px 3px 24px 0px rgba(20, 110, 180, 1), 6px 0px 24px 0px rgba(36, 117, 131, 0.357);
+      right: 0;
+    `};
+  ${({ alertType }) =>
+    alertType === "none" &&
+    css`
+      background-color: transparent;
+      color: transparent;
+    `};
 `;

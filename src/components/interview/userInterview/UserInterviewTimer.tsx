@@ -14,8 +14,8 @@ const UserInterviewTimer = (props: UserInterviewTimerProps) => {
   const initialTime = useRef<number>(roomTime * 60);
   const interval = useRef<any>(null);
 
-  const [ min, setMin ] = useState<string>(roomTime + "");
-  const [ sec, setSec ] = useState<string>("00");
+  const [min, setMin] = useState<string>(roomTime + "");
+  const [sec, setSec] = useState<string>("00");
 
   useEffect(() => {
     interval.current = setInterval(() => {
@@ -33,7 +33,7 @@ const UserInterviewTimer = (props: UserInterviewTimerProps) => {
     if (initialTime.current <= 0) {
       clearInterval(interval.current);
     }
-  }, [ sec ]);
+  }, [sec]);
 
   return (
     <StyledUserInterviewTimer>
@@ -43,7 +43,7 @@ const UserInterviewTimer = (props: UserInterviewTimerProps) => {
 };
 
 const StyledUserInterviewTimer = styled.div`
-  padding: 15px 0;
+  padding-top: 50px;
   font-size: 20px;
 `;
 

@@ -20,12 +20,7 @@ const ResultDetails = () => {
   const [ searchParams ] = useSearchParams();
   const videoRef = useRef<null | Player>(null);
 
-  const {
-    data,
-    isFetching,
-    isSuccess,
-    refetch,
-  } = useGetRatingDetail(
+  const { data, isFetching, isSuccess, refetch } = useGetRatingDetail(
     Number(searchParams.get("room")),
     searchParams.get("type") as RoomTypes,
   );
@@ -54,14 +49,16 @@ const ResultDetails = () => {
         )}
       </StyledVideoSection>
       <StyledChartSection>
-        {searchParams.get("type") === "AI"
-          ? <ResultChartAi resultDetail={data.data.data} />
-          : <ResultChartUser resultDetail={data.data.data} />
-        }
-        {searchParams.get("type") === "AI"
-          ? <ResultScript resultDetail={data.data.data} />
-          : <ResultComments />
-        }
+        {searchParams.get("type") === "AI" ? (
+          <ResultChartAi resultDetail={data.data.data} />
+        ) : (
+          <ResultChartUser resultDetail={data.data.data} />
+        )}
+        {searchParams.get("type") === "AI" ? (
+          <ResultScript resultDetail={data.data.data} />
+        ) : (
+          <ResultComments resultDetail={data.data.data} />
+        )}
       </StyledChartSection>
     </ResultDetailsLayout>
   ) : (

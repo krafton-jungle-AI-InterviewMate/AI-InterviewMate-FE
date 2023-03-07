@@ -40,7 +40,7 @@ export type RatingDetail = {
   createdAt: string;
   roomName: string;
   roomQuestionNum: number;
-  comments: Array<string>;
+  comments: Array<Comment>;
 };
 
 export type GetRatingDetailResponse = ResponseStatus & {

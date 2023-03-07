@@ -14,18 +14,18 @@ interface UserVideoComponentProps {
 
 const UserVideoComponent = (props: UserVideoComponentProps) => {
   const { streamManager, setVideo } = props;
-  const [isLoading, setIsLoading] = useState(true);
+  const [ isLoading, setIsLoading ] = useState(true);
   const host = useRecoilValue(hostAtom);
   const isInterviewStart = useRecoilValue(isInterviewStartAtom);
   const isInterviewer = useRecoilValue(isInterviewerAtom);
-  const [isHost, setIsHost] = useState(false);
+  const [ isHost, setIsHost ] = useState(false);
 
   useEffect(() => {
     if (streamManager) {
       setIsLoading(false);
       setIsHost(host === streamManager.stream.connection.connectionId);
     }
-  }, [streamManager]);
+  }, [ streamManager ]);
 
   return (
     <StyledUserVideoComponent isHost={isHost} isInterviewStart={isInterviewStart}>
@@ -39,7 +39,7 @@ const UserVideoComponent = (props: UserVideoComponentProps) => {
           {!isInterviewStart && (
             <p>
               <span className="interviewer">{isHost ? "면접자" : "면접관"}</span>
-              <span className="nickname">{streamManager.stream.connection.data.split('"')[3]}</span>
+              <span className="nickname">{streamManager.stream.connection.data.split("\"")[3]}</span>
             </p>
           )}
         </div>
@@ -54,10 +54,12 @@ interface StyledUserVideoComponentProps {
 }
 
 const StyledUserVideoComponent = styled.div<StyledUserVideoComponentProps>`
+  margin-top: ${props => (props.isHost ? "100px" : "0")};
   .streamcomponent {
     position: relative;
     display: flex;
     flex-direction: ${props => (props.isHost ? "column" : "row")};
+    padding-bottom: 60px;
     p {
       position: absolute;
       display: flex;

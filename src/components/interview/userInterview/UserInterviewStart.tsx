@@ -52,9 +52,9 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
   const isInterviewer = useRecoilValue(isInterviewerAtom);
   const setTimelineRecord = useSetRecoilState(timelineRecordAtom);
 
-  const [video, setVideo] = useState<null | HTMLVideoElement>(null);
+  const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
 
-  const isRealtimeMode = useMemo(() => feedbackMode === "ON", [feedbackMode]);
+  const isRealtimeMode = useMemo(() => feedbackMode === "ON", [ feedbackMode ]);
   const { face, setIsDetectionOn } = useFaceLandmarksDetection({ video });
 
   const { horizontalRatio } = useCheckIrisPosition({ face });
@@ -76,7 +76,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
       }));
       setIsDetectionOn(true);
     }
-  }, [video]);
+  }, [ video ]);
 
   useEffect(() => {
     const timerId = window.setTimeout(() => {
@@ -121,11 +121,9 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
               >
                 면접 나가기
               </StyledBtn>
+              <UserInterviewTimer roomTime={userInterviewData?.roomTime} />
             </div>
           </div>
-          <UserInterviewTimer roomTime={userInterviewData?.roomTime} />
-          {showIrisFeedback && <InterviewFeedback feedbackType="iris" />}
-          {showMotionFeedback && <InterviewFeedback feedbackType="motion" />}
           <div className="publisherContents">
             {publisher && (
               <div className="publisherVideo">
