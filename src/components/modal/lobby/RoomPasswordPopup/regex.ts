@@ -1,1 +1,1 @@
-export const roomPasswordRegex = new RegExp(/^\d{6}$/, "g");
+export const roomPasswordRegex = new RegExp(/^[0-9]+$/, "g");
