@@ -99,6 +99,7 @@ const StyledCommentsBox = styled.div`
     text-align: left;
     overflow-y: auto;
     word-break: keep-all;
+    font-size: 1.2rem;
 
     &::-webkit-scrollbar {
       width: 8px;
