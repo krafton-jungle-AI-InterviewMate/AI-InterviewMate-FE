@@ -180,6 +180,8 @@ const UserInterview = () => {
 
   const handleClickInterviewOut = () => {
     // 인터뷰 도중 나감
+    leaveSession();
+    setIsInterviewStart(false);
     session
       .signal({
         data: host === publisher.stream.connection.connectionId ? "면접자" : "면접관",
@@ -192,8 +194,6 @@ const UserInterview = () => {
     deleteInterviewRoomsMutate(userInterviewData!.roomIdx, {
       onSuccess: () => {
         console.log("면접방을 나갔습니다.");
-        setIsInterviewStart(false);
-        leaveSession();
         if (isInterviewer) {
           navigate("/lobby");
         }
