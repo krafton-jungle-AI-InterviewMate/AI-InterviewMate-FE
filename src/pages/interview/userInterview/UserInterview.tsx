@@ -180,8 +180,6 @@ const UserInterview = () => {
 
   const handleClickInterviewOut = () => {
     // 인터뷰 도중 나감
-    leaveSession();
-    setIsInterviewStart(false);
     session
       .signal({
         data: host === publisher.stream.connection.connectionId ? "면접자" : "면접관",
@@ -200,6 +198,8 @@ const UserInterview = () => {
         if (!isInterviewer) {
           navigate("/interview/end");
         }
+        leaveSession();
+        setIsInterviewStart(false);
       },
       onError(error) {
         alert(error);
