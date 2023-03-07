@@ -111,9 +111,7 @@ const UserInterview = () => {
 
     session.on("signal:setHost", event => {
       console.log(event.type);
-      if (isInterviewer) {
-        setHost(event.data);
-      }
+      setHost(event.data);
     });
 
     session
