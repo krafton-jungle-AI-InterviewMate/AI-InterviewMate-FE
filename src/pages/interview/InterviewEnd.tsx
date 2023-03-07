@@ -1,7 +1,5 @@
-import styled from "@emotion/styled";
-import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { StyledBtn } from "styles/StyledBtn";
+import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   aiInterviewNextProcessAtom,
@@ -9,11 +7,16 @@ import {
   isInterviewerAtom,
   timelineRecordAtom,
 } from "store/interview/atom";
-import { usePostRatingViewee } from "hooks/queries/mypage";
-import { deduplicate } from "lib/interview";
-import { PostRatingVieweePayloadData } from "api/mypage/types";
 
+import { usePostRatingViewee } from "hooks/queries/mypage";
+import { PostRatingVieweePayloadData } from "api/mypage/types";
+import { deduplicate } from "lib/interview";
+
+import SubmitProcessingPopup from "components/interview/SubmitProcessingPopup";
 import EndCommentForm from "components/interview/EndCommentForm";
+import { StyledBtn } from "styles/StyledBtn";
+
+import styled from "@emotion/styled";
 
 const InterviewEnd = () => {
   const setAiInterviewNextProcess = useSetRecoilState(aiInterviewNextProcessAtom);
