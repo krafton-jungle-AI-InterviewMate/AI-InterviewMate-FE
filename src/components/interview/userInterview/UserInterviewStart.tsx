@@ -19,7 +19,6 @@ import useCheckIrisPosition from "hooks/useCheckIrisPosition";
 import useCheckHeadMotion from "hooks/useCheckHeadMotion";
 import useIrisAssessment from "hooks/useIrisAssessment";
 import useMotionAssessment from "hooks/useMotionAssessment";
-import InterviewFeedback from "../InterviewFeedback";
 
 import styled from "@emotion/styled";
 
@@ -59,11 +58,11 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
 
   const { horizontalRatio } = useCheckIrisPosition({ face });
   const { isBadMotion } = useCheckHeadMotion({ face });
-  const { showFeedback: showIrisFeedback } = useIrisAssessment({
+  useIrisAssessment({
     isRealtimeMode,
     horizontalRatio,
   });
-  const { showFeedback: showMotionFeedback } = useMotionAssessment({
+  useMotionAssessment({
     isRealtimeMode,
     isBadMotion,
   });
