@@ -89,12 +89,14 @@ const UserInterview = () => {
 
     session.on("signal:interviewOut", event => {
       console.log(event.type);
+      console.log(event.data);
       if (event.data === "면접자") {
         // 면접자가 나갔을 때 면접관들 모두 로비로
         setIsInterviewStart(false);
         leaveSession();
         navigate("/lobby");
-      } else if (event.data === "면접관" && subscribers.length === 0 && !isInterviewer) {
+      }
+      if (event.data === "면접관" && subscribers.length === 0 && !isInterviewer) {
         // 면접관이 나갔을 때 다른 면접관이 남아있지 않고 본인이 면접자일 때
         setIsInterviewStart(false);
         leaveSession();
