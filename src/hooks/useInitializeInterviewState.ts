@@ -8,6 +8,7 @@ import {
   timelineRecordAtom,
   videoBlobAtom,
   videoUrlAtom,
+  preSignedUrlListAtom,
 } from "store/interview/atom";
 import { InitialTimelineRecord } from "constants/interview";
 
@@ -19,7 +20,8 @@ const useInitializeInterviewState = () => {
   const setAnswerScript = useSetRecoilState(answerScriptAtom);
   const setTimelineRecord = useSetRecoilState(timelineRecordAtom);
   const setVideoBlobAtom = useSetRecoilState(videoBlobAtom);
-  const setVideoUrlAtom = useSetRecoilState(videoUrlAtom);
+  const setVideoUrl = useSetRecoilState(videoUrlAtom);
+  const setPreSignedUrlList = useSetRecoilState(preSignedUrlListAtom);
 
   const initializeInterviewState = () => {
     setInterviewMode("break");
@@ -29,7 +31,8 @@ const useInitializeInterviewState = () => {
     setAnswerScript([]);
     setTimelineRecord(InitialTimelineRecord);
     setVideoBlobAtom(null);
-    setVideoUrlAtom("");
+    setVideoUrl("");
+    setPreSignedUrlList([]);
   };
 
   return {

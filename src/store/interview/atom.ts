@@ -156,3 +156,8 @@ export const showMotionFeedbackAtom = atom<boolean>({
   key: "ShowMotionFeedback",
   default: false,
 });
+
+export const preSignedUrlListAtom = atom<string[]>({
+  key: "PreSignedUrlList",
+  default: [],
+});

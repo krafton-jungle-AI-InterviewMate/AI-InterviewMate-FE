@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useRecoilValue, useRecoilState } from "recoil";
 import {
   interviewDataAtom,
   videoBlobAtom,
   videoUrlAtom,
+  preSignedUrlListAtom,
 } from "store/interview/atom";
 
 import {
@@ -43,13 +44,15 @@ const SubmitProcessingPopup = (props: SubmitProcessingPopupProps) => {
   const blob = useRecoilValue(videoBlobAtom);
   const interviewData = useRecoilValue(interviewDataAtom);
   const [ videoUrl, setVideoUrl ] = useRecoilState(videoUrlAtom);
+  const preSignedUrlList = useRecoilValue(preSignedUrlListAtom);
 
   const [ chunkNumber, setChunkNumber ] = useState(0);
   const [ uploadId, setUploadId ] = useState("");
   const [ serverFileName, setServerFileName ] = useState("");
   const [ multiUploadList, setMultiUploadList ] = useState<Array<VideoPart>>([]);
-  const [ currBlobPart, setCurrBlobPart ] = useState<null | Blob>(null);
-  const [ currPartNumber, setCurrPartNumber ] = useState<number>(0);
+  const [ isAllSet, setIsAllSet ] = useState(false);
+
+  const chunkSize = useMemo(() => 10 * MB, []);
 
   const handleClickCancelButton = () => {
     if (window.confirm("정말 제출을 취소하시겠습니까?")) {
@@ -83,9 +86,6 @@ const SubmitProcessingPopup = (props: SubmitProcessingPopupProps) => {
   } = usePostInitiateVideoUpload();
   const {
     mutate: fetchSignedVideoUrl,
-    isLoading: fetchSignedVideoUrlLoading,
-    isSuccess: fetchSignedVideoUrlComplete,
-    data: fetchSignedVideoUrlResponse,
   } = usePostSignedVideoUrl();
   const {
     mutate: postComplete,
@@ -112,7 +112,6 @@ const SubmitProcessingPopup = (props: SubmitProcessingPopupProps) => {
 
     if (blob) {
       const fileName = formatVideoFileName(roomIdx);
-
       initiateVideoUpload({
         fileName,
       });
@@ -130,40 +129,56 @@ const SubmitProcessingPopup = (props: SubmitProcessingPopupProps) => {
       setUploadId(uploadId);
       setServerFileName(fileName);
 
-      const chunkSize = 10 * MB;
       const chunkCount = Math.ceil(blob!.size / chunkSize);
       setChunkNumber(chunkCount);
 
-      let nextStart = 0;
+      (async () => {
+        let partNumber = 1;
 
-      for (let count = 0; count < chunkCount; count++) {
-        const blobPart = blob!.slice(nextStart, nextStart + chunkSize);
-        setCurrBlobPart(blobPart);
-        setCurrPartNumber(count + 1);
-        nextStart += chunkSize;
+        for (let partIdx = 0; partIdx < chunkCount; partIdx++) {
+          fetchSignedVideoUrl(
+            {
+              fileName,
+              uploadId,
+              partNumber,
+            },
+          );
 
-        fetchSignedVideoUrl({
-          fileName,
-          uploadId,
-          partNumber: count + 1,
-        });
-      }
+          partNumber++;
+        }
+      })();
     }
   }, [ initiateLoading ]);
 
   useEffect(() => {
-    if (fetchSignedVideoUrlLoading || !currBlobPart) {
+    if (!chunkNumber) {
       return;
     }
 
-    if (fetchSignedVideoUrlComplete && fetchSignedVideoUrlResponse) {
-      uploadChunkToAWS({
-        preSignedUrl: fetchSignedVideoUrlResponse.data.preSignedUrl,
-        blobPart: currBlobPart,
-        partNumber: currPartNumber,
-      });
+    if (preSignedUrlList.length !== chunkNumber) {
+      return;
     }
-  }, [ fetchSignedVideoUrlLoading ]);
+
+    (async () => {
+      let partNumber = 1;
+      let nextStart = 0;
+
+      for (let preSignedUrl of preSignedUrlList) {
+        const blobPart = blob!.slice(nextStart, nextStart + chunkSize);
+        nextStart += chunkSize;
+
+        await uploadChunkToAWS({
+          preSignedUrl,
+          blobPart,
+          partNumber,
+        });
+
+        partNumber++;
+      }
+
+      setIsAllSet(true);
+    })();
+  }, [ preSignedUrlList ]);
 
   useEffect(() => {
     if (!interviewData) {
@@ -171,16 +186,19 @@ const SubmitProcessingPopup = (props: SubmitProcessingPopupProps) => {
       return;
     }
 
-    const { roomIdx } = interviewData;
-    if (multiUploadList.length && multiUploadList.length === chunkNumber) {
-      postComplete({
-        parts: multiUploadList,
-        fileName: serverFileName,
-        uploadId,
-        roomIdx,
-      });
+    if (!isAllSet) {
+      return;
     }
-  }, [ multiUploadList ]);
+
+    const { roomIdx } = interviewData;
+
+    postComplete({
+      parts: multiUploadList,
+      fileName: serverFileName,
+      uploadId,
+      roomIdx,
+    });
+  }, [ isAllSet ]);
 
   useEffect(() => {
     if (postCompleteLoading) {
