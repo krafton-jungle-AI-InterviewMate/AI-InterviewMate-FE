@@ -21,9 +21,9 @@ export const useUserRecorderPermission = (subscribers: Array<Subscriber>) => {
     subscribers.forEach(subscriber => {
       const { stream } = subscriber;
       const audioTrack = stream.getMediaStream().getAudioTracks()[0];
-      const mixedAudioStream = new MediaStream([ audioTrack ]);
+      const audioStream = new MediaStream([ audioTrack ]);
 
-      mediaStreams.push(mixedAudioStream);
+      mediaStreams.push(audioStream);
     });
     // 모든 오디오 트랙을 믹싱하여 새 MediaStream 객체 생성
     // 사용자 웹캠 및 마이크 데이터 불러오기 -> 원래 getPermissionInitializeUserRecorder에 있던 코드!!
