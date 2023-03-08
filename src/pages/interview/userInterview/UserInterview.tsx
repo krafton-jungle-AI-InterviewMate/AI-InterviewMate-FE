@@ -19,20 +19,20 @@ const UserInterview = () => {
   const userInterviewData = useRecoilValue(interviewDataAtom);
   const { nickname } = useRecoilValue(memberAtom);
   const setRoomPeopleNow = useSetRecoilState(roomPeopleNowAtom);
-  const [isInterviewStart, setIsInterviewStart] = useRecoilState(isInterviewStartAtom);
+  const [ isInterviewStart, setIsInterviewStart ] = useRecoilState(isInterviewStartAtom);
   const isInterviewer = useRecoilValue(isInterviewerAtom);
-  const [host, setHost] = useRecoilState(hostAtom);
+  const [ host, setHost ] = useRecoilState(hostAtom);
   const setComment = useSetRecoilState(interviewCommentAtom);
 
   const navigate = useNavigate();
 
-  const [OV, setOV] = useState<any>(null);
-  const [myUserName, setMyUserName] = useState<string | undefined>(nickname);
-  const [session, setSession] = useState<any>(undefined);
-  const [publisher, setPublisher] = useState<any>(undefined);
-  const [subscribers, setSubscribers] = useState<Array<any>>([]);
-  const [ready, setReady] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [ OV, setOV ] = useState<any>(null);
+  const [ myUserName, setMyUserName ] = useState<string | undefined>(nickname);
+  const [ session, setSession ] = useState<any>(undefined);
+  const [ publisher, setPublisher ] = useState<any>(undefined);
+  const [ subscribers, setSubscribers ] = useState<Array<any>>([]);
+  const [ ready, setReady ] = useState(false);
+  const [ isOpen, setIsOpen ] = useState(false);
 
   const { mutate: putInterviewRoomsMutate } = usePutInterviewRooms();
   const { mutate: deleteInterviewRoomsMutate } = useDeleteInterviewRooms();
@@ -68,7 +68,7 @@ const UserInterview = () => {
 
     session.on("streamCreated", event => {
       const newSubscriber = session.subscribe(event.stream, undefined);
-      setSubscribers(curr => [...curr, newSubscriber]);
+      setSubscribers(curr => [ ...curr, newSubscriber ]);
     });
 
     session.on("streamDestroyed", event => {
@@ -88,17 +88,19 @@ const UserInterview = () => {
     });
 
     session.on("signal:interviewOut", event => {
+      const data = JSON.parse(event.data);
       console.log(event.type);
-      if (event.data === "면접자") {
-        // 면접자가 나갔을 때 면접관들 모두 로비로
+      console.log(event.data);
+      console.log(data.host);
+      if (data.host) {
         setIsInterviewStart(false);
-        leaveSession();
         navigate("/lobby");
-      } else if (event.data === "면접관" && subscribers.length === 0 && !isInterviewer) {
-        // 면접관이 나갔을 때 다른 면접관이 남아있지 않고 본인이 면접자일 때
-        setIsInterviewStart(false);
         leaveSession();
+      }
+      else if (data.length === 1 && !isInterviewer) {
+        setIsInterviewStart(false);
         navigate("/interview/end");
+        leaveSession();
       }
     });
 
@@ -109,9 +111,7 @@ const UserInterview = () => {
 
     session.on("signal:setHost", event => {
       console.log(event.type);
-      if (isInterviewer) {
-        setHost(event.data);
-      }
+      setHost(event.data);
     });
 
     session
@@ -146,7 +146,7 @@ const UserInterview = () => {
       .catch(error => {
         console.log("There was an error connecting to the session:", error.code, error.message);
       });
-  }, [session]);
+  }, [ session ]);
 
   const leaveSession = () => {
     if (session) {
@@ -180,7 +180,10 @@ const UserInterview = () => {
     // 인터뷰 도중 나감
     session
       .signal({
-        data: host === publisher.stream.connection.connectionId ? "면접자" : "면접관",
+        data: JSON.stringify({
+          host: host === publisher.stream.connection.connectionId,
+          length: subscribers.length,
+        }),
         to: subscribers,
         type: "interviewOut",
       })
@@ -190,14 +193,14 @@ const UserInterview = () => {
     deleteInterviewRoomsMutate(userInterviewData!.roomIdx, {
       onSuccess: () => {
         console.log("면접방을 나갔습니다.");
-        setIsInterviewStart(false);
-        leaveSession();
         if (isInterviewer) {
           navigate("/lobby");
         }
         if (!isInterviewer) {
           navigate("/interview/end");
         }
+        leaveSession();
+        setIsInterviewStart(false);
       },
       onError(error) {
         alert(error);
@@ -252,7 +255,8 @@ const UserInterview = () => {
             alert(error);
           },
         });
-      } catch (e) {
+      }
+      catch (e) {
         console.log(e);
       }
     }
@@ -274,7 +278,8 @@ const UserInterview = () => {
     setRoomPeopleNow(subscribers.length);
     if (subscribers.length) {
       setReady(true);
-    } else {
+    }
+    else {
       setReady(false);
     }
     if (!isInterviewer && session && publisher) {
@@ -288,13 +293,13 @@ const UserInterview = () => {
           console.error(error);
         });
     }
-  }, [subscribers]);
+  }, [ subscribers ]);
 
   useEffect(() => {
     if (publisher && !isInterviewer) {
       setHost(publisher.stream.connection.connectionId);
     }
-  }, [publisher]);
+  }, [ publisher ]);
 
   return (
     <>

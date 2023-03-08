@@ -75,9 +75,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
     isBadMotion,
   });
 
-  const {
-    getPermissionInitializeUserRecorder,
-  } = useRecorderPermission("video");
+  const { getPermissionInitializeUserRecorder } = useRecorderPermission("video");
 
   const stopRecording = () => {
     if (isInterviewer) {
@@ -85,7 +83,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
     }
 
     if (recorder) {
-      recorder.stop((blob) => {
+      recorder.stop(blob => {
         setVideoBlob(blob);
       });
     }
@@ -102,7 +100,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
       stopRecording();
     }
 
-    setTimelineRecord((curr) => ({
+    setTimelineRecord(curr => ({
       ...curr,
       endTime: Date.now(),
     }));
@@ -115,7 +113,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
       stopRecording();
     }
 
-    setTimelineRecord((curr) => ({
+    setTimelineRecord(curr => ({
       ...curr,
       endTime: Date.now(),
     }));
@@ -151,10 +149,10 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
 
         setRecorder(rec);
       })();
-  
-      return (() => {
+
+      return () => {
         recorder?.clearRecordedData();
-      });
+      };
     }
   }, []);
 
@@ -229,12 +227,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
               로비로 이동하시겠습니까?
             </DialogTitle>
             <DialogActions>
-              <StyledBtn
-                onClick={handleInterviewLeave}
-                width="200px"
-                height="42px"
-                color="orange"
-              >
+              <StyledBtn onClick={handleInterviewLeave} width="200px" height="42px" color="orange">
                 네!
               </StyledBtn>
               <StyledBtn onClick={handleClickModalClose} width="200px" height="42px" color="red">

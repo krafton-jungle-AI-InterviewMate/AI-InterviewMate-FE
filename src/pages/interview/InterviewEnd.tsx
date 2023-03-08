@@ -34,9 +34,9 @@ const InterviewEnd = () => {
   const isRecordMode = useRecoilValue(recordModeAtom);
   const videoUrl = useRecoilValue(videoUrlAtom);
   const recorder = useRecoilValue(userRecorderAtom);
-  const [videoBlob, setVideoBlob] = useRecoilState(videoBlobAtom);
+  const [ videoBlob, setVideoBlob ] = useRecoilState(videoBlobAtom);
 
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [ isProcessing, setIsProcessing ] = useState(false);
 
   const { mutate: postRatingVieweeMutate, isLoading: isPostRatingVieweeLoading } =
     usePostRatingViewee();
@@ -63,6 +63,7 @@ const InterviewEnd = () => {
         {
           onError(error: any) {
             if (error.response.status === 400) {
+              alert("방이 강제로 종료되었습니다.");
               navigate("/lobby");
             }
           },
@@ -85,7 +86,7 @@ const InterviewEnd = () => {
     if (videoUrl) {
       setIsProcessing(false);
     }
-  }, [videoUrl]);
+  }, [ videoUrl ]);
 
   const handleProcessingPopupClose = () => {
     setIsProcessing(false);
