@@ -19,20 +19,20 @@ const UserInterview = () => {
   const userInterviewData = useRecoilValue(interviewDataAtom);
   const { nickname } = useRecoilValue(memberAtom);
   const setRoomPeopleNow = useSetRecoilState(roomPeopleNowAtom);
-  const [isInterviewStart, setIsInterviewStart] = useRecoilState(isInterviewStartAtom);
+  const [ isInterviewStart, setIsInterviewStart ] = useRecoilState(isInterviewStartAtom);
   const isInterviewer = useRecoilValue(isInterviewerAtom);
-  const [host, setHost] = useRecoilState(hostAtom);
+  const [ host, setHost ] = useRecoilState(hostAtom);
   const setComment = useSetRecoilState(interviewCommentAtom);
 
   const navigate = useNavigate();
 
-  const [OV, setOV] = useState<any>(null);
-  const [myUserName, setMyUserName] = useState<string | undefined>(nickname);
-  const [session, setSession] = useState<any>(undefined);
-  const [publisher, setPublisher] = useState<any>(undefined);
-  const [subscribers, setSubscribers] = useState<Array<any>>([]);
-  const [ready, setReady] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [ OV, setOV ] = useState<any>(null);
+  const [ myUserName, setMyUserName ] = useState<string | undefined>(nickname);
+  const [ session, setSession ] = useState<any>(undefined);
+  const [ publisher, setPublisher ] = useState<any>(undefined);
+  const [ subscribers, setSubscribers ] = useState<Array<any>>([]);
+  const [ ready, setReady ] = useState(false);
+  const [ isOpen, setIsOpen ] = useState(false);
 
   const { mutate: putInterviewRoomsMutate } = usePutInterviewRooms();
   const { mutate: deleteInterviewRoomsMutate } = useDeleteInterviewRooms();
@@ -68,7 +68,7 @@ const UserInterview = () => {
 
     session.on("streamCreated", event => {
       const newSubscriber = session.subscribe(event.stream, undefined);
-      setSubscribers(curr => [...curr, newSubscriber]);
+      setSubscribers(curr => [ ...curr, newSubscriber ]);
     });
 
     session.on("streamDestroyed", event => {
@@ -96,7 +96,8 @@ const UserInterview = () => {
         setIsInterviewStart(false);
         navigate("/lobby");
         leaveSession();
-      } else if (data.length === 1 && !isInterviewer) {
+      }
+      else if (data.length === 1 && !isInterviewer) {
         setIsInterviewStart(false);
         navigate("/interview/end");
         leaveSession();
@@ -145,7 +146,7 @@ const UserInterview = () => {
       .catch(error => {
         console.log("There was an error connecting to the session:", error.code, error.message);
       });
-  }, [session]);
+  }, [ session ]);
 
   const leaveSession = () => {
     if (session) {
@@ -254,7 +255,8 @@ const UserInterview = () => {
             alert(error);
           },
         });
-      } catch (e) {
+      }
+      catch (e) {
         console.log(e);
       }
     }
@@ -276,7 +278,8 @@ const UserInterview = () => {
     setRoomPeopleNow(subscribers.length);
     if (subscribers.length) {
       setReady(true);
-    } else {
+    }
+    else {
       setReady(false);
     }
     if (!isInterviewer && session && publisher) {
@@ -290,13 +293,13 @@ const UserInterview = () => {
           console.error(error);
         });
     }
-  }, [subscribers]);
+  }, [ subscribers ]);
 
   useEffect(() => {
     if (publisher && !isInterviewer) {
       setHost(publisher.stream.connection.connectionId);
     }
-  }, [publisher]);
+  }, [ publisher ]);
 
   return (
     <>

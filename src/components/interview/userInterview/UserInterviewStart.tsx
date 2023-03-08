@@ -57,11 +57,11 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
   const setTimelineRecord = useSetRecoilState(timelineRecordAtom);
   const setVideoBlob = useSetRecoilState(videoBlobAtom);
   const isRecordMode = useRecoilValue(recordModeAtom);
-  const [recorder, setRecorder] = useRecoilState(userRecorderAtom);
+  const [ recorder, setRecorder ] = useRecoilState(userRecorderAtom);
 
-  const [video, setVideo] = useState<null | HTMLVideoElement>(null);
+  const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
 
-  const isRealtimeMode = useMemo(() => feedbackMode === "ON", [feedbackMode]);
+  const isRealtimeMode = useMemo(() => feedbackMode === "ON", [ feedbackMode ]);
   const { face, setIsDetectionOn } = useFaceLandmarksDetection({ video });
 
   const { horizontalRatio } = useCheckIrisPosition({ face });
@@ -127,7 +127,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
       }));
       setIsDetectionOn(true);
     }
-  }, [video]);
+  }, [ video ]);
 
   useEffect(() => {
     const timerId = window.setTimeout(
