@@ -10,7 +10,7 @@ import {
   recordModeAtom,
   userRecorderAtom,
 } from "store/interview/atom";
-import RecordRTC from "recordrtc";
+import { Session, Publisher, Subscriber } from "openvidu-browser";
 
 import { Dialog, DialogActions, DialogTitle } from "@mui/material";
 import InterviewQuestionTab from "./InterviewerQuestionTap";
@@ -23,14 +23,14 @@ import useCheckIrisPosition from "hooks/useCheckIrisPosition";
 import useCheckHeadMotion from "hooks/useCheckHeadMotion";
 import useIrisAssessment from "hooks/useIrisAssessment";
 import useMotionAssessment from "hooks/useMotionAssessment";
-import { useRecorderPermission } from "hooks/useRecorderPermission";
+import { useUserRecorderPermission } from "hooks/useUserRecorderPermission";
 
 import styled from "@emotion/styled";
 
 interface UserInterviewStartProps {
-  session: any;
-  publisher: any;
-  subscribers: Array<any>;
+  session: Session | null;
+  publisher: Publisher | null;
+  subscribers: Array<Subscriber>;
   isOpen: boolean;
   handleClickModalClose: () => void;
   handleClickModalRoomLeave: () => void;
@@ -57,7 +57,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
   const setTimelineRecord = useSetRecoilState(timelineRecordAtom);
   const setVideoBlob = useSetRecoilState(videoBlobAtom);
   const isRecordMode = useRecoilValue(recordModeAtom);
-  const [ recorder, setRecorder ] = useRecoilState(userRecorderAtom);
+  const [ recorder, _ ] = useRecoilState(userRecorderAtom);
 
   const [ video, setVideo ] = useState<null | HTMLVideoElement>(null);
 
@@ -74,8 +74,6 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
     isRealtimeMode,
     isBadMotion,
   });
-
-  const { getPermissionInitializeUserRecorder } = useRecorderPermission("video");
 
   const stopRecording = () => {
     if (isInterviewer) {
@@ -141,20 +139,7 @@ const UserInterviewStart = (props: UserInterviewStartProps) => {
   }, []);
 
   // * 녹화 시작
-  useEffect(() => {
-    if (isRecordMode && !isInterviewer) {
-      (async () => {
-        const rec = await getPermissionInitializeUserRecorder();
-        rec.record();
-
-        setRecorder(rec);
-      })();
-
-      return () => {
-        recorder?.clearRecordedData();
-      };
-    }
-  }, []);
+  useUserRecorderPermission(subscribers);
 
   return (
     <StyledUserInterviewStart>
