@@ -76,7 +76,7 @@
 
 ## 프로젝트 포스터
 
-<img src="https://bucket1182644-staging.s3.ap-northeast-2.amazonaws.com/interviewer/poster.png" alt="" width=500 />
+<img src="public/assets/poster.png" alt="" width=500 />
 
 ## 프로젝트 진행 과정
 👉 [Wiki 바로가기](https://github.com/krafton-jungle-AI-InterviewMate/AI-InterviewMate-FE/wiki)
