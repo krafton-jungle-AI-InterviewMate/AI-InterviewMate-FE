@@ -1,13 +1,21 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import interviewAPI from "api/interview";
+import { useNavigate } from "react-router-dom";
 
 export const useDeleteInterviewRooms = () => {
   return useMutation(interviewAPI.deleteInterviewRooms);
 };
 
+export const useDeleteInterviewRoomsOnInterviewee = (onSuccess: any) => {
+  const navigate = useNavigate();
+  return useMutation(interviewAPI.deleteInterviewRooms, {
+    onSuccess,
+  });
+};
+
 export const useGetInterviewRooms = () => {
   const { data, isSuccess, isLoading, isError, refetch } = useQuery(
-    [ "fetchInterviewRooms" ],
+    ["fetchInterviewRooms"],
     () => {
       return interviewAPI.getInterviewRooms();
     },
@@ -59,7 +67,7 @@ export const usePutInterviewRooms = () => {
 };
 
 export const useGetQuestionDetails = (questionBoxIdx: number) => {
-  const { data, isLoading, isSuccess, isError } = useQuery([ "userInterviewQuestionDetails" ], () => {
+  const { data, isLoading, isSuccess, isError } = useQuery(["userInterviewQuestionDetails"], () => {
     return interviewAPI.getQuestionDetails(questionBoxIdx);
   });
 
