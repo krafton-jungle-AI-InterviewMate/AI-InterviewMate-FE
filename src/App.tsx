@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { PagesPath } from "constants/pages";
 
@@ -25,6 +26,12 @@ import { isInterviewStartAtom } from "store/interview/atom";
 function App() {
   useCheckSTTAvailable();
   useCheckAuth();
+
+  useEffect(() => {
+    if (import.meta.env.PROD) {
+      console.log = function () {};
+    }
+  }, []);
 
   const isInterviewStart = useRecoilValue(isInterviewStartAtom);
 

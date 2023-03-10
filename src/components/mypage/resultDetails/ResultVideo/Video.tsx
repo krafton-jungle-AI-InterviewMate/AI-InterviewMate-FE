@@ -41,7 +41,6 @@ const Video = (props: VideoProps) => {
         });
         player.on("error", () => setIsError(true));
 
-        console.log(player);
       // You could update an existing player in the `else` block here
       // on prop change, for example:
       }
