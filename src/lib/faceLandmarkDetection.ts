@@ -70,9 +70,12 @@ export const isFaceDistanceStable = (
   initDistance: FaceDistanceWithThreshold,
   currDistance: FaceDistance,
 ) => {
+  // * false라면 왼쪽으로 unsafe하게 돌아간 것
   const isHeadTurnRightSafely =
     (initDistance.rightThreshold < currDistance.right)
     && (initDistance.right > currDistance.right);
+
+  // * false라면 오른쪽으로 unsafe하게 돌아간 것
   const isHeadTurnLeftSafely =
     (initDistance.leftThreshold < currDistance.left)
     && (initDistance.left > currDistance.left);
